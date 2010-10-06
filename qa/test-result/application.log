@@ -1,9 +1,9 @@
-06 Okt 2010 04:54:18,900 INFO  ~ Starting /Users/simi/Dropbox/Universita?t/ESE/qa
-06 Okt 2010 04:54:18,919 INFO  ~ Module secure is available (/Users/simi/Dropbox/Development/web/play/modules/secure)
-06 Okt 2010 04:54:20,153 INFO  ~ 
-06 Okt 2010 04:54:20,154 INFO  ~ Go to http://localhost:9000/@tests to run the tests
-06 Okt 2010 04:54:20,154 INFO  ~ 
-06 Okt 2010 04:54:20,154 WARN  ~ You're running Play! in DEV mode
-06 Okt 2010 04:54:20,422 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-06 Okt 2010 04:54:22,158 INFO  ~ Connected to jdbc:hsqldb:mem:playembed
-06 Okt 2010 04:54:22,438 INFO  ~ Application 'qa' is now started !
+06 Oct 2010 23:09:04,545 INFO  ~ Starting /home/aaron/P3/ese2010-simple-ui/qa
+06 Oct 2010 23:09:04,571 INFO  ~ Module secure is available (/home/aaron/P3/modules/secure)
+06 Oct 2010 23:09:05,181 INFO  ~ 
+06 Oct 2010 23:09:05,182 INFO  ~ Go to http://localhost:9000/@tests to run the tests
+06 Oct 2010 23:09:05,182 INFO  ~ 
+06 Oct 2010 23:09:05,183 WARN  ~ You're running Play! in DEV mode
+06 Oct 2010 23:09:05,684 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+06 Oct 2010 23:09:33,059 INFO  ~ Connected to jdbc:hsqldb:mem:playembed
+06 Oct 2010 23:09:33,835 INFO  ~ Application 'qa' is now started !

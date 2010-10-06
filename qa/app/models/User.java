@@ -13,9 +13,9 @@ import java.util.*;
 public class User {
 
 	private String name;
-	private ArrayList<Item> items;
+	private Set<Item> items;
 	
-	private static HashMap<String,User> user = new HashMap();
+	private static HashMap<String,User> users = new HashMap();
 	
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -23,8 +23,8 @@ public class User {
 	 */
 	public User(String name) {
 		this.name = name;
-		this.items = new ArrayList<Item>();
-		user.put(name, this);
+		this.items = new HashSet<Item>();
+		users.put(name, this);
 	}
 	
 	/**
@@ -48,11 +48,11 @@ public class User {
 	 */
 	public void delete() {
 		Iterator<Item> it = this.items.iterator();
-		this.items = new ArrayList<Item>();
+		this.items.clear();
 		while(it.hasNext()) {
 			it.next().unregister();
 		}
-		user.remove(this.name);
+		users.remove(this.name);
 	}
 	
 	/**
@@ -78,8 +78,8 @@ public class User {
 	 * @return a <code>User</code> or null if the given name doesn't exist.
 	 */
 	public static User get(String name) {
-		if(user.containsKey(name))
-			return user.get(name);
+		if(users.containsKey(name))
+			return users.get(name);
 		return null;
 	}
 
