@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ese2010-simple-ui</name>
+	<name>%PROJECT_NAME%</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -15,4 +15,5 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.playframework.playclipse.playNature</nature>
 	</natures>
+	%LINKS%
 </projectDescription>

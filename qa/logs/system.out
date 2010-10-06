@@ -1,0 +1,8 @@
+23:06:34,676 INFO  ~ Starting /Users/simi/Dropbox/Universita?t/ESE/qa
+23:06:35,987 INFO  ~ 
+23:06:35,987 INFO  ~ Go to http://localhost:9000/@tests to run the tests
+23:06:35,987 INFO  ~ 
+23:06:35,988 WARN  ~ You're running Play! in DEV mode
+23:06:36,222 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+23:06:37,778 INFO  ~ Connected to jdbc:hsqldb:mem:playembed
+23:06:37,913 INFO  ~ Application 'qa' is now started !
