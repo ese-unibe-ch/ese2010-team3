@@ -47,11 +47,9 @@ public class User {
 	 * Causes the <code>User</code> to delete all his {@link Item}s.
 	 */
 	public void delete() {
-		Iterator<Item> it = this.items.iterator();
+		for (Item item : this.items)
+			item.unregister();
 		this.items.clear();
-		while(it.hasNext()) {
-			it.next().unregister();
-		}
 		users.remove(this.name);
 	}
 	
