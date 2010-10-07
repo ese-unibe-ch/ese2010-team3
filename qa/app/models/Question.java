@@ -2,7 +2,7 @@ package models;
 import java.util.*;
 
 /**
- * A {@link Entry} containing a question as <code>content</code> and {@link Answer}s.  
+ * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s and {@link Comments}.  
  * 
  * @author Simon Marti
  * @author Mirco Kocher
@@ -11,6 +11,7 @@ import java.util.*;
 public class Question extends Entry {
 
 	private IDTable<Answer> answers;
+	private IDTable<Comment> comments;
 	private int id;
 	
 	private static IDTable<Question> questions = new IDTable();
@@ -23,6 +24,7 @@ public class Question extends Entry {
 	public Question(User owner, String content) {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
+		this.comments = new IDTable<Comment>();
 		this.id = questions.add(this);
 	}
 
@@ -31,14 +33,19 @@ public class Question extends Entry {
 	}
 	
 	/**
-	 * Unregisters all {@link Answer}s, {@link Vote}s and itself.
+	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s and itself.
 	 */
 	@Override
 	public void unregister() {
-		Iterator<Answer> it = this.answers.iterator();
+		Iterator<Answer> itAnswer = this.answers.iterator();
+		Iterator<Comment> itComment = this.comments.iterator();
 		this.answers = new IDTable<Answer>();
-		while(it.hasNext()) {
-			it.next().unregister();
+		this.comments = new IDTable<Comment>();
+		while(itAnswer.hasNext()) {
+			itAnswer.next().unregister();
+		}
+		while(itComment.hasNext()) {
+			itComment.next().unregister();
 		}
 		questions.remove(this.id);
 		this.unregisterVotes();
@@ -51,6 +58,14 @@ public class Question extends Entry {
 	 */
 	public void unregister(Answer answer) {
 		this.answers.remove(answer.id());
+	}
+	
+	/**
+	 * Unregisters a deleted {@link Comment}.
+	 * @param comment the {@link Comment} to unregister
+	 */
+	public void unregister(Comment comment) {
+		this.comments.remove(comment.id());
 	}
 
 	/**
@@ -66,12 +81,33 @@ public class Question extends Entry {
 	}
 	
 	/**
+	 * Post a {@link Comment} to a <code>Question</code>
+	 * @param user the {@link User} posting the {@link Comment}
+	 * @param content the comment
+	 * @return an {@link Comment}
+	 */
+	public Comment comment(User user, String content) {
+		Comment comment = new Comment(this.comments.nextID(), user, this, content);
+		this.comments.add(comment);
+		return comment;
+	}
+	
+	/**
 	 * Checks if a {@link Answer} belongs to a <code>Question</code>
 	 * @param answer the {@link Answer} to check
 	 * @return true if the {@link Answer} belongs to the <code>Question</code>
 	 */
 	public boolean hasAnswer(Answer answer) {
 		return this.answers.contains(answer);
+	}
+	
+	/**
+	 * Checks if a {@link Comment} belongs to a <code>Question</code>
+	 * @param comment the {@link Comment} to check
+	 * @return true if the {@link Comment} belongs to the <code>Question</code>
+	 */
+	public boolean hasComment(Comment comment) {
+		return this.comments.contains(comment);
 	}
 	
 	/**
@@ -113,6 +149,17 @@ public class Question extends Entry {
 		Collections.sort(list, new EntryComperator());
 		return list;
 	}
+	
+	/**
+	 * Get all {@link Comment}s to a <code>Question</code>
+	 * @return {@link Collection} of {@link Comments}
+	 */
+	public List<Comment> comments() {
+		List<Comment> list = new ArrayList<Comment>();
+		list.addAll(comments.list());
+		Collections.sort(list, new EntryComperator());
+		return list;
+	}
 
 	/**
 	 * Get a specific {@link Answer} to a <code>Question</code>
@@ -121,6 +168,15 @@ public class Question extends Entry {
 	 */
 	public Entry getAnswer(int id) {
 		return this.answers.get(id);
+	}
+	
+	/**
+	 * Get a specific {@link Comment} to a <code>Question</code>
+	 * @param id of the <code>Comment</code>
+	 * @return {@link Comment} or null
+	 */
+	public Entry getComment(int id) {
+		return this.comments.get(id);
 	}
 
 }

@@ -3,7 +3,7 @@ import java.util.*;
 
 
 /**
- * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s and {@link Vote}s.
+ * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s, {@link Comment}s and {@link Vote}s.
  * When deleted, the <code>User</code> requests all his {@link Item}s to delete themselves.
  * 
  * @author Simon Marti
