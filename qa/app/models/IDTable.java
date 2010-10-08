@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @param <E> Class to collect
  */
-public class IDTable<E> {
+public class IDTable<E> implements Iterable<E> {
 	private int id;
 	private HashMap<Integer,E> objects;
 	

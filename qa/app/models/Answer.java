@@ -32,15 +32,24 @@ public class Answer extends Entry {
 	}
 	
 	/**
+	 * Post a {@link Comment} to a <code>Answer</code>
+	 * @param user the {@link User} posting the {@link Comment}
+	 * @param content the comment
+	 * @return an {@link Comment}
+	 */
+	public Comment comment(User user, String content) {
+		Comment comment = new Comment(this.comments.nextID(),user,question,content);
+		this.comments.add(comment);
+		return comment;
+	}
+	/**
 	 * Unregisters all {@link Vote}s, {@link Comments} and itself.
 	 */
 	@Override
 	public void unregister() {
-		Iterator<Comment> itComment = this.comments.iterator();
 		this.comments = new IDTable<Comment>();
-		while(itComment.hasNext()) {
-			itComment.next().unregister();
-		}
+		for (Comment comment : this.comments)
+		      comment.unregister();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -87,7 +96,7 @@ public class Answer extends Entry {
 	 * @param id of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
-	public Entry getComment(int id) {
+	public Comment getComment(int id) {
 		return this.comments.get(id);
 	}
 
