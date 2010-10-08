@@ -32,6 +32,16 @@ public class CommentTest extends UnitTest {
 		assertTrue(commentQuestion != null);
 	}
 	
+	@Test
+	public void shouldReturnCorrectType() {
+		assertTrue(question.getComment(commentQuestion.id()).type().equals("Comment"));
+		assertTrue(answer.getComment(commentAnswer.id()).type().equals("Comment"));
+		
+	}
+	
+	
+	
+	
 	//TODO @Tobias: more Tests
 
 }
