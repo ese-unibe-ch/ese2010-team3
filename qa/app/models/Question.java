@@ -60,10 +60,8 @@ public class Question extends Entry {
 		this.answers.remove(answer.id());
 	}
 	
-	/**
-	 * Unregisters a deleted {@link Comment}.
-	 * @param comment the {@link Comment} to unregister
-	 */
+	
+	@Override
 	public void unregister(Comment comment) {
 		this.comments.remove(comment.id());
 	}

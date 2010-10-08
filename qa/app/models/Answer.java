@@ -38,7 +38,7 @@ public class Answer extends Entry {
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(),user,question,content);
+		Comment comment = new Comment(this.comments.nextID(),user,this,content);
 		this.comments.add(comment);
 		return comment;
 	}

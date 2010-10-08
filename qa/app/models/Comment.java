@@ -2,6 +2,8 @@ package models;
 
 /**
  * 
+ * An {@link Entry} containing a comment as its content.
+ * 
  * @author Felix Langenegger
  * @author Tobias Brog (Review)
  *
@@ -11,17 +13,26 @@ public class Comment extends Entry {
 	
 	private int id;
 	private Question question;
+	private Entry entry;
 	
 
-	public Comment(int id, User owner, Question question, String content) {
+	public Comment(int id, User owner, Entry entry, String content) {
 		super(owner, content);
 		this.question = question;
+		this.entry = entry;
 		this.id = id;
 	}
 
 	@Override
 	public String type() {
 		return "Comment";
+	}
+	
+	@Override
+	public void unregister() {
+		this.entry.unregister(this);
+		this.unregisterUser();
+		
 	}
 	
 	public Question question() {
@@ -31,5 +42,14 @@ public class Comment extends Entry {
 	public int id() {
 		return this.id;
 	}
+
+	@Override
+	public void unregister(Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
 
 }

@@ -39,7 +39,11 @@ public class CommentTest extends UnitTest {
 		
 	}
 	
-	
+	@Test
+	public void shouldHaveCorrectContent() {
+		assertTrue(commentQuestion.content().equals("Strange Question!"));
+		assertTrue(commentAnswer.content().equals("Good point!"));
+	}
 	
 	
 	//TODO @Tobias: more Tests
