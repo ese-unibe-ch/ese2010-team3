@@ -9,7 +9,8 @@
 			<p>
 				${question.content()}
 			</p>
-			<a href="@{Application.commentQuestion(question.id())}"><FONT SIZE="1"> Comments ${question.comments().size()}</FONT> </a> 
+			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
+			<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;>> </FONT> </a> 
 			#{date question /}
 			#{if user && question.owner() != user}
 				#{vote question /}

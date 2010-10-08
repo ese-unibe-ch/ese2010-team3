@@ -10,18 +10,16 @@
 			<p>
 				${question.content()}
 			</p>
-			<a href="@{Application.commentQuestion(question.id())}"><FONT SIZE="1"> Comments ${question.comments().size()}</FONT> </a> 
+			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
+			<a href ="@{Application.question(question.id())}"> &#160; &#160;<<</FONT> </a>
 			#{date question /}
 			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
 		</li>
-	
-	
 	</ul>
-	
-	
 		#{if comments.size() > 0}
+		<FONT SIZE = 1>
 		<h1>Comments</h1>
 		<ul>
 			#{list items:comments, as:'comment'}
@@ -32,7 +30,7 @@
 				</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}
-					
+				<a href="@{Application.index()}">Delete</a>
 				#{/if}
 			</li>
 			#{/list}
@@ -46,6 +44,7 @@
 			#{/field}
 			<input type="submit" value="Post" />
 		#{/form}
+		</FONT>
 	#{/if}
 
 		

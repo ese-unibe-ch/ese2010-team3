@@ -40,6 +40,9 @@ public class Comment extends Entry {
 	}
 
 	@Override
+	/**
+	 * Just a stub. Should be removed with refactoring
+	 */
 	public void unregister(Comment comment) {
 		// TODO Auto-generated method stub
 	}

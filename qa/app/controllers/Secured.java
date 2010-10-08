@@ -72,4 +72,9 @@ public class Secured extends Controller {
         }
     }
     
+  public static void deleteComment(Comment comment, int questionId) {
+	  Question question = Question.get(questionId);
+	  question.unregister(comment);
+	  Application.index();
+  }
 }
