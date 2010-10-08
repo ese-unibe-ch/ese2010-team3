@@ -2,11 +2,21 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import models.*;
 import play.test.UnitTest;
+
+/**
+ * 
+ * Unregistering is tested in {@link UnregisterTest}
+ * 
+ * @author Tobias Brog
+ *
+ */
 
 public class CommentTest extends UnitTest {
 	
@@ -46,6 +56,22 @@ public class CommentTest extends UnitTest {
 	}
 	
 	
+	@Test
+	public void shouldHaveOwner() {
+		assertTrue(commentQuestion.owner().equals(james));
+	}
+
+	@Test
+	public void shouldRegisterItself() {
+		assertTrue(question.hasComment(commentQuestion));
+		assertTrue(answer.hasComment(commentAnswer));
+	}
+	
+	@Test
+	public void shouldHaveTimestamp() {
+		assertTrue(commentQuestion.timestamp() != null);
+		assertTrue(commentQuestion.timestamp().compareTo(new Date()) <= 0);
+	}
 	//TODO @Tobias: more Tests
 
 }

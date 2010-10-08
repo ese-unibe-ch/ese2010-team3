@@ -30,6 +30,16 @@ public class Application extends Controller {
     	}
     }
     
+    public static void commentQuestion(int id) {
+    	Question question = Question.get(id);
+    	List<Question> questions = Question.questions();
+    	List<Comment> comments = question.comments();
+    	int count = question.comments().size();
+    	render(questions, question, comments, count);
+    	
+    	
+    }
+    
 
 
 }	

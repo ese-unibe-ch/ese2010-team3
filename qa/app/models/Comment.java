@@ -12,13 +12,11 @@ package models;
 public class Comment extends Entry {
 	
 	private int id;
-	private Question question;
 	private Entry entry;
 	
 
 	public Comment(int id, User owner, Entry entry, String content) {
 		super(owner, content);
-		this.question = question;
 		this.entry = entry;
 		this.id = id;
 	}
@@ -35,9 +33,7 @@ public class Comment extends Entry {
 		
 	}
 	
-	public Question question() {
-		return this.question;
-	}
+	
 	
 	public int id() {
 		return this.id;
@@ -46,7 +42,6 @@ public class Comment extends Entry {
 	@Override
 	public void unregister(Comment comment) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	

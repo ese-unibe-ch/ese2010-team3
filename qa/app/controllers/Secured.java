@@ -29,6 +29,13 @@ public class Secured extends Controller {
         }
     }
     
+    public static void newCommentQuestion(int questionId, @Required String content) {
+    	if (!validation.hasErrors() && Question.get(questionId) != null) {
+    		Question.get(questionId).comment(currentUser(), content);
+    		Application.commentQuestion(questionId);
+    	}
+    }
+    
     public static void voteQuestionUp(int id) {
     	if (Question.get(id) != null) {
     		Question.get(id).voteUp(currentUser());
