@@ -27,6 +27,8 @@
 				<p>
 					${answer.content()}
 				</p>
+				<FONT SIZE="1"> Comments ${answer.comments().size()}</a>
+				<a href ="@{Application.commentAnswer(question.id(), answer.id())}">  &#160; &#160;>> </FONT></a>
 				#{date answer /}
 				#{if user && answer.owner() != user}
 					#{vote answer /}

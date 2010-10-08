@@ -1,16 +1,16 @@
 #{extends 'main.html' /}
 
 
-#{if question}
-#{set title:'ajopi - Question by ' + question.owner().name /}
+#{if answer}
+#{set title:'ajopi - Answer by ' + answer.owner().name /}
 <ul>
 	
-		<li onclick="goto('@@{Application.question(question.id())}')">
-			<h2>${question.owner().name()}:</h2>
+		<li>
+			<h2>${answer.owner().name()}:</h2>
 			<p>
-				${question.content()}
+				${answer.content()}
 			</p>
-			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
+			<FONT SIZE="1"> Comments ${answer.comments().size()}</a>
 			<a href ="@{Application.question(question.id())}"> &#160; &#160;<<</FONT> </a>
 			#{date question /}
 			#{if user && question.owner() != user}
@@ -30,7 +30,7 @@
 				</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}
-				<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
+				<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
 				#{/if}
 			</li>
 			#{/list}
@@ -38,7 +38,7 @@
 	#{/if}
 		#{if user}
 		<h1>Add Comment</h1>
-		#{form @Secured.newCommentQuestion(question.id())}
+		#{form @Secured.newCommentAnswer(question.id(), answer.id())}
 			#{field 'content'}
 	        	<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 			#{/field}

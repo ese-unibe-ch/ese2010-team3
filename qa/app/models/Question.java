@@ -164,7 +164,7 @@ public class Question extends Entry {
 	 * @param id of the <code>Answer</code>
 	 * @return {@link Answer} or null
 	 */
-	public Entry getAnswer(int id) {
+	public Answer getAnswer(int id) {
 		return this.answers.get(id);
 	}
 	
@@ -173,7 +173,7 @@ public class Question extends Entry {
 	 * @param id of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
-	public Entry getComment(int id) {
+	public Comment getComment(int id) {
 		return this.comments.get(id);
 	}
 

@@ -36,8 +36,13 @@ public class Application extends Controller {
     	List<Comment> comments = question.comments();
     	int count = question.comments().size();
     	render(questions, question, comments, count);
-    	
-    	
+    }
+    
+    public static void commentAnswer(int questionId, int answerId) {
+    	Question question = Question.get(questionId);
+    	Answer answer = question.getAnswer(answerId);
+    	List<Comment> comments = answer.comments();
+    	render(answer, comments, question);
     }
     
 
