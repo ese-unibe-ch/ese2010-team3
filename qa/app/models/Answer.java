@@ -1,4 +1,5 @@
 package models;
+import java.util.*;
 /**
  * A {@link Entry} containing an answer to a {@link Question}
  * 
@@ -9,6 +10,7 @@ package models;
 public class Answer extends Entry {
 
 	private Question question;
+	private IDTable<Comment> comments;
 	private int id;
 	
 	/**
@@ -21,6 +23,7 @@ public class Answer extends Entry {
 	public Answer(int id, User owner, Question question, String content) {
 		super(owner, content);
 		this.question = question;
+		this.comments = new IDTable<Comment>();
 		this.id = id;
 	}
 	
@@ -29,10 +32,24 @@ public class Answer extends Entry {
 	}
 	
 	/**
-	 * Unregisters all {@link Vote}s and itself.
+	 * Post a {@link Comment} to a <code>Answer</code>
+	 * @param user the {@link User} posting the {@link Comment}
+	 * @param content the comment
+	 * @return an {@link Comment}
+	 */
+	public Comment comment(User user, String content) {
+		Comment comment = new Comment(this.comments.nextID(),user,this,content);
+		this.comments.add(comment);
+		return comment;
+	}
+	/**
+	 * Unregisters all {@link Vote}s, {@link Comments} and itself.
 	 */
 	@Override
 	public void unregister() {
+		this.comments = new IDTable<Comment>();
+		for (Comment comment : this.comments)
+		      comment.unregister();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -44,6 +61,43 @@ public class Answer extends Entry {
 	 */
 	public Question question() {
 		return this.question;
+	}
+	
+	/**
+	 * Unregisters a deleted {@link Comment}.
+	 * @param comment the {@link Comment} to unregister
+	 */
+	public void unregister(Comment comment) {
+		this.comments.remove(comment.id());
+	}
+	
+	/**
+	 * Checks if a {@link Comment} belongs to a <code>Answer</code>
+	 * @param comment the {@link Comment} to check
+	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
+	 */
+	public boolean hasComment(Comment comment) {
+		return this.comments.contains(comment);
+	}
+	
+	/**
+	 * Get all {@link Comment}s to a <code>Answer</code>
+	 * @return {@link Collection} of {@link Comments}
+	 */
+	public List<Comment> comments() {
+		List<Comment> list = new ArrayList<Comment>();
+		list.addAll(comments.list());
+		Collections.sort(list, new EntryComperator());
+		return list;
+	}
+	
+	/**
+	 * Get a specific {@link Comment} to a <code>Answer</code>
+	 * @param id of the <code>Comment</code>
+	 * @return {@link Comment} or null
+	 */
+	public Comment getComment(int id) {
+		return this.comments.get(id);
 	}
 
 	public int id() {

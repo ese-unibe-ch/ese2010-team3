@@ -12,8 +12,12 @@ public class UnregisterTest extends UnitTest {
 	private User john;
 	private User bill;
 	private User kate;
+	private User sahra;
+	private User michael;
 	private Question question;
 	private Answer answer;
+	private Comment questionComment;
+	private Comment answerComment;
 	private Vote questionVote;
 	private Vote answerVote;
 
@@ -23,10 +27,14 @@ public class UnregisterTest extends UnitTest {
 		this.john = new User("John");
 		this.bill = new User("Bill");
 		this.kate = new User("Kate");
+		this.sahra = new User("Sahra");
+		this.michael = new User("Michael");
 		this.question = new Question(this.jack, "Why did the chicken cross the road?");
 		this.answer = this.question.answer(this.john, "To get to the other side.");
 		this.questionVote = this.question.voteUp(this.kate);
 		this.answerVote = this.answer.voteDown(this.bill);
+		this.questionComment = this.question.comment(this.michael, "Strange question");
+		this.answerComment = this.answer.comment(this.sahra, "Good answer");
 	}
 	
 	@Test
@@ -62,5 +70,19 @@ public class UnregisterTest extends UnitTest {
 		assertFalse(this.kate.hasItem(this.questionVote));
 		assertFalse(this.bill.hasItem(this.answerVote));
 		
+	}
+	
+	@Test
+	public void shouldUnregisterCommentsToQuestion() {
+		assertTrue(question.hasComment(questionComment));
+		this.michael.delete();
+		assertFalse(question.hasComment(questionComment));
+	}
+	
+	@Test
+	public void shouldUnregisterCommentsToAnswer() {
+		assertTrue(answer.hasComment(answerComment));
+		this.sahra.delete();
+		assertFalse(answer.hasComment(answerComment));
 	}
 }

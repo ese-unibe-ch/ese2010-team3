@@ -29,6 +29,12 @@ public abstract class Entry extends Item {
 	public abstract String type();
 	
 	/**
+	 * Unregisters a deleted {@link Comment} to its {@link Entry}
+	 * @param comment the <code> Comment </code> to be unregistered.
+	 */
+	public abstract void unregister(Comment comment);
+	
+	/**
 	 * Unregisters the <code>Entry</code> if it gets deleted.
 	 */
 	@Override
@@ -133,6 +139,9 @@ public abstract class Entry extends Item {
 		this.votes.put(user.name(), vote);
 		return vote;
 	}
+
+	
+	
 
 
 }

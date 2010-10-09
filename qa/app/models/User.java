@@ -3,7 +3,7 @@ import java.util.*;
 
 
 /**
- * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s and {@link Vote}s.
+ * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s, {@link Comment}s and {@link Vote}s.
  * When deleted, the <code>User</code> requests all his {@link Item}s to delete themselves.
  * 
  * @author Simon Marti
@@ -47,11 +47,9 @@ public class User {
 	 * Causes the <code>User</code> to delete all his {@link Item}s.
 	 */
 	public void delete() {
-		Iterator<Item> it = this.items.iterator();
+		for (Item item : this.items)
+			item.unregister();
 		this.items.clear();
-		while(it.hasNext()) {
-			it.next().unregister();
-		}
 		users.remove(this.name);
 	}
 	
