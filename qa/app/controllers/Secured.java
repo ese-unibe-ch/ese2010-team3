@@ -11,6 +11,7 @@ public class Secured extends Controller {
 	public static User currentUser(){
 		return User.get(Security.connected());
 	}
+	
     public static void newQuestion(@Required String content) {
     	if (!validation.hasErrors()) {
     		Question question = new Question(currentUser(), content);
@@ -65,4 +66,18 @@ public class Secured extends Controller {
         }
     }
     
+    public static void deleteUser(String name) throws Throwable{
+		User user = User.get(name);
+    	if (hasPermissionToDelete(currentUser(),user)){
+    		if (name == currentUser().name()){
+    			Secure.logout();
+    		}
+    		user.delete();
+    	}
+    	Application.index();
+    }
+    
+	private static boolean hasPermissionToDelete(User currentUser, User user) {
+		return currentUser.name() == user.name();
+	}
 }
