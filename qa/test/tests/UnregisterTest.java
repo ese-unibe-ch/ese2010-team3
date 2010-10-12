@@ -63,4 +63,30 @@ public class UnregisterTest extends UnitTest {
 		assertFalse(this.bill.hasItem(this.answerVote));
 		
 	}
+	
+	@Test
+	public void testUserQuestionAnonymization() {
+		this.jack.anonymize(false);
+		this.john.anonymize(false);
+		
+		assertNull(this.question.owner());
+		assertEquals(this.question.upVotes(), 1);
+		assertEquals(this.answer.owner(), this.john);
+		assertEquals(this.answer.downVotes(), 1);
+	}
+	
+	@Test
+	public void testUserAnonymization() {
+		assertNotNull(User.get(this.jack.name()));
+		this.jack.anonymize(true);
+		this.jack.delete();
+		this.john.anonymize(true);
+		this.john.delete();
+		assertNull(User.get(this.jack.name()));
+		
+		assertNull(this.question.owner());
+		assertEquals(this.question.upVotes(), 1);
+		assertNull(this.answer.owner());
+		assertEquals(this.answer.downVotes(), 1);
+	}
 }
