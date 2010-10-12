@@ -93,7 +93,7 @@ public class Secured extends Controller {
 		question.unregister(comment);
 		Application.commentQuestion(questionId);
 	}
-	
+
 	public static void deleteCommentAnswer(int commentId, int questionId,
 			int answerId) {
 		Question question = Question.get(questionId);
