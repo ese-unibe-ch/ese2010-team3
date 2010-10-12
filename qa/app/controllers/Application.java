@@ -56,7 +56,5 @@ public class Application extends Controller {
     public static void deleteuser(User user){
     	render();
     }
-    
-
 
 }

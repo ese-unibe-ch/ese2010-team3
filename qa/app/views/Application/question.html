@@ -2,10 +2,10 @@
 
 
 #{if question}
-#{set title:'ajopi - Question by ' + question.owner().name /}
+#{set title:'ajopi - ' + question.summary()  /}
 	<ul>
 		<li>
-			<h2>${question.owner().name()}:</h2>
+			<h2>#{userName question /}:</h2>
 			<p>
 				${question.content()}
 			</p>
@@ -24,7 +24,7 @@
 		<ul>
 			#{list items:answers, as:'answer'}
 			<li>
-				<h2>${answer.owner().name()}:</h2>
+				<h2>#{userName answer /}:</h2>
 				<p>
 					${answer.content()}
 				</p>

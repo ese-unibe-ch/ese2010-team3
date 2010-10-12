@@ -32,6 +32,11 @@ public class QuestionTest extends UnitTest {
 	public void shouldHaveCorrectContent() {
 		assertEquals(question.content(), "Why did the chicken cross the road?");
 	}
+	
+	@Test
+	public void shouldHaveCorrectSummary() {
+		assertEquals(question.summary(), "Why did the chicken ...");
+	}
 
 	@Test
 	public void shouldRegisterItself() {
