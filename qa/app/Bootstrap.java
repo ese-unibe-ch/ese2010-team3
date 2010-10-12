@@ -9,10 +9,10 @@ public class Bootstrap extends Job {
  
     public void doJob() {
     	// User
-        User jack = new User("Jack");
-        User john = new User("John");
-        User bill = new User("Bill");
-        User kate = new User("Kate");
+        User jack = new User("Jack", "jack");
+        User john = new User("John", "john");
+        User bill = new User("Bill", "bill");
+        User kate = new User("Kate", "kate");
         
         // Questions
         Question question = new Question(jack, "Why did the chicken cross the road?");
