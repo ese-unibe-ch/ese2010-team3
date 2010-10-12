@@ -1,0 +1,22 @@
+#{extends 'main.html' /}
+
+
+#{if user}
+#{set title:'ajopi - delete ' + user.name() + '?'  /}
+	<ul>
+		<li>
+			<h2>Do you want to delete the Account ${user.name}?</h2>
+			<p>
+			<ul>
+				<li><a href="@{Secured.deleteUser(user.name())}">Yes, delete everything</a></li>
+				<li><a href="@{Secured.anonymizeUser(user.name())}">Yes, but keep my questions and answers</a></li>
+				<li><a href="@{Application.index()}">No, just kidding</a></li>
+			</p>
+		</li>
+	</ul>
+	
+#{/if}#{else}
+	#{set title:'Error' /}
+	<h1>No such user ${name}</h1>
+#{/else}
+

@@ -34,6 +34,11 @@ public class QuestionTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldHaveCorrectSummary() {
+		assertEquals(question.summary(), "Why did the chicken ...");
+	}
+	
+	@Test
 	public void shouldRegisterItself() {
 		assertTrue(user.hasItem(question));
 	}

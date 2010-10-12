@@ -61,6 +61,20 @@ public class User {
 	}
 
 	/**
+	 * Anonymizes all questions and answers by this user.
+	 * @param doAnswers - whether to anonymize this user's answers as well 
+	 */
+	public void anonymize(boolean doAnswers) {
+		for (Item item : this.items) {
+			if (item instanceof Question ||
+				item instanceof Answer && doAnswers) {
+				((Entry)item).anonymize();
+				this.items.remove(item);
+			}
+		}
+	}
+	
+	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
 	 * @param item
