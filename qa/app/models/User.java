@@ -3,7 +3,7 @@ import java.util.*;
 
 
 /**
- * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s and {@link Vote}s.
+ * A user with a name. Can contain {@link Item}s i.e. {@link Question}s, {@link Answer}s, {@link Comment}s and {@link Vote}s.
  * When deleted, the <code>User</code> requests all his {@link Item}s to delete themselves.
  * 
  * @author Simon Marti
@@ -51,20 +51,6 @@ public class User {
 			item.unregister();
 		this.items.clear();
 		users.remove(this.name);
-	}
-	
-	/**
-	 * Anonymizes all questions and answers by this user.
-	 * @param doAnswers - whether to anonymize this user's answers as well 
-	 */
-	public void anonymize(boolean doAnswers) {
-		for (Item item : this.items) {
-			if (item instanceof Question ||
-				item instanceof Answer && doAnswers) {
-				((Entry)item).anonymize();
-				this.items.remove(item);
-			}
-		}
 	}
 	
 	/**

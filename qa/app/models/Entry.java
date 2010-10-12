@@ -29,6 +29,12 @@ public abstract class Entry extends Item {
 	public abstract String type();
 	
 	/**
+	 * Unregisters a deleted {@link Comment} to its {@link Entry}
+	 * @param comment the <code> Comment </code> to be unregistered.
+	 */
+	public abstract void unregister(Comment comment);
+	
+	/**
 	 * Unregisters the <code>Entry</code> if it gets deleted.
 	 */
 	@Override
@@ -57,27 +63,11 @@ public abstract class Entry extends Item {
 	}
 	
 	/**
-	 * Turns this Entry into an anonymous (user-less) one 
-	 */
-	public void anonymize() {
-		this.unregisterUser();
-	}
-	
-	/**
 	 * Get the content of an <code>Entry</code>.
 	 * @return the content of the <code>Entry</code>
 	 */
 	public String content() {
 		return this.content;
-	}
-	
-	/**
-	 * @return a one-line summary of an <code>Entry</code>.
-	 */
-	public String summary() {
-		if (this.content.length() <= 20)
-			return this.content.replaceAll("[\r\n]+", " ");
-		return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
 	}
 	
 	/**
@@ -149,6 +139,9 @@ public abstract class Entry extends Item {
 		this.votes.put(user.name(), vote);
 		return vote;
 	}
+
+	
+	
 
 
 }

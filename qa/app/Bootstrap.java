@@ -21,6 +21,9 @@ public class Bootstrap extends Job {
         question = new Question(john, "What is the answer to life the universe and everything?");
         question.answer(kate, "42");
         question.answer(kate, "1337");
+        
+        //Comments
+        question.comment(jack, "What a strange question");
     }
  
 }

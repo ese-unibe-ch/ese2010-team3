@@ -38,6 +38,5 @@ public abstract class Item {
 	 */
 	protected void unregisterUser() {
 		this.owner.unregister(this);
-		this.owner = null;
 	}
 }

@@ -30,8 +30,29 @@ public class Application extends Controller {
     	}
     }
     
-    public static void deleteuser(User user){
-    	render();
+    public static void answerQuestion(int id) {
+    	Question question = Question.get(id);
+    	List<Question> questions = Question.questions();
+    	List<Answer> answers = question.answers();
+    	int count = question.answers().size();
+    	render(questions, question, answers, count);
     }
+    
+    public static void commentQuestion(int id) {
+    	Question question = Question.get(id);
+    	List<Question> questions = Question.questions();
+    	List<Comment> comments = question.comments();
+    	int count = question.comments().size();
+    	render(questions, question, comments, count);
+    }
+    
+    public static void commentAnswer(int questionId, int answerId) {
+    	Question question = Question.get(questionId);
+    	Answer answer = question.getAnswer(answerId);
+    	List<Comment> comments = answer.comments();
+    	render(answer, comments, question);
+    }
+    
+
 
 }	

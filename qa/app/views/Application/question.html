@@ -2,15 +2,18 @@
 
 
 #{if question}
-#{set title:'ajopi - ' + question.summary()  /}
+#{set title:'ajopi - Question by ' + question.owner().name /}
 	<ul>
 		<li>
-			<h2>#{userName question /}:</h2>
+			<h2>${question.owner().name()}:</h2>
 			<p>
 				${question.content()}
 			</p>
+			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
+			<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;>> </FONT> </a> 
 			#{date question /}
-			#{if user && question.owner() != user}
+			#{if user && question.owner() == user}
+			<br><a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
 				#{vote question /}
 			#{/if}
 		</li>
@@ -21,12 +24,15 @@
 		<ul>
 			#{list items:answers, as:'answer'}
 			<li>
-				<h2>#{userName answer /}:</h2>
+				<h2>${answer.owner().name()}:</h2>
 				<p>
 					${answer.content()}
 				</p>
+				<FONT SIZE="1"> Comments ${answer.comments().size()}</a>
+				<a href ="@{Application.commentAnswer(question.id(), answer.id())}">  &#160; &#160;>> </FONT></a>
 				#{date answer /}
-				#{if user && answer.owner() != user}
+				#{if user && answer.owner() == user}
+				<br><a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
 					#{vote answer /}
 				#{/if}
 			</li>
