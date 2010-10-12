@@ -28,13 +28,13 @@ public class User {
 		this.items = new ArrayList<Item>();
 		user.put(name, this);
 	}
-	
+	/*
 	public User(String name){
 		this.name = name;
 		this.items = new ArrayList<Item>();
 		user.put(name, this);
 	}
-	
+	*/
 	/**
 	 * Returns the name of the <code>User</code>.
 	 * @return name of the <code>User</code>

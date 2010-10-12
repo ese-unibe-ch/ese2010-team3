@@ -49,10 +49,10 @@ public class VoteTest extends UnitTest {
 	@Test
 	public void shouldCount() {
 		for(int i=0; i<11; i++) {
-			this.answer.voteUp(new User("up" + i));
+			this.answer.voteUp(new User("up" + i, "pw"));
 		}
 		for(int i=0; i<42; i++) {
-			this.answer.voteDown(new User("down" + i));
+			this.answer.voteDown(new User("down" + i, "pw"));
 		}
 		assertEquals(this.answer.upVotes(), 11);
 		assertEquals(this.answer.downVotes(), 42);
