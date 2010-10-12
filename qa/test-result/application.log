@@ -1,9 +1,0 @@
-12 Okt 2010 22:11:42,671 INFO  ~ Starting C:\Users\Blacky\play\qa
-12 Okt 2010 22:11:42,673 INFO  ~ Module secure is available (C:\Users\Blacky\play\modules\secure)
-12 Okt 2010 22:11:43,210 INFO  ~ 
-12 Okt 2010 22:11:43,210 INFO  ~ Go to http://localhost:9000/@tests to run the tests
-12 Okt 2010 22:11:43,211 INFO  ~ 
-12 Okt 2010 22:11:43,211 WARN  ~ You're running Play! in DEV mode
-12 Okt 2010 22:11:43,305 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-12 Okt 2010 22:11:52,366 INFO  ~ Connected to jdbc:hsqldb:mem:playembed
-12 Okt 2010 22:11:52,427 INFO  ~ Application 'qa' is now started !
