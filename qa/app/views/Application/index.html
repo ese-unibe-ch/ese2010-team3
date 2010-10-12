@@ -5,14 +5,11 @@
 #{list items:questions, as:'question'}
 	<li onclick="goto('@@{Application.question(question.id())}')">
 		<a href="@{Application.question(question.id())}">
-			<h2>${question.owner().name()}:</h2>
+			<h2>#{userName question /}:</h2>
 		</a>
 		<p>
 			${question.content()}
-		
-		</p>  
-		<FONT SIZE="1"> Comments ${question.comments().size()} </a>
-		<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;>> </FONT></a>
+		</p>
 		#{date question /}
 		#{if user && question.owner() != user}
 			#{vote question /}
