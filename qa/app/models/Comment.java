@@ -6,6 +6,7 @@ package models;
  * 
  * @author Felix Langenegger
  * @author Tobias Brog (Review)
+<<<<<<< HEAD
  *
  */
 
@@ -13,7 +14,6 @@ public class Comment extends Entry {
 	
 	private int id;
 	private Entry entry;
-	
 
 	public Comment(int id, User owner, Entry entry, String content) {
 		super(owner, content);
@@ -25,16 +25,13 @@ public class Comment extends Entry {
 	public String type() {
 		return "Comment";
 	}
-	
+
 	@Override
 	public void unregister() {
 		this.entry.unregister(this);
 		this.unregisterUser();
-		
 	}
-	
-	
-	
+
 	public int id() {
 		return this.id;
 	}
@@ -46,8 +43,5 @@ public class Comment extends Entry {
 	public void unregister(Comment comment) {
 		// TODO Auto-generated method stub
 	}
-
-	
-	
 
 }

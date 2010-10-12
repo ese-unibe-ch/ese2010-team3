@@ -85,4 +85,14 @@ public class UnregisterTest extends UnitTest {
 		this.sahra.delete();
 		assertFalse(answer.hasComment(answerComment));
 	}
+
+	public void testUserQuestionAnonymization() {
+		this.jack.anonymize(false);
+		this.john.anonymize(false);
+		
+		assertNull(this.question.owner());
+		assertEquals(this.question.upVotes(), 1);
+		assertEquals(this.answer.owner(), this.john);
+		assertEquals(this.answer.downVotes(), 1);
+	}
 }
