@@ -66,18 +66,37 @@ public class Secured extends Controller {
         }
     }
     
-    public static void deleteUser(String name) throws Throwable{
-		User user = User.get(name);
-    	if (hasPermissionToDelete(currentUser(),user)){
-    		if (name == currentUser().name()){
-    			Secure.logout();
+	public static void deleteUser( String name ) throws Throwable {
+		User user = User.get( name );
+		if ( hasPermissionToDelete( currentUser(), user )) {
+			if (name.equals( currentUser().name() )) {
+				// try {
+				Secure.logout();
+				// } catch (Throwable e) {
+				// flash.error("Logout failed", e);
+				// }
+			}
+			user.delete();
+		}
+		Application.index();
+	}
+    
+    public static void anonymizeUser( String name ) throws Throwable {
+    	User user = User.get(name);
+    	if (hasPermissionToDelete( currentUser(),user )){
+    		if ( name.equals( currentUser().name() )){
+//    			try {
+					Secure.logout();
+//				} catch (Throwable e) {
+//					flash.error("Logout failed", e);
+//				}
     		}
-    		user.delete();
+    		user.anonymize(true);
     	}
     	Application.index();
     }
     
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.name() == user.name();
+		return currentUser.name().equals( user.name() );
 	}
 }

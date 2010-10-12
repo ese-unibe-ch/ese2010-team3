@@ -19,7 +19,7 @@
     				<span>
     					#{if user}
 							Hi ${user.name()}!
-							<a href="@{Secured.deleteUser(user.name())}">Delete</a>
+							<a href="@{Application.deleteuser}">Delete</a>
 							<a href="@{Secure.logout}">Logout</a>
 						#{/if}
 						#{else}
