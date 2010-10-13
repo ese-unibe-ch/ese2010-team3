@@ -1,6 +1,7 @@
 package models;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -13,8 +14,8 @@ import java.util.*;
  */
 public class User {
 
-	private String name;
-	private Set<Item> items;
+	private final String name;
+	private final HashSet<Item> items;
 
 	private static HashMap<String, User> users = new HashMap();
 
@@ -49,7 +50,9 @@ public class User {
 	 * Causes the <code>User</code> to delete all his {@link Item}s.
 	 */
 	public void delete() {
-		for (Item item : this.items)
+		// operate on a clone to prevent a ConcurrentModificationException
+		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
+		for (Item item : clone)
 			item.unregister();
 		this.items.clear();
 		users.remove(this.name);
@@ -83,19 +86,24 @@ public class User {
 			return users.get(name);
 		return null;
 	}
-	
-	/**
-	  * Anonymizes all questions and answers by this user.
-	  * @param doAnswers - whether to anonymize this user's answers as well 
-	  */
-	 public void anonymize(boolean doAnswers) {
-		 for (Item item : this.items) {
-			 if (item instanceof Question ||
-					 item instanceof Answer && doAnswers) {
-				 ((Entry)item).anonymize();
-				 this.items.remove(item);
-			 }
-		 }
-	 }
 
+	/**
+	 * Anonymizes all questions, answers and comments by this user.
+	 * 
+	 * @param doAnswers
+	 *            - whether to anonymize this user's answers as well
+	 * @param doComments
+	 *            - whether to anonymize this user's comments as well
+	 */
+	public void anonymize(boolean doAnswers, boolean doComments) {
+		// operate on a clone to prevent a ConcurrentModificationException
+		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
+		for (Item item : clone) {
+			if (item instanceof Question || doAnswers && item instanceof Answer
+					|| doComments && item instanceof Comment) {
+				((Entry) item).anonymize();
+				this.items.remove(item);
+			}
+		}
+	}
 }

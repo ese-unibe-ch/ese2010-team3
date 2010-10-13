@@ -118,8 +118,9 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user)) {
+			boolean deleteSelf = name.equals(currentUser().name());
 			user.delete();
-			if (name.equals(currentUser().name()))
+			if (deleteSelf)
 				Secure.logout();
 		}
 		Application.index();
@@ -128,7 +129,7 @@ public class Secured extends Controller {
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user))
-			user.anonymize(true);
+			user.anonymize(true, false);
 		deleteUser(name);
 	}
 
