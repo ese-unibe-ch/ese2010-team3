@@ -23,12 +23,12 @@ public class UnregisterTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.jack = new User("Jack");
-		this.john = new User("John");
-		this.bill = new User("Bill");
-		this.kate = new User("Kate");
-		this.sahra = new User("Sahra");
-		this.michael = new User("Michael");
+		this.jack = new User("Jack", "jack");
+		this.john = new User("John", "john");
+		this.bill = new User("Bill", "bill");
+		this.kate = new User("Kate", "kate");
+		this.sahra = new User("Sahra", "sahra");
+		this.michael = new User("Michael", "michael");
 		this.question = new Question(this.jack, "Why did the chicken cross the road?");
 		this.answer = this.question.answer(this.john, "To get to the other side.");
 		this.questionVote = this.question.voteUp(this.kate);

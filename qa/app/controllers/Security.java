@@ -5,10 +5,7 @@ import models.*;
 public class Security extends Secure.Security {
 
 	static boolean authenticate(String username, String password) {
-		if (User.get(username) == null) {
-			new User(username);
-		}
-		return true;
+		return User.get(username) != null && User.get(username).checkPW(password);
 	}
 
 	static void onDisconnected() {

@@ -14,6 +14,8 @@ import java.util.*;
 public class User {
 
 	private String name;
+	private String password;
+	private String email;
 	private Set<Item> items;
 
 	private static HashMap<String, User> users = new HashMap();
@@ -22,8 +24,9 @@ public class User {
 	 * Creates a <code>User</code> with a given name.
 	 * @param name the name of the <code>User</code>
 	 */
-	public User(String name) {
+	public User(String name, String password) {
 		this.name = name;
+		this.password = password;
 		this.items = new HashSet<Item>();
 		users.put(name, this);
 	}
@@ -36,6 +39,22 @@ public class User {
 		return this.name;
 	}
 
+	public boolean checkPW(String password){
+		return this.password.equals(password);
+	}
+	
+	public static boolean needSignUp(String username){
+    	return (User.get(username)==null);
+    }
+	
+	public static void register(String username, String password){
+		User user = new User(username, password);
+	}
+	
+	public boolean checkeMail(String email){
+		return this.email.equals(email);
+	}
+	
 	/**
 	 * Registers an {@link Item} which should be deleted in case the <code>User</code> gets deleted.
 	 * 
