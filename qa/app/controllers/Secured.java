@@ -6,6 +6,7 @@ import models.Question;
 import models.User;
 import play.data.validation.Required;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 @With(Secure.class)
@@ -52,7 +53,8 @@ public class Secured extends Controller {
 	public static void voteQuestionUp(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteUp(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -61,7 +63,8 @@ public class Secured extends Controller {
 	public static void voteQuestionDown(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteDown(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -134,6 +137,13 @@ public class Secured extends Controller {
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
 		return currentUser.name().equals(user.name());
+	}
 
+	private static boolean redirectToCallingPage() {
+		Http.Header referer = request.headers.get("referer");
+		if (referer == null)
+			return false;
+		redirect(referer.value());
+		return true;
 	}
 }
