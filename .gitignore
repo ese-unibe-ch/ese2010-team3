@@ -9,6 +9,7 @@
 /qa/eclipse
 
 # do not commit all temporary play stuff
+/qa/cobertura.ser
 /qa/logs
 /qa/server.pid
 /qa/tmp
