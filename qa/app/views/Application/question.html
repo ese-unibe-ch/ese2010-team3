@@ -1,55 +1,60 @@
 #{extends 'main.html' /}
 
-
 #{if question}
 #{set title:'ajopi - ' + question.summary()  /}
 	<ul>
 		<li>
 			<h2>#{userName question /}:</h2>
-			<p>
-				${question.content()}
-			</p>
-			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
-			<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;>> </FONT> </a> 
+			<p>${question.content()}</p>
 			#{date question /}
 			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
 		</li>
 	</ul>
-	
 	#{if answers.size() > 0}
 		<h1>Answers</h1>
 		<ul>
 			#{list items:answers, as:'answer'}
 			<li>
 				<h2>#{userName answer /}:</h2>
-				<p>
-					${answer.content()}
-				</p>
-				<FONT SIZE="1"> Comments ${answer.comments().size()}</a>
-				<a href ="@{Application.commentAnswer(question.id(), answer.id())}">  &#160; &#160;>> </FONT></a>
+				<p>${answer.content()}</p>
+				#{if user != null}
+					<FONT SIZE="1"> <a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</FONT></a>
+				#{/if}
 				#{date answer /}
 				#{if user && answer.owner() != user}
 					#{vote answer /}
 				#{/if}
 			</li>
+				#{if answer.comments().size() != 0}
+					<p class="comments">Comments</h3>
+					<ul class="comments">
+						#{list items:answer.comments(), as:'comment'}
+							<li class="comments">
+								<h2>${comment.owner().name()}:</h2>
+								<p>${comment.content()}</p>
+								#{date comment /}
+								#{if user && comment.owner() == user}
+									<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
+								#{/if}
+							</li>	
+						#{/list}
+					</ul>
+					<br />
+				#{/if}
 			#{/list}
 		</ul>
 	#{/if}
-	
-	
 	#{if user}
 		<h1>Add Answer</h1>
 		#{form @Secured.newAnswer(question.id())}
 			#{field 'content'}
-	        	<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+	        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 			#{/field}
 			<input type="submit" value="Post" />
 		#{/form}
 	#{/if}
-
-
 #{/if}#{else}
 	#{set title:'Error' /}
 	<h1>Question does not exist.</h1>

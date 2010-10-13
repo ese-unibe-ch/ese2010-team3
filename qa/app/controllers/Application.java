@@ -44,9 +44,9 @@ public class Application extends Controller {
 		List<Comment> comments = answer.comments();
 		render(answer, comments, question);
 	}
-	
-    public static void deleteuser(User user){
-    	render();
-    }
+
+	public static void deleteuser(User user) {
+		render();
+	}
 
 }

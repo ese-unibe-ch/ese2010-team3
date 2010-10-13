@@ -70,12 +70,12 @@ public abstract class Entry extends Item {
 	}
 
 	/**
-	 * Turns this Entry into an anonymous (user-less) one 
+	 * Turns this Entry into an anonymous (user-less) one
 	 */
 	public void anonymize() {
 		this.unregisterUser();
 	}
-	
+
 	/**
 	 * Get the content of an <code>Entry</code>.
 	 * 
@@ -93,7 +93,7 @@ public abstract class Entry extends Item {
 			return this.content.replaceAll("[\r\n]+", " ");
 		return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
 	}
-	
+
 	/**
 	 * Get the time the <code>Entry</code> was created.
 	 * 

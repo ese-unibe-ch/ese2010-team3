@@ -1,36 +1,44 @@
 #{extends 'main.html' /}
 #{set title:'ajopi' /}
-
 <ul>
-#{list items:questions, as:'question'}
-	<li onclick="goto('@@{Application.question(question.id())}')">
-		<a href="@{Application.question(question.id())}">
-			<h2>#{userName question /}:</h2>
-		</a>
-		<p>
-			${question.content()}
-		
-		</p>  
-		<FONT SIZE="1"> Comments ${question.comments().size()} </a>
-		<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;>> </FONT></a>
-		#{date question /}
-		#{if user && question.owner() != user}
-			#{vote question /}
+	#{list items:questions, as:'question'}
+		<li onclick="goto('@@{Application.question(question.id())}')">
+			<a href="@{Application.question(question.id())}">
+				<h2>#{userName question /}:</h2>
+			</a>
+			<p>${question.content()}</p>  
+			#{date question /}
+			#{if user != null}
+				<FONT SIZE="1"> <a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</FONT></a>
+			#{/if}
+			#{if user && question.owner() != user}
+				#{vote question /}
+			#{/if}
+		</li>
+		#{if question.comments().size() != 0}
+			<p class="comments">Comments</h3>
+			<ul class="comments">
+				#{list items:question.comments(), as:'comment'}
+					<li class="comments">
+						<h2>${comment.owner().name()}:</h2>
+						<p>${comment.content()}</p>
+						#{date comment /}
+						#{if user && comment.owner() == user}
+							<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
+						#{/if}
+					</li>	
+				#{/list}
+			</ul>
+			<br />
 		#{/if}
-	</li>
-#{/list}
+	#{/list}
 </ul>
-
-
-
 #{if user}
-
 	<h1>Ask Question</h1>
 	#{form @Secured.newQuestion()}
 		#{field 'content'}
-        	<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 		#{/field}
 		<input type="submit" value="Post" />
 	#{/form}
-
 #{/if}
