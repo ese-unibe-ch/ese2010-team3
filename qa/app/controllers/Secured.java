@@ -1,10 +1,12 @@
 package controllers;
 
-import java.util.*;
-import models.*;
-import play.*;
-import play.mvc.*;
-import play.data.validation.*;
+import models.Answer;
+import models.Comment;
+import models.Question;
+import models.User;
+import play.data.validation.Required;
+import play.mvc.Controller;
+import play.mvc.With;
 
 @With(Secure.class)
 public class Secured extends Controller {
@@ -116,31 +118,18 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
-				// try {
-				Secure.logout();
-				// } catch (Throwable e) {
-				// flash.error("Logout failed", e);
-				// }
-			}
 			user.delete();
-
+			if (name.equals(currentUser().name()))
+				Secure.logout();
 		}
+		Application.index();
 	}
 	
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
-				// try {
-				Secure.logout();
-				// } catch (Throwable e) {
-				// flash.error("Logout failed", e);
-				// }
-			}
+		if (hasPermissionToDelete(currentUser(), user))
 			user.anonymize(true);
-		}
-		Application.index();
+		deleteUser(name);
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
