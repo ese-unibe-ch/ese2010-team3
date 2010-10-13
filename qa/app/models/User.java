@@ -14,6 +14,7 @@ public class User {
 
 	private String name;
 	private String password;
+	private String email;
 	private Set<Item> items;
 	
 	private static HashMap<String,User> users = new HashMap();
@@ -37,8 +38,20 @@ public class User {
 		return this.name;
 	}
 	
-	public boolean checkpw(String password){
+	public boolean checkPW(String password){
 		return this.password.equals(password);
+	}
+	
+	public static boolean needSignUp(String username){
+    	return (User.get(username)==null);
+    }
+	
+	public static void register(String username, String password){
+		User user = new User(username, password);
+	}
+	
+	public boolean checkeMail(String email){
+		return this.email.equals(email);
 	}
 	
 	/**

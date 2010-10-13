@@ -10,7 +10,7 @@ public class UserTest extends UnitTest {
 	public void shouldCreateUser() {
 		User user = new User("Jack", "jack");
 		assertTrue(user != null);
-		assertTrue(user.checkpw("jack"));
+		assertTrue(user.checkPW("jack"));
 	}
 	
 	@Test
