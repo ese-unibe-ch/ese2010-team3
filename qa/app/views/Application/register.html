@@ -1,9 +1,9 @@
-#{extends 'Secure/layout.html' /}
+#{extends 'main.html' /}
 
+#{set title:'ajopi - register'  /}
 <div id="register">
-	
 	<h1>&{'secure.title'}</h1>
-		
+	
 	#{form @signup()}
 		
 		#{if flash.error}
@@ -21,20 +21,16 @@
 			<label for="username">&{'secure.username'}</label>
 			<input type="text" name="username" id="username" value="${flash.username}" />
 		</p>
-		<p id="email-field">
-			<label for="email">&{'secure.email'}</label>
-			<input type="text" name="email" id="email" value="@" />
-		</p>
 		<p id="password-field">
 			<label for="password">&{'secure.password'}</label>
 			<input type="password" name="password" id="password" value="" />
 		</p>
-		<p id="remember-field">
-			<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
-			<label for="remember">&{'secure.remember'}</label>
+		<p id="email-field">
+			<label for="email">E-Mail:</label>
+			<input type="text" name="email" id="email" value="" />
 		</p>
 		<p id="signup-field">
-			<input type="submit" id="register" value="&{'secure.signup'}" />
+			<input type="submit" id="register" value="Sign Up" />
 		</p>
 	#{/form}
 </div>

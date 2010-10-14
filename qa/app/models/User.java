@@ -14,10 +14,10 @@ import java.util.HashSet;
  */
 public class User {
 
-	private String name;
-	private String password;
+	private final String name;
+	private final String password;
 	private String email;
-	private HashSet<Item> items;
+	private final HashSet<Item> items;
 
 	private static HashMap<String, User> users = new HashMap();
 
@@ -48,14 +48,18 @@ public class User {
     	return (User.get(username)==null);
     }
 	
-	public static void register(String username, String password){
-		User user = new User(username, password);
+	public static User register(String username, String password) {
+		return new User(username, password);
 	}
 	
 	public boolean checkeMail(String email){
 		return this.email.equals(email);
 	}
 	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	/**
 	 * Registers an {@link Item} which should be deleted in case the <code>User</code> gets deleted.
 	 * 
