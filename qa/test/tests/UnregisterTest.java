@@ -1,9 +1,14 @@
 package tests;
-import static org.junit.Assert.*;
+import models.Answer;
+import models.Comment;
+import models.Question;
+import models.User;
+import models.Vote;
+
 import org.junit.Before;
 import org.junit.Test;
-import models.*;
-import play.test.*;
+
+import play.test.UnitTest;
 
 
 public class UnregisterTest extends UnitTest {
@@ -86,8 +91,8 @@ public class UnregisterTest extends UnitTest {
 	}
 
 	public void testUserQuestionAnonymization() {
-		this.jack.anonymize(false);
-		this.john.anonymize(false);
+		this.jack.anonymize(false, false);
+		this.john.anonymize(false, false);
 		
 		assertNull(this.question.owner());
 		assertEquals(this.question.upVotes(), 1);
@@ -98,9 +103,9 @@ public class UnregisterTest extends UnitTest {
 	@Test
 	public void testUserAnonymization() {
 		assertNotNull(User.get(this.jack.name()));
-		this.jack.anonymize(true);
+		this.jack.anonymize(true, false);
 		this.jack.delete();
-		this.john.anonymize(true);
+		this.john.anonymize(true, false);
 		this.john.delete();
 		assertNull(User.get(this.jack.name()));
 		
@@ -108,5 +113,15 @@ public class UnregisterTest extends UnitTest {
 		assertEquals(this.question.upVotes(), 1);
 		assertNull(this.answer.owner());
 		assertEquals(this.answer.downVotes(), 1);
+
+		assertNotNull(questionComment.owner());
+		assertNotNull(answerComment.owner());
+		this.michael.anonymize(true, true);
+		this.michael.delete();
+		this.sahra.anonymize(true, false);
+		this.sahra.delete();
+		assertTrue(question.hasComment(questionComment));
+		assertNull(questionComment.owner());
+		assertFalse(answer.hasComment(answerComment));
 	}
 }
