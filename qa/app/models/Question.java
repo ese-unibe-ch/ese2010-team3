@@ -3,12 +3,8 @@ package models;
 import java.util.*;
 
 /**
-<<<<<<< HEAD
- * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s and {@link Comments}.  
-=======
- * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
- * s and {@link Comments}.
->>>>>>> upstream/master
+ * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
+ * and {@link Comments}.
  * 
  * @author Simon Marti
  * @author Mirco Kocher
@@ -42,12 +38,8 @@ public class Question extends Entry {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s and itself.
-=======
 	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s and
 	 * itself.
->>>>>>> upstream/master
 	 */
 	@Override
 	public void unregister() {
