@@ -14,6 +14,8 @@
 			#{date question /}
 			#{if user && question.owner() == user}
 			<br><a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
+			#{/if}
+			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -33,6 +35,8 @@
 				#{date answer /}
 				#{if user && answer.owner() == user}
 				<br><a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
+				#{/if}
+				#{if user && answer.owner() != user}
 					#{vote answer /}
 				#{/if}
 			</li>
