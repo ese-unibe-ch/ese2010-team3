@@ -18,6 +18,12 @@ public class User {
 	private final String password;
 	private String email;
 	private final HashSet<Item> items;
+	private String fullname;
+	private String age;
+	private String website;
+	private String profession;
+	private String employer;
+	private String biography;
 
 	private static HashMap<String, User> users = new HashMap();
 
@@ -58,6 +64,30 @@ public class User {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public void fullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public void age(String age) {
+		this.age = age;
+	}
+
+	public void website(String website) {
+		this.website = website;
+	}
+
+	public void profession(String profession) {
+		this.profession = profession;
+	}
+
+	public void employer(String employer) {
+		this.employer = employer;
+	}
+
+	public void biography(String biography) {
+		this.biography = biography;
 	}
 
 	/**

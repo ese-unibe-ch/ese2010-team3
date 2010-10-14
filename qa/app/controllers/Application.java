@@ -75,4 +75,12 @@ public class Application extends Controller {
 		session.put("username", username);
 		index();
 	}
+
+	public static void showprofile(User user) {
+		render();
+	}
+
+	public static void editprofile(User user) {
+		render();
+	}
 }

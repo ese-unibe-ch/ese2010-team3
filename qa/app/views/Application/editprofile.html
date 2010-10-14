@@ -1,0 +1,19 @@
+#{extends 'main.html' /}
+
+#{if user}
+#{set title:'ajopi - Profile editor' /}
+
+	<FONT SIZE = 2>
+	<h1>Username: </h1>
+	<h1>Real Name: </h1>
+	<h1>Age: </h1>
+	<h1>Website: </h1>
+	<h1>Profession: </h1>
+	<h1>Employer: </h1>
+	<h1>Biography: </h1>
+	</FONT>
+
+#{/if}#{else}
+	#{set title:'Error' /}
+	<h1>No such user ${name}</h1>
+#{/else}
