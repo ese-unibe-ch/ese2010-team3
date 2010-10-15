@@ -205,7 +205,7 @@ public class Question extends Entry {
 		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
 		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
 		return this.settingOfBestAnswer == null ||
-			!this.settingOfBestAnswer.before(thirtyMinutesAgo.getTime());
+			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
 	}
 	
 	/**
@@ -216,6 +216,10 @@ public class Question extends Entry {
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
 		Calendar now = Calendar.getInstance();
+		return setBestAnswer(bestAnswer, now);
+	}
+	
+	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
 		if ( this.isBestAnswerSettable(now) ){
 			this.bestAnswer = bestAnswer;
 			this.settingOfBestAnswer = now;
