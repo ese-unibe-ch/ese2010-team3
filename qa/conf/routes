@@ -17,6 +17,7 @@ GET		/question/{id}/down						Secured.voteQuestionDown
 
 GET		/answer/{question}/{id}/up				Secured.voteAnswerUp
 GET		/answer/{question}/{id}/down			Secured.voteAnswerDown
+GET		/answer/{question}/{id}/isbest			Secured.selectBestAnswer
 
 GET    	/user/{name}/delete            			Application.deleteuser
 GET    	/user/{name}/truedelete         	 	Secured.deleteUser
