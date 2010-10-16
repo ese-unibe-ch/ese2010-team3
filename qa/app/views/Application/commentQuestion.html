@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+
+
+#{if question}
+#{set title:'ajopi - Question by ' + question.owner().name /}
+<ul>
+	
+		<li onclick="goto('@@{Application.question(question.id())}')">
+			<h2>${question.owner().name()}:</h2>
+			<p>
+				${question.content()}
+			</p>
+			<FONT SIZE="1"> Comments ${question.comments().size()}</a>
+			<a href ="@{Application.question(question.id())}"> &#160; &#160;<<</FONT> </a>
+			#{date question /}
+			#{if user && question.owner() != user}
+				#{vote question /}
+			#{/if}
+		</li>
+	</ul>
+		#{if comments.size() > 0}
+		<FONT SIZE = 1>
+		<h1>Comments</h1>
+		<ul>
+			#{list items:comments, as:'comment'}
+			<li>
+				<h2>${comment.owner().name()}:</h2>
+				<p>
+					${comment.content()}
+				</p>
+				#{date comment /}
+				#{if user && comment.owner() == user}
+				<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
+				#{/if}
+			</li>
+			#{/list}
+		</ul>
+	#{/if}
+		#{if user}
+		<h1>Add Comment</h1>
+		#{form @Secured.newCommentQuestion(question.id())}
+			#{field 'content'}
+	        	<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+			#{/field}
+			<input type="submit" value="Post" />
+		#{/form}
+		</FONT>
+	#{/if}
+
+		
+	#{/if}
