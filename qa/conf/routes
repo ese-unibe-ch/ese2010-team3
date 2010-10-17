@@ -10,7 +10,7 @@ GET		/question/{id}							Application.question
 POST	/question/{id}							Secured.newAnswer
 
 GET     /question/{id}/comments/				Application.commentQuestion
-POST	/question/{id}/							Secured.newCommentQuestion 
+POST	/question/{id}/							Secured.newCommentQuestion
 
 GET		/question/{id}/up						Secured.voteQuestionUp
 GET		/question/{id}/down						Secured.voteQuestionDown

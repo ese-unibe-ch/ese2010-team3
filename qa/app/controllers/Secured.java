@@ -33,14 +33,16 @@ public class Secured extends Controller {
 		}
 	}
 
-	public static void newCommentQuestion(int questionId, @Required String content) {
+	public static void newCommentQuestion(int questionId,
+			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Question.get(questionId).comment(currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
 
-	public static void newCommentAnswer(int questionId, int answerId, @Required String content) {
+	public static void newCommentAnswer(int questionId, int answerId,
+			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
@@ -89,14 +91,14 @@ public class Secured extends Controller {
 			Application.index();
 		}
 	}
-	
-	public static void deleteQuestion (int questionId) {
+
+	public static void deleteQuestion(int questionId) {
 		Question question = Question.get(questionId);
 		question.unregister();
 		Application.index();
 	}
-	
-	public static void deleteAnswer (int answerId, int questionId) {
+
+	public static void deleteAnswer(int answerId, int questionId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
@@ -107,15 +109,16 @@ public class Secured extends Controller {
 		Question question = Question.get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
-		Application.commentQuestion(questionId);
+		Application.index();
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId, int answerId) {
+	public static void deleteCommentAnswer(int commentId, int questionId,
+			int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
-		Application.commentAnswer(questionId, answerId);
+		Application.index();
 	}
 
 	public static void deleteUser(String name) throws Throwable {
@@ -128,15 +131,15 @@ public class Secured extends Controller {
 		}
 		Application.index();
 	}
-	
+
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user))
 			user.anonymize(true, false);
 		deleteUser(name);
 	}
-	
-	public static void selectBestAnswer(int questionId,int answerId) {
+
+	public static void selectBestAnswer(int questionId, int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
@@ -154,5 +157,5 @@ public class Secured extends Controller {
 		redirect(referer.value());
 		return true;
 	}
-	
+
 }
