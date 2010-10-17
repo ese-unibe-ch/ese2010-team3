@@ -15,7 +15,7 @@ import java.util.HashSet;
 public class User {
 
 	private final String name;
-	private final String password;
+	public final int password;
 	private String email;
 	private final HashSet<Item> items;
 
@@ -27,7 +27,7 @@ public class User {
 	 */
 	public User(String name, String password) {
 		this.name = name;
-		this.password = password;
+		this.password = password.hashCode();
 		this.items = new HashSet<Item>();
 		users.put(name, this);
 	}
@@ -39,9 +39,17 @@ public class User {
 	public String name() {
 		return this.name;
 	}
+	
+	public String email(){
+		return this.email;
+	}
+	
+	public int hashofpassword(){
+		return this.password;
+	}
 
-	public boolean checkPW(String password){
-		return this.password.equals(password);
+	public boolean checkPW(String passw){
+		return this.password == passw.hashCode();
 	}
 	
 	public static boolean needSignUp(String username){
@@ -53,7 +61,7 @@ public class User {
 	}
 	
 	public boolean checkeMail(String email){
-		return this.email.equals(email);
+		return this.email.equals(email) && email != null && email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
 	}
 	
 	public void setEmail(String email) {
