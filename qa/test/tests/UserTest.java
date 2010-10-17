@@ -9,13 +9,13 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldCreateUser() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertTrue(user != null);
 	}
 	
 	@Test
 	public void shouldBeCalledJack() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(user.name(), "Jack");
 	}
 

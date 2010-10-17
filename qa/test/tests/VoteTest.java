@@ -14,9 +14,9 @@ public class VoteTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.question = new Question(new User("Jack", "jack"), "Why did the chicken cross the road?");
-		this.answer = question.answer(new User("James", "james"), "To get to the other side.");
-		this.bill = new User("Bill", "bill");
+		this.question = new Question(new User("Jack"), "Why did the chicken cross the road?");
+		this.answer = question.answer(new User("James"), "To get to the other side.");
+		this.bill = new User("Bill");
 	}
 	
 	@Test
@@ -50,10 +50,10 @@ public class VoteTest extends UnitTest {
 	@Test
 	public void shouldCount() {
 		for(int i=0; i<11; i++) {
-			this.answer.voteUp(new User("up" + i, "pw"));
+			this.answer.voteUp(new User("up" + i));
 		}
 		for(int i=0; i<42; i++) {
-			this.answer.voteDown(new User("down" + i, "pw"));
+			this.answer.voteDown(new User("down" + i));
 		}
 		assertEquals(this.answer.upVotes(), 11);
 		assertEquals(this.answer.downVotes(), 42);

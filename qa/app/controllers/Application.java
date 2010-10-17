@@ -1,14 +1,9 @@
 package controllers;
 
-import java.util.List;
-
-import models.Answer;
-import models.Comment;
-import models.Question;
-import models.User;
-import play.data.validation.Required;
-import play.mvc.Before;
-import play.mvc.Controller;
+import java.util.*;
+import models.*;
+import play.*;
+import play.mvc.*;
 
 public class Application extends Controller {
 
@@ -61,26 +56,7 @@ public class Application extends Controller {
     public static void deleteuser(User user){
     	render();
     }
+    
 
-	public static void register() {
-		render();
-	}
 
-	public static void signup(@Required String username, String password,
-			String email) {
-		User user = User.register(username, password);
-		if (email != null && email.matches("\\S+@\\w+\\.\\w+"))
-			user.setEmail(email);
-		// Mark user as connected
-		session.put("username", username);
-		index();
-	}
-
-	public static void showprofile(User user) {
-		render();
-	}
-
-	public static void editprofile(User user) {
-		render();
-	}
 }

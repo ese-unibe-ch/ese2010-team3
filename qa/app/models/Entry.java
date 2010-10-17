@@ -161,13 +161,5 @@ public abstract class Entry extends Item {
 		 this.unregisterUser();
 	 }
 	 
-	 /**
-	  * @return a one-line summary of an <code>Entry</code>.
-	  * */
-	 public String summary() {
-		 if (this.content.length() <= 20)
-			 return this.content.replaceAll("[\r\n]+", " ");
-		 return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
-	 }
 
 }

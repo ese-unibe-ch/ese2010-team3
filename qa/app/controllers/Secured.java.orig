@@ -11,6 +11,7 @@ public class Secured extends Controller {
 	public static User currentUser() {
 		return User.get(Security.connected());
 	}
+<<<<<<< HEAD
 
 	public static void newQuestion(@Required String content) {
 		if (!validation.hasErrors()) {
@@ -30,14 +31,16 @@ public class Secured extends Controller {
 		}
 	}
 
-	public static void newCommentQuestion(int questionId, @Required String content) {
+	public static void newCommentQuestion(int questionId,
+			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Question.get(questionId).comment(currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
 
-	public static void newCommentAnswer(int questionId, int answerId, @Required String content) {
+	public static void newCommentAnswer(int questionId, int answerId,
+			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
@@ -84,19 +87,6 @@ public class Secured extends Controller {
 			Application.index();
 		}
 	}
-	
-	public static void deleteQuestion (int questionId) {
-		Question question = Question.get(questionId);
-		question.unregister();
-		Application.index();
-	}
-	
-	public static void deleteAnswer (int answerId, int questionId) {
-		Question question = Question.get(questionId);
-		Answer answer = question.getAnswer(answerId);
-		answer.unregister();
-		Application.question(questionId);
-	}
 
 	public static void deleteCommentQuestion(int commentId, int questionId) {
 		Question question = Question.get(questionId);
@@ -105,18 +95,73 @@ public class Secured extends Controller {
 		Application.commentQuestion(questionId);
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId, int answerId) {
+	public static void deleteCommentAnswer(int commentId, int questionId,
+			int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
 		Application.commentAnswer(questionId, answerId);
-	}
+=======
+	
+    public static void newQuestion(@Required String content) {
+    	if (!validation.hasErrors()) {
+    		Question question = new Question(currentUser(), content);
+    		Application.question(question.id());
+        } else {
+        	Application.index();
+        }
+    }
+    
+    public static void newAnswer(int questionId, @Required String content) {
+    	if (!validation.hasErrors() && Question.get(questionId) != null) {
+    		Question.get(questionId).answer(currentUser(), content);
+    		Application.question(questionId);
+        } else {
+        	Application.index();
+        }
+    }
+    
+    public static void voteQuestionUp(int id) {
+    	if (Question.get(id) != null) {
+    		Question.get(id).voteUp(currentUser());
+    		Application.question(id);
+        } else {
+        	Application.index();
+        }
+    }
+    
+    public static void voteQuestionDown(int id) {
+    	if (Question.get(id) != null) {
+    		Question.get(id).voteDown(currentUser());
+    		Application.question(id);
+        } else {
+        	Application.index();
+        }
+    }
 
-	public static void deleteUser(String name) throws Throwable {
-		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
+    public static void voteAnswerUp(int question, int id) {
+    	if (Question.get(question) != null && Question.get(question).getAnswer(id) != null) {
+    		Question.get(question).getAnswer(id).voteUp(currentUser());
+    		Application.question(question);
+        } else {
+        	Application.index();
+        }
+    }
+    
+    public static void voteAnswerDown(int question, int id) {
+    	if (Question.get(question) != null && Question.get(question).getAnswer(id) != null) {
+    		Question.get(question).getAnswer(id).voteDown(currentUser());
+    		Application.question(question);
+        } else {
+        	Application.index();
+        }
+    }
+    
+	public static void deleteUser( String name ) throws Throwable {
+		User user = User.get( name );
+		if ( hasPermissionToDelete( currentUser(), user )) {
+			if (name.equals( currentUser().name() )) {
 				// try {
 				Secure.logout();
 				// } catch (Throwable e) {
@@ -124,27 +169,27 @@ public class Secured extends Controller {
 				// }
 			}
 			user.delete();
-
-		}
-	}
-	
-	public static void anonymizeUser(String name) throws Throwable {
-		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
-				// try {
-				Secure.logout();
-				// } catch (Throwable e) {
-				// flash.error("Logout failed", e);
-				// }
-			}
-			user.anonymize(true);
 		}
 		Application.index();
 	}
-
+    
+    public static void anonymizeUser( String name ) throws Throwable {
+    	User user = User.get(name);
+    	if (hasPermissionToDelete( currentUser(),user )){
+    		if ( name.equals( currentUser().name() )){
+//    			try {
+					Secure.logout();
+//				} catch (Throwable e) {
+//					flash.error("Logout failed", e);
+//				}
+    		}
+    		user.anonymize(true);
+    	}
+    	Application.index();
+    }
+    
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.name().equals(user.name());
-
+		return currentUser.name().equals( user.name() );
+>>>>>>> upstream/master
 	}
 }

@@ -1,7 +1,6 @@
 package models;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -14,16 +13,8 @@ import java.util.HashSet;
  */
 public class User {
 
-	private final String name;
-	private final String password;
-	private String email;
-	private final HashSet<Item> items;
-	private String fullname;
-	private String age;
-	private String website;
-	private String profession;
-	private String employer;
-	private String biography;
+	private String name;
+	private Set<Item> items;
 
 	private static HashMap<String, User> users = new HashMap();
 
@@ -31,9 +22,8 @@ public class User {
 	 * Creates a <code>User</code> with a given name.
 	 * @param name the name of the <code>User</code>
 	 */
-	public User(String name, String password) {
+	public User(String name) {
 		this.name = name;
-		this.password = password;
 		this.items = new HashSet<Item>();
 		users.put(name, this);
 	}
@@ -44,50 +34,6 @@ public class User {
 	 */
 	public String name() {
 		return this.name;
-	}
-
-	public boolean checkPW(String password){
-		return this.password.equals(password);
-	}
-	
-	public static boolean needSignUp(String username){
-    	return (User.get(username)==null);
-    }
-	
-	public static User register(String username, String password) {
-		return new User(username, password);
-	}
-	
-	public boolean checkeMail(String email){
-		return this.email.equals(email);
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void fullname(String fullname) {
-		this.fullname = fullname;
-	}
-
-	public void age(String age) {
-		this.age = age;
-	}
-
-	public void website(String website) {
-		this.website = website;
-	}
-
-	public void profession(String profession) {
-		this.profession = profession;
-	}
-
-	public void employer(String employer) {
-		this.employer = employer;
-	}
-
-	public void biography(String biography) {
-		this.biography = biography;
 	}
 
 	/**
@@ -103,9 +49,7 @@ public class User {
 	 * Causes the <code>User</code> to delete all his {@link Item}s.
 	 */
 	public void delete() {
-		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
-		for (Item item : clone)
+		for (Item item : this.items)
 			item.unregister();
 		this.items.clear();
 		users.remove(this.name);
@@ -139,24 +83,19 @@ public class User {
 			return users.get(name);
 		return null;
 	}
-
+	
 	/**
-	 * Anonymizes all questions, answers and comments by this user.
-	 * 
-	 * @param doAnswers
-	 *            - whether to anonymize this user's answers as well
-	 * @param doComments
-	 *            - whether to anonymize this user's comments as well
-	 */
-	public void anonymize(boolean doAnswers, boolean doComments) {
-		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
-		for (Item item : clone) {
-			if (item instanceof Question || doAnswers && item instanceof Answer
-					|| doComments && item instanceof Comment) {
-				((Entry) item).anonymize();
-				this.items.remove(item);
-			}
-		}
-	}
+	  * Anonymizes all questions and answers by this user.
+	  * @param doAnswers - whether to anonymize this user's answers as well 
+	  */
+	 public void anonymize(boolean doAnswers) {
+		 for (Item item : this.items) {
+			 if (item instanceof Question ||
+					 item instanceof Answer && doAnswers) {
+				 ((Entry)item).anonymize();
+				 this.items.remove(item);
+			 }
+		 }
+	 }
+
 }

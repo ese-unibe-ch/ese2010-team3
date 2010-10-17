@@ -1,14 +1,9 @@
 package tests;
-import models.Answer;
-import models.Comment;
-import models.Question;
-import models.User;
-import models.Vote;
-
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import play.test.UnitTest;
+import models.*;
+import play.test.*;
 
 
 public class UnregisterTest extends UnitTest {
@@ -28,12 +23,12 @@ public class UnregisterTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.jack = new User("Jack", "jack");
-		this.john = new User("John", "john");
-		this.bill = new User("Bill", "bill");
-		this.kate = new User("Kate", "kate");
-		this.sahra = new User("Sahra", "sahra");
-		this.michael = new User("Michael", "michael");
+		this.jack = new User("Jack");
+		this.john = new User("John");
+		this.bill = new User("Bill");
+		this.kate = new User("Kate");
+		this.sahra = new User("Sahra");
+		this.michael = new User("Michael");
 		this.question = new Question(this.jack, "Why did the chicken cross the road?");
 		this.answer = this.question.answer(this.john, "To get to the other side.");
 		this.questionVote = this.question.voteUp(this.kate);
@@ -73,7 +68,8 @@ public class UnregisterTest extends UnitTest {
 		assertTrue(this.bill.hasItem(this.answerVote));
 		this.jack.delete();
 		assertFalse(this.kate.hasItem(this.questionVote));
-		assertFalse(this.bill.hasItem(this.answerVote));	
+		assertFalse(this.bill.hasItem(this.answerVote));
+		
 	}
 	
 	@Test
@@ -91,37 +87,12 @@ public class UnregisterTest extends UnitTest {
 	}
 
 	public void testUserQuestionAnonymization() {
-		this.jack.anonymize(false, false);
-		this.john.anonymize(false, false);
+		this.jack.anonymize(false);
+		this.john.anonymize(false);
 		
 		assertNull(this.question.owner());
 		assertEquals(this.question.upVotes(), 1);
 		assertEquals(this.answer.owner(), this.john);
 		assertEquals(this.answer.downVotes(), 1);
-	}
-	
-	@Test
-	public void testUserAnonymization() {
-		assertNotNull(User.get(this.jack.name()));
-		this.jack.anonymize(true, false);
-		this.jack.delete();
-		this.john.anonymize(true, false);
-		this.john.delete();
-		assertNull(User.get(this.jack.name()));
-		
-		assertNull(this.question.owner());
-		assertEquals(this.question.upVotes(), 1);
-		assertNull(this.answer.owner());
-		assertEquals(this.answer.downVotes(), 1);
-
-		assertNotNull(questionComment.owner());
-		assertNotNull(answerComment.owner());
-		this.michael.anonymize(true, true);
-		this.michael.delete();
-		this.sahra.anonymize(true, false);
-		this.sahra.delete();
-		assertTrue(question.hasComment(questionComment));
-		assertNull(questionComment.owner());
-		assertFalse(answer.hasComment(answerComment));
 	}
 }
