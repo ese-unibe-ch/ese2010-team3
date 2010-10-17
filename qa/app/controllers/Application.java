@@ -58,9 +58,6 @@ public class Application extends Controller {
     	render(answer, comments, question);
     }
 
-    public static void deleteuser(User user){
-    	render();
-    }
 
 	public static void register() {
 		render();
