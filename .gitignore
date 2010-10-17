@@ -1,2 +1,19 @@
 # do not commit all the eclipse stuff
 /.metadata
+/qa/.buildpath
+/qa/.classpath
+/qa/.project
+/qa/.settings
+/qa/cache
+/qa/log
+/qa/eclipse
+
+# do not commit all temporary play stuff
+/qa/cobertura.ser
+/qa/logs
+/qa/server.pid
+/qa/tmp
+/qa/test-result
+
+# and do not commit the stuff from mac users
+.DS_Store

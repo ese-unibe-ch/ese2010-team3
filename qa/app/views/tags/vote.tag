@@ -1,5 +1,5 @@
 <span class="vote">
-
+	
 	<a href="
 		#{if _arg.type() == "Answer"}
 			@{Secured.voteAnswerDown(_arg.question().id(), _arg.id())}

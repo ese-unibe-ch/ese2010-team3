@@ -6,7 +6,6 @@ package models;
  * 
  * @author Felix Langenegger
  * @author Tobias Brog (Review)
-<<<<<<< HEAD
  *
  */
 

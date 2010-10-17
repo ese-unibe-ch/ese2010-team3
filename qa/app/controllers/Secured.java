@@ -6,6 +6,7 @@ import models.Question;
 import models.User;
 import play.data.validation.Required;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 @With(Secure.class)
@@ -52,7 +53,8 @@ public class Secured extends Controller {
 	public static void voteQuestionUp(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteUp(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -61,7 +63,8 @@ public class Secured extends Controller {
 	public static void voteQuestionDown(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteDown(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -118,8 +121,9 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user)) {
+			boolean deleteSelf = name.equals(currentUser().name());
 			user.delete();
-			if (name.equals(currentUser().name()))
+			if (deleteSelf)
 				Secure.logout();
 		}
 		Application.index();
@@ -128,12 +132,27 @@ public class Secured extends Controller {
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user))
-			user.anonymize(true);
+			user.anonymize(true, false);
 		deleteUser(name);
+	}
+	
+	public static void selectBestAnswer(int questionId,int answerId) {
+		Question question = Question.get(questionId);
+		Answer answer = question.getAnswer(answerId);
+		question.setBestAnswer(answer);
+		Application.question(questionId);
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
 		return currentUser.name().equals(user.name());
-
 	}
+
+	private static boolean redirectToCallingPage() {
+		Http.Header referer = request.headers.get("referer");
+		if (referer == null)
+			return false;
+		redirect(referer.value());
+		return true;
+	}
+	
 }

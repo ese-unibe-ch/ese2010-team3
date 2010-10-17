@@ -130,6 +130,12 @@ article {
 			display: 			block;
 		}
 		
+#register label {
+	display: block;
+	float: left;
+	min-width: 6em;
+}
+
 footer {
 	text-align: 		right;
 	font-size: 			0.7em;
