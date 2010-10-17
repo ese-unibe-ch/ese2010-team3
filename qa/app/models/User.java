@@ -61,6 +61,34 @@ public class User {
 	public boolean checkeMail(String email){
 		return this.email.equals(email);
 	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void fullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public void age(String age) {
+		this.age = age;
+	}
+
+	public void website(String website) {
+		this.website = website;
+	}
+
+	public void profession(String profession) {
+		this.profession = profession;
+	}
+
+	public void employer(String employer) {
+		this.employer = employer;
+	}
+
+	public void biography(String biography) {
+		this.biography = biography;
+	}
 
 	/**
 	 * Registers an {@link Item} which should be deleted in case the <code>User</code> gets deleted.
@@ -130,63 +158,5 @@ public class User {
 				this.items.remove(item);
 			}
 		}
-	}
-
-	/* Getter and Setter for profile data */
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
-
-	public String getFullname() {
-		return this.fullname;
-	}
-
-	public void setAge(String age) {
-		this.age = age;
-	}
-
-	public String getAge() {
-		return this.age;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
-	}
-
-	public String getWebsite() {
-		return this.website;
-	}
-
-	public void setProfession(String profession) {
-		this.profession = profession;
-	}
-
-	public String getProfession() {
-		return this.profession;
-	}
-
-	public void setEmployer(String employer) {
-		this.employer = employer;
-	}
-
-	public String getEmployer() {
-		return this.employer;
-	}
-
-	public void setBiography(String biography) {
-		this.biography = biography;
-	}
-
-	public String getBiography() {
-		return this.biography;
 	}
 }
