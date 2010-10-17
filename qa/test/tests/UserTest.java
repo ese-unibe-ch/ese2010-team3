@@ -1,8 +1,9 @@
 package tests;
-import static org.junit.Assert.*;
+import models.User;
+
 import org.junit.Test;
-import models.*;
-import play.test.*;
+
+import play.test.UnitTest;
 
 
 public class UserTest extends UnitTest {

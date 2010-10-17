@@ -83,4 +83,18 @@ public class Application extends Controller {
 	public static void editprofile(User user) {
 		render();
 	}
+
+	public static void saveProfile(String name, String email,
+			String fullname, String age, String website, String profession,
+			String employer, String biography) {
+		User user = User.get(name);
+		user.setEmail(email);
+		user.setFullname(fullname);
+		user.setAge(age);
+		user.setWebsite(website);
+		user.setProfession(profession);
+		user.setEmployer(employer);
+		user.setBiography(biography);
+		showprofile(user);
+	}
 }

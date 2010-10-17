@@ -121,9 +121,9 @@ article {
 		textarea {
 			height: 			50px;
 			width: 				300px;
-			background: 		#222;
+			background: 		#fff;
 			border: 			1px #000 solid;
-			color: 				#aecbfb;
+			color: 				#000;
 		}
 		
 		input[type="submit"] {

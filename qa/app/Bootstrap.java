@@ -1,18 +1,17 @@
-import play.*;
-import play.jobs.*;
-import play.test.*;
-
-import models.*;
+import models.Question;
+import models.User;
+import play.jobs.Job;
+import play.jobs.OnApplicationStart;
 
 @OnApplicationStart
 public class Bootstrap extends Job {
  
     public void doJob() {
     	// User
-        User jack = new User("Jack", "jack");
-        User john = new User("John", "john");
-        User bill = new User("Bill", "bill");
-        User kate = new User("Kate", "kate");
+		User jack = new User("Jack", "jack");
+		User john = new User("John", "john");
+		User bill = new User("Bill", "bill");
+		User kate = new User("Kate", "kate");
         
         // Questions
         Question question = new Question(jack, "Why did the chicken cross the road?");
