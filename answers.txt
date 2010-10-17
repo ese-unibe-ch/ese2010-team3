@@ -1,0 +1,3 @@
+1. A HTTP request is directly handled by the play! framework (no webserver like apache). First play! searches the routes file for the needed controller using the requested URI. When a Controller is found, it can perform various tasks, programmed by the developer, using the model. Some Objects are then transferred to the view which gets interpreted by the framework. The resulting text is then sent back to the user. Any changes made to objects during this task will be saved in memory and can be used by the next request.
+
+2. play! provides a testing environment called "Selenium" which allows to run predefined actions in a automated browser and check the responses. Using this, one could for example test if the displayed rating really goes up after clicking the "+" button.
