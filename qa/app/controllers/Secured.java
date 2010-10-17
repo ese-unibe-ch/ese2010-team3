@@ -109,7 +109,7 @@ public class Secured extends Controller {
 		Question question = Question.get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
-		Application.index();
+		Application.commentQuestion(questionId);
 	}
 
 	public static void deleteCommentAnswer(int commentId, int questionId,
@@ -118,7 +118,7 @@ public class Secured extends Controller {
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
-		Application.index();
+		Application.commentAnswer(questionId, answerId);
 	}
 
 	public static void deleteUser(String name) throws Throwable {

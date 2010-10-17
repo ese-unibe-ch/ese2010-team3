@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{if question}
 #{set title:'ajopi - Question by ' + question.owner().name /}
-<a href="@{Application.index}"}">back</a>
+<a href="@{Application.index}">back</a>
 <ul>
 	<li onclick="goto('@@{Application.question(question.id())}')">
 		<h2>${question.owner().name()}:</h2>
