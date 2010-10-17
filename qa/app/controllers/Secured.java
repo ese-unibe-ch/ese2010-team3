@@ -1,10 +1,13 @@
 package controllers;
 
-import java.util.*;
-import models.*;
-import play.*;
-import play.mvc.*;
-import play.data.validation.*;
+import models.Answer;
+import models.Comment;
+import models.Question;
+import models.User;
+import play.data.validation.Required;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.With;
 
 @With(Secure.class)
 public class Secured extends Controller {
@@ -50,7 +53,8 @@ public class Secured extends Controller {
 	public static void voteQuestionUp(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteUp(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -59,7 +63,8 @@ public class Secured extends Controller {
 	public static void voteQuestionDown(int id) {
 		if (Question.get(id) != null) {
 			Question.get(id).voteDown(currentUser());
-			Application.question(id);
+			if (!redirectToCallingPage())
+				Application.question(id);
 		} else {
 			Application.index();
 		}
@@ -116,35 +121,30 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
-				// try {
-				Secure.logout();
-				// } catch (Throwable e) {
-				// flash.error("Logout failed", e);
-				// }
-			}
+			boolean deleteSelf = name.equals(currentUser().name());
 			user.delete();
-
+			if (deleteSelf)
+				Secure.logout();
 		}
+		Application.index();
 	}
 	
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user)) {
-			if (name.equals(currentUser().name())) {
-				// try {
-				Secure.logout();
-				// } catch (Throwable e) {
-				// flash.error("Logout failed", e);
-				// }
-			}
-			user.anonymize(true);
-		}
-		Application.index();
+		if (hasPermissionToDelete(currentUser(), user))
+			user.anonymize(true, false);
+		deleteUser(name);
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
 		return currentUser.name().equals(user.name());
+	}
 
+	private static boolean redirectToCallingPage() {
+		Http.Header referer = request.headers.get("referer");
+		if (referer == null)
+			return false;
+		redirect(referer.value());
+		return true;
 	}
 }

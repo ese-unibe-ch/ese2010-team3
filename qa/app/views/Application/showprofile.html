@@ -1,0 +1,47 @@
+#{extends 'main.html' /}
+
+#{if user}
+#{set title:'ajopi - Profile' /}
+
+	<ul>
+		<li>
+		<a href="@{Application.editprofile}">Edit Profile</a>
+		</li>
+	</ul>
+	
+	<div id="showprofile">
+	
+		<p id="username-field">
+			<label for="username">&{'Username: ' + user.name}</label>
+		</p>
+		<p id="email-field">
+			<label for="email">&{'Email: ' + user.email}</label>
+		</p>
+		<p id="fullname-field">
+			<label for="fullname">&{'Real name: ' + user.fullname}</label>
+		</p>
+		<p id="age-field">
+			<label for="age">&{'Age: ' + user.age}</label>
+		</p>
+		<p id="website-field">
+			<label for="website">&{'Website: ' + user.website}</label>
+		</p>
+		<p id="profession-field">
+			<label for="profession">&{'Profession: ' + user.profession}</label>
+		</p>
+		<p id="employer-field">
+			<label for="employer">&{'Employer: ' + user.employer}</label>
+		</p>
+		<p id="biography-field">
+			<label for="biography">&{'Biography: ' + user.biography}</label>
+		</p>
+		
+		<p id="saveprofile-field">
+		</p>
+	
+	</div>
+
+#{/if}#{else}
+	#{set title:'Error' /}
+	<h1>No such user ${name}</h1>
+#{/else}

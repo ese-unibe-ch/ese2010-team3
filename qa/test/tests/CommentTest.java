@@ -28,11 +28,11 @@ public class CommentTest extends UnitTest {
 	
 	@Before
 	public void setUp() {
-		this.james = new User("James");
-		this.question = new Question(new User("Jack"), "Why did the chicken cross the road?");
+		this.james = new User("James", "james");
+		this.question = new Question(new User("Jack", "jack"), "Why did the chicken cross the road?");
 		this.answer = this.question.answer(james, "To get to the other side.");
 		this.commentQuestion = this.question.comment(james, "Strange Question!");
-		this.commentAnswer = this.answer.comment(new User("Jill"), "Good point!");
+		this.commentAnswer = this.answer.comment(new User("Jill", "jill"), "Good point!");
 		
 	}
 	

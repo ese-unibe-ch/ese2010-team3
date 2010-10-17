@@ -2,10 +2,10 @@
 
 
 #{if question}
-#{set title:'ajopi - Question by ' + question.owner().name /}
+#{set title:'ajopi - ' + question.summary()  /}
 	<ul>
 		<li>
-			<h2>${question.owner().name()}:</h2>
+			<h2>#{userName question /}:</h2>
 			<p>
 				${question.content()}
 			</p>
@@ -14,6 +14,8 @@
 			#{date question /}
 			#{if user && question.owner() == user}
 			<br><a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
+			#{/if}
+			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -24,7 +26,7 @@
 		<ul>
 			#{list items:answers, as:'answer'}
 			<li>
-				<h2>${answer.owner().name()}:</h2>
+				<h2>#{userName answer /}:</h2>
 				<p>
 					${answer.content()}
 				</p>
@@ -33,6 +35,8 @@
 				#{date answer /}
 				#{if user && answer.owner() == user}
 				<br><a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
+				#{/if}
+				#{if user && answer.owner() != user}
 					#{vote answer /}
 				#{/if}
 			</li>

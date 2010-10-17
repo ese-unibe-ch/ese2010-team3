@@ -16,8 +16,8 @@ public class AnswerTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.james = new User("James");
-		this.question = new Question(new User("Jack"), "Why did the chicken cross the road?");
+		this.james = new User("James", "jack");
+		this.question = new Question(new User("Jack", "jack"), "Why did the chicken cross the road?");
 		this.answer = this.question.answer(james, "To get to the other side.");
 	}
 	

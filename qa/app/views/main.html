@@ -19,12 +19,15 @@
     				<span>
     					#{if user}
 							Hi ${user.name()}!
+							<a href="@{Application.showprofile}">Profile</a>
 							<a href="@{Application.deleteuser}">Delete</a>
 							<a href="@{Secure.logout}">Logout</a>
 						#{/if}
 						#{else}
 							Not logged in
 							<a href="@{Secure.login}">Login</a>
+							or
+							<a href="@{Application.register}">Sign Up</a>
 						#{/else}	
     				</span>
     			</nav>
@@ -33,7 +36,7 @@
         		#{doLayout /}
         	</article>
         	<footer>
-        		A demo project by Simon Marti & Mirco Kocher
+        		A project by Group 3.
         	</footer>
         </div>
     </body>
