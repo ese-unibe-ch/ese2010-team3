@@ -1,10 +1,10 @@
 #{extends 'main.html' /}
 #{if answer}
-	#{set title:'ajopi - Answer by ' + answer.owner().name /}
+	#{set title:'ajopi - ' + answer.summary()  /}
 <a href="@{Application.question(question.id())}">back</a>
 	<ul>
 		<li>
-			<h2>${answer.owner().name()}:</h2>
+			<h2>#{userName answer /}:</h2>
 			<p>
 				${answer.content()}
 			</p>
@@ -19,7 +19,7 @@
 		<ul class="comments">
 			#{list items:comments, as:'comment'}
 			<li class="comments">
-				<h2>${comment.owner().name()}:</h2>
+				<h2>#{userName comment /}:</h2>
 				<p>${comment.content()}</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}
