@@ -151,3 +151,7 @@ footer {
 header, nav, article, footer {
 	display: 			block;
 }
+
+div.showprofile {
+ color: #ff8400;
+}

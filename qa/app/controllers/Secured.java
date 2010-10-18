@@ -147,4 +147,19 @@ public class Secured extends Controller {
 		redirect(referer.value());
 		return true;
 	}
+
+	public static void saveProfile(String email, String fullname,
+			String age, String website, String profession, String employer,
+			String biography) {
+		User user = currentUser();
+		user.setEmail(email);
+		user.setFullname(fullname);
+		user.setAge(age);
+		user.setWebsite(website);
+		user.setProfession(profession);
+		user.setEmployer(employer);
+		user.setBiography(biography);
+		Application.showprofile();
+	}
+
 }

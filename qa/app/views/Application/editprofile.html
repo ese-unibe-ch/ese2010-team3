@@ -3,8 +3,7 @@
 #{if user}
 #{set title:'ajopi - Profile editor' /}
 
-	<form id="editprofile">
-	#{form @saveProfile()}
+	#{form @Secured.saveProfile()}
 	
 		<p id="username-field">
 			#{field 'username'}
@@ -14,6 +13,7 @@
 			</br>
 			#{/field}
 		</p>
+		
 		
 		<p id="email-field">
 			#{field 'email'}
@@ -40,6 +40,7 @@
 			</br>
 			#{/field}
 		</p>
+		
 		
 		<p id="website-field">
 			#{field 'website'}
@@ -71,17 +72,16 @@
 		<p id="biography-field">
 			#{field 'biography'}
 			<label for="biography">&{'Biography: '}</label>
-			<textarea name="${field.name}"></textarea>
+			<textarea name="${field.name}">${user.biography}</textarea>
 			#{/field}
 		</p>
 		
 		
 		<p id="saveprofile-field">
-			<input type="submit" id="editprofile" value="Save Profile" />
+			<input type="submit" id="saveProfile" value="Save Profile" />
 		</p>
 	
 	#{/form}
-	</form>
 
 #{/if}#{else}
 	#{set title:'Error' /}
