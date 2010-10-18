@@ -33,14 +33,16 @@ public class Secured extends Controller {
 		}
 	}
 
-	public static void newCommentQuestion(int questionId, @Required String content) {
+	public static void newCommentQuestion(int questionId,
+			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Question.get(questionId).comment(currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
 
-	public static void newCommentAnswer(int questionId, int answerId, @Required String content) {
+	public static void newCommentAnswer(int questionId, int answerId,
+			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
@@ -89,14 +91,14 @@ public class Secured extends Controller {
 			Application.index();
 		}
 	}
-	
-	public static void deleteQuestion (int questionId) {
+
+	public static void deleteQuestion(int questionId) {
 		Question question = Question.get(questionId);
 		question.unregister();
 		Application.index();
 	}
-	
-	public static void deleteAnswer (int answerId, int questionId) {
+
+	public static void deleteAnswer(int answerId, int questionId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
@@ -110,7 +112,8 @@ public class Secured extends Controller {
 		Application.commentQuestion(questionId);
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId, int answerId) {
+	public static void deleteCommentAnswer(int commentId, int questionId,
+			int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
@@ -128,7 +131,7 @@ public class Secured extends Controller {
 		}
 		Application.index();
 	}
-	
+
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user))
@@ -148,17 +151,24 @@ public class Secured extends Controller {
 		return true;
 	}
 
-	public static void saveProfile(String email, String fullname,
+	public static void saveProfile(String name, String email, String fullname,
 			String age, String website, String profession, String employer,
 			String biography) {
-		User user = currentUser();
-		user.setEmail(email);
-		user.setFullname(fullname);
-		user.setAge(age);
-		user.setWebsite(website);
-		user.setProfession(profession);
-		user.setEmployer(employer);
-		user.setBiography(biography);
+
+		if (email != null)
+			currentUser().setEmail(email);
+		if (fullname != null)
+			currentUser().setFullname(fullname);
+		if (age != null)
+			currentUser().setAge(age);
+		if (website != null)
+			currentUser().setWebsite(website);
+		if (profession != null)
+			currentUser().setProfession(profession);
+		if (employer != null)
+			currentUser().setEmployer(employer);
+		if (biography != null)
+			currentUser().setBiography(biography);
 		Application.showprofile();
 	}
 
