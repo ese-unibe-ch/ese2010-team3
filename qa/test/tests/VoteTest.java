@@ -1,5 +1,8 @@
 package tests;
 import static org.junit.Assert.*;
+
+import java.util.Calendar;
+
 import org.junit.Before;
 import org.junit.Test;
 import models.*;
@@ -11,12 +14,14 @@ public class VoteTest extends UnitTest {
 	private Question question;
 	private Answer answer;
 	private User bill;
+	private Answer secondAnswer;
 
 	@Before
 	public void setUp() {
 		this.question = new Question(new User("Jack", "jack"), "Why did the chicken cross the road?");
 		this.answer = question.answer(new User("James", "james"), "To get to the other side.");
 		this.bill = new User("Bill", "bill");
+		this.secondAnswer = question.answer(new User("Paul", "paul"), "Because.");
 	}
 	
 	@Test
@@ -68,4 +73,28 @@ public class VoteTest extends UnitTest {
 		assertEquals(this.question.downVotes(), 0);
 	}
 	
+	@Test
+	public void testBestAnswerSetting() {
+		Calendar now = Calendar.getInstance();
+		assertTrue(this.question.isBestAnswerSettable(now));
+		this.question.setBestAnswer(answer);
+		assertEquals(this.question.getBestAnswer(),answer);
+		this.question.setBestAnswer(secondAnswer);
+		assertEquals(this.question.getBestAnswer(),secondAnswer);
+	}
+	
+	@Test
+	public void shouldNotAllowBestAnswerSetAfterOneHour() {
+		Calendar now = Calendar.getInstance();
+
+		Calendar inAnHour = (Calendar) now.clone();
+		inAnHour.add(Calendar.HOUR, 1);
+		
+		this.question.setBestAnswer(answer);
+		assertTrue(this.question.isBestAnswerSettable(now));
+		assertFalse(this.question.isBestAnswerSettable(inAnHour));
+		
+		assertFalse(this.question.setBestAnswer(secondAnswer,inAnHour));
+		assertEquals(this.question.getBestAnswer(),answer);
+	}
 }

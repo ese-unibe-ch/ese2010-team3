@@ -115,5 +115,9 @@ public class Answer extends Entry {
 	public int id() {
 		return this.id;
 	}
+	
+	public boolean isBestAnswer() {
+		return this.question.getBestAnswer() == this;
+	}
 
 }

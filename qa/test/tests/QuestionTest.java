@@ -46,7 +46,7 @@ public class QuestionTest extends UnitTest {
 	@Test
 	public void shouldBeInPublicList() {
 		List q = Question.questions();
-		assertFalse(q == null);
+		assertNotNull(q);
 		assertTrue(q.contains(this.question));
 		int size = Question.questions().size();
 		new Question(this.user, "What is the answer to life the universe and everything?");

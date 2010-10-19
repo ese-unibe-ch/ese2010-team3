@@ -80,7 +80,7 @@ article {
 					background: 		#444;
 				}
 		
-			h2, h3 {
+			h2,h3 {
 				color: 				#ff8400;
 				margin: 			0;
 			}
@@ -149,13 +149,31 @@ footer {
 
 
 header, nav, article, footer {
-	display: 			block;
+	display: block;
 }
 
+ul.comments {
+	padding-left:30px;
+}
+
+li.comments {
+	background:#181818;
+	font-size: 0.9em;
+}
+p.comments {
+	color: #ff8400;
+	font-weight: bold;
+	padding-left:30px;
+}
+li.comments h2 {
+	color: #ff8400;
+	font-weight: bold;
+	font-size: 0.9em;
+}
 div.showprofile {
 	color: #ff8400;
 }
 
 form.editprofile {
 	color: #ff8400;
-} 
+}

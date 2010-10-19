@@ -15,6 +15,8 @@ public class Question extends Entry {
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
 	private int id;
+	private Answer     bestAnswer;
+	private Calendar   settingOfBestAnswer;
 
 	private static IDTable<Question> questions = new IDTable();
 
@@ -197,6 +199,38 @@ public class Question extends Entry {
 	 */
 	public Comment getComment(int id) {
 		return this.comments.get(id);
+	}
+
+	public boolean isBestAnswerSettable(Calendar now){
+		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
+		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
+		return this.settingOfBestAnswer == null ||
+			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
+	}
+	
+	/**
+	 * Sets the best answer. This answer can not be changed after 30min. This
+	 * Method enforces this and fails if it can not be set.
+	 * @param bestAnswer the answer the user chose to be the best for this question.
+	 * @return true iff setting of best answer was allowed.
+	 */
+	public boolean setBestAnswer(Answer bestAnswer) {
+		Calendar now = Calendar.getInstance();
+		return setBestAnswer(bestAnswer, now);
+	}
+	
+	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
+		if ( this.isBestAnswerSettable(now) ){
+			this.bestAnswer = bestAnswer;
+			this.settingOfBestAnswer = now;
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public Answer getBestAnswer() {
+		return bestAnswer;
 	}
 
 }

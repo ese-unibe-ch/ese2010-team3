@@ -141,6 +141,13 @@ public class Secured extends Controller {
 		deleteUser(name);
 	}
 
+	public static void selectBestAnswer(int questionId, int answerId) {
+		Question question = Question.get(questionId);
+		Answer answer = question.getAnswer(answerId);
+		question.setBestAnswer(answer);
+		Application.question(questionId);
+	}
+
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
 		return currentUser.name().equals(user.name());
 	}
@@ -174,5 +181,4 @@ public class Secured extends Controller {
 			user.setBiography(biography);
 		Application.showprofile();
 	}
-
 }
