@@ -153,5 +153,9 @@ header, nav, article, footer {
 }
 
 div.showprofile {
- color: #ff8400;
+	color: #ff8400;
 }
+
+form.editprofile {
+	color: #ff8400;
+} 

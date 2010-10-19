@@ -8,9 +8,7 @@
 		<p id="username-field">
 			#{field 'username'}
 			<label for="username">&{'Username: '}</label>
-			<br>
 			<label for="username">&{user.name}</label>
-			</br>
 			#{/field}
 		</p>
 		
@@ -18,26 +16,20 @@
 		<p id="email-field">
 			#{field 'email'}
 			<label for="email">&{'Email: '}</label>
-			<br>
 			<input type="text" name="email" id="email" value="${user.email}" />
-			</br>
 			#{/field}
 		</p>
 		
 		<p id="fullname-field">
 			#{field 'fullname'}
 			<label for="fullname">&{'Real Name: '}</label>
-			<br>
 			<input type="text" name="fullname" id="fullname" value="${user.fullname}" />
-			</br>
 			#{/field}
 		
-		<p id="age-field">
-			#{field 'age'}
-			<label for="age">&{'Age: '}</label>
-			<br>
-			<input type="text" name="age" id="age" value="${user.age}" />
-			</br>
+		<p id="birthday-field">
+			#{field 'birthday'}
+			<label for="birthday">&{'Birthday: '}</label>
+			<input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" />
 			#{/field}
 		</p>
 		
@@ -45,27 +37,21 @@
 		<p id="website-field">
 			#{field 'website'}
 			<label for="website">&{'Website: '}</label>
-			<br>
 			<input type="text" name="website" id="website" value="${user.website}" />
-			</br>
 			#{/field}
 		</p>
 		
 		<p id="profession-field">
 			#{field 'profession'}
 			<label for="profession">&{'Profession: '}</label>
-			<br>
 			<input type="text" name="profession" id="profession" value="${user.profession}" />
-			</br>
 			#{/field}
 		</p>
 		
 		<p id="employer-field">
 			#{field 'employer'}
 			<label for="employer">&{'Employer: '}</label>
-			<br>
 			<input type="text" name="employer" id="employer" value="${user.employer}" />
-			</br>
 			#{/field}
 		</p>
 		

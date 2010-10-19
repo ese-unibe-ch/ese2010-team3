@@ -1,5 +1,7 @@
 package controllers;
 
+import java.text.ParseException;
+
 import models.Answer;
 import models.Comment;
 import models.Question;
@@ -152,23 +154,24 @@ public class Secured extends Controller {
 	}
 
 	public static void saveProfile(String name, String email, String fullname,
-			String age, String website, String profession, String employer,
-			String biography) {
+			String birthday, String website, String profession,
+			String employer, String biography) throws ParseException {
 
+		User user = currentUser();
 		if (email != null)
-			currentUser().setEmail(email);
+			user.setEmail(email);
 		if (fullname != null)
-			currentUser().setFullname(fullname);
-		if (age != null)
-			currentUser().setAge(age);
+			user.setFullname(fullname);
+		if (birthday != null)
+			user.setDateOfBirth(birthday);
 		if (website != null)
-			currentUser().setWebsite(website);
+			user.setWebsite(website);
 		if (profession != null)
-			currentUser().setProfession(profession);
+			user.setProfession(profession);
 		if (employer != null)
-			currentUser().setEmployer(employer);
+			user.setEmployer(employer);
 		if (biography != null)
-			currentUser().setBiography(biography);
+			user.setBiography(biography);
 		Application.showprofile();
 	}
 

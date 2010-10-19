@@ -1,5 +1,7 @@
 package tests;
 
+import java.text.ParseException;
+
 import models.User;
 
 import org.junit.Test;
@@ -21,9 +23,9 @@ public class UserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldEditProfileCorrectly() {
+	public void shouldEditProfileCorrectly() throws ParseException {
 		User user = new User("Jack", "jack");
-		user.setAge("23");
+		user.setDateOfBirth("14-09-87");
 		user.setBiography("I lived");
 		user.setEmail("test@test.tt");
 		user.setEmployer("TestInc");
@@ -31,7 +33,7 @@ public class UserTest extends UnitTest {
 		user.setProfession("tester");
 		user.setWebsite("http://www.test.ch");
 
-		assertTrue(user.getAge().equals("23"));
+		assertEquals(user.getAge(), 23);
 		assertTrue(user.getBiography().equalsIgnoreCase("I lived"));
 		assertTrue(user.getEmail().equals("test@test.tt"));
 		assertTrue(user.getEmployer().equals("TestInc"));

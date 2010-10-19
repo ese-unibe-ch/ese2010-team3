@@ -1,5 +1,8 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -19,11 +22,13 @@ public class User {
 	private String email;
 	private final HashSet<Item> items;
 	private String fullname;
-	private String age;
+	protected Date dateOfBirth;
 	private String website;
 	private String profession;
 	private String employer;
 	private String biography;
+
+	public static final String DATE_FORMAT = "dd-MM-yy";
 
 	private static HashMap<String, User> users = new HashMap();
 
@@ -132,6 +137,46 @@ public class User {
 		}
 	}
 
+	/**
+	 * Calculates the age of the <code>User</code> in years
+	 * 
+	 * @return age of the <code>User</code>
+	 */
+	private int age() {
+		Date now = new Date();
+		if (dateOfBirth != null) {
+			long age = now.getTime() - dateOfBirth.getTime();
+			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
+		} else
+			return (0);
+	}
+
+	/**
+	 * Turns the Date object d into a String using the format given in the
+	 * constant DATE_FORMAT.
+	 */
+	private String dateToString(Date d) {
+		if (d != null) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			return fmt.format(d);
+		} else
+			return ("dd-mm-yy");
+	}
+
+	/**
+	 * Turns the String object s into a Date assuming the format given in the
+	 * constant DATE_FORMAT
+	 * 
+	 * @throws ParseException
+	 */
+	private Date stringToDate(String s) throws ParseException {
+		if (s != null) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			return fmt.parse(s);
+		} else
+			return (null);
+	}
+
 	/* Getter and Setter for profile data */
 
 	public void setEmail(String email) {
@@ -150,12 +195,16 @@ public class User {
 		return this.fullname;
 	}
 
-	public void setAge(String age) {
-		this.age = age;
+	public void setDateOfBirth(String birthday) throws ParseException {
+		this.dateOfBirth = stringToDate(birthday);
 	}
 
-	public String getAge() {
-		return this.age;
+	public String getDateOfBirth() {
+		return this.dateToString(dateOfBirth);
+	}
+
+	public int getAge() {
+		return this.age();
 	}
 
 	public void setWebsite(String website) {
