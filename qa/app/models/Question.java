@@ -35,10 +35,6 @@ public class Question extends Entry {
 		this.id = questions.add(this);
 	}
 
-	public String type() {
-		return "Question";
-	}
-
 	/**
 	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s and
 	 * itself.
