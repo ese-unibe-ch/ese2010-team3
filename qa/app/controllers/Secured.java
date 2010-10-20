@@ -19,7 +19,7 @@ public class Secured extends Controller {
 
 	public static void newQuestion(@Required String content) {
 		if (!validation.hasErrors()) {
-			Question question = new Question(currentUser(), content);
+			Question question = Question.register(currentUser(), content);
 			Application.question(question.id());
 		} else {
 			Application.index();
