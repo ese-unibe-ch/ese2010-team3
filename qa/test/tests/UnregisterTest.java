@@ -102,12 +102,10 @@ public class UnregisterTest extends UnitTest {
 	
 	@Test
 	public void testUserAnonymization() {
-		assertNotNull(User.get(this.jack.name()));
 		this.jack.anonymize(true, false);
 		this.jack.delete();
 		this.john.anonymize(true, false);
 		this.john.delete();
-		assertNull(User.get(this.jack.name()));
 		
 		assertNull(this.question.owner());
 		assertEquals(this.question.upVotes(), 1);

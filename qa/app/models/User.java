@@ -40,7 +40,6 @@ public class User {
 		this.name = name;
 		this.password = password;
 		this.items = new HashSet<Item>();
-		users.put(name, this);
 	}
 
 	/**
@@ -60,7 +59,9 @@ public class User {
     }
 	
 	public static User register(String username, String password) {
-		return new User(username, password);
+		User user = new User(username, password);
+		users.put(username, user);
+		return user;
 	}
 	
 	public boolean checkeMail(String email){

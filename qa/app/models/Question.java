@@ -1,6 +1,11 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
@@ -14,7 +19,7 @@ public class Question extends Entry {
 
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
-	private int id;
+	private final int id;
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
 
@@ -29,12 +34,21 @@ public class Question extends Entry {
 	 *            the question
 	 */
 	public Question(User owner, String content) {
+		this(owner, content, null);
+	}
+
+	public Question(User owner, String content, IDTable<Question> database) {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
-		this.id = questions.add(this);
+		this.id = database != null ? database.add(this) : -1;
 	}
 
+	public static Question register(User owner, String content) {
+		return new Question(owner, content, questions);
+	}
+
+	@Override
 	public String type() {
 		return "Question";
 	}

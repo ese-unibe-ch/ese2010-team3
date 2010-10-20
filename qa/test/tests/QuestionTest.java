@@ -1,11 +1,11 @@
 package tests;
-import static org.junit.Assert.*;
+import models.Question;
+import models.User;
 
-import java.util.*;
 import org.junit.Before;
 import org.junit.Test;
-import models.*;
-import play.test.*;
+
+import play.test.UnitTest;
 
 
 public class QuestionTest extends UnitTest {
@@ -41,17 +41,5 @@ public class QuestionTest extends UnitTest {
 	@Test
 	public void shouldRegisterItself() {
 		assertTrue(user.hasItem(question));
-	}
-	
-	@Test
-	public void shouldBeInPublicList() {
-		List q = Question.questions();
-		assertNotNull(q);
-		assertTrue(q.contains(this.question));
-		int size = Question.questions().size();
-		new Question(this.user, "What is the answer to life the universe and everything?");
-		assertEquals(size+1, Question.questions().size());
-		this.question.unregister();
-		assertEquals(size, Question.questions().size());
 	}
 }
