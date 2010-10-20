@@ -30,8 +30,6 @@ public class User {
 
 	public static final String DATE_FORMAT = "dd-MM-yy";
 
-	private static HashMap<String, User> users = new HashMap();
-
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * @param name the name of the <code>User</code>
@@ -40,7 +38,6 @@ public class User {
 		this.name = name;
 		this.password = password;
 		this.items = new HashSet<Item>();
-		users.put(name, this);
 	}
 
 	/**
@@ -53,14 +50,6 @@ public class User {
 
 	public boolean checkPW(String password){
 		return this.password.equals(password);
-	}
-	
-	public static boolean needSignUp(String username){
-    	return (User.get(username)==null);
-    }
-	
-	public static User register(String username, String password) {
-		return new User(username, password);
 	}
 	
 	public boolean checkeMail(String email){
@@ -104,17 +93,6 @@ public class User {
 	 */
 	public boolean hasItem(Item item) {
 		return this.items.contains(item);
-	}
-
-	/**
-	 * Get the <code>User</code> with the given name.
-	 * @param name
-	 * @return a <code>User</code> or null if the given name doesn't exist.
-	 */
-	public static User get(String name) {
-		if (users.containsKey(name))
-			return users.get(name);
-		return null;
 	}
 
 	/**
@@ -237,5 +215,32 @@ public class User {
 
 	public String getBiography() {
 		return this.biography;
+	}
+
+	/*
+	 * Static interface to access questions from controller (not part of unit
+	 * testing)
+	 */
+
+	private static HashMap<String, User> users = new HashMap();
+
+	public static boolean needSignUp(String username) {
+		return (users.get(username) == null);
+	}
+
+	public static User register(String username, String password) {
+		User user = new User(username, password);
+		users.put(username, user);
+		return user;
+	}
+
+	/**
+	 * Get the <code>User</code> with the given name.
+	 * 
+	 * @param name
+	 * @return a <code>User</code> or null if the given name doesn't exist.
+	 */
+	public static User get(String name) {
+		return users.get(name);
 	}
 }

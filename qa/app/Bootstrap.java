@@ -6,18 +6,21 @@ import play.jobs.OnApplicationStart;
 @OnApplicationStart
 public class Bootstrap extends Job {
  
-    public void doJob() {
+    @Override
+	public void doJob() {
     	// User
-		User jack = new User("Jack", "jack");
-		User john = new User("John", "john");
-		User bill = new User("Bill", "bill");
-		User kate = new User("Kate", "kate");
+		User jack = User.register("Jack", "jack");
+		User john = User.register("John", "john");
+		User bill = User.register("Bill", "bill");
+		User kate = User.register("Kate", "kate");
         
         // Questions
-        Question question = new Question(jack, "Why did the chicken cross the road?");
+		Question question = Question.register(jack,
+				"Why did the chicken cross the road?");
         question.answer(bill, "To get to the other side.");
         
-        question = new Question(john, "What is the answer to life the universe and everything?");
+		question = Question.register(john,
+				"What is the answer to life the universe and everything?");
         question.answer(kate, "42");
         question.answer(kate, "1337");
         
