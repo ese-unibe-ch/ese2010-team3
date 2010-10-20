@@ -26,8 +26,7 @@ GET    	/user/{name}/trueanonymize        		Secured.anonymizeUser
 GET		/register								Application.register
 POST	/register								Application.signup
 
-GET		/user/showprofile						Application.showprofile
-GET		/user/editProfile						Application.editProfile
+GET		/user/{userName}/showprofile/		Application.showprofile
 POST	/user/savedProfile						Secured.saveProfile
 
 # Map static resources from the /app/public folder to the /public path

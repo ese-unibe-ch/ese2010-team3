@@ -4,7 +4,7 @@
 <a href="@{Application.index}">back</a>
 <ul>
 	<li onclick="goto('@@{Application.question(question.id())}')">
-		<h2>#{userName question /}:</h2>
+		<h2><a href="@{Application.showprofile(question.owner().name())}"/>#{userName question /}</a>:</h2>
 		<p>${question.content()}</p>
 		#{date question /}
 		#{if user && question.owner() != user}
@@ -17,7 +17,7 @@
 	<ul class="comments">
 		#{list items:comments, as:'comment'}
 		<li class="comments">
-			<h2>#{userName comment /}:</h2>
+			<h2><a href="@{Application.showprofile(comment.owner().name())}"/>#{userName comment /}</a>:</h2>
 			<p>${comment.content()}</p>
 			#{date comment /}
 			#{if user && comment.owner() == user}

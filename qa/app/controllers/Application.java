@@ -76,12 +76,8 @@ public class Application extends Controller {
 		index();
 	}
 
-	public static void showprofile() {
-		render();
+	public static void showprofile(String userName) {
+		User showUser = User.get(userName);
+		render(showUser);
 	}
-
-	public static void editprofile(User user) {
-		render();
-	}
-
 }

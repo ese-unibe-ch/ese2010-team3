@@ -4,7 +4,7 @@
 <a href="@{Application.question(question.id())}">back</a>
 	<ul>
 		<li>
-			<h2>#{userName answer /}:</h2>
+			<h2><a href="@{Application.showprofile(answer.owner().name())}"/>#{userName answer /}</a>:</h2>
 			<p>
 				${answer.content()}
 			</p>
@@ -19,7 +19,7 @@
 		<ul class="comments">
 			#{list items:comments, as:'comment'}
 			<li class="comments">
-				<h2>#{userName comment /}:</h2>
+				<h2><a href="@{Application.showprofile(comment.owner().name())}"/>#{userName comment /}</a>:</h2>
 				<p>${comment.content()}</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}

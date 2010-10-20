@@ -179,6 +179,6 @@ public class Secured extends Controller {
 			user.setEmployer(employer);
 		if (biography != null)
 			user.setBiography(biography);
-		Application.showprofile();
+		Application.showprofile(user.name());
 	}
 }

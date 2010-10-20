@@ -4,7 +4,7 @@
 #{set title:'ajopi - ' + question.summary()  /}
 	<ul>
 		<li>
-			<h2>#{userName question /}:</h2>
+			<h2><a href="@{Application.showprofile(question.owner().name())}"/>#{userName question /}</a>:</h2>
 			<p>${question.content()}</p>
 			#{date question /}
 			#{if user && question.owner() == user}
@@ -19,7 +19,7 @@
 			<ul class="comments">
 				#{list items:question.comments(), as:'comment'}
 					<li class="comments">
-						<h2>#{userName comment /}</h2>
+						<h2><a href="@{Application.showprofile(comment.owner().name())}"/>#{userName comment /}</a>:</h2>
 						<p>${comment.content()}</p>
 						#{date comment /}
 						#{if user && comment.owner() == user}
@@ -36,7 +36,7 @@
 		<ul>
 			#{list items:answers, as:'answer'}
 			<li>
-				<h2>#{userName answer /}:</h2>
+				<h2><a href="@{Application.showprofile(answer.owner().name())}"/>#{userName answer /}</a>:</h2>
 				<p>${answer.content()}</p>
 				#{if user != null}
 					<FONT SIZE="1"> <a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</FONT></a>
@@ -55,11 +55,11 @@
 				
 			</li>
 				#{if answer.comments().size() != 0}
-					<h3>Comments</h3>
+					<p class="comments">Comments</h3>
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
-								<h2>#{userName comment /}:</h2>
+								<h2><a href="@{Application.showprofile(comment.owner().name())}"/>#{userName comment /}</a>:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
 								#{if user && comment.owner() == user}
