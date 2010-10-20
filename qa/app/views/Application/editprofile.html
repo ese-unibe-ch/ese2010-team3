@@ -2,74 +2,66 @@
 
 #{if user}
 #{set title:'ajopi - Profile editor' /}
+	<div class="editprofile">
+		#{form @Secured.saveProfile()}
+			<table>
+				<tr>
+					#{field 'username'}
+					<td><label for="username">&{'Username: '}</label></td>
+					<td><label for="username">&{user.name}</label></td>
+					#{/field}
+				</tr>
+				<tr>
+					#{field 'email'}
+					<td><label for="email">&{'Email: '}</label></td>
+					<td><input type="text" name="email" id="email" value="${user.email}" /></td>
+					#{/field}
+				</tr>
+				<tr>		
+					#{field 'fullname'}
+					<td><label for="fullname">&{'Real Name: '}</label></td>
+					<td><input type="text" name="fullname" id="fullname" value="${user.fullname}" /></td>
+					#{/field}
+				</tr>
+				<tr>	
+					#{field 'birthday'}
+					<td><label for="birthday">&{'Birthday: '}</label></td>
+					<td><input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" /></td>
+					#{/field}
 
-	#{form @Secured.saveProfile()}
-	
-		<p id="username-field">
-			#{field 'username'}
-			<label for="username">&{'Username: '}</label>
-			<label for="username">&{user.name}</label>
-			#{/field}
-		</p>
-		
-		
-		<p id="email-field">
-			#{field 'email'}
-			<label for="email">&{'Email: '}</label>
-			<input type="text" name="email" id="email" value="${user.email}" />
-			#{/field}
-		</p>
-		
-		<p id="fullname-field">
-			#{field 'fullname'}
-			<label for="fullname">&{'Real Name: '}</label>
-			<input type="text" name="fullname" id="fullname" value="${user.fullname}" />
-			#{/field}
-		
-		<p id="birthday-field">
-			#{field 'birthday'}
-			<label for="birthday">&{'Birthday: '}</label>
-			<input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" />
-			#{/field}
-		</p>
-		
-		
-		<p id="website-field">
-			#{field 'website'}
-			<label for="website">&{'Website: '}</label>
-			<input type="text" name="website" id="website" value="${user.website}" />
-			#{/field}
-		</p>
-		
-		<p id="profession-field">
-			#{field 'profession'}
-			<label for="profession">&{'Profession: '}</label>
-			<input type="text" name="profession" id="profession" value="${user.profession}" />
-			#{/field}
-		</p>
-		
-		<p id="employer-field">
-			#{field 'employer'}
-			<label for="employer">&{'Employer: '}</label>
-			<input type="text" name="employer" id="employer" value="${user.employer}" />
-			#{/field}
-		</p>
-		
-		<p id="biography-field">
-			#{field 'biography'}
-			<label for="biography">&{'Biography: '}</label>
-			<textarea name="${field.name}">${user.biography}</textarea>
-			#{/field}
-		</p>
-		
-		
-		<p id="saveprofile-field">
-			<input type="submit" id="saveProfile" value="Save Profile" />
-		</p>
-	
-	#{/form}
+				</tr>
+				<tr>	
+					#{field 'website'}
+					<td><label for="website">&{'Website: '}</label></td>
+					<td><input type="text" name="website" id="website" value="${user.website}" /></td>
+					#{/field}
+				</tr>
+				<tr>
+					#{field 'profession'}
+					<td><label for="profession">&{'Profession: '}</label>
+					<td><input type="text" name="profession" id="profession" value="${user.profession}" /></td>
+					#{/field}
+				</tr>
+				<tr>
+					#{field 'employer'}
+					<td><label for="employer">&{'Employer: '}</label></td>
+					<td><input type="text" name="employer" id="employer" value="${user.employer}" /></td>
+					#{/field}
+				</tr>
+				<tr>
+					#{field 'biography'}
+					<td><label for="biography">&{'Biography: '}</label></td>
+					<td><textarea class="editprofile" name="${field.name}">${user.biography}</textarea></td>
+					#{/field}
+				</tr>
+				<tr>	
+					<td><input type="submit" id="saveProfile" value="Save Profile" /></td>
+				</tr>
+			</table>	
+		#{/form}
 
-#{/if}#{else}
-	#{set title:'Error' /}
-	<h1>No such user ${name}</h1>
-#{/else}
+		#{/if}#{else}
+			#{set title:'Error' /}
+			<h1>No such user ${name}</h1>
+		#{/else}
+	</div><!-- end editprofile -->
