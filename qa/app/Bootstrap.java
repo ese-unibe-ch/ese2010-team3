@@ -26,6 +26,8 @@ public class Bootstrap extends Job {
         
         //Comments
         question.comment(jack, "What a strange question");
+
+		// Tags
+		question.setTagString("numb3rs");
     }
- 
 }

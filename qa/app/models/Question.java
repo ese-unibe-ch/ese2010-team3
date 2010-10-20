@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,6 +21,7 @@ public class Question extends Entry {
 	private final int id;
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
+	private final ArrayList<Tag> tags = new ArrayList<Tag>();
 
 	/**
 	 * Create a Question.
@@ -43,24 +43,24 @@ public class Question extends Entry {
 	}
 
 	/**
-	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s and
-	 * itself.
+	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s,
+	 * {@link Tag}s and itself.
 	 */
 	@Override
 	public void unregister() {
-		Iterator<Answer> itAnswer = this.answers.iterator();
-		Iterator<Comment> itComment = this.comments.iterator();
+		Collection<Answer> answers = this.answers.list();
+		Collection<Comment> comments = this.comments.list();
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
-		while (itAnswer.hasNext()) {
-			itAnswer.next().unregister();
-		}
-		while (itComment.hasNext()) {
-			itComment.next().unregister();
-		}
-		questions.remove(this.id);
+		for (Answer answer : answers)
+			answer.unregister();
+		for (Comment comment : comments)
+			comment.unregister();
+		if (this.id != -1)
+			questions.remove(this.id);
 		this.unregisterVotes();
 		this.unregisterUser();
+		this.setTagString("");
 	}
 
 	/**
@@ -212,6 +212,31 @@ public class Question extends Entry {
 
 	public Answer getBestAnswer() {
 		return bestAnswer;
+	}
+
+	/**
+	 * @param tags
+	 *            a comma- or whitespace-separated list of tags to be associated
+	 *            with this question
+	 */
+	public void setTagString(String tags) {
+		for (Tag tag : this.tags)
+			tag.unregister(this);
+		this.tags.clear();
+
+		String bits[] = tags.split("[\\s,]+");
+		for (String bit : bits) {
+			Tag tag = Tag.get(bit);
+			if (tag != null && !this.tags.contains(tag)) {
+				this.tags.add(tag);
+				tag.register(this);
+			}
+		}
+		Collections.sort(this.tags);
+	}
+
+	public ArrayList<Tag> getTags() {
+		return (ArrayList<Tag>) this.tags.clone();
 	}
 
 	/*
