@@ -23,8 +23,6 @@ public class Question extends Entry {
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
 
-	private static IDTable<Question> questions = new IDTable();
-
 	/**
 	 * Create a Question.
 	 * 
@@ -42,10 +40,6 @@ public class Question extends Entry {
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
 		this.id = database != null ? database.add(this) : -1;
-	}
-
-	public static Question register(User owner, String content) {
-		return new Question(owner, content, questions);
 	}
 
 	@Override
@@ -151,28 +145,6 @@ public class Question extends Entry {
 	}
 
 	/**
-	 * Get a <@link Collection} of all <code>Questions</code>.
-	 * 
-	 * @return all <code>Questions</code>
-	 */
-	public static List<Question> questions() {
-		List<Question> list = new ArrayList();
-		list.addAll(questions.list());
-		Collections.sort(list, new EntryComperator());
-		return list;
-	}
-
-	/**
-	 * Get the <code>Question</code> with the given id.
-	 * 
-	 * @param id
-	 * @return a <code>Question</code> or null if the given id doesn't exist.
-	 */
-	public static Question get(int id) {
-		return questions.get(id);
-	}
-
-	/**
 	 * Get all {@link Answer}s to a <code>Question</code>
 	 * 
 	 * @return {@link Collection} of {@link Answers}
@@ -245,6 +217,39 @@ public class Question extends Entry {
 
 	public Answer getBestAnswer() {
 		return bestAnswer;
+	}
+
+	/*
+	 * Static interface to access questions from controller (not part of unit
+	 * testing)
+	 */
+
+	private static IDTable<Question> questions = new IDTable();
+
+	public static Question register(User owner, String content) {
+		return new Question(owner, content, questions);
+	}
+
+	/**
+	 * Get a <@link Collection} of all <code>Questions</code>.
+	 * 
+	 * @return all <code>Questions</code>
+	 */
+	public static List<Question> questions() {
+		List<Question> list = new ArrayList();
+		list.addAll(questions.list());
+		Collections.sort(list, new EntryComperator());
+		return list;
+	}
+
+	/**
+	 * Get the <code>Question</code> with the given id.
+	 * 
+	 * @param id
+	 * @return a <code>Question</code> or null if the given id doesn't exist.
+	 */
+	public static Question get(int id) {
+		return questions.get(id);
 	}
 
 }
