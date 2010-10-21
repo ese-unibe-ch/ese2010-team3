@@ -254,7 +254,7 @@ public class User {
 	}
 	
 	public String getMd5Password(){
-		return User.encrypt(password);
+		return password;
 	}
 
 	/*
