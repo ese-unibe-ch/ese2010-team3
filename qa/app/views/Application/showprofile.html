@@ -1,7 +1,6 @@
 #{extends 'main.html' /}
 
 #{set title:'ajopi - Profile' /}
-
 #{if showUser}
 	<div class="showprofile">
 		<table>
@@ -41,13 +40,13 @@
 	</div><!-- end showprofile -->
 #{/if}
 #{elseif user}
-	<div class="showprofile">
+	<div class="editprofile">
 		#{form @Secured.saveProfile()}
 			<table>
 				<tr>
 					#{field 'username'}
 					<td><label for="username">&{'Username: '}</label></td>
-					<td><label for="username">&{user.name}</label></td>
+					<td><label for="username">${user.name}</label></td>
 					#{/field}
 				</tr>
 				<tr>

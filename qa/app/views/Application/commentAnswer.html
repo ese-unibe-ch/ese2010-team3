@@ -4,7 +4,7 @@
 <a href="@{Application.question(question.id())}">back</a>
 	<ul>
 		<li>
-			<h2><a href="@{Application.showprofile(answer.owner().name())}"/>#{userName answer /}</a>:</h2>
+			<h2>#{showProfile answer /}:</h2>
 			<p>
 				${answer.content()}
 			</p>
@@ -14,12 +14,12 @@
 			#{/if}
 		</li>
 	</ul>
-		#{if comments.size() > 0}
-		<p class="comments">Comments</h3>
+	#{if comments.size() > 0}
+		<p class="comments">Comments</p>
 		<ul class="comments">
 			#{list items:comments, as:'comment'}
 			<li class="comments">
-				<h2><a href="@{Application.showprofile(comment.owner().name())}"/>#{userName comment /}</a>:</h2>
+				<h2>#{showProfile comment /}:</h2>
 				<p>${comment.content()}</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}
@@ -29,7 +29,7 @@
 			#{/list}
 		</ul>
 	#{/if}
-		#{if user}
+	#{if user}
 		<h1>Add Comment</h1>
 		#{form @Secured.newCommentAnswer(question.id(), answer.id())}
 			#{field 'content'}
@@ -37,7 +37,6 @@
 			#{/field}
 			<input type="submit" value="Post" />
 		#{/form}
-		</FONT>
 	#{/if}
 #{/if}
 

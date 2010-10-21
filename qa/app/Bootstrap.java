@@ -13,6 +13,12 @@ public class Bootstrap extends Job {
 		User john = User.register("John", "john");
 		User bill = User.register("Bill", "bill");
 		User kate = User.register("Kate", "kate");
+
+		jack.setEmail("jack@jack.jk");
+		jack.setFullname("Jack Daniel");
+		jack.setWebsite("www.jack.jk");
+		jack.setProfession("Brewer");
+		jack.setBiography("Oh well, ...");
         
         // Questions
 		Question question = Question.register(jack,
