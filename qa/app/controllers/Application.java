@@ -5,6 +5,7 @@ import java.util.List;
 import models.Answer;
 import models.Comment;
 import models.Question;
+import models.Tag;
 import models.User;
 import play.data.validation.Required;
 import play.mvc.Before;
@@ -79,5 +80,17 @@ public class Application extends Controller {
 	public static void showprofile(String userName) {
 		User showUser = User.get(userName);
 		render(showUser);
+	}
+
+	public static void tags(String term) {
+		String tagString = "";
+		for (Tag tag : Tag.tags())
+			if (term == null || tag.getName().startsWith(term.toLowerCase()))
+				tagString += tag.getName() + " ";
+		// make sure not to return an array with a single empty string ([""])
+		String[] tags = tagString.split("\\s+");
+		if (tagString.length() == 0)
+			tags = new String[0];
+		renderJSON(tags);
 	}
 }

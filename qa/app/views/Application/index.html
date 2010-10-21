@@ -6,11 +6,9 @@
 			<a href="@{Application.question(question.id())}">
 				<h2>#{showProfile question /}:</h2>
 			</a>
-			<p>${question.content()}</p>  
+			<p>${question.content()}</p>
 			#{date question /}
-			#{if user != null}
-				<FONT SIZE="1"> <a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</FONT></a>
-			#{/if}
+			#{tags question:question, editable:false /}  
 			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
@@ -22,6 +20,12 @@
 	#{form @Secured.newQuestion()}
 		#{field 'content'}
         		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+		#{/field}
+		#{field 'tags'}
+			<p>
+				<label for="tags">Label this question:</label>
+				<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
+			</p>
 		#{/field}
 		<input type="submit" value="Post" />
 	#{/form}
