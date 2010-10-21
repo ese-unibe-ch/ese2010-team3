@@ -29,7 +29,6 @@ a {
 	text-decoration: none;
 	font-weight: bold;
 }
-
 a:hover {
 	color: #c71c1c;
 }
@@ -186,3 +185,36 @@ div.editprofile textarea {
 	height: 100px;
 	width: 610px;
 }
+
+/*********************** 
+tags and tag autocomplete box
+************************/
+div.tags .tag {
+	color: #000;
+	background: #aecbfb;
+	border: 2px #aecbfb outset;
+	padding: 1px;
+}
+
+.ui-autocomplete {
+	position: absolute;
+	cursor: default;
+	border: 2px #aecbfb outset;
+	background: #aecbfb;
+	list-style: none;
+	padding: 2px;
+	margin: 0;
+}
+.ui-autocomplete .ui-menu-item a {
+	color: #000;
+	background: #aecbfb;
+	display: block;
+	padding: 2px;
+}
+.ui-autocomplete a.ui-state-hover {
+	/* inverse colors */
+	color: #aecbfb;
+	background: #000;
+}
+.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+* html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */

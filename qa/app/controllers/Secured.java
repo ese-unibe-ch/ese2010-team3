@@ -16,9 +16,10 @@ public class Secured extends Controller {
 		return User.get(Security.connected());
 	}
 
-	public static void newQuestion(@Required String content) {
+	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
 			Question question = Question.register(currentUser(), content);
+			question.setTagString(tags);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -179,5 +180,13 @@ public class Secured extends Controller {
 		if (biography != null)
 			user.setBiography(biography);
 		Application.showprofile(user.name());
+	}
+
+	public static void updateTags(int id, String tags) {
+		Question question = Question.get(id);
+		User user = currentUser();
+		if (question != null && user == question.owner())
+			question.setTagString(tags);
+		Application.question(id);
 	}
 }
