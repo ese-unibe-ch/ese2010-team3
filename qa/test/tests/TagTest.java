@@ -4,7 +4,6 @@ import models.Question;
 import models.Tag;
 import models.User;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +26,8 @@ public class TagTest extends UnitTest {
 		this.tagName = "" + Math.random();
 	}
 
-	@After
-	public void tearDown() {
-		this.question1.setTagString("");
-		this.question2.setTagString("");
-	}
-
 	@Test
-	public void testHasName() {
+	public void shouldHaveName() {
 		Tag tag = new Tag(this.tagName);
 		assertNotNull(tag.getName());
 		assertEquals(tag.getName(), this.tagName);
@@ -52,10 +45,16 @@ public class TagTest extends UnitTest {
 		} catch (IllegalArgumentException ex) {
 			assertTrue(true);
 		}
+		try {
+			new Tag("012345678901234567890123456789012");
+			assertTrue(false);
+		} catch (IllegalArgumentException ex) {
+			assertTrue(true);
+		}
 	}
 
 	@Test
-	public void testAssociations() {
+	public void shouldAssociateWithQuestions() {
 		assertEquals(countTags(this.tagName), 0);
 
 		assertEquals(this.question1.getTags().size(), 0);
@@ -79,6 +78,11 @@ public class TagTest extends UnitTest {
 		assertTrue(tag1.getQuestions().contains(this.question2));
 		assertEquals(tag1.getQuestions().size(), 2);
 
+		assertEquals(this.question1.getTags().size(), 1);
+		assertEquals(this.question2.getTags().size(), 1);
+		assertEquals(this.question1.getTags().get(0), this.question2.getTags()
+				.get(0));
+
 		this.question1.setTagString("");
 		assertEquals(this.question1.getTags().size(), 0);
 		assertFalse(this.question1.getTags().contains(tag1));
@@ -97,7 +101,7 @@ public class TagTest extends UnitTest {
 	}
 
 	@Test
-	public void testTagOrdening() {
+	public void shouldOrderAlphabetically() {
 		Tag tagC = Tag.get("c" + this.tagName);
 		Tag tagA = Tag.get("a" + this.tagName);
 		Tag tagB = Tag.get("b" + this.tagName);

@@ -4,14 +4,14 @@ function goto(url) {
 
 /**
  * Controller for dynamic Tag autocompletion, fetching a JSON array of
- * Tags from an <input type="text">'s tagURL.
+ * Tags from an <input type="text">'s tagsJSON.
  */
 var TagAutocompletion = {
 	_extractTags: function(tagString) {
 		return tagString.split(/[\s,]\s*/);
 	},
 	source: function(request, response) {
-		$.getJSON($(this.element[0]).attr("tagURL"), {
+		$.getJSON($(this.element[0]).attr("tagsJSON"), {
 			term: TagAutocompletion._extractTags(request.term).pop()
 		}, response);
 	},
@@ -33,7 +33,7 @@ var TagAutocompletion = {
 
 $(document).ready(function() {
 	// autocompletify all elements marked as such
-	$("input[type=text][tagURL]").autocomplete(TagAutocompletion);
+	$("input[type=text][tagsJSON]").autocomplete(TagAutocompletion);
 	
 	// make an "Edit Tags" button replace the static Tag list with
 	// a dynamic one - or submit the form, if it's already done that 
@@ -50,7 +50,7 @@ $(document).ready(function() {
 		}).remove();
 		
 		$('<input type="text" name="tags">').insertBefore(this)
-			.attr("tagURL", $(this).attr("tagURL")).val(tags.join(" "));
-		$("input[type=text][tagURL]").autocomplete(TagAutocompletion);
+			.attr("tagsJSON", $(this).attr("tagsJSON")).val(tags.join(" "));
+		$("input[type=text][tagsJSON]").autocomplete(TagAutocompletion);
 	});
 });

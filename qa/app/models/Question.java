@@ -226,6 +226,11 @@ public class Question extends Entry {
 
 		String bits[] = tags.split("[\\s,]+");
 		for (String bit : bits) {
+			// make the tag conform to Tag.tagRegex
+			bit = bit.toLowerCase();
+			if (bit.length() > 32)
+				bit = bit.substring(0, 32);
+
 			Tag tag = Tag.get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);

@@ -4,7 +4,7 @@
 		<span class="tag">${tag.getName()}</span>
 	#{/list}
 	#{if _editable}
-		<input type="button" class="editTags" value="Edit Tags" tagURL="@{Application.tags}">
+		<input type="button" class="editTags" value="Edit Lables" tagsJSON="@{Application.tags}">
 	#{/if}
 	#{/form}
 </div>

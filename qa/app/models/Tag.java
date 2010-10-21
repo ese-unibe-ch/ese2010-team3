@@ -20,7 +20,7 @@ public class Tag implements Comparable {
 	private final HashSet<Question> questions = new HashSet<Question>();
 
 	/** A regex a valid tag name has to match. */
-	private static final String tagRegex = "^[^A-Z\\s]+$";
+	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	/**
 	 * Instantiates a new Tag.
@@ -87,7 +87,6 @@ public class Tag implements Comparable {
 	 * @return a (new or pre-existing) Tag for the given Tag-name.
 	 */
 	public static Tag get(String name) {
-		name = name.toLowerCase();
 		Tag tag = tags.get(name);
 		if (tag == null && name.matches(tagRegex)) {
 			tag = new Tag(name);

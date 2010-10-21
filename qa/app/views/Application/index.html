@@ -24,7 +24,7 @@
 		#{field 'tags'}
 			<p>
 				<label for="tags">Label this question:</label>
-				<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagURL="@{Application.tags}">
+				<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
 			</p>
 		#{/field}
 		<input type="submit" value="Post" />
