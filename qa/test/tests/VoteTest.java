@@ -1,12 +1,14 @@
 package tests;
-import static org.junit.Assert.*;
-
 import java.util.Calendar;
 
+import models.Answer;
+import models.EntryComperator;
+import models.Question;
+import models.User;
 import org.junit.Before;
 import org.junit.Test;
-import models.*;
-import play.test.*;
+
+import play.test.UnitTest;
 
 
 public class VoteTest extends UnitTest {
@@ -96,5 +98,20 @@ public class VoteTest extends UnitTest {
 		
 		assertFalse(this.question.setBestAnswer(secondAnswer,inAnHour));
 		assertEquals(this.question.getBestAnswer(),answer);
+	}
+
+	@Test
+	public void shouldSortCorrectly() {
+		EntryComperator comparator = new EntryComperator();
+		assertEquals(comparator.compare(this.answer, this.secondAnswer), 0);
+		this.answer.voteUp(bill);
+		assertEquals(comparator.compare(this.answer, this.secondAnswer), -1);
+		assertSame(this.question.answers().get(0), this.answer);
+		this.answer.voteDown(bill);
+		assertEquals(comparator.compare(this.answer, this.secondAnswer), 1);
+		assertNotSame(this.question.answers().get(0), this.answer);
+		this.question.setBestAnswer(this.answer);
+		assertEquals(comparator.compare(this.answer, this.secondAnswer), -1);
+		assertSame(this.question.answers().get(0), this.answer);
 	}
 }

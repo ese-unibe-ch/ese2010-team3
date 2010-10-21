@@ -10,7 +10,6 @@ GET		/question/{id}							Application.question
 POST	/question/{id}							Secured.newAnswer
 
 GET     /question/{id}/comments/				Application.commentQuestion
-POST	/question/{id}/							Secured.newCommentQuestion 
 
 GET		/question/{id}/up						Secured.voteQuestionUp
 GET		/question/{id}/down						Secured.voteQuestionDown
@@ -25,6 +24,9 @@ GET    	/user/{name}/trueanonymize        		Secured.anonymizeUser
 
 GET		/register								Application.register
 POST	/register								Application.signup
+
+GET		/user/{userName}/showprofile/		Application.showprofile
+POST	/user/savedProfile						Secured.saveProfile
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

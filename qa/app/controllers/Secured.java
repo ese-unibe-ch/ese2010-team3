@@ -1,5 +1,6 @@
 package controllers;
 
+import java.text.ParseException;
 import models.Answer;
 import models.Comment;
 import models.Question;
@@ -17,7 +18,7 @@ public class Secured extends Controller {
 
 	public static void newQuestion(@Required String content) {
 		if (!validation.hasErrors()) {
-			Question question = new Question(currentUser(), content);
+			Question question = Question.register(currentUser(), content);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -33,14 +34,16 @@ public class Secured extends Controller {
 		}
 	}
 
-	public static void newCommentQuestion(int questionId, @Required String content) {
+	public static void newCommentQuestion(int questionId,
+			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Question.get(questionId).comment(currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
 
-	public static void newCommentAnswer(int questionId, int answerId, @Required String content) {
+	public static void newCommentAnswer(int questionId, int answerId,
+			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
@@ -89,14 +92,14 @@ public class Secured extends Controller {
 			Application.index();
 		}
 	}
-	
-	public static void deleteQuestion (int questionId) {
+
+	public static void deleteQuestion(int questionId) {
 		Question question = Question.get(questionId);
 		question.unregister();
 		Application.index();
 	}
-	
-	public static void deleteAnswer (int answerId, int questionId) {
+
+	public static void deleteAnswer(int answerId, int questionId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
@@ -110,7 +113,8 @@ public class Secured extends Controller {
 		Application.commentQuestion(questionId);
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId, int answerId) {
+	public static void deleteCommentAnswer(int commentId, int questionId,
+			int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
@@ -128,15 +132,15 @@ public class Secured extends Controller {
 		}
 		Application.index();
 	}
-	
+
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(currentUser(), user))
 			user.anonymize(true, false);
 		deleteUser(name);
 	}
-	
-	public static void selectBestAnswer(int questionId,int answerId) {
+
+	public static void selectBestAnswer(int questionId, int answerId) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
@@ -154,5 +158,26 @@ public class Secured extends Controller {
 		redirect(referer.value());
 		return true;
 	}
-	
+
+	public static void saveProfile(String name, String email, String fullname,
+			String birthday, String website, String profession,
+			String employer, String biography) throws ParseException {
+
+		User user = currentUser();
+		if (email != null)
+			user.setEmail(email);
+		if (fullname != null)
+			user.setFullname(fullname);
+		if (birthday != null)
+			user.setDateOfBirth(birthday);
+		if (website != null)
+			user.setWebsite(website);
+		if (profession != null)
+			user.setProfession(profession);
+		if (employer != null)
+			user.setEmployer(employer);
+		if (biography != null)
+			user.setBiography(biography);
+		Application.showprofile(user.name());
+	}
 }

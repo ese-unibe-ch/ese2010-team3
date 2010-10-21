@@ -1,36 +1,35 @@
 #{extends 'main.html' /}
 
 #{set title:'ajopi - register'  /}
-<div id="register">
+<div class="register">
 	<h1>&{'secure.title'}</h1>
-	
 	#{form @signup()}
-		
-		#{if flash.error}
-			<p class="error">
-				&{flash.error}
-			</p>
-		#{/if}
-		#{if flash.success}
-			<p class="success">
-				&{flash.success}
-			</p>
-		#{/if}
-	
-		<p id="username-field">
-			<label for="username">&{'secure.username'}</label>
-			<input type="text" name="username" id="username" value="${flash.username}" />
-		</p>
-		<p id="password-field">
-			<label for="password">&{'secure.password'}</label>
-			<input type="password" name="password" id="password" value="" />
-		</p>
-		<p id="email-field">
-			<label for="email">E-Mail:</label>
-			<input type="text" name="email" id="email" value="" />
-		</p>
-		<p id="signup-field">
-			<input type="submit" id="register" value="Sign Up" />
-		</p>
+		<table>	
+			<tr>
+				#{if flash.error}
+					<td>&{flash.error}</td>
+				#{/if}
+			</tr>
+			<tr>
+				#{if flash.success}
+					<td>&{flash.success}</td>
+				#{/if}
+			</tr>
+			<tr>
+				<td>&{'secure.username'}</td>
+				<td><input type="text" name="username" id="username" value="${flash.username}" /></td>
+			</tr>
+			<tr>
+				<td>&{'secure.password'}</td>
+				<td><input type="password" name="password" id="password" value="" /></td>
+			</tr>
+			<tr>
+				<td>E-Mail:</td>
+				<td><input type="text" name="email" id="email" value="" /></td>
+			</tr>
+			<tr>
+				<td><input type="submit" id="register" value="Sign Up" /><td>
+			</tr>
+		</table>
 	#{/form}
-</div>
+</div><!-- end register -->

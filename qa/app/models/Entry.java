@@ -29,8 +29,6 @@ public abstract class Entry extends Item {
 		this.votes = new HashMap();
 	}
 
-	public abstract String type();
-
 	/**
 	 * Unregisters a deleted {@link Comment} to its {@link Entry}
 	 * @param comment the <code> Comment </code> to be unregistered.
@@ -68,6 +66,7 @@ public abstract class Entry extends Item {
 	}
 
 	/**
+
 	 * Get the content of an <code>Entry</code>.
 	 * 
 	 * @return the content of the <code>Entry</code>

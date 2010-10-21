@@ -21,11 +21,6 @@ public class Comment extends Entry {
 	}
 
 	@Override
-	public String type() {
-		return "Comment";
-	}
-
-	@Override
 	public void unregister() {
 		this.entry.unregister(this);
 		this.unregisterUser();

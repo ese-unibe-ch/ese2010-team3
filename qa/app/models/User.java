@@ -1,5 +1,8 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -15,11 +18,17 @@ import java.util.HashSet;
 public class User {
 
 	private final String name;
-	public final int password;
+	private final String password;
 	private String email;
 	private final HashSet<Item> items;
+	private String fullname;
+	protected Date dateOfBirth;
+	private String website;
+	private String profession;
+	private String employer;
+	private String biography;
 
-	private static HashMap<String, User> users = new HashMap();
+	public static final String DATE_FORMAT = "dd-MM-yy";
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -29,7 +38,6 @@ public class User {
 		this.name = name;
 		this.password = password.hashCode();
 		this.items = new HashSet<Item>();
-		users.put(name, this);
 	}
 
 	/**
@@ -38,6 +46,10 @@ public class User {
 	 */
 	public String name() {
 		return this.name;
+	}
+
+	public boolean checkPW(String password){
+		return this.password.equals(password);
 	}
 	
 	public String email(){
@@ -108,17 +120,6 @@ public class User {
 	}
 
 	/**
-	 * Get the <code>User</code> with the given name.
-	 * @param name
-	 * @return a <code>User</code> or null if the given name doesn't exist.
-	 */
-	public static User get(String name) {
-		if (users.containsKey(name))
-			return users.get(name);
-		return null;
-	}
-
-	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
 	 * @param doAnswers
@@ -136,5 +137,134 @@ public class User {
 				this.items.remove(item);
 			}
 		}
+	}
+
+	/**
+	 * Calculates the age of the <code>User</code> in years
+	 * 
+	 * @return age of the <code>User</code>
+	 */
+	private int age() {
+		Date now = new Date();
+		if (dateOfBirth != null) {
+			long age = now.getTime() - dateOfBirth.getTime();
+			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
+		} else
+			return (0);
+	}
+
+	/**
+	 * Turns the Date object d into a String using the format given in the
+	 * constant DATE_FORMAT.
+	 */
+	private String dateToString(Date d) {
+		if (d != null) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			return fmt.format(d);
+		} else
+			return ("dd-mm-yy");
+	}
+
+	/**
+	 * Turns the String object s into a Date assuming the format given in the
+	 * constant DATE_FORMAT
+	 * 
+	 * @throws ParseException
+	 */
+	private Date stringToDate(String s) throws ParseException {
+		if (s != null) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			return fmt.parse(s);
+		} else
+			return (null);
+	}
+
+	/* Getter and Setter for profile data */
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public String getFullname() {
+		return this.fullname;
+	}
+
+	public void setDateOfBirth(String birthday) throws ParseException {
+		this.dateOfBirth = stringToDate(birthday);
+	}
+
+	public String getDateOfBirth() {
+		return this.dateToString(dateOfBirth);
+	}
+
+	public int getAge() {
+		return this.age();
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getWebsite() {
+		return this.website;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public String getProfession() {
+		return this.profession;
+	}
+
+	public void setEmployer(String employer) {
+		this.employer = employer;
+	}
+
+	public String getEmployer() {
+		return this.employer;
+	}
+
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+
+	public String getBiography() {
+		return this.biography;
+	}
+
+	/*
+	 * Static interface to access questions from controller (not part of unit
+	 * testing)
+	 */
+
+	private static HashMap<String, User> users = new HashMap();
+
+	public static boolean needSignUp(String username) {
+		return (users.get(username) == null);
+	}
+
+	public static User register(String username, String password) {
+		User user = new User(username, password);
+		users.put(username, user);
+		return user;
+	}
+
+	/**
+	 * Get the <code>User</code> with the given name.
+	 * 
+	 * @param name
+	 * @return a <code>User</code> or null if the given name doesn't exist.
+	 */
+	public static User get(String name) {
+		return users.get(name);
 	}
 }

@@ -1,6 +1,11 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
@@ -14,11 +19,9 @@ public class Question extends Entry {
 
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
-	private int id;
+	private final int id;
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
-
-	private static IDTable<Question> questions = new IDTable();
 
 	/**
 	 * Create a Question.
@@ -29,14 +32,14 @@ public class Question extends Entry {
 	 *            the question
 	 */
 	public Question(User owner, String content) {
+		this(owner, content, null);
+	}
+
+	public Question(User owner, String content, IDTable<Question> database) {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
-		this.id = questions.add(this);
-	}
-
-	public String type() {
-		return "Question";
+		this.id = database != null ? database.add(this) : -1;
 	}
 
 	/**
@@ -137,28 +140,6 @@ public class Question extends Entry {
 	}
 
 	/**
-	 * Get a <@link Collection} of all <code>Questions</code>.
-	 * 
-	 * @return all <code>Questions</code>
-	 */
-	public static List<Question> questions() {
-		List<Question> list = new ArrayList();
-		list.addAll(questions.list());
-		Collections.sort(list, new EntryComperator());
-		return list;
-	}
-
-	/**
-	 * Get the <code>Question</code> with the given id.
-	 * 
-	 * @param id
-	 * @return a <code>Question</code> or null if the given id doesn't exist.
-	 */
-	public static Question get(int id) {
-		return questions.get(id);
-	}
-
-	/**
 	 * Get all {@link Answer}s to a <code>Question</code>
 	 * 
 	 * @return {@link Collection} of {@link Answers}
@@ -169,7 +150,7 @@ public class Question extends Entry {
 		Collections.sort(list, new EntryComperator());
 		return list;
 	}
-	
+
 	/**
 	 * Get all {@link Comment}s to a <code>Question</code>
 	 * @return {@link Collection} of {@link Comments}
@@ -190,6 +171,91 @@ public class Question extends Entry {
 	 */
 	public Answer getAnswer(int id) {
 		return this.answers.get(id);
+	}
+	
+	/**
+	 * Get a specific {@link Comment} to a <code>Question</code>
+	 * @param id of the <code>Comment</code>
+	 * @return {@link Comment} or null
+	 */
+	public Comment getComment(int id) {
+		return this.comments.get(id);
+	}
+
+	public boolean isBestAnswerSettable(Calendar now){
+		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
+		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
+		return this.settingOfBestAnswer == null ||
+			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
+	}
+	
+	/**
+	 * Sets the best answer. This answer can not be changed after 30min. This
+	 * Method enforces this and fails if it can not be set.
+	 * @param bestAnswer the answer the user chose to be the best for this question.
+	 * @return true iff setting of best answer was allowed.
+	 */
+	public boolean setBestAnswer(Answer bestAnswer) {
+		Calendar now = Calendar.getInstance();
+		return setBestAnswer(bestAnswer, now);
+	}
+	
+	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
+		if ( this.isBestAnswerSettable(now) ){
+			this.bestAnswer = bestAnswer;
+			this.settingOfBestAnswer = now;
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public Answer getBestAnswer() {
+		return bestAnswer;
+	}
+
+	/*
+	 * Static interface to access questions from controller (not part of unit
+	 * testing)
+	 */
+
+	private static IDTable<Question> questions = new IDTable();
+
+	public static Question register(User owner, String content) {
+		return new Question(owner, content, questions);
+	}
+
+	/**
+	 * Get a <@link Collection} of all <code>Questions</code>.
+	 * 
+	 * @return all <code>Questions</code>
+	 */
+	public static List<Question> questions() {
+		List<Question> list = new ArrayList();
+		list.addAll(questions.list());
+		Collections.sort(list, new EntryComperator());
+		return list;
+	}
+	
+	/**
+	 * Get all {@link Comment}s to a <code>Question</code>
+	 * @return {@link Collection} of {@link Comments}
+	 */
+	public List<Comment> comments() {
+		List<Comment> list = new ArrayList<Comment>();
+		list.addAll(comments.list());
+		Collections.sort(list, new EntryComperator());
+		return list;
+	}
+
+	/**
+	 * Get the <code>Question</code> with the given id.
+	 * 
+	 * @param id
+	 * @return a <code>Question</code> or null if the given id doesn't exist.
+	 */
+	public static Question get(int id) {
+		return questions.get(id);
 	}
 	
 	/**

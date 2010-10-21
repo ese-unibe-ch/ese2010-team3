@@ -1,153 +1,188 @@
-html, body {
-	background: 		#00272b;
-	font-family: 		Helvetica, Veranda, Arial, sans-serif;
+body {
+	background: #00272b;
+	font-family: Helvetica, Veranda, Arial, sans-serif;
+}
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*********************** 
+headings
+************************/
+h1 {
+	color: #ff8400;
+	font-size: 1.3em;
+	margin-top: 30px;
 }
 
-body > div {
-	background: 		#000;
-	margin:				20px auto;
-	width: 				690px;
-	/*border: 			3px #000 solid;*/
-	padding: 			0;
-	position: 			relative;
+h2 {
+	color: #ff8400;
+	margin: 0;
 }
-
+h3 {
+	color: #ff8400;
+	margin: 0;
+}
+/*********************** 
+links
+************************/
 a {
-	color: 				#ff8400;
-	text-decoration: 	none;
-	font-weight: 		bold;
-}
-			
-	a:hover {
-		color: 				#c71c1c;
-	}
-
-header {
-	margin: 			0;
+	color: #ff8400;
+	text-decoration: none;
+	font-weight: bold;
 }
 
-	header > a {
-		display: 			block;
-		height: 			131px;
-		width: 				250px;
-		margin: 			16px;
-		background: 		url(../images/logo.png) no-repeat center;
-	}
-
-	nav {
-		padding: 			5px;
-		background: 		#555;
-		color: 				#222;
-	}
-			
-		nav span {
-			position: 			absolute;
-			right: 				5px;
-		}
-		
-			nav span a {
-				margin-left: 		5px;
-			}
-	
-article {
-	padding: 		10px;
+a:hover {
+	color: #c71c1c;
 }
-	
-	h1 {
-		color: 				#ff8400;
-		font-size: 			1.3em;
-		margin-top: 	30px;
-	}
-	
-	ul {
-		padding: 			0;
-		margin: 			0;
-	}
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*********************** 
+main
+************************/
+div.main {
+	background: #000000;
+	margin:	20px auto;
+	width: 750px;
+	padding: 0;
+	position: relative;
+}
+/*********************** 
+header
+************************/
+div.header {
+	margin:	0;
+}
 
-		li {
-			background: 		#333;
-			list-style: 		none;
-			margin: 			10px 0;
-			padding: 			7px;
-			position: 			relative;
-		}
-		
-			li[onclick] {
-				cursor: 			pointer;
-			}
-		
-				li[onclick]:hover {
-					background: 		#444;
-				}
-		
-			h2, h3 {
-				color: 				#ff8400;
-				margin: 			0;
-			}
-			
-			li p {
-				color: 				#aecbfb;
-			}
-			
-			.vote, .date{
-				position: 			absolute;
-				right: 				7px;
-			}
-				
-			.vote {
-				bottom: 			7px;
-				font-size: 			2em;
-			}
-			
-			.date {
-				top:	 			7px;
-				color: 				#222;
-			}
-
-	
-
-	form {
-		background: 		#333;
-		margin: 			10px 0;
-		padding: 			7px;
-		position: 			relative;
-		width: 				307px;
-	}
-	
-		h3 {
-			padding-top: 		30px;
-		}
-		
-		textarea {
-			height: 			50px;
-			width: 				300px;
-			background: 		#222;
-			border: 			1px #000 solid;
-			color: 				#aecbfb;
-		}
-		
-		input[type="submit"] {
-			display: 			block;
-		}
-		
-#register label {
+div.header a {
 	display: block;
-	float: left;
-	min-width: 6em;
+	height: 131px;
+	width: 250px;
+	margin: 16px;
+	background: url(../images/logo.png) no-repeat center;
+}
+/*********************** 
+navigation
+************************/
+div.navigation {
+	padding: 5px;
+	background: #555555;
+	color: #222222;
 }
 
-footer {
-	text-align: 		right;
-	font-size: 			0.7em;
-	color: 				#333;
-	padding: 			3px;
-	background: 		#00272b;
+div.navigation span {			
+	position: absolute;
+	right: 	5px;
 }
 
+div.navigation span a {
+	margin-left: 5px;
+}
+/*********************** 
+content
+************************/	
+div.content {
+	padding: 10px;
+}
+div.content ul {
+	padding: 0;
+	margin: 0;
+}
 
+div.content li {
+	background: #333333;
+	list-style: none;
+	margin: 10px 0;
+	padding: 7px;
+	position: relative;
+}
+		
+div.content li[onclick] {
+	cursor: pointer;
+}
+		
+div.content li[onclick]:hover {
+	background: #444444;
+}
+		
+div.content li p {
+	color: #aecbfb;
+}
+	
+div.content span.vote {
+	bottom: 7px;
+	font-size: 2em;
+	position: absolute;
+	right: 7px;
+}
 
+div.content span.date {
+	top: 7px;
+	color: #222;
+	position: absolute;
+	right: 7px;
+}
+div.content form {
+	background: #333;
+	margin: 10px 0;
+	padding: 7px;
+	position: relative;
 
+}
+			
+div.content textarea {
+	height: 50px;
+	width: 710px;
+	background: #555;
+	border: 1px #000000 solid;
+	color: #000000;
+}
+		
+div.content input[type="submit"] {
+	display: block;
+}
+/*********************** 
+footer
+************************/
+div.footer {
+	text-align: right;
+	font-size: 0.7em;
+	color: #333333;
+	padding: 3px;
+	background: #00272b;
+}
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*********************** 
+comments
+************************/
+div.content ul.comments {
+	padding-left:30px;
+}
 
-header, nav, article, footer {
-	display: 			block;
+div.content li.comments {
+	background:#181818;
+	font-size: 0.9em;
+}
+p.comments {
+	color: #ff8400;
+	font-weight: bold;
+	padding-left:30px;
+}
+li.comments h2 {
+	color: #ff8400;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+/*********************** 
+show profile
+************************/
+div.showprofile {
+	color: #ff8400;
+}
+/*********************** 
+edit profile
+************************/
+div.editprofile textarea {
+	height: 100px;
+	width: 610px;
 }

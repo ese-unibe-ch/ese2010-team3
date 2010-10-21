@@ -33,10 +33,6 @@ public class Answer extends Entry {
 		this.id = id;
 	}
 
-	public String type() {
-		return "Answer";
-	}
-
 	/**
 	 * Post a {@link Comment} to a <code>Answer</code>
 	 * 
