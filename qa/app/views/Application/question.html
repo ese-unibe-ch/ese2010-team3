@@ -6,11 +6,14 @@
 		<li>
 			<h2>#{showProfile question /}:</h2>
 			<p>${question.content()}</p>
-			#{date question /}
 			#{tags question:question, editable:question?.owner() == user /}  
+			#{if user != null}
+				<FONT SIZE="1"> <a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</FONT></a>
+			#{/if}
 			#{if user && question.owner() == user}
 			<a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
 			#{/if}
+			#{date question /}
 			#{if user && question.owner() != user}
 				#{vote question /}
 			#{/if}
