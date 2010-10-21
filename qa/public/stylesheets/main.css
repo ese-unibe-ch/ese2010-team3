@@ -33,6 +33,8 @@ a {
 a:hover {
 	color: #c71c1c;
 }
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
 /*********************** 
 main
 ************************/
@@ -170,14 +172,7 @@ li.comments h2 {
 	font-weight: bold;
 	font-size: 0.9em;
 }
-/*********************** 
-register
-************************/
-#register label {
-	display: block;
-	float: left;
-	min-width: 6em;
-}
+
 /*********************** 
 show profile
 ************************/
@@ -187,13 +182,7 @@ div.showprofile {
 /*********************** 
 edit profile
 ************************/
-div.editprofile form.editprofile {
-	color: #ff8400;
-}
 div.editprofile textarea {
 	height: 100px;
 	width: 610px;
-	background: #555;
-	border: 1px #000000 solid;
-	color: #000000;
 }
