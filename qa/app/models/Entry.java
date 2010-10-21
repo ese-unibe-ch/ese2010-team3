@@ -1,6 +1,8 @@
 package models;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -8,10 +10,10 @@ import java.util.*;
  * @author Simon Marti
  * @author Mirco Kocher
  */
-public abstract class Entry extends Item {
+public abstract class Entry extends Item implements Comparable {
 
-	private String content;
-	private Date timestamp;
+	private final String content;
+	private final Date timestamp;
 	private HashMap<String, Vote> votes;
 
 	/**
@@ -48,11 +50,10 @@ public abstract class Entry extends Item {
 	 * Delete all {@link Vote}s if the <code>Entry</code> gets deleted.
 	 */
 	protected void unregisterVotes() {
-		Iterator<Vote> it = this.votes.values().iterator();
+		Collection<Vote> votes = this.votes.values();
 		this.votes = new HashMap();
-		while (it.hasNext()) {
-			it.next().unregister();
-		}
+		for (Vote vote : votes)
+			vote.unregister();
 	}
 
 	/**
@@ -111,13 +112,21 @@ public abstract class Entry extends Item {
 		return this.upVotes() - this.downVotes();
 	}
 
+	/**
+	 * Compares this <code>Entry</code> with another one with respect to their
+	 * ratings.
+	 * 
+	 * @return comparison result (-1 = this Entry has more upVotes)
+	 */
+	public int compareTo(Object o) {
+		return ((Entry) o).rating() - this.rating();
+	}
+
 	private int countVotes(boolean up) {
 		int counter = 0;
-		Iterator<Vote> it = this.votes.values().iterator();
-		while (it.hasNext()) {
-			if (it.next().up() == up)
+		for (Vote vote : this.votes.values())
+			if (vote.up() == up)
 				counter++;
-		}
 		return counter;
 	}
 
