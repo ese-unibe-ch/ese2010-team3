@@ -47,7 +47,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void checkPassw(){
 		User user = new User("Bill", "bill");
-		assertEquals(user.password, user.hashofpassword());
+		assertEquals(user.encrypt("bill"), user.getMd5Password());
 	}
 
 	@Test

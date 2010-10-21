@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -32,58 +35,63 @@ public class User {
 
 	/**
 	 * Creates a <code>User</code> with a given name.
-	 * @param name the name of the <code>User</code>
+	 * 
+	 * @param name
+	 *            the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
-		this.password = password.hashCode();
+		this.password = encrypt(password);
 		this.items = new HashSet<Item>();
 	}
 
 	/**
 	 * Returns the name of the <code>User</code>.
+	 * 
 	 * @return name of the <code>User</code>
 	 */
 	public String name() {
 		return this.name;
 	}
 
-	public boolean checkPW(String password){
-		return this.password.equals(password);
-	}
-	
-	public String email(){
-		return this.email;
-	}
-	
-	public int hashofpassword(){
-		return this.password;
+	public static String encrypt(String password) {
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(password.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1, digest);
+			String hashtext = bigInt.toString(16);
+			// Now we need to zero pad it if you actually want the full 32
+			// chars.
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+			return hashtext;
+		} catch (Exception e) {
+			return password;
+		}
 	}
 
-	public boolean checkPW(String passw){
-		return this.password == passw.hashCode();
+	public boolean checkPW(String password) {
+		return this.password.equals(encrypt(password));
 	}
-	
-	public static boolean needSignUp(String username){
-    	return (User.get(username)==null);
-    }
-	
-	public static User register(String username, String password) {
-		return new User(username, password);
+
+	public String email() {
+		return this.email;
 	}
-	
-	public boolean checkeMail(String email){
-		return this.email.equals(email) && email != null && email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
+
+	public boolean checkeMail(String email) {
+		return this.email.equals(email) && email != null
+				&& email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
 	}
 
 	/**
-	 * Registers an {@link Item} which should be deleted in case the <code>User</code> gets deleted.
+	 * Registers an {@link Item} which should be deleted in case the
+	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item the {@link Item} to register
+	 * @param item
+	 *            the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -103,7 +111,9 @@ public class User {
 
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
-	 * @param item the {@link Item} to unregister
+	 * 
+	 * @param item
+	 *            the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -112,7 +122,9 @@ public class User {
 	/**
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
-	 * @param item the {@link Item}to check
+	 * 
+	 * @param item
+	 *            the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -239,6 +251,10 @@ public class User {
 
 	public String getBiography() {
 		return this.biography;
+	}
+	
+	public String getMd5Password(){
+		return User.encrypt(password);
 	}
 
 	/*

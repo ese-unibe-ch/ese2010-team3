@@ -80,6 +80,7 @@ public class Application extends Controller {
             params.flash();
             register();
 		}
+	}
 	public static void showprofile(String userName) {
 		User showUser = User.get(userName);
 		render(showUser);

@@ -150,7 +150,7 @@ public class Question extends Entry {
 		Collections.sort(list, new EntryComperator());
 		return list;
 	}
-
+	
 	/**
 	 * Get all {@link Comment}s to a <code>Question</code>
 	 * @return {@link Collection} of {@link Comments}
@@ -236,17 +236,6 @@ public class Question extends Entry {
 		Collections.sort(list, new EntryComperator());
 		return list;
 	}
-	
-	/**
-	 * Get all {@link Comment}s to a <code>Question</code>
-	 * @return {@link Collection} of {@link Comments}
-	 */
-	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>();
-		list.addAll(comments.list());
-		Collections.sort(list, new EntryComperator());
-		return list;
-	}
 
 	/**
 	 * Get the <code>Question</code> with the given id.
@@ -256,47 +245,6 @@ public class Question extends Entry {
 	 */
 	public static Question get(int id) {
 		return questions.get(id);
-	}
-	
-	/**
-	 * Get a specific {@link Comment} to a <code>Question</code>
-	 * @param id of the <code>Comment</code>
-	 * @return {@link Comment} or null
-	 */
-	public Comment getComment(int id) {
-		return this.comments.get(id);
-	}
-
-	public boolean isBestAnswerSettable(Calendar now){
-		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
-		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return this.settingOfBestAnswer == null ||
-			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
-	}
-	
-	/**
-	 * Sets the best answer. This answer can not be changed after 30min. This
-	 * Method enforces this and fails if it can not be set.
-	 * @param bestAnswer the answer the user chose to be the best for this question.
-	 * @return true iff setting of best answer was allowed.
-	 */
-	public boolean setBestAnswer(Answer bestAnswer) {
-		Calendar now = Calendar.getInstance();
-		return setBestAnswer(bestAnswer, now);
-	}
-	
-	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
-		if ( this.isBestAnswerSettable(now) ){
-			this.bestAnswer = bestAnswer;
-			this.settingOfBestAnswer = now;
-			return true;
-		}
-		else
-			return false;
-	}
-
-	public Answer getBestAnswer() {
-		return bestAnswer;
 	}
 
 }
