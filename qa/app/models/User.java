@@ -30,6 +30,7 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
+	private boolean cheater;
 
 	public static final String DATE_FORMAT = "dd-MM-yy";
 
@@ -43,6 +44,7 @@ public class User {
 		this.name = name;
 		this.password = encrypt(password);
 		this.items = new HashSet<Item>();
+		this.cheater = false;
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class User {
 				hashtext = "0" + hashtext;
 			}
 			return hashtext;
-		} catch (Exception e) {
+		} catch(NoSuchAlgorithmException e) {
 			return password;
 		}
 	}
@@ -77,13 +79,12 @@ public class User {
 		return this.password.equals(encrypt(password));
 	}
 
-	public String email() {
-		return this.email;
+	public boolean hasThisEmail(String email){
+		return this.email.equals(email) && email != null;
 	}
-
-	public boolean checkeMail(String email) {
-		return this.email.equals(email) && email != null
-				&& email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+	
+	public static boolean checkEmail(String email) {
+		 return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
 	}
 
 	/**
@@ -254,9 +255,17 @@ public class User {
 	}
 	
 	public String getMd5Password(){
-		return password;
+		return this.password;
+	}
+	
+	public boolean getCheater(){
+		return this.cheater;
 	}
 
+	public void setCheater(boolean status){
+		this.cheater = status;
+	}
+	
 	/*
 	 * Static interface to access questions from controller (not part of unit
 	 * testing)

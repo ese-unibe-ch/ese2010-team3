@@ -25,29 +25,32 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldCheckeMailValidation(){
 		User user = new User("John", "john");
-		user.setEmail("john@gmx.com");
-		assertTrue(user.checkeMail("john@gmx.com"));
-		user.setEmail("john.smith@students.unibe.ch");
-		assertTrue(user.checkeMail("john.smith@students.unibe.ch"));
-		user.setEmail("john@gmx.c");
-		assertFalse(user.checkeMail("john@gmx.c"));
-		user.setEmail("john@info.museum");
-		assertFalse(user.checkeMail("john@info.museum"));
-		user.setEmail("john@...com");
-		assertFalse(user.checkeMail("john@...com"));
+		assertTrue(user.checkEmail("john@gmx.com"));
+		assertTrue(user.checkEmail("john.smith@students.unibe.ch"));
+		assertFalse(user.checkEmail("john@gmx.c"));
+		assertFalse(user.checkEmail("john@info.museum"));
+		assertFalse(user.checkEmail("john@...com"));
+	}
+	
+	public void userShouldHaveSpecificEmail(){
+		User user = new User("John", "john");
+		user.setEmail("john@gmx.ch");
+		assertTrue(user.hasThisEmail("john@gmx.ch"));
+		assertFalse(user.hasThisEmail("john.smith@gmx.ch"));
 	}
 	
 	@Test
 	public void checkMailAssertion(){
 		User user = new User("Bill", "bill");
 		user.setEmail("bill@aol.com");
-		assertEquals(user.email(), "bill@aol.com");
+		assertEquals(user.getEmail(), "bill@aol.com");
 	}
 	
 	@Test
 	public void checkPassw(){
 		User user = new User("Bill", "bill");
 		assertEquals(user.encrypt("bill"), user.getMd5Password());
+		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
 	}
 
 	@Test
