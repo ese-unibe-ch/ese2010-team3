@@ -59,7 +59,7 @@ public class Answer extends Entry {
 	public void unregister() {
 		this.comments = new IDTable<Comment>();
 		for (Comment comment : this.comments)
-		      comment.unregister();
+			comment.unregister();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -127,9 +127,10 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public int compareTo(Object o) {
-		Answer other = (Answer) o;
-		if (this.isBestAnswer() == other.isBestAnswer())
-			return other.rating() - this.rating();
+		Entry other = (Entry) o;
+		if (!(other instanceof Answer)
+				|| this.isBestAnswer() == ((Answer) other).isBestAnswer())
+			return super.compareTo(o);
 		if (this.isBestAnswer())
 			return -1;
 		return 1;
