@@ -1,13 +1,13 @@
 package models;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -70,7 +70,7 @@ public class User {
 				hashtext = "0" + hashtext;
 			}
 			return hashtext;
-		} catch(NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 			return password;
 		}
 	}
@@ -79,12 +79,8 @@ public class User {
 		return this.password.equals(encrypt(password));
 	}
 
-	public boolean hasThisEmail(String email){
-		return this.email.equals(email) && email != null;
-	}
-	
 	public static boolean checkEmail(String email) {
-		 return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
 	}
 
 	/**
@@ -132,6 +128,16 @@ public class User {
 		return this.items.contains(item);
 	}
 
+	// Should only count comments, questions within the last hour
+	public int howManyItems() {
+		return this.items.size();
+	}
+
+	private int votesfor(/* User user */) {
+		// call the votesByUser(user) from Entry.java and return this integer
+		return 0;
+	}
+
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
@@ -150,6 +156,33 @@ public class User {
 				this.items.remove(item);
 			}
 		}
+	}
+
+	// Max. 10 questions, answers or comments per minute in 1h
+	// Against Spammers
+	public boolean lotsOfComments() {
+		int number = this.howManyItems();
+		if (number > 10) {
+			return true;
+		}
+		return false;
+	}
+
+	// Max. 3 up-votes for the same user in 1h
+	// Against Supporters
+	private boolean upvoteuser() {
+		int number = this.votesfor();
+		if (number > 3) {
+			return true;
+		}
+		return false;
+	}
+
+	public void doesUserCheat() {
+		if (lotsOfComments() || upvoteuser()) {
+			this.setCheater(true);
+		}
+		this.setCheater(false);
 	}
 
 	/**
@@ -253,19 +286,19 @@ public class User {
 	public String getBiography() {
 		return this.biography;
 	}
-	
-	public String getMd5Password(){
+
+	public String getMd5Password() {
 		return this.password;
 	}
-	
-	public boolean getCheater(){
+
+	public boolean getCheater() {
 		return this.cheater;
 	}
 
-	public void setCheater(boolean status){
+	public void setCheater(boolean status) {
 		this.cheater = status;
 	}
-	
+
 	/*
 	 * Static interface to access questions from controller (not part of unit
 	 * testing)

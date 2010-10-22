@@ -1,6 +1,8 @@
 package models;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -53,6 +55,19 @@ public abstract class Entry extends Item {
 		while (it.hasNext()) {
 			it.next().unregister();
 		}
+	}
+
+	public int votesByUser(User user) {
+		Iterator<Vote> it = this.votes.values().iterator();
+		this.votes = new HashMap();
+		int i = 0;
+		while (it.hasNext()) {
+			if (this.owner() == user) {
+				i++;
+				it = (Iterator<Vote>) it.next();
+			}
+		}
+		return i;
 	}
 
 	/**

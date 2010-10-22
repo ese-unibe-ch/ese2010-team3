@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.List;
+
 import models.Answer;
 import models.Comment;
 import models.Question;
@@ -69,7 +70,7 @@ public class Application extends Controller {
 	public static void signup(@Required String username, String password,
 			String email) {
 
-		if (email != null && email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}")){
+		if (User.checkEmail(email)) {
 			User user = User.register(username, password);
 			user.setEmail(email);
 			// Mark user as connected

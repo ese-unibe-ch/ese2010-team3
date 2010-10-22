@@ -2,6 +2,7 @@ package tests;
 
 import java.text.ParseException;
 
+import models.Question;
 import models.User;
 
 import org.junit.Test;
@@ -30,13 +31,6 @@ public class UserTest extends UnitTest {
 		assertFalse(user.checkEmail("john@gmx.c"));
 		assertFalse(user.checkEmail("john@info.museum"));
 		assertFalse(user.checkEmail("john@...com"));
-	}
-	
-	public void userShouldHaveSpecificEmail(){
-		User user = new User("John", "john");
-		user.setEmail("john@gmx.ch");
-		assertTrue(user.hasThisEmail("john@gmx.ch"));
-		assertFalse(user.hasThisEmail("john.smith@gmx.ch"));
 	}
 	
 	@Test
@@ -72,4 +66,15 @@ public class UserTest extends UnitTest {
 		assertTrue(user.getProfession().equals("tester"));
 		assertTrue(user.getWebsite().equals("http://www.test.ch"));
 	}
+	
+	@Test
+	public void RightNumberOfItems(){
+		User user = new User("miko", "miko");
+		assertTrue(user.howManyItems() == 0);
+		Question question = new Question(user, "Why did the chicken cross the road?");
+		assertTrue(user.howManyItems() == 1);
+		Question quest = new Question(user, "Does anybody know?");
+		assertFalse(user.howManyItems() == 1);
+	}
+	
 }
