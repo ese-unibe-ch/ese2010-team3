@@ -1,14 +1,13 @@
 package models;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
+import java.util.regex.Pattern;
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
  * {@link Answer}s, {@link Comment}s and {@link Vote}s. When deleted, the
@@ -31,7 +30,9 @@ public class User {
 	private String employer;
 	private String biography;
 
-	public static final String DATE_FORMAT = "dd-MM-yy";
+	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
+	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -171,10 +172,10 @@ public class User {
 	 */
 	private String dateToString(Date d) {
 		if (d != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
 			return fmt.format(d);
 		} else
-			return ("dd-mm-yy");
+			return null;
 	}
 
 	/**
@@ -184,8 +185,14 @@ public class User {
 	 * @throws ParseException
 	 */
 	private Date stringToDate(String s) throws ParseException {
-		if (s != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+		if (Pattern.matches("..\\...\\.....", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
+			return fmt.parse(s);
+		} else if (Pattern.matches("../../....", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_US);
+			return fmt.parse(s);
+		} else if (Pattern.matches("....-..-..", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_ISO);
 			return fmt.parse(s);
 		} else
 			return (null);
