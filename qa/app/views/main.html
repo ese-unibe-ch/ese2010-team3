@@ -12,6 +12,12 @@
         #{get 'moreScripts' /}
     </head>
     <body>
+    #{if user  && user.getCheater()}
+				<font color="#ffffff" size="+2"><center><b>
+				You are either Spamming this cool Site or Supporting somebody! STOP IT!!!
+				</b></center></font>
+    			<hr size="15" color="#ff0000" />
+    #{/if}
     	<div class="main">
     		<div class="header">
     			<a href="@{Application.index}"></a>

@@ -11,7 +11,7 @@
 			#{if user && question.owner() == user}
 			<a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
 			#{/if}
-			#{if user && question.owner() != user}
+			#{if user && question.owner() != user && user.getCheater()==false}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -39,7 +39,7 @@
 			<li>
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
-				#{if user != null}
+				#{if user != null && user.getCheater()==false}
 					<FONT SIZE="1"> <a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</FONT></a>
 				#{/if}
 				#{date answer /}
@@ -48,7 +48,7 @@
 					<br>
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
 				#{/if}
-				#{if user && answer.owner() != user}
+				#{if user && answer.owner() != user && user.getCheater()==false}
 					#{vote answer /}
 				#{/if}
 				#{if user && question.owner() == user}
@@ -75,7 +75,7 @@
 			#{/list}
 		</ul>
 	#{/if}
-	#{if user}
+	#{if user && user.getCheater()==false}
 		<h1>Add Answer</h1>
 		#{form @Secured.newAnswer(question.id())}
 			#{field 'content'}
