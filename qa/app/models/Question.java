@@ -281,4 +281,14 @@ public class Question extends Entry {
 		}
 		return highRatedAnswers;
 	}
+
+	public static int bestRatedAnswers() {
+		int count = 0;
+		for (Question q : questions) {
+			if (q.bestAnswer != null) {
+				count++;
+			}
+		}
+		return count;
+	}
 }

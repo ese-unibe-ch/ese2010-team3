@@ -5,6 +5,7 @@ import java.util.List;
 import models.Answer;
 import models.Comment;
 import models.Question;
+import models.TimeTracker;
 import models.User;
 import play.data.validation.Required;
 import play.mvc.Before;
@@ -85,17 +86,34 @@ public class Application extends Controller {
 	}
 
 	public static void showStatisticalOverview() {
+		TimeTracker t = TimeTracker.getInstance();
 		int numberOfQuestions;
 		int numberOfAnswers;
 		int numberOfUsers;
 		int numberOfHighRatedAnswers;
+		int numberOfBestAnswers;
+		float questionsPerDay;
+		float questionsPerWeek;
+		float questionsPerMonth;
+		float answersPerDay;
+		float answersPerWeek;
+		float answersPerMonth;
 
 		numberOfUsers = User.getUserCount();
 		numberOfQuestions = Question.questions().size();
 		numberOfAnswers = Answer.getAnswerCount();
 		numberOfHighRatedAnswers = Question.highRatedAnswers();
+		numberOfBestAnswers = Question.bestRatedAnswers();
+		questionsPerDay = (float) numberOfQuestions / (float) t.getDays();
+		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks();
+		questionsPerMonth = (float) numberOfQuestions / (float) t.getMonths();
+		answersPerDay = (float) numberOfAnswers / (float) t.getDays();
+		answersPerWeek = (float) numberOfAnswers / (float) t.getWeeks();
+		answersPerMonth = (float) numberOfAnswers / (float) t.getMonths();
 
 		render(numberOfQuestions, numberOfAnswers, numberOfUsers,
-				numberOfHighRatedAnswers);
+				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,
+				questionsPerWeek, questionsPerMonth, answersPerDay,
+				answersPerWeek, answersPerMonth);
 	}
 }
