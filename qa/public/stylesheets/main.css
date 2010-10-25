@@ -143,7 +143,13 @@ footer {
 	padding: 			3px;
 	background: 		#00272b;
 }
-
+	
+	footer > a {
+		text-align: 		left;
+		font-size: 			0.7em;	
+		padding: 			3px;
+		background: 		#00272b;
+	}
 
 
 

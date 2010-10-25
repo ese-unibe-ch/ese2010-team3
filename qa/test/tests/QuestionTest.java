@@ -1,4 +1,5 @@
 package tests;
+
 import models.Question;
 import models.User;
 
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import play.test.UnitTest;
 
-
 public class QuestionTest extends UnitTest {
 	private User user;
 	private Question question;
@@ -15,24 +15,25 @@ public class QuestionTest extends UnitTest {
 	@Before
 	public void setUp() {
 		this.user = new User("Jack", "jack");
-		this.question = new Question(user, "Why did the chicken cross the road?");
+		this.question = new Question(user,
+				"Why did the chicken cross the road?");
 	}
-	
+
 	@Test
 	public void shouldCreateQuestion() {
 		assertTrue(question != null);
 	}
-	
+
 	@Test
 	public void shouldHaveOwner() {
 		assertEquals(question.owner(), user);
 	}
-	
+
 	@Test
 	public void shouldHaveCorrectContent() {
 		assertEquals(question.content(), "Why did the chicken cross the road?");
 	}
-	
+
 	@Test
 	public void shouldHaveCorrectSummary() {
 		assertEquals(question.summary(), "Why did the chicken ...");
@@ -42,4 +43,9 @@ public class QuestionTest extends UnitTest {
 	public void shouldRegisterItself() {
 		assertTrue(user.hasItem(question));
 	}
+
+	/*
+	 * Statistics Tests
+	 */
+
 }

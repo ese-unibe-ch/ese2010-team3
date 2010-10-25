@@ -84,4 +84,18 @@ public class Application extends Controller {
 		render();
 	}
 
+	public static void showStatisticalOverview() {
+		int numberOfQuestions;
+		int numberOfAnswers;
+		int numberOfUsers;
+		int numberOfHighRatedAnswers;
+
+		numberOfUsers = User.getUserCount();
+		numberOfQuestions = Question.questions().size();
+		numberOfAnswers = Answer.getAnswerCount();
+		numberOfHighRatedAnswers = Question.highRatedAnswers();
+
+		render(numberOfQuestions, numberOfAnswers, numberOfUsers,
+				numberOfHighRatedAnswers);
+	}
 }

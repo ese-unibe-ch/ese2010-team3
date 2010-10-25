@@ -1,6 +1,9 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -14,6 +17,7 @@ public class Answer extends Entry {
 	private Question question;
 	private IDTable<Comment> comments;
 	private int id;
+	private static int answerCount;
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -31,6 +35,7 @@ public class Answer extends Entry {
 		this.question = question;
 		this.comments = new IDTable<Comment>();
 		this.id = id;
+		answerCount += 1;
 	}
 
 	/**
@@ -56,10 +61,11 @@ public class Answer extends Entry {
 	public void unregister() {
 		this.comments = new IDTable<Comment>();
 		for (Comment comment : this.comments)
-		      comment.unregister();
+			comment.unregister();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
+		this.answerCount -= 1;
 	}
 
 	/**
@@ -70,26 +76,31 @@ public class Answer extends Entry {
 	public Question question() {
 		return this.question;
 	}
-	
+
 	/**
 	 * Unregisters a deleted {@link Comment}.
-	 * @param comment the {@link Comment} to unregister
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	public void unregister(Comment comment) {
 		this.comments.remove(comment.id());
 	}
-	
+
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Answer</code>
-	 * @param comment the {@link Comment} to check
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
 	 */
 	public boolean hasComment(Comment comment) {
 		return this.comments.contains(comment);
 	}
-	
+
 	/**
 	 * Get all {@link Comment}s to a <code>Answer</code>
+	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
@@ -98,10 +109,12 @@ public class Answer extends Entry {
 		Collections.sort(list, new EntryComperator());
 		return list;
 	}
-	
+
 	/**
 	 * Get a specific {@link Comment} to a <code>Answer</code>
-	 * @param id of the <code>Comment</code>
+	 * 
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
@@ -111,9 +124,28 @@ public class Answer extends Entry {
 	public int id() {
 		return this.id;
 	}
-	
+
 	public boolean isBestAnswer() {
 		return this.question.getBestAnswer() == this;
+	}
+
+	/**
+	 * Get the number of all answers currently in the system
+	 * 
+	 * @return int the number of answers
+	 */
+
+	public static int getAnswerCount() {
+		return answerCount;
+	}
+
+	/**
+	 * Checks whether the answer is high-rated or not
+	 * 
+	 * @return boolean whether the answer is high rated or not
+	 */
+	public boolean isHighRated() {
+		return (this.rating() >= 5);
 	}
 
 }

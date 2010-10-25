@@ -1,0 +1,19 @@
+#{extends 'main.html' /}
+#{set title:'ajopi - statistics overview' /}
+
+<ul>
+	<li>
+		<p id="number-of-questions">
+			 <label for="questionsNumber">Questions:</label> <div id="questionsNumber">${numberOfQuestions}</div>
+		</p>
+		<p id="number-of-answers">
+			 <label for="answersNumber">Answers:</label> <div id="answersNumber">${numberOfAnswers}</div>
+		</p>
+		<p id="number-of-users">
+			 <label for="userNumber">Users:</label> <div id="userNumber">${numberOfUsers}</div>
+		</p>
+		<p id="number-of-highrated-answers">
+			 <label for="highRateNumber">High rated answers:</label> <div id="highRateNumber">${numberOfHighRatedAnswers}</div>
+		</p>
+	</li>
+</ul>

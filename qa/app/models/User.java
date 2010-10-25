@@ -27,39 +27,45 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-
+	private static int userCount;
 	public static final String DATE_FORMAT = "dd-MM-yy";
 
 	/**
 	 * Creates a <code>User</code> with a given name.
-	 * @param name the name of the <code>User</code>
+	 * 
+	 * @param name
+	 *            the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
 		this.items = new HashSet<Item>();
+		userCount += 1;
 	}
 
 	/**
 	 * Returns the name of the <code>User</code>.
+	 * 
 	 * @return name of the <code>User</code>
 	 */
 	public String name() {
 		return this.name;
 	}
 
-	public boolean checkPW(String password){
+	public boolean checkPW(String password) {
 		return this.password.equals(password);
 	}
-	
-	public boolean checkeMail(String email){
+
+	public boolean checkeMail(String email) {
 		return this.email.equals(email);
 	}
 
 	/**
-	 * Registers an {@link Item} which should be deleted in case the <code>User</code> gets deleted.
+	 * Registers an {@link Item} which should be deleted in case the
+	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item the {@link Item} to register
+	 * @param item
+	 *            the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -74,12 +80,15 @@ public class User {
 		for (Item item : clone)
 			item.unregister();
 		this.items.clear();
+		this.userCount -= 1;
 		users.remove(this.name);
 	}
 
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
-	 * @param item the {@link Item} to unregister
+	 * 
+	 * @param item
+	 *            the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -88,7 +97,9 @@ public class User {
 	/**
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
-	 * @param item the {@link Item}to check
+	 * 
+	 * @param item
+	 *            the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -111,6 +122,7 @@ public class User {
 					|| doComments && item instanceof Comment) {
 				((Entry) item).anonymize();
 				this.items.remove(item);
+				this.userCount -= 1;
 			}
 		}
 	}
@@ -242,5 +254,13 @@ public class User {
 	 */
 	public static User get(String name) {
 		return users.get(name);
+	}
+
+	/*
+	 * Interface to gather statistical data
+	 */
+
+	public static int getUserCount() {
+		return userCount;
 	}
 }
