@@ -27,7 +27,6 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-	private static int userCount;
 	public static final String DATE_FORMAT = "dd-MM-yy";
 
 	/**
@@ -40,7 +39,6 @@ public class User {
 		this.name = name;
 		this.password = password;
 		this.items = new HashSet<Item>();
-		userCount += 1;
 	}
 
 	/**
@@ -80,7 +78,6 @@ public class User {
 		for (Item item : clone)
 			item.unregister();
 		this.items.clear();
-		this.userCount -= 1;
 		users.remove(this.name);
 	}
 
@@ -122,7 +119,6 @@ public class User {
 					|| doComments && item instanceof Comment) {
 				((Entry) item).anonymize();
 				this.items.remove(item);
-				this.userCount -= 1;
 			}
 		}
 	}
@@ -261,6 +257,6 @@ public class User {
 	 */
 
 	public static int getUserCount() {
-		return userCount;
+		return User.users.size();
 	}
 }
