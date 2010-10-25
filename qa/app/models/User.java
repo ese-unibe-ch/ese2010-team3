@@ -259,4 +259,8 @@ public class User {
 	public static int getUserCount() {
 		return User.users.size();
 	}
+
+	public int getQuestionNumber() {
+		return Question.getUserQuestions(this);
+	}
 }

@@ -39,8 +39,12 @@
 		<p id="saveprofile-field">
 		</p>
 	</li>
+	<li>
+		<p id="numberOfQuestions">
+			<label for="numberOfQuestions">Number of Questions:</label> <div id="numberOfQuestions">${user.getQuestionNumber()}</div>
+		</p>
+	</li>
 	</div>
-
 #{/if}#{else}
 	#{set title:'Error' /}
 	<h1>No such user ${name}</h1>

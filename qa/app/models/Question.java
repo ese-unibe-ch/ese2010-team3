@@ -291,4 +291,15 @@ public class Question extends Entry {
 		}
 		return count;
 	}
+
+	public static int getUserQuestions(User user) {
+		int count = 0;
+		for (Question q : questions) {
+			if (q.owner().equals(user)) {
+				count++;
+			}
+		}
+		return count;
+
+	}
 }
