@@ -21,7 +21,7 @@ import controllers.Secured;
 import controllers.Session;
 
 @Ignore
-public class UserInteractionTest extends UnitTest {
+public class UserInteractionTest extends FunctionalTest {
 
 	private User jack;
 	private SessionMock session;

@@ -39,7 +39,8 @@
 		<h1>Answers</h1>
 		<ul>
 			#{list items:answers, as:'answer'}
-			<li>
+			#{if answer.isBestAnswer()}<li class="bestAnswer">#{/if}
+			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
 				#{if user != null}
