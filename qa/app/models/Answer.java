@@ -1,6 +1,9 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -46,6 +49,7 @@ public class Answer extends Entry {
 		Comment comment = new Comment(this.comments.nextID(), user, this,
 				content);
 		this.comments.add(comment);
+		user.addRecentComments(content + " on " + comment.timestamp());
 		return comment;
 	}
 

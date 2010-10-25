@@ -53,7 +53,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
 		User user = new User("Jack", "jack");
-		user.setDateOfBirth("14.09.1987");
+		user.setDateOfBirth("14.9.1987");
 		user.setBiography("I lived");
 		user.setEmail("test@test.tt");
 		user.setEmployer("TestInc");

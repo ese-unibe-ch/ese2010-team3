@@ -36,8 +36,20 @@
 				<td><label for="biography">Biography:</label>
 				<td>${showUser.biography}</td>
 			</tr>
+			<tr>
+				<td><label for="recentquestions">Recent questions:</label>
+				<td>${showUser.getRecentQuestions()}</td>
+			</tr>
+			<tr>
+				<td><label for="recentanswers">Recent answers:</label>
+				<td>${showUser.getRecentAnswers()}</td>
+			</tr>
+			<tr>
+				<td><label for="recentcomments">Recent comments:</label>
+				<td>${showUser.getRecentComments()}</td>
+			</tr>
 		</table>
-	</div><!-- end showprofile -->
+	  		</div><!-- end showprofile -->
 #{/if}
 #{elseif user}
 	<div class="editprofile">

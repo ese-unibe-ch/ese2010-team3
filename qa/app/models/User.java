@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,9 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
+	private ArrayList<String> recentQuestions = new ArrayList<String>();
+	private ArrayList<String> recentAnswers = new ArrayList<String>();
+	private ArrayList<String> recentComments = new ArrayList<String>();
 
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -185,13 +189,13 @@ public class User {
 	 * @throws ParseException
 	 */
 	private Date stringToDate(String s) throws ParseException {
-		if (Pattern.matches("..\\...\\.....", s)) {
+		if (Pattern.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{4}", s)) {
 			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
 			return fmt.parse(s);
-		} else if (Pattern.matches("../../....", s)) {
+		} else if (Pattern.matches("\\d{1,2}/\\d{1,2}/\\d{4}", s)) {
 			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_US);
 			return fmt.parse(s);
-		} else if (Pattern.matches("....-..-..", s)) {
+		} else if (Pattern.matches("\\d{4}-\\d{1,2}-\\d{1,2}", s)) {
 			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_ISO);
 			return fmt.parse(s);
 		} else
@@ -289,5 +293,38 @@ public class User {
 	 */
 	public static User get(String name) {
 		return users.get(name);
+	}
+
+	public ArrayList<String> getRecentQuestions() {
+		return this.recentQuestions;
+	}
+
+	public ArrayList<String> getRecentAnswers() {
+		return this.recentAnswers;
+	}
+
+	public ArrayList<String> getRecentComments() {
+		return this.recentComments;
+	}
+	
+	public void addRecentQuestions(String content) {
+		if (recentQuestions.size() > 2) {
+			this.recentQuestions.remove(2);
+		}
+		this.recentQuestions.add(0, content);
+	}
+
+	public void addRecentAnswers(String content) {
+		if (recentAnswers.size() > 2) {
+			this.recentAnswers.remove(2);
+		}
+		this.recentAnswers.add(0, content);
+	}
+
+	public void addRecentComments(String content) {
+		if (recentComments.size() > 2) {
+			this.recentComments.remove(2);
+		}
+		this.recentComments.add(0, content);
 	}
 }
