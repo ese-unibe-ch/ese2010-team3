@@ -2,6 +2,7 @@ package models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -157,7 +158,7 @@ public class User {
 	 * @return age of the <code>User</code>
 	 */
 	private int age() {
-		Date now = new Date();
+		Date now = Calendar.getInstance().getTime();
 		if (dateOfBirth != null) {
 			long age = now.getTime() - dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));

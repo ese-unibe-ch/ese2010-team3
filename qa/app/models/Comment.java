@@ -13,7 +13,7 @@ public class Comment extends Entry {
 	
 	private int id;
 	private Entry entry;
-
+	
 	public Comment(int id, User owner, Entry entry, String content) {
 		super(owner, content);
 		this.entry = entry;
@@ -24,6 +24,7 @@ public class Comment extends Entry {
 	public void unregister() {
 		this.entry.unregister(this);
 		this.unregisterUser();
+		this.entry = null;
 	}
 
 	public int id() {
@@ -36,6 +37,10 @@ public class Comment extends Entry {
 	 */
 	public void unregister(Comment comment) {
 		// TODO Auto-generated method stub
+	}
+
+	public boolean isRegistered() {
+		return this.entry != null;
 	}
 
 }

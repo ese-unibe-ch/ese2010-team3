@@ -20,7 +20,7 @@ public class QuestionTest extends UnitTest {
 	
 	@Test
 	public void shouldCreateQuestion() {
-		assertTrue(question != null);
+		assertNotNull(question);
 	}
 	
 	@Test

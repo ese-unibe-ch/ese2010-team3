@@ -12,51 +12,55 @@ import play.mvc.With;
 
 @With(Secure.class)
 public class Secured extends Controller {
-	public static User currentUser() {
-		return User.get(Security.connected());
-	}
-
-	public static void newQuestion(@Required String content, String tags) {
+	public static Question newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
-			Question question = Question.register(currentUser(), content);
+			Question question = Question.register(Session.get().currentUser(), content);
 			question.setTagString(tags);
 			Application.question(question.id());
+			return question;
 		} else {
 			Application.index();
+			return null;
 		}
 	}
 
-	public static void newAnswer(int questionId, @Required String content) {
+	public static Answer newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Question.get(questionId).answer(currentUser(), content);
+			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
 			Application.question(questionId);
+			return answer;
 		} else {
 			Application.index();
+			return null;
 		}
 	}
 
-	public static void newCommentQuestion(int questionId,
+	public static Comment newCommentQuestion(int questionId,
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Question.get(questionId).comment(currentUser(), content);
+			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
 			Application.commentQuestion(questionId);
+			return comment;
 		}
+		return null;
 	}
 
-	public static void newCommentAnswer(int questionId, int answerId,
+	public static Comment newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
 		if (!validation.hasErrors() && answer != null) {
-			answer.comment(currentUser(), content);
+			Comment comment = answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
+			return comment;
 		}
+		return null;
 	}
 
 	public static void voteQuestionUp(int id) {
 		if (Question.get(id) != null) {
-			Question.get(id).voteUp(currentUser());
+			Question.get(id).voteUp(Session.get().currentUser());
 			if (!redirectToCallingPage())
 				Application.question(id);
 		} else {
@@ -66,7 +70,7 @@ public class Secured extends Controller {
 
 	public static void voteQuestionDown(int id) {
 		if (Question.get(id) != null) {
-			Question.get(id).voteDown(currentUser());
+			Question.get(id).voteDown(Session.get().currentUser());
 			if (!redirectToCallingPage())
 				Application.question(id);
 		} else {
@@ -77,7 +81,7 @@ public class Secured extends Controller {
 	public static void voteAnswerUp(int question, int id) {
 		if (Question.get(question) != null
 				&& Question.get(question).getAnswer(id) != null) {
-			Question.get(question).getAnswer(id).voteUp(currentUser());
+			Question.get(question).getAnswer(id).voteUp(Session.get().currentUser());
 			Application.question(question);
 		} else {
 			Application.index();
@@ -87,7 +91,7 @@ public class Secured extends Controller {
 	public static void voteAnswerDown(int question, int id) {
 		if (Question.get(question) != null
 				&& Question.get(question).getAnswer(id) != null) {
-			Question.get(question).getAnswer(id).voteDown(currentUser());
+			Question.get(question).getAnswer(id).voteDown(Session.get().currentUser());
 			Application.question(question);
 		} else {
 			Application.index();
@@ -125,8 +129,8 @@ public class Secured extends Controller {
 
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user)) {
-			boolean deleteSelf = name.equals(currentUser().name());
+		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
+			boolean deleteSelf = name.equals(Session.get().currentUser().name());
 			user.delete();
 			if (deleteSelf)
 				Secure.logout();
@@ -136,7 +140,7 @@ public class Secured extends Controller {
 
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = User.get(name);
-		if (hasPermissionToDelete(currentUser(), user))
+		if (hasPermissionToDelete(Session.get().currentUser(), user))
 			user.anonymize(true, false);
 		deleteUser(name);
 	}
@@ -164,7 +168,7 @@ public class Secured extends Controller {
 			String birthday, String website, String profession,
 			String employer, String biography) throws ParseException {
 
-		User user = currentUser();
+		User user = Session.get().currentUser();
 		if (email != null)
 			user.setEmail(email);
 		if (fullname != null)
@@ -184,7 +188,7 @@ public class Secured extends Controller {
 
 	public static void updateTags(int id, String tags) {
 		Question question = Question.get(id);
-		User user = currentUser();
+		User user = Session.get().currentUser();
 		if (question != null && user == question.owner())
 			question.setTagString(tags);
 		Application.question(id);

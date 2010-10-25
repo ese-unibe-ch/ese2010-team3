@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+import models.IDTable;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -14,6 +15,7 @@ public class Answer extends Entry {
 	private Question question;
 	private IDTable<Comment> comments;
 	private int id;
+	
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -54,9 +56,10 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		this.comments = new IDTable<Comment>();
-		for (Comment comment : this.comments)
+		for (Comment comment : this.comments){
 		      comment.unregister();
+		}
+		this.comments = new IDTable<Comment>();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -96,7 +99,7 @@ public class Answer extends Entry {
 		List<Comment> list = new ArrayList<Comment>();
 		list.addAll(comments.list());
 		Collections.sort(list, new EntryComperator());
-		return list;
+		return Collections.unmodifiableList(list);
 	}
 	
 	/**

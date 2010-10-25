@@ -89,7 +89,23 @@ public class UnregisterTest extends UnitTest {
 		this.sahra.delete();
 		assertFalse(answer.hasComment(answerComment));
 	}
+	
+	@Test
+	public void shouldDeleteAllCommentsOnQuestionDelete() {
+		assertTrue(questionComment.isRegistered());
+		this.question.unregister();
+		assertFalse(questionComment.isRegistered());
+	}
+	
+	@Test
+	public void shouldDeleteAllCommentsOnAnswerDelete() {
+		assertTrue(answerComment.isRegistered());
+		this.answer.unregister();
+		assertFalse(answerComment.isRegistered());
+	}
 
+	
+	@Test
 	public void testUserQuestionAnonymization() {
 		this.jack.anonymize(false, false);
 		this.john.anonymize(false, false);
@@ -99,6 +115,8 @@ public class UnregisterTest extends UnitTest {
 		assertEquals(this.answer.owner(), this.john);
 		assertEquals(this.answer.downVotes(), 1);
 	}
+	
+
 	
 	@Test
 	public void testUserAnonymization() {

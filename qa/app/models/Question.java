@@ -148,7 +148,7 @@ public class Question extends Entry {
 		List<Answer> list = new ArrayList();
 		list.addAll(answers.list());
 		Collections.sort(list, new EntryComperator());
-		return list;
+		return Collections.unmodifiableList(list);
 	}
 	
 	/**
@@ -159,7 +159,7 @@ public class Question extends Entry {
 		List<Comment> list = new ArrayList<Comment>();
 		list.addAll(comments.list());
 		Collections.sort(list, new EntryComperator());
-		return list;
+		return Collections.unmodifiableList(list);
 	}
 
 	/**

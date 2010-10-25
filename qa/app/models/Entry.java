@@ -25,8 +25,8 @@ public abstract class Entry extends Item {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		this.timestamp = new Date();
-		this.votes = new HashMap();
+		this.timestamp = SystemInformation.get().now();
+		this.votes = new HashMap<String,Vote>();
 	}
 
 	/**
