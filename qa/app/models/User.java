@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class User {
 	private String employer;
 	private String biography;
 	private boolean cheater;
+	private Date timestamp;
 
 	public static final String DATE_FORMAT = "dd-MM-yy";
 
@@ -44,7 +46,7 @@ public class User {
 		this.name = name;
 		this.password = encrypt(password);
 		this.items = new HashSet<Item>();
-		this.cheater = false;
+		this.cheater = true;
 	}
 
 	/**
@@ -56,6 +58,12 @@ public class User {
 		return this.name;
 	}
 
+	/**
+	 * Encrypt the password with MD5
+	 * 
+	 * @param password
+	 * @return the encrypted password
+	 */
 	public static String encrypt(String password) {
 		try {
 			MessageDigest m = MessageDigest.getInstance("MD5");
@@ -75,10 +83,22 @@ public class User {
 		}
 	}
 
+	/**
+	 * Encrypt the password and check if it is the same as the stored one.
+	 * 
+	 * @param passwort
+	 * @return true if the password is right
+	 */
 	public boolean checkPW(String password) {
 		return this.password.equals(encrypt(password));
 	}
 
+	/**
+	 * Check an email-address to be valid.
+	 * 
+	 * @param email
+	 * @return true if the email is valid.
+	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
 	}
@@ -128,14 +148,43 @@ public class User {
 		return this.items.contains(item);
 	}
 
-	// Should only count comments, questions within the last hour
+	/**
+	 * The amount of Comments, Answers and Questions the <code>User</code> has
+	 * posted.
+	 * 
+	 * @return The amount of Comments, Answers and Questions for this
+	 *         <code>User</code>.
+	 */
 	public int howManyItems() {
 		return this.items.size();
 	}
 
-	private int votesfor(/* User user */) {
-		// call the votesByUser(user) from Entry.java and return this integer
-		return 0;
+	/**
+	 * The <code>User</code> is a Cheater if over 50% of his votes is for the
+	 * same <code>User</code>
+	 * 
+	 * @return True if the <code>User</code> is supporting somebody.
+	 */
+	public boolean isMaybeCheater() {
+		HashMap<User, Integer> votesPerUser = new HashMap<User, Integer>();
+		for (Item item : this.items) {
+			if (!(item instanceof Entry))
+				continue;
+			for (Vote vote : ((Entry) item).getVotes()) {
+				if (vote.up()) {
+					Integer count = votesPerUser.get(vote.owner());
+					if (count == null)
+						count = 0;
+					votesPerUser.put(vote.owner(), count + 1);
+				}
+			}
+		}
+
+		if (votesPerUser.isEmpty())
+			return false;
+
+		Integer maxCount = (Integer) Collections.max(votesPerUser.values());
+		return maxCount != null && maxCount / votesPerUser.size() > 0.5;
 	}
 
 	/**
@@ -158,9 +207,13 @@ public class User {
 		}
 	}
 
-	// Max. 10 questions, answers or comments per minute in 1h
-	// Against Spammers
-	public boolean lotsOfComments() {
+	/**
+	 * The <code>User</code> is a Spammer depending of how many comments he has
+	 * written in the last hour.
+	 * 
+	 * @return True if the <code>User</code> is a Spammer.
+	 */
+	public boolean isCommentSpammer() {
 		int number = this.howManyItems();
 		if (number > 10) {
 			return true;
@@ -168,18 +221,13 @@ public class User {
 		return false;
 	}
 
-	// Max. 3 up-votes for the same user in 1h
-	// Against Supporters
-	private boolean upvoteuser() {
-		int number = this.votesfor();
-		if (number > 3) {
-			return true;
-		}
-		return false;
-	}
-
-	public void doesUserCheat() {
-		if (lotsOfComments() || upvoteuser()) {
+	/**
+	 * Set the <code>User</code> as a Cheater if he spams the Site or supports
+	 * somebody.
+	 * 
+	 */
+	public void isCheating() {
+		if (isCommentSpammer() || isMaybeCheater()) {
 			this.setCheater(true);
 		}
 		this.setCheater(false);
@@ -291,7 +339,7 @@ public class User {
 		return this.password;
 	}
 
-	public boolean getCheater() {
+	public boolean isCheater() {
 		return this.cheater;
 	}
 
@@ -306,6 +354,12 @@ public class User {
 
 	private static HashMap<String, User> users = new HashMap();
 
+	/**
+	 * Validate if the <code>User</code> is already in our database.
+	 * 
+	 * @param username
+	 * @return True if this <code>User</code> has not yet Signed Up
+	 */
 	public static boolean needSignUp(String username) {
 		return (users.get(username) == null);
 	}

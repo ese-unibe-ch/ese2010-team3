@@ -9,13 +9,13 @@
 			<p>${question.content()}</p>
 			#{date question /}
 			#{tags question:question, editable:false /}  
-			#{if user && question.owner() != user && user.getCheater()==false}
+			#{if user && question.owner() != user && !user.isCheater()}
 				#{vote question /}
 			#{/if}
 		</li>
 	#{/list}
 </ul>
-#{if user && user.getCheater()==false}
+#{if user && !user.isCheater()}
 	<h1>Ask Question</h1>
 	#{form @Secured.newQuestion()}
 		#{field 'content'}

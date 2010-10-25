@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -57,17 +58,23 @@ public abstract class Entry extends Item {
 		}
 	}
 
+	/**
+	 * Counts all Votes done by this user
+	 * 
+	 * @param user
+	 * @return The amount of votes
+	 */
 	public int votesByUser(User user) {
-		Iterator<Vote> it = this.votes.values().iterator();
-		this.votes = new HashMap();
 		int i = 0;
-		while (it.hasNext()) {
-			if (this.owner() == user) {
+		for (Vote vote : this.votes.values()) {
+			if (vote.owner() == user) {
 				i++;
-				it = (Iterator<Vote>) it.next();
 			}
 		}
-		return i;
+		if (inLastHour()) {
+			return i;
+		}
+		return 0;
 	}
 
 	/**
@@ -183,5 +190,30 @@ public abstract class Entry extends Item {
 			 return this.content.replaceAll("[\r\n]+", " ");
 		 return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
 	 }
+
+	/**
+	 * Get all <code>Votes</code>
+	 * 
+	 * @return votes
+	 */
+	public Collection<Vote> getVotes() {
+		return votes.values();
+	}
+	
+	/**
+ 	* Check if the <code>Item</code> is added within the last Hour
+ 	*
+ 	* @return true if the <code>User</code> added something in this Hour
+ 	*/ 
+	public boolean inLastHour() {
+		Date now = new Date();
+		long milisec1 = now.getTime();
+		long milisec2 = timestamp.getTime();
+		long diffHours = (milisec2 - milisec1) / (60 * 60 * 1000);
+		if (diffHours < 1) {
+			return true;
+		}
+		return false;
+	}
 
 }

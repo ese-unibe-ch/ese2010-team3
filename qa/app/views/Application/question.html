@@ -11,7 +11,7 @@
 			#{if user && question.owner() == user}
 			<a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
 			#{/if}
-			#{if user && question.owner() != user && user.getCheater()==false}
+			#{if user && question.owner() != user && !user.isCheater()}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -39,7 +39,7 @@
 			<li>
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
-				#{if user != null && user.getCheater()==false}
+				#{if user != null && !user.isCheater()}
 					<FONT SIZE="1"> <a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</FONT></a>
 				#{/if}
 				#{date answer /}
@@ -48,10 +48,10 @@
 					<br>
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
 				#{/if}
-				#{if user && answer.owner() != user && user.getCheater()==false}
+				#{if user && answer.owner() != user && !user.isCheater()}
 					#{vote answer /}
 				#{/if}
-				#{if user && question.owner() == user}
+				#{if user && question.owner() == user && !user.isCheater()}
 					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}">Best</a>
 				#{/if}
 				
@@ -75,7 +75,7 @@
 			#{/list}
 		</ul>
 	#{/if}
-	#{if user && user.getCheater()==false}
+	#{if user && !user.isCheater()}
 		<h1>Add Answer</h1>
 		#{form @Secured.newAnswer(question.id())}
 			#{field 'content'}
