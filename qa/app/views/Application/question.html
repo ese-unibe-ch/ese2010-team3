@@ -64,7 +64,7 @@
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
-								<h2>#{showProfile comments /}:</h2>
+								<h2>#{showProfile comment /}:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
 								#{if user && comment.owner() == user}
