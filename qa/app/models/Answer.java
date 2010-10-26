@@ -17,7 +17,6 @@ public class Answer extends Entry {
 	private Question question;
 	private IDTable<Comment> comments;
 	private int id;
-	private static int answerCount;
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -35,7 +34,6 @@ public class Answer extends Entry {
 		this.question = question;
 		this.comments = new IDTable<Comment>();
 		this.id = id;
-		answerCount += 1;
 	}
 
 	/**
@@ -65,7 +63,6 @@ public class Answer extends Entry {
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
-		this.answerCount -= 1;
 	}
 
 	/**
@@ -127,16 +124,6 @@ public class Answer extends Entry {
 
 	public boolean isBestAnswer() {
 		return this.question.getBestAnswer() == this;
-	}
-
-	/**
-	 * Get the number of all answers currently in the system
-	 * 
-	 * @return int the number of answers
-	 */
-
-	public static int getAnswerCount() {
-		return answerCount;
 	}
 
 	/**

@@ -2,6 +2,7 @@ package models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -260,7 +261,63 @@ public class User {
 		return User.users.size();
 	}
 
-	public int getQuestionNumber() {
-		return Question.getUserQuestions(this);
+	/**
+	 * Get an ArrayList of all questions of this user
+	 * 
+	 * @return ArrayList<Question> All questions of this user
+	 */
+	public ArrayList<Question> getQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Item i : this.items) {
+			if (i instanceof Question) {
+				questions.add((Question) i);
+			}
+		}
+		return questions;
+	}
+
+	/**
+	 * Get an ArrayList of all answers of this user
+	 * 
+	 * @return ArrayList<Answer> All answers of this user
+	 */
+	public ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Item i : this.items) {
+			if (i instanceof Answer) {
+				answers.add((Answer) i);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all best rated answers
+	 * 
+	 * @return ArrayList<Answer> All best rated answers
+	 */
+	public ArrayList<Answer> bestAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isBestAnswer()) {
+				answers.add(a);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all highRated answers
+	 * 
+	 * @return ArrayList<Answer> All high rated answers
+	 */
+	public ArrayList<Answer> highRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isHighRated()) {
+				answers.add(a);
+			}
+		}
+		return answers;
 	}
 }

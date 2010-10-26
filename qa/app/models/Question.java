@@ -265,41 +265,49 @@ public class Question extends Entry {
 	 */
 
 	/**
-	 * Counts all high rated answers in the system
+	 *Get all high rated answers in the system
 	 * 
-	 * @return int the number of the high rated answers
+	 * @return ArrayList<Answer> an arraylist of all high rated answers
 	 */
-	public static int highRatedAnswers() {
-		int highRatedAnswers = 0;
+	public static ArrayList<Answer> getHighRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
 		for (Question q : questions) {
-			Iterator<Answer> answersIt = q.answers.iterator();
-			while (answersIt.hasNext()) {
-				if (answersIt.next().isHighRated()) {
-					highRatedAnswers += 1;
+			for (Answer a : q.answers) {
+				if (a.isHighRated()) {
+					answers.add(a);
 				}
 			}
 		}
-		return highRatedAnswers;
+		return answers;
 	}
 
-	public static int bestRatedAnswers() {
-		int count = 0;
+	/**
+	 *Get all best answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all best answers
+	 */
+	public static ArrayList<Answer> getBestRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
 		for (Question q : questions) {
 			if (q.bestAnswer != null) {
-				count++;
+				answers.add(q.bestAnswer);
 			}
 		}
-		return count;
+		return answers;
 	}
 
-	public static int getUserQuestions(User user) {
-		int count = 0;
-		for (Question q : questions) {
-			if (q.owner().equals(user)) {
-				count++;
+	/**
+	 *Get all answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all answers
+	 */
+	public static ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : Question.questions) {
+			for (Answer a : q.answers) {
+				answers.add(a);
 			}
 		}
-		return count;
-
+		return answers;
 	}
 }

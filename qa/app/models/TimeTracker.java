@@ -42,17 +42,17 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of days
 	 */
-	public int getDays() {
-		GregorianCalendar now, startClone, nowClone;
-		int elapsed = 1;
+	public int getDays(GregorianCalendar now) {
+		GregorianCalendar startClone, nowClone;
+		int elapsed = 0;
 
-		now = new GregorianCalendar();
 		startClone = (GregorianCalendar) this.startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
 		startClone.clear(Calendar.MILLISECOND);
 		startClone.clear(Calendar.SECOND);
 		startClone.clear(Calendar.MINUTE);
+		startClone.clear(Calendar.HOUR_OF_DAY);
 		startClone.clear(Calendar.HOUR_OF_DAY);
 		nowClone.clear(Calendar.MILLISECOND);
 		nowClone.clear(Calendar.SECOND);
@@ -71,11 +71,9 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of weeks
 	 */
-	public int getWeeks() {
-		GregorianCalendar now, startClone, nowClone;
-		int elapsed = 1;
-
-		now = new GregorianCalendar();
+	public int getWeeks(GregorianCalendar now) {
+		GregorianCalendar startClone, nowClone;
+		int elapsed = 0;
 		startClone = (GregorianCalendar) this.startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
@@ -83,7 +81,7 @@ public final class TimeTracker {
 		startClone.clear(Calendar.SECOND);
 		startClone.clear(Calendar.MINUTE);
 		startClone.clear(Calendar.HOUR_OF_DAY);
-		startClone.clear(Calendar.DATE);
+
 		nowClone.clear(Calendar.MILLISECOND);
 		nowClone.clear(Calendar.SECOND);
 		nowClone.clear(Calendar.MINUTE);
@@ -101,11 +99,10 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of months
 	 */
-	public int getMonths() {
-		GregorianCalendar now, startClone, nowClone;
-		int elapsed = 1;
+	public int getMonths(GregorianCalendar now) {
+		GregorianCalendar startClone, nowClone;
+		int elapsed = 0;
 
-		now = new GregorianCalendar();
 		startClone = (GregorianCalendar) this.startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
@@ -113,12 +110,11 @@ public final class TimeTracker {
 		startClone.clear(Calendar.SECOND);
 		startClone.clear(Calendar.MINUTE);
 		startClone.clear(Calendar.HOUR_OF_DAY);
-		startClone.clear(Calendar.DATE);
+
 		nowClone.clear(Calendar.MILLISECOND);
 		nowClone.clear(Calendar.SECOND);
 		nowClone.clear(Calendar.MINUTE);
 		nowClone.clear(Calendar.HOUR_OF_DAY);
-		nowClone.clear(Calendar.DATE);
 
 		while (startClone.before(nowClone)) {
 			startClone.add(Calendar.MONTH, 1);

@@ -41,7 +41,16 @@
 	</li>
 	<li>
 		<p id="numberOfQuestions">
-			<label for="numberOfQuestions">Number of Questions:</label> <div id="numberOfQuestions">${user.getQuestionNumber()}</div>
+			<label for="numberOfQuestions">Number of questions:</label> <div id="numberOfQuestions">${user.getQuestions().size()}</div>
+		</p>
+		<p id="numberOfAnswers">
+			<label for="numberOfAnswers">Number of answers:</label> <div id="numberOfAnswers">${user.getAnswers().size()}</div>
+		</p>
+		<p id="bestAnswers">
+			<label for="bestAnswers">Number of best answers:</label> <div id="bestAnswers">${user.bestAnswers().size()}</div>
+		</p>
+		<p id="highRatedAnswers">
+			<label for="highRatedAnswers">Number of high rated answers:</label> <div id="highRatedAnswers">${user.highRatedAnswers().size()}</div>
 		</p>
 	</li>
 	</div>

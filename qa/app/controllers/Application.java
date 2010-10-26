@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.Answer;
@@ -87,6 +88,7 @@ public class Application extends Controller {
 
 	public static void showStatisticalOverview() {
 		TimeTracker t = TimeTracker.getInstance();
+		GregorianCalendar now = new GregorianCalendar();
 		int numberOfQuestions;
 		int numberOfAnswers;
 		int numberOfUsers;
@@ -101,15 +103,17 @@ public class Application extends Controller {
 
 		numberOfUsers = User.getUserCount();
 		numberOfQuestions = Question.questions().size();
-		numberOfAnswers = Answer.getAnswerCount();
-		numberOfHighRatedAnswers = Question.highRatedAnswers();
-		numberOfBestAnswers = Question.bestRatedAnswers();
-		questionsPerDay = (float) numberOfQuestions / (float) t.getDays();
-		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks();
-		questionsPerMonth = (float) numberOfQuestions / (float) t.getMonths();
-		answersPerDay = (float) numberOfAnswers / (float) t.getDays();
-		answersPerWeek = (float) numberOfAnswers / (float) t.getWeeks();
-		answersPerMonth = (float) numberOfAnswers / (float) t.getMonths();
+		numberOfAnswers = Question.getAnswers().size();
+		numberOfHighRatedAnswers = Question.getHighRatedAnswers().size();
+		numberOfBestAnswers = Question.getBestRatedAnswers().size();
+		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
+		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
+		System.out.println(t.getWeeks(now));
+		questionsPerMonth = (float) numberOfQuestions
+				/ (float) t.getMonths(now);
+		answersPerDay = (float) numberOfAnswers / (float) t.getDays(now);
+		answersPerWeek = (float) numberOfAnswers / (float) t.getWeeks(now);
+		answersPerMonth = (float) numberOfAnswers / (float) t.getMonths(now);
 
 		render(numberOfQuestions, numberOfAnswers, numberOfUsers,
 				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,

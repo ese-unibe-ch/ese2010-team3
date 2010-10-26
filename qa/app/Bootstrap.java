@@ -32,7 +32,7 @@ public class Bootstrap extends Job {
 		question.comment(jack, "What a strange question");
 
 		// TimeTracker
-		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 1);
+		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
 		TimeTracker.getInstance(g);
 	}
 }
