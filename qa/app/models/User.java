@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -65,7 +66,6 @@ public class User {
 	public static String encrypt(String password) {
 		try {
 			MessageDigest m = MessageDigest.getInstance("SHA-1");
-			m.update(password.getBytes());
 			return new BigInteger(1, m.digest(password.getBytes()))
 					.toString(16);
 		} catch (NoSuchAlgorithmException e) {
@@ -91,10 +91,6 @@ public class User {
 	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
-	}
-
-	public static boolean samePassword(String password, String passwordrepeat) {
-		return password.equals(passwordrepeat);
 	}
 
 	/**
@@ -144,13 +140,22 @@ public class User {
 
 	/**
 	 * The amount of Comments, Answers and Questions the <code>User</code> has
-	 * posted.
+	 * posted in the last 60 Minutes
 	 * 
 	 * @return The amount of Comments, Answers and Questions for this
-	 *         <code>User</code>.
+	 *         <code>User</code> in this Hour.
 	 */
-	public int howManyItems() {
-		return this.items.size();
+	public int howManyItemsPerHour() {
+		Date now = new Date();
+		int i = 0;
+		Iterator<Item> it = this.items.iterator();
+		while (it.hasNext()) {
+			if ((now.getTime() - it.next().timestamp().getTime())
+ / (60 * 1000) <= 60) {
+				i++;
+			}
+		}
+		return i;
 	}
 
 	/**
@@ -198,16 +203,14 @@ public class User {
 	}
 
 	/**
-	 * The <code>User</code> is a Spammer depending of how many comments,
-	 * answers and questions he has written in the last hour.
+	 * The <code>User</code> is a Spammer if he posts more than 30 comments,
+	 * answers or questions in the last hour.
 	 * 
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
-		// TODO: Count only items in the last hour. How? Adding a timestamp for
-		// every item?
-		int number = this.howManyItems();
-		if (number > 10) {
+		int number = this.howManyItemsPerHour();
+		if (number >= 60) {
 			return true;
 		}
 		return false;

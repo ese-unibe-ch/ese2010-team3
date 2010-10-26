@@ -51,13 +51,6 @@ public class UserTest extends UnitTest {
 	}
 
 	@Test
-	public void checkSamePassword() {
-		User user = new User("Bill", "bill");
-		assertTrue(user.samePassword("bill", "bill"));
-		assertFalse(user.samePassword("Bill", "bill"));
-	}
-
-	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
 		User user = new User("Jack", "jack");
 		user.setDateOfBirth("14-09-87");
@@ -80,11 +73,11 @@ public class UserTest extends UnitTest {
 	@Test
 	public void RightNumberOfItems(){
 		User user = new User("miko", "miko");
-		assertTrue(user.howManyItems() == 0);
+		assertTrue(user.howManyItemsPerHour() == 0);
 		Question question = new Question(user, "Why did the chicken cross the road?");
-		assertTrue(user.howManyItems() == 1);
+		assertTrue(user.howManyItemsPerHour() == 1);
 		Question quest = new Question(user, "Does anybody know?");
-		assertFalse(user.howManyItems() == 1);
+		assertFalse(user.howManyItemsPerHour() == 1);
 	}
 	
 }

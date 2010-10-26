@@ -70,8 +70,7 @@ public class Application extends Controller {
 	public static void signup(@Required String username, String password,
 			String passwordrepeat, String email) {
 
-		if (User.checkEmail(email)
-				&& User.samePassword(password, passwordrepeat)) {
+		if (User.checkEmail(email) && password.equals(passwordrepeat)) {
 			User user = User.register(username, password);
 			user.setEmail(email);
 			// Mark user as connected

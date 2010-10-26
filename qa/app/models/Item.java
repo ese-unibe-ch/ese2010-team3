@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 /**
  * A item owned by a {@link User}.
  * 
@@ -9,6 +11,7 @@ package models;
  */
 public abstract class Item {
 	private User owner;
+	private Date timestamp;
 
 	/**
 	 * Create an <code>Item</code>
@@ -18,6 +21,7 @@ public abstract class Item {
 	 */
 	public Item(User owner) {
 		this.owner = owner;
+		this.timestamp = new Date();
 		owner.registerItem(this);
 	}
 
@@ -28,6 +32,15 @@ public abstract class Item {
 	 */
 	public User owner() {
 		return this.owner;
+	}
+
+	/**
+	 * Get the time the <code>Item</code> was created.
+	 * 
+	 * @return the creation date as a UNIX timestamp
+	 */
+	public Date timestamp() {
+		return this.timestamp;
 	}
 
 	/**
