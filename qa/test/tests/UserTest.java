@@ -43,6 +43,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void checkPassw() {
 		User user = new User("Bill", "bill");
+		assertTrue(user.checkPW("bill"));
 		assertEquals(user.encrypt("bill"), user.getSHA1Password());
 		assertEquals(user.encrypt(""),
 				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
@@ -71,13 +72,35 @@ public class UserTest extends UnitTest {
 	}
 	
 	@Test
-	public void RightNumberOfItems(){
-		User user = new User("miko", "miko");
+	public void checkForSpammer() {
+		User user = new User("Spammer", "spammer");
 		assertTrue(user.howManyItemsPerHour() == 0);
 		Question question = new Question(user, "Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
 		Question quest = new Question(user, "Does anybody know?");
 		assertFalse(user.howManyItemsPerHour() == 1);
+		for (int i = 0; i < 57; i++) {
+			new Question(user, "This is my " + i + ". question");
+		}
+		assertTrue(!user.isSpammer());
+		assertTrue(user.howManyItemsPerHour() == 59);
+		assertTrue(!user.isCheating());
+		Question q = new Question(user, "My last possible Post");
+		assertTrue(user.isSpammer());
+		assertTrue(user.isCheating());
 	}
 	
+	@Test
+	public void checkForCheater() {
+		User user = new User("TheSupported", "supported");
+		User user2 = new User("Cheater", "cheater");
+		for (int i = 0; i < 4; i++) {
+			new Question(user, "This is my " + i + ". question").voteUp(user2);
+		}
+		assertTrue(user2.isMaybeCheater());
+		assertTrue(user2.isCheating());
+		assertTrue(!user.isMaybeCheater());
+		assertTrue(!user.isCheating());
+	}
+
 }

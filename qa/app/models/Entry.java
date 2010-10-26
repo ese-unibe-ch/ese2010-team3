@@ -1,7 +1,6 @@
 package models;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -14,7 +13,6 @@ import java.util.Iterator;
 public abstract class Entry extends Item {
 
 	private String content;
-	private Date timestamp;
 	private HashMap<String, Vote> votes;
 
 	/**
@@ -28,7 +26,6 @@ public abstract class Entry extends Item {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		this.timestamp = new Date();
 		this.votes = new HashMap();
 	}
 
@@ -76,15 +73,6 @@ public abstract class Entry extends Item {
 	 */
 	public String content() {
 		return this.content;
-	}
-
-	/**
-	 * Get the time the <code>Entry</code> was created.
-	 * 
-	 * @return the creation date as a UNIX timestamp
-	 */
-	public Date timestamp() {
-		return this.timestamp;
 	}
 
 	/**

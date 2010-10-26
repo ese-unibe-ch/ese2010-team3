@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -148,10 +147,8 @@ public class User {
 	public int howManyItemsPerHour() {
 		Date now = new Date();
 		int i = 0;
-		Iterator<Item> it = this.items.iterator();
-		while (it.hasNext()) {
-			if ((now.getTime() - it.next().timestamp().getTime())
- / (60 * 1000) <= 60) {
+		for (Item item : this.items) {
+			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
 				i++;
 			}
 		}
