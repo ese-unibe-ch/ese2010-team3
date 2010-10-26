@@ -49,7 +49,6 @@ public class Answer extends Entry {
 		Comment comment = new Comment(this.comments.nextID(), user, this,
 				content);
 		this.comments.add(comment);
-		user.addRecentComments(content + " on " + comment.timestamp());
 		return comment;
 	}
 

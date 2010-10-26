@@ -10,7 +10,7 @@ import java.util.*;
  */
 public abstract class Entry extends Item {
 
-	private String content;
+	public String content;
 	private Date timestamp;
 	private HashMap<String, Vote> votes;
 

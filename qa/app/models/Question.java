@@ -40,7 +40,6 @@ public class Question extends Entry {
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
 		this.id = database != null ? database.add(this) : -1;
-		owner.addRecentQuestions(content + " on " + this.timestamp());
 	}
 
 	/**
@@ -96,7 +95,6 @@ public class Question extends Entry {
 	public Answer answer(User user, String content) {
 		Answer answer = new Answer(this.answers.nextID(), user, this, content);
 		this.answers.add(answer);
-		user.addRecentAnswers(content + " on " + answer.timestamp());
 		return answer;
 	}
 
@@ -109,7 +107,6 @@ public class Question extends Entry {
 	public Comment comment(User user, String content) {
 		Comment comment = new Comment(this.comments.nextID(), user, this, content);
 		this.comments.add(comment);
-		user.addRecentComments(content + " on " + comment.timestamp());
 		return comment;
 	}
 	
