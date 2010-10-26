@@ -5,11 +5,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -33,6 +33,7 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
+
 	private Date timestamp;
 	
 	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
@@ -42,6 +43,7 @@ public class User {
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
 	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
+
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -63,6 +65,7 @@ public class User {
 	public String name() {
 		return this.name;
 	}
+
 
 	/**
 	 * Encrypt the password with MD5
@@ -98,6 +101,7 @@ public class User {
 	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+
 	}
 
 	/**
@@ -406,5 +410,74 @@ public class User {
 			this.recentComments.remove(2);
 		}
 		this.recentComments.add(0, comment);
+	}
+
+	/*
+	 * Interface to gather statistical data
+	 */
+
+	public static int getUserCount() {
+		return User.users.size();
+	}
+
+	/**
+	 * Get an ArrayList of all questions of this user
+	 * 
+	 * @return ArrayList<Question> All questions of this user
+	 */
+	public ArrayList<Question> getQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Item i : this.items) {
+			if (i instanceof Question) {
+				questions.add((Question) i);
+			}
+		}
+		return questions;
+	}
+
+	/**
+	 * Get an ArrayList of all answers of this user
+	 * 
+	 * @return ArrayList<Answer> All answers of this user
+	 */
+	public ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Item i : this.items) {
+			if (i instanceof Answer) {
+				answers.add((Answer) i);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all best rated answers
+	 * 
+	 * @return ArrayList<Answer> All best rated answers
+	 */
+	public ArrayList<Answer> bestAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isBestAnswer()) {
+				answers.add(a);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all highRated answers
+	 * 
+	 * @return ArrayList<Answer> All high rated answers
+	 */
+	public ArrayList<Answer> highRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isHighRated()) {
+				answers.add(a);
+			}
+		}
+		return answers;
+
 	}
 }
