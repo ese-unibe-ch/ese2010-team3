@@ -1,6 +1,9 @@
 package models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -11,9 +14,9 @@ import java.util.*;
  */
 public class Answer extends Entry {
 
-	private Question question;
+	private final Question question;
 	private IDTable<Comment> comments;
-	private int id;
+	private final int id;
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -56,7 +59,7 @@ public class Answer extends Entry {
 	public void unregister() {
 		this.comments = new IDTable<Comment>();
 		for (Comment comment : this.comments)
-		      comment.unregister();
+			comment.unregister();
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -75,6 +78,7 @@ public class Answer extends Entry {
 	 * Unregisters a deleted {@link Comment}.
 	 * @param comment the {@link Comment} to unregister
 	 */
+	@Override
 	public void unregister(Comment comment) {
 		this.comments.remove(comment.id());
 	}
@@ -93,9 +97,8 @@ public class Answer extends Entry {
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>();
-		list.addAll(comments.list());
-		Collections.sort(list, new EntryComperator());
+		List<Comment> list = new ArrayList<Comment>(comments.values());
+		Collections.sort(list);
 		return list;
 	}
 	
@@ -116,4 +119,20 @@ public class Answer extends Entry {
 		return this.question.getBestAnswer() == this;
 	}
 
+	/**
+	 * Compares this <code>Answer</code> with another one with respect to their
+	 * ratings and their Best-answer state.
+	 * 
+	 * @return comparison result (-1 = this Answer has more upVotes or is best)
+	 */
+	@Override
+	public int compareTo(Object o) {
+		Entry other = (Entry) o;
+		if (!(other instanceof Answer)
+				|| this.isBestAnswer() == ((Answer) other).isBestAnswer())
+			return super.compareTo(o);
+		if (this.isBestAnswer())
+			return -1;
+		return 1;
+	}
 }

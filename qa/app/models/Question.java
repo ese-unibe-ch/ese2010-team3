@@ -48,8 +48,8 @@ public class Question extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		Collection<Answer> answers = this.answers.list();
-		Collection<Comment> comments = this.comments.list();
+		Collection<Answer> answers = this.answers.values();
+		Collection<Comment> comments = this.comments.values();
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
 		for (Answer answer : answers)
@@ -145,9 +145,8 @@ public class Question extends Entry {
 	 * @return {@link Collection} of {@link Answers}
 	 */
 	public List<Answer> answers() {
-		List<Answer> list = new ArrayList();
-		list.addAll(answers.list());
-		Collections.sort(list, new EntryComperator());
+		List<Answer> list = new ArrayList<Answer>(answers.values());
+		Collections.sort(list);
 		return list;
 	}
 	
@@ -156,9 +155,8 @@ public class Question extends Entry {
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>();
-		list.addAll(comments.list());
-		Collections.sort(list, new EntryComperator());
+		List<Comment> list = new ArrayList<Comment>(comments.values());
+		Collections.sort(list);
 		return list;
 	}
 
@@ -264,9 +262,8 @@ public class Question extends Entry {
 	 * @return all <code>Questions</code>
 	 */
 	public static List<Question> questions() {
-		List<Question> list = new ArrayList();
-		list.addAll(questions.list());
-		Collections.sort(list, new EntryComperator());
+		List<Question> list = new ArrayList<Question>(questions.values());
+		Collections.sort(list);
 		return list;
 	}
 
