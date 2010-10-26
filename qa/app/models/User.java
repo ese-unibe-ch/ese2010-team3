@@ -30,9 +30,9 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-	private ArrayList<String> recentQuestions = new ArrayList<String>();
-	private ArrayList<String> recentAnswers = new ArrayList<String>();
-	private ArrayList<String> recentComments = new ArrayList<String>();
+	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
+	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
+	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
 
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -295,49 +295,36 @@ public class User {
 		return users.get(name);
 	}
 
-	public String getRecentQuestions() {
-		return arrayListToString(this.recentQuestions);
+	public ArrayList<Question> getRecentQuestions() {
+		return this.recentQuestions;
 	}
 
-	public String getRecentAnswers() {
-		return arrayListToString(this.recentAnswers);
+	public ArrayList<Answer> getRecentAnswers() {
+		return this.recentAnswers;
 	}
 
-	public String getRecentComments() {
-		return arrayListToString(this.recentComments);
+	public ArrayList<Comment> getRecentComments() {
+		return this.recentComments;
 	}
 	
-	public void addRecentQuestions(String content) {
+	public void addRecentQuestions(Question question) {
 		if (recentQuestions.size() > 2) {
 			this.recentQuestions.remove(2);
 		}
-		this.recentQuestions.add(0, content);
+		this.recentQuestions.add(0, question);
 	}
 
-	public void addRecentAnswers(String content) {
+	public void addRecentAnswers(Answer answer) {
 		if (recentAnswers.size() > 2) {
 			this.recentAnswers.remove(2);
 		}
-		this.recentAnswers.add(0, content);
+		this.recentAnswers.add(0, answer);
 	}
 
-	public void addRecentComments(String content) {
+	public void addRecentComments(Comment comment) {
 		if (recentComments.size() > 2) {
 			this.recentComments.remove(2);
 		}
-		this.recentComments.add(0, content);
-	}
-	
-	public String arrayListToString (ArrayList<String> al) {
-		String recent;
-		if (al.size() == 0)
-			recent = null;
-		else if (al.size() == 1)
-			recent = al.get(0);
-		else if (al.size() == 2)
-			recent = al.get(0) + " || " + al.get(1);
-		else
-			recent = al.get(0) + " || " + al.get(1) + " || " + al.get(2);
-		return recent;
+		this.recentComments.add(0, comment);
 	}
 }

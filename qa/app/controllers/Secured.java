@@ -21,7 +21,7 @@ public class Secured extends Controller {
 		if (!validation.hasErrors()) {
 			Question question = Question.register(currentUser(), content);
 			question.setTagString(tags);
-			currentUser().addRecentQuestions(question.timestamp().toLocaleString() + " - asked: \"" + content + "\"");
+			currentUser().addRecentQuestions(question);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -31,7 +31,7 @@ public class Secured extends Controller {
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Answer answer = Question.get(questionId).answer(currentUser(), content);
-			currentUser().addRecentAnswers(answer.timestamp().toLocaleString() + " - answered: \"" + content + "\" on question: \"" + Question.get(questionId).content() + "\"");
+			currentUser().addRecentAnswers(answer);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -42,7 +42,7 @@ public class Secured extends Controller {
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Comment comment = Question.get(questionId).comment(currentUser(), content);
-			currentUser().addRecentComments(comment.timestamp().toLocaleString() + " - commented: \"" + content + "\" on question: \"" + Question.get(questionId).content() + "\"");
+			currentUser().addRecentComments(comment);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -54,7 +54,7 @@ public class Secured extends Controller {
 
 		if (!validation.hasErrors() && answer != null) {
 			Comment comment = answer.comment(currentUser(), content);
-			currentUser().addRecentComments(comment.timestamp().toLocaleString() + " - commented: \"" + content + "\" on answer: \"" + question.getAnswer(answerId).content() + "\"");
+			currentUser().addRecentComments(comment);
 			Application.commentAnswer(questionId, answerId);
 		}
 	}
