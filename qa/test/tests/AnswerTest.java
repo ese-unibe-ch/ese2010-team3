@@ -82,4 +82,11 @@ public class AnswerTest extends UnitTest {
 
 		assertFalse(this.answer.isHighRated());
 	}
+
+	@Test
+	public void shouldBeBestAnswer() {
+		question.setBestAnswer(answer);
+
+		assertTrue(answer.isBestAnswer());
+	}
 }

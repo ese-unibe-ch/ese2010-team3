@@ -44,8 +44,4 @@ public class QuestionTest extends UnitTest {
 		assertTrue(user.hasItem(question));
 	}
 
-	/*
-	 * Statistics Tests
-	 */
-
 }

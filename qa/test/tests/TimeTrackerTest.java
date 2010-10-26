@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 
 import models.TimeTracker;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,9 +25,23 @@ public class TimeTrackerTest {
 	}
 
 	@Test
-	public void shouldCalculateDays() {
+	public void shouldCalculateNinetyOneDays() {
 		int days = t.getDays(now);
 		assertEquals(91, days);
+	}
+
+	@Test
+	public void shouldCalculateOneDay() {
+		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 2);
+		int days = t.getDays(l);
+		assertEquals(1, days);
+	}
+
+	@Test
+	public void shouldCalculateZeroDays() {
+		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
+		int days = t.getDays(l);
+		assertEquals(0, days);
 	}
 
 	@Test
@@ -67,5 +82,10 @@ public class TimeTrackerTest {
 		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
 		int months = t.getMonths(l);
 		assertEquals(0, months);
+	}
+
+	@After
+	public void tearDown() {
+
 	}
 }
