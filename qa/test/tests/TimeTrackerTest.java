@@ -1,7 +1,5 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -11,7 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TimeTrackerTest {
+import play.test.UnitTest;
+
+public class TimeTrackerTest extends UnitTest {
 
 	private GregorianCalendar g;
 	private GregorianCalendar now;
@@ -21,7 +21,7 @@ public class TimeTrackerTest {
 	public void setUp() throws Exception {
 		g = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
 		now = new GregorianCalendar(2010, Calendar.DECEMBER, 1);
-		t = TimeTracker.getInstance(g);
+		t = new TimeTracker(g);
 	}
 
 	@Test

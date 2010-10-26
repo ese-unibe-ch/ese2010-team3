@@ -87,8 +87,8 @@ public class Application extends Controller {
 	}
 
 	public static void showStatisticalOverview() {
-		TimeTracker t = TimeTracker.getInstance();
 		GregorianCalendar now = new GregorianCalendar();
+		TimeTracker t = TimeTracker.getRealTimeTracker();
 		int numberOfQuestions;
 		int numberOfAnswers;
 		int numberOfUsers;

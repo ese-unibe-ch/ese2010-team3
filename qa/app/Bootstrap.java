@@ -33,6 +33,8 @@ public class Bootstrap extends Job {
 
 		// TimeTracker
 		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
-		TimeTracker.getInstance(g);
+		TimeTracker.setRealTimeTracker(g);
+		
+		
 	}
 }

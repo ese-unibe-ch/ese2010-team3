@@ -14,27 +14,19 @@ import java.util.GregorianCalendar;
 public final class TimeTracker {
 
 	private GregorianCalendar startTime;
-	private static TimeTracker timeTracker;
+	private static TimeTracker t;
 
-	private TimeTracker(GregorianCalendar g) {
-		startTime = g;
+
+	public TimeTracker(GregorianCalendar now) {
+		this.startTime = now;
 	}
 
-	private TimeTracker() {
+	public static void setRealTimeTracker(GregorianCalendar now) {
+		t = new TimeTracker(now);
 	}
-
-	public static TimeTracker getInstance(GregorianCalendar g) {
-		if (timeTracker == null) {
-			timeTracker = new TimeTracker(g);
-		}
-		return timeTracker;
-	}
-
-	public static TimeTracker getInstance() {
-		if (timeTracker == null) {
-			timeTracker = new TimeTracker();
-		}
-		return timeTracker;
+	
+	public static TimeTracker getRealTimeTracker() {
+		return t;
 	}
 
 	/**
