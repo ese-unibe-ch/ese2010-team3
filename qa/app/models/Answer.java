@@ -1,7 +1,9 @@
 package models;
 
-import java.util.*;
-import models.IDTable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -12,9 +14,9 @@ import models.IDTable;
  */
 public class Answer extends Entry {
 
-	private Question question;
+	private final Question question;
 	private IDTable<Comment> comments;
-	private int id;
+	private final int id;
 	
 
 	/**
@@ -57,7 +59,7 @@ public class Answer extends Entry {
 	@Override
 	public void unregister() {
 		for (Comment comment : this.comments){
-		      comment.unregister();
+			comment.unregister();
 		}
 		this.comments = new IDTable<Comment>();
 		this.question.unregister(this);
@@ -78,6 +80,7 @@ public class Answer extends Entry {
 	 * Unregisters a deleted {@link Comment}.
 	 * @param comment the {@link Comment} to unregister
 	 */
+	@Override
 	public void unregister(Comment comment) {
 		this.comments.remove(comment.id());
 	}
@@ -96,9 +99,8 @@ public class Answer extends Entry {
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>();
-		list.addAll(comments.list());
-		Collections.sort(list, new EntryComperator());
+		List<Comment> list = new ArrayList<Comment>(comments.values());
+		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
 	
@@ -119,4 +121,20 @@ public class Answer extends Entry {
 		return this.question.getBestAnswer() == this;
 	}
 
+	/**
+	 * Compares this <code>Answer</code> with another one with respect to their
+	 * ratings and their Best-answer state.
+	 * 
+	 * @return comparison result (-1 = this Answer has more upVotes or is best)
+	 */
+	@Override
+	public int compareTo(Object o) {
+		Entry other = (Entry) o;
+		if (!(other instanceof Answer)
+				|| this.isBestAnswer() == ((Answer) other).isBestAnswer())
+			return super.compareTo(o);
+		if (this.isBestAnswer())
+			return -1;
+		return 1;
+	}
 }

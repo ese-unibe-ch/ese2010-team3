@@ -2,6 +2,7 @@ package tests;
 
 import java.text.ParseException;
 
+import models.Question;
 import models.User;
 
 import org.junit.Test;
@@ -25,29 +26,29 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldCheckeMailValidation(){
 		User user = new User("John", "john");
-		user.setEmail("john@gmx.com");
-		assertTrue(user.checkeMail("john@gmx.com"));
-		user.setEmail("john.smith@students.unibe.ch");
-		assertTrue(user.checkeMail("john.smith@students.unibe.ch"));
-		user.setEmail("john@gmx.c");
-		assertFalse(user.checkeMail("john@gmx.c"));
-		user.setEmail("john@info.museum");
-		assertFalse(user.checkeMail("john@info.museum"));
-		user.setEmail("john@...com");
-		assertFalse(user.checkeMail("john@...com"));
+		assertTrue(user.checkEmail("john@gmx.com"));
+		assertTrue(user.checkEmail("john.smith@students.unibe.ch"));
+		assertFalse(user.checkEmail("john@gmx.c"));
+		assertFalse(user.checkEmail("john@info.museum"));
+		assertFalse(user.checkEmail("john@...com"));
 	}
 	
 	@Test
 	public void checkMailAssertion(){
 		User user = new User("Bill", "bill");
 		user.setEmail("bill@aol.com");
-		assertEquals(user.email(), "bill@aol.com");
+		assertEquals(user.getEmail(), "bill@aol.com");
 	}
 	
 	@Test
-	public void checkPassw(){
+	public void checkPassw() {
 		User user = new User("Bill", "bill");
-		assertEquals(user.encrypt("bill"), user.getMd5Password());
+		assertTrue(user.checkPW("bill"));
+		assertEquals(user.encrypt("bill"), user.getSHA1Password());
+		assertEquals(user.encrypt(""),
+				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
+																// wikipedia.org/wiki/Examples_of_SHA_digests
+		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
 	}
 
 	@Test
@@ -69,4 +70,37 @@ public class UserTest extends UnitTest {
 		assertTrue(user.getProfession().equals("tester"));
 		assertTrue(user.getWebsite().equals("http://www.test.ch"));
 	}
+	
+	@Test
+	public void checkForSpammer() {
+		User user = new User("Spammer", "spammer");
+		assertTrue(user.howManyItemsPerHour() == 0);
+		Question question = new Question(user, "Why did the chicken cross the road?");
+		assertTrue(user.howManyItemsPerHour() == 1);
+		Question quest = new Question(user, "Does anybody know?");
+		assertFalse(user.howManyItemsPerHour() == 1);
+		for (int i = 0; i < 57; i++) {
+			new Question(user, "This is my " + i + ". question");
+		}
+		assertTrue(!user.isSpammer());
+		assertTrue(user.howManyItemsPerHour() == 59);
+		assertTrue(!user.isCheating());
+		Question q = new Question(user, "My last possible Post");
+		assertTrue(user.isSpammer());
+		assertTrue(user.isCheating());
+	}
+	
+	@Test
+	public void checkForCheater() {
+		User user = new User("TheSupported", "supported");
+		User user2 = new User("Cheater", "cheater");
+		for (int i = 0; i < 4; i++) {
+			new Question(user, "This is my " + i + ". question").voteUp(user2);
+		}
+		assertTrue(user2.isMaybeCheater());
+		assertTrue(user2.isCheating());
+		assertTrue(!user.isMaybeCheater());
+		assertTrue(!user.isCheating());
+	}
+
 }
