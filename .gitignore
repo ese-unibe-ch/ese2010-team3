@@ -18,4 +18,5 @@
 # and do not commit the stuff from mac users
 .DS_Store
 
+# do not commit files that are created while merging
 *.orig
