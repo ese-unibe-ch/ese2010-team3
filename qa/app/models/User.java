@@ -295,16 +295,16 @@ public class User {
 		return users.get(name);
 	}
 
-	public ArrayList<String> getRecentQuestions() {
-		return this.recentQuestions;
+	public String getRecentQuestions() {
+		return arrayListToString(this.recentQuestions);
 	}
 
-	public ArrayList<String> getRecentAnswers() {
-		return this.recentAnswers;
+	public String getRecentAnswers() {
+		return arrayListToString(this.recentAnswers);
 	}
 
-	public ArrayList<String> getRecentComments() {
-		return this.recentComments;
+	public String getRecentComments() {
+		return arrayListToString(this.recentComments);
 	}
 	
 	public void addRecentQuestions(String content) {
@@ -326,5 +326,18 @@ public class User {
 			this.recentComments.remove(2);
 		}
 		this.recentComments.add(0, content);
+	}
+	
+	public String arrayListToString (ArrayList<String> al) {
+		String recent;
+		if (al.size() == 0)
+			recent = null;
+		else if (al.size() == 1)
+			recent = al.get(0);
+		else if (al.size() == 2)
+			recent = al.get(0) + " || " + al.get(1);
+		else
+			recent = al.get(0) + " || " + al.get(1) + " || " + al.get(2);
+		return recent;
 	}
 }
