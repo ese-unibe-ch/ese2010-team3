@@ -191,6 +191,22 @@ show profile
 div.showprofile {
 	color: #ff8400;
 }
+td.right{
+	width:100%;
+	color: #ff8400;
+}
+td.left {
+	vertical-align: top;
+	color: #ff8400;
+}
+li.showprofile {
+	background: #333333;
+	width: 800px;
+	list-style: none;
+	margin: 5px;
+	padding: 7px;
+	position: relative;
+}
 /*********************** 
 edit profile
 ************************/

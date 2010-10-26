@@ -2,42 +2,72 @@
 
 #{set title:'ajopi - Profile' /}
 #{if showUser}
-	<div class="showprofile">
+	<div>
 		<table>
 			<tr>
-				<td><label for="username">Username:</label></td>
-				<td>${showUser.name}</td>
+				<td class="left"><label for="username">Username:</label></td>
+				<td class="right">${showUser.name}</td>
 			</tr>
 			<tr>
-				<td><label for="email">Email:</label>
-				<td>${showUser.email}</td>
+				<td class="left"><label for="email">Email:</label>
+				<td class="right">${showUser.email}</td>
 			</tr>
 			<tr>
-				<td><label for="fullname">Real name:</label>
-				<td>${showUser.fullname}</td>
+				<td class="left"><label for="fullname">Real name:</label>
+				<td class="right">${showUser.fullname}</td>
 			</tr>
 			<tr>
-				<td><label for="age">Age:</label> 
-				<td>#{if showUser.age != 0} ${showUser.age}#{/if}</td> 
+				<td class="left"><label for="age">Age:</label> 
+				<td class="right">#{if showUser.age != 0} ${showUser.age}#{/if}</td> 
 			</tr>
 			<tr>
-				<td><label for="website">Website:</label>
-				<td>${showUser.website}</td>
+				<td class="left"><label for="website">Website:</label>
+				<td class="right">${showUser.website}</td>
 			</tr>
 			<tr>
-				<td><label for="profession">Profession:</label>
-				<td>${showUser.profession}</td>
+				<td class="left"><label for="profession">Profession:</label>
+				<td class="right">${showUser.profession}</td>
 			</tr>
 			<tr>
-				<td><label for="employer">Employer:</label>
-				<td>${showUser.employer}</td>
+				<td class="left"><label for="employer">Employer:</label>
+				<td class="right">${showUser.employer}</td>
 			</tr>
 			<tr>
-				<td><label for="biography">Biography:</label>
-				<td>${showUser.biography}</td>
+				<td class="left"><label for="biography">Biography:</label>
+				<td class="right">${showUser.biography}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentquestions">Recent questions:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentQuestions(), as:'question'}
+						<li><a href="@{Application.question(question.id())}">${question.content()}</a>#{date question /}</li>
+						#{/list}
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentanswers">Recent answers:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentAnswers(), as:'answer'}
+						<li><a href="@{Application.question(answer.question().id())}">${answer.content()}</a>#{date answer /}</li>
+						#{/list}
+					</ul>				
+				</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentcomments">Recent comments:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentComments(), as:'comment'}
+						<li><a href="@{Application.index()}">${comment.content()}#{date comment /}</li>
+						#{/list}
+					</ul>
+				</td>
 			</tr>
 		</table>
-	</div><!-- end showprofile -->
+	  		</div><!-- end showprofile -->
 #{/if}
 #{elseif user}
 	<div class="editprofile">

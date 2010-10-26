@@ -1,6 +1,7 @@
 package controllers;
 
 import java.text.ParseException;
+
 import models.Answer;
 import models.Comment;
 import models.Question;
@@ -16,6 +17,7 @@ public class Secured extends Controller {
 		if (!validation.hasErrors()) {
 			Question question = Question.register(Session.get().currentUser(), content);
 			question.setTagString(tags);
+			Session.get().currentUser().addRecentQuestions(question);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -25,6 +27,7 @@ public class Secured extends Controller {
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentAnswers(answer);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -35,6 +38,7 @@ public class Secured extends Controller {
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentComments(comment);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -46,6 +50,7 @@ public class Secured extends Controller {
 
 		if (!validation.hasErrors() && answer != null) {
 			Comment comment = answer.comment(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentComments(comment);
 			Application.commentAnswer(questionId, answerId);
 		}
 	}

@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -32,8 +34,14 @@ public class User {
 	private String employer;
 	private String biography;
 	private Date timestamp;
-
-	public static final String DATE_FORMAT = "dd-MM-yy";
+	
+	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
+	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
+	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
+	
+	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
+	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -242,10 +250,10 @@ public class User {
 	 */
 	private String dateToString(Date d) {
 		if (d != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
 			return fmt.format(d);
 		} else
-			return ("dd-mm-yy");
+			return null;
 	}
 
 	/**
@@ -255,8 +263,14 @@ public class User {
 	 * @throws ParseException
 	 */
 	private Date stringToDate(String s) throws ParseException {
-		if (s != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+		if (Pattern.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{1,2}/\\d{1,2}/\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_US);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{4}-\\d{1,2}-\\d{1,2}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_ISO);
 			return fmt.parse(s);
 		} else
 			return (null);
@@ -359,5 +373,38 @@ public class User {
 	 */
 	public static User get(String name) {
 		return users.get(name);
+	}
+
+	public ArrayList<Question> getRecentQuestions() {
+		return this.recentQuestions;
+	}
+
+	public ArrayList<Answer> getRecentAnswers() {
+		return this.recentAnswers;
+	}
+
+	public ArrayList<Comment> getRecentComments() {
+		return this.recentComments;
+	}
+	
+	public void addRecentQuestions(Question question) {
+		if (recentQuestions.size() > 2) {
+			this.recentQuestions.remove(2);
+		}
+		this.recentQuestions.add(0, question);
+	}
+
+	public void addRecentAnswers(Answer answer) {
+		if (recentAnswers.size() > 2) {
+			this.recentAnswers.remove(2);
+		}
+		this.recentAnswers.add(0, answer);
+	}
+
+	public void addRecentComments(Comment comment) {
+		if (recentComments.size() > 2) {
+			this.recentComments.remove(2);
+		}
+		this.recentComments.add(0, comment);
 	}
 }
