@@ -18,4 +18,4 @@
 # and do not commit the stuff from mac users
 .DS_Store
 
-.orig
+*.orig
