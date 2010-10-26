@@ -41,10 +41,20 @@ public class UserTest extends UnitTest {
 	}
 	
 	@Test
-	public void checkPassw(){
+	public void checkPassw() {
 		User user = new User("Bill", "bill");
-		assertEquals(user.encrypt("bill"), user.getMd5Password());
+		assertEquals(user.encrypt("bill"), user.getSHA1Password());
+		assertEquals(user.encrypt(""),
+				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
+																// wikipedia.org/wiki/Examples_of_SHA_digests
 		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
+	}
+
+	@Test
+	public void checkSamePassword() {
+		User user = new User("Bill", "bill");
+		assertTrue(user.samePassword("bill", "bill"));
+		assertFalse(user.samePassword("Bill", "bill"));
 	}
 
 	@Test

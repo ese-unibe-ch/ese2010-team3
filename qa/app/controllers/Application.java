@@ -68,9 +68,10 @@ public class Application extends Controller {
 	}
 
 	public static void signup(@Required String username, String password,
-			String email) {
+			String passwordrepeat, String email) {
 
-		if (User.checkEmail(email)) {
+		if (User.checkEmail(email)
+				&& User.samePassword(password, passwordrepeat)) {
 			User user = User.register(username, password);
 			user.setEmail(email);
 			// Mark user as connected
@@ -78,9 +79,13 @@ public class Application extends Controller {
 			index();
 		} else {
 			flash.keep("url");
-            flash.error("secure.emailerror");
-            params.flash();
-            register();
+			if (!User.checkEmail(email)) {
+				flash.error("secure.emailerror");
+			} else {
+				flash.error("secure.passworderror");
+			}
+			params.flash();
+			register();
 		}
 	}
 	public static void showprofile(String userName) {

@@ -59,25 +59,6 @@ public abstract class Entry extends Item {
 	}
 
 	/**
-	 * Counts all Votes done by this user
-	 * 
-	 * @param user
-	 * @return The amount of votes
-	 */
-	public int votesByUser(User user) {
-		int i = 0;
-		for (Vote vote : this.votes.values()) {
-			if (vote.owner() == user) {
-				i++;
-			}
-		}
-		if (inLastHour()) {
-			return i;
-		}
-		return 0;
-	}
-
-	/**
 	 * Unregisters a deleted {@link Vote}.
 	 * 
 	 * @param vote
@@ -198,22 +179,6 @@ public abstract class Entry extends Item {
 	 */
 	public Collection<Vote> getVotes() {
 		return votes.values();
-	}
-	
-	/**
- 	* Check if the <code>Item</code> is added within the last Hour
- 	*
- 	* @return true if the <code>User</code> added something in this Hour
- 	*/ 
-	public boolean inLastHour() {
-		Date now = new Date();
-		long milisec1 = now.getTime();
-		long milisec2 = timestamp.getTime();
-		long diffHours = (milisec2 - milisec1) / (60 * 60 * 1000);
-		if (diffHours < 1) {
-			return true;
-		}
-		return false;
 	}
 
 }

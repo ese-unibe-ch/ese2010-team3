@@ -3,3 +3,5 @@
 #
 
 secure.emailerror=Oops, this is not a valid eMail address.
+secure.passwordrepeat=Repeat your Password.
+secure.passworderror=Oops, you entered two different Passwords.

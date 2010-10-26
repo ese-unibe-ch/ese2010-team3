@@ -31,7 +31,6 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-	private boolean cheater;
 	private Date timestamp;
 
 	public static final String DATE_FORMAT = "dd-MM-yy";
@@ -46,7 +45,6 @@ public class User {
 		this.name = name;
 		this.password = encrypt(password);
 		this.items = new HashSet<Item>();
-		this.cheater = true;
 	}
 
 	/**
@@ -66,18 +64,10 @@ public class User {
 	 */
 	public static String encrypt(String password) {
 		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.reset();
+			MessageDigest m = MessageDigest.getInstance("SHA-1");
 			m.update(password.getBytes());
-			byte[] digest = m.digest();
-			BigInteger bigInt = new BigInteger(1, digest);
-			String hashtext = bigInt.toString(16);
-			// Now we need to zero pad it if you actually want the full 32
-			// chars.
-			while (hashtext.length() < 32) {
-				hashtext = "0" + hashtext;
-			}
-			return hashtext;
+			return new BigInteger(1, m.digest(password.getBytes()))
+					.toString(16);
 		} catch (NoSuchAlgorithmException e) {
 			return password;
 		}
@@ -101,6 +91,10 @@ public class User {
 	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+	}
+
+	public static boolean samePassword(String password, String passwordrepeat) {
+		return password.equals(passwordrepeat);
 	}
 
 	/**
@@ -166,25 +160,21 @@ public class User {
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
 	public boolean isMaybeCheater() {
-		HashMap<User, Integer> votesPerUser = new HashMap<User, Integer>();
+		HashMap<User, Integer> votesForUser = new HashMap<User, Integer>();
 		for (Item item : this.items) {
-			if (!(item instanceof Entry))
-				continue;
-			for (Vote vote : ((Entry) item).getVotes()) {
-				if (vote.up()) {
-					Integer count = votesPerUser.get(vote.owner());
-					if (count == null)
-						count = 0;
-					votesPerUser.put(vote.owner(), count + 1);
-				}
+			if (item instanceof Vote && ((Vote) item).up()) {
+				Integer count = votesForUser.get(item.owner());
+				if (count == null)
+					count = 0;
+				votesForUser.put(item.owner(), count + 1);
 			}
 		}
 
-		if (votesPerUser.isEmpty())
+	    if (votesForUser.isEmpty())
 			return false;
 
-		Integer maxCount = (Integer) Collections.max(votesPerUser.values());
-		return maxCount != null && maxCount / votesPerUser.size() > 0.5;
+	    Integer maxCount = (Integer) Collections.max(votesForUser.values());
+		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
 	/**
@@ -208,12 +198,14 @@ public class User {
 	}
 
 	/**
-	 * The <code>User</code> is a Spammer depending of how many comments he has
-	 * written in the last hour.
+	 * The <code>User</code> is a Spammer depending of how many comments,
+	 * answers and questions he has written in the last hour.
 	 * 
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
-	public boolean isCommentSpammer() {
+	public boolean isSpammer() {
+		// TODO: Count only items in the last hour. How? Adding a timestamp for
+		// every item?
 		int number = this.howManyItems();
 		if (number > 10) {
 			return true;
@@ -226,11 +218,8 @@ public class User {
 	 * somebody.
 	 * 
 	 */
-	public void isCheating() {
-		if (isCommentSpammer() || isMaybeCheater()) {
-			this.setCheater(true);
-		}
-		this.setCheater(false);
+	public boolean isCheating() {
+		return (isSpammer() || isMaybeCheater());
 	}
 
 	/**
@@ -335,16 +324,8 @@ public class User {
 		return this.biography;
 	}
 
-	public String getMd5Password() {
+	public String getSHA1Password() {
 		return this.password;
-	}
-
-	public boolean isCheater() {
-		return this.cheater;
-	}
-
-	public void setCheater(boolean status) {
-		this.cheater = status;
 	}
 
 	/*
