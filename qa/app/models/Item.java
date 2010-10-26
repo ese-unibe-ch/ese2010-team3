@@ -21,7 +21,7 @@ public abstract class Item {
 	 */
 	public Item(User owner) {
 		this.owner = owner;
-		this.timestamp = new Date();
+		this.timestamp = SystemInformation.get().now();
 		owner.registerItem(this);
 	}
 

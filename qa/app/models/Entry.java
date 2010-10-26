@@ -26,7 +26,6 @@ public abstract class Entry extends Item implements Comparable {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		this.timestamp = SystemInformation.get().now();
 		this.votes = new HashMap<String,Vote>();
 	}
 
@@ -73,15 +72,6 @@ public abstract class Entry extends Item implements Comparable {
 	 */
 	public String content() {
 		return this.content;
-	}
-
-	/**
-	 * Get the time the <code>Entry</code> was created.
-	 * 
-	 * @return the creation date as a UNIX timestamp
-	 */
-	public Date timestamp() {
-		return this.timestamp;
 	}
 
 	/**

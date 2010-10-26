@@ -145,7 +145,7 @@ public class User {
 	 *         <code>User</code> in this Hour.
 	 */
 	public int howManyItemsPerHour() {
-		Date now = new Date();
+		Date now = SystemInformation.get().now();
 		int i = 0;
 		for (Item item : this.items) {
 			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
@@ -228,7 +228,7 @@ public class User {
 	 * @return age of the <code>User</code>
 	 */
 	private int age() {
-		Date now = Calendar.getInstance().getTime();
+		Date now = SystemInformation.get().now();
 		if (dateOfBirth != null) {
 			long age = now.getTime() - dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));

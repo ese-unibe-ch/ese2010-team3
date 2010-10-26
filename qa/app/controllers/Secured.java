@@ -12,40 +12,34 @@ import play.mvc.With;
 
 @With(Secure.class)
 public class Secured extends Controller {
-	public static Question newQuestion(@Required String content, String tags) {
+	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
 			Question question = Question.register(Session.get().currentUser(), content);
 			question.setTagString(tags);
 			Application.question(question.id());
-			return question;
 		} else {
 			Application.index();
-			return null;
 		}
 	}
 
-	public static Answer newAnswer(int questionId, @Required String content) {
+	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
 			Application.question(questionId);
-			return answer;
 		} else {
 			Application.index();
-			return null;
 		}
 	}
 
-	public static Comment newCommentQuestion(int questionId,
+	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
 			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
 			Application.commentQuestion(questionId);
-			return comment;
 		}
-		return null;
 	}
 
-	public static Comment newCommentAnswer(int questionId, int answerId,
+	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
 		Question question = Question.get(questionId);
 		Answer answer = question.getAnswer(answerId);
@@ -53,9 +47,7 @@ public class Secured extends Controller {
 		if (!validation.hasErrors() && answer != null) {
 			Comment comment = answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
-			return comment;
 		}
-		return null;
 	}
 
 	public static void voteQuestionUp(int id) {

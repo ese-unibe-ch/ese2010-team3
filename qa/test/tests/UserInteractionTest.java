@@ -22,7 +22,7 @@ import controllers.Session;
 
 @Ignore
 public class UserInteractionTest extends FunctionalTest {
-
+/*
 	private User jack;
 	private SessionMock session;
 
@@ -130,5 +130,5 @@ public class UserInteractionTest extends FunctionalTest {
 		Comment comment = Secured.newCommentAnswer(answer.id(),question.id(), "Could I specify?");
 		Secured.deleteCommentAnswer(comment.id(),question.id(),answer.id());
 		assertFalse(answer.comments().contains(question));
-	}
+	}*/
 }
