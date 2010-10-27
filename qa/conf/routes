@@ -30,6 +30,7 @@ POST	/register								Application.signup
 GET		/user/{userName}/showprofile/		Application.showprofile
 POST	/user/savedProfile						Secured.saveProfile
 
+
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 

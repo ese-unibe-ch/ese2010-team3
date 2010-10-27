@@ -40,19 +40,11 @@ main
 div.main {
 	background: #000000;
 	margin:	20px auto;
-	width: 750px;
+	max-width: 800px;
+	min-width:500px;
 	padding: 0;
 	position: relative;
 }
-
-.cheaterWarning {
-	color: #ffffff;
-	font-size: 1.4em;
-	font-wight: bold;
-	text-align: center;
-	border-bottom: 15px solid #f00;
-}
-
 /*********************** 
 header
 ************************/
@@ -212,6 +204,16 @@ edit profile
 div.editprofile textarea {
 	height: 100px;
 	width: 610px;
+}
+/*********************** 
+Cheater Warning
+************************/
+p.cheaterWarning {
+	color: #ffffff;
+	font-size: 1.4em;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 15px solid #f00;
 }
 
 /*********************** 
