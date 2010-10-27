@@ -57,7 +57,7 @@ public class User {
 	}
 
 	/**
-	 * Encrypt the password with MD5
+	 * Encrypt the password with SHA-1
 	 * 
 	 * @param password
 	 * @return the encrypted password
@@ -103,7 +103,19 @@ public class User {
 		this.items.add(item);
 	}
 
-	/*
+	/**
+	 * Checks at Sign Up if the entered username is available. This way we can
+	 * avoid having two User called "SoMeThinG" and "SoMetHinG" which might be
+	 * hard to distinguish
+	 * 
+	 * @param username
+	 * @return true if the username is available.
+	 */
+	public static boolean isAvailable(String username) {
+		return (users.get(username.toLowerCase()) == null);
+	}
+
+	/**
 	 * Causes the <code>User</code> to delete all his {@link Item}s.
 	 */
 	public void delete() {
@@ -347,7 +359,7 @@ public class User {
 
 	public static User register(String username, String password) {
 		User user = new User(username, password);
-		users.put(username, user);
+		users.put(username.toLowerCase(), user);
 		return user;
 	}
 
@@ -358,6 +370,6 @@ public class User {
 	 * @return a <code>User</code> or null if the given name doesn't exist.
 	 */
 	public static User get(String name) {
-		return users.get(name);
+		return users.get(name.toLowerCase());
 	}
 }
