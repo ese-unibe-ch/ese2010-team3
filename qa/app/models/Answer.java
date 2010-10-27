@@ -35,6 +35,9 @@ public class Answer extends Entry {
 		this.question = question;
 		this.comments = new IDTable<Comment>();
 		this.id = id;
+
+		// make users aware of this new answer
+		question.notifyObservers(this);
 	}
 
 	/**

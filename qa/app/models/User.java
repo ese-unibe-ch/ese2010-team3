@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * @author Mirco Kocher
  * 
  */
-public class User {
+public class User implements IObserver {
 
 	private final String name;
 	private final String password;
@@ -34,11 +34,9 @@ public class User {
 	private String employer;
 	private String biography;
 
-	private Date timestamp;
-	
-	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
-	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
-	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
+	private final ArrayList<Question> recentQuestions = new ArrayList<Question>();
+	private final ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
+	private final ArrayList<Comment> recentComments = new ArrayList<Comment>();
 	
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -187,7 +185,7 @@ public class User {
 	    if (votesForUser.isEmpty())
 			return false;
 
-	    Integer maxCount = (Integer) Collections.max(votesForUser.values());
+	    Integer maxCount = Collections.max(votesForUser.values());
 		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
@@ -346,6 +344,44 @@ public class User {
 		return this.password;
 	}
 
+	/**
+	 * Start observing changes for an entry (e.g. new answers to a question).
+	 * 
+	 * @param what
+	 *            the entry to watch
+	 */
+	public void startObserving(IObservable what) {
+		what.addObserver(this);
+	}
+
+	/**
+	 * Checks if a specific entry is being observed for changes.
+	 * 
+	 * @param what
+	 *            the entry to check
+	 */
+	public boolean isObserving(IObservable what) {
+		return what.hasObserver(this);
+	}
+
+	/**
+	 * Stop observing changes for an entry (e.g. new answers to a question).
+	 * 
+	 * @param what
+	 *            the entry to unwatch
+	 */
+	public void stopObserving(IObservable what) {
+		what.removeObserver(this);
+	}
+
+	/**
+	 * @see models.IObserver#observe(models.IObservable, java.lang.Object)
+	 */
+	public void observe(IObservable o, Object arg) {
+		if (o instanceof Question && arg instanceof Answer)
+			new Notification(this, (Answer) arg);
+	}
+
 	/*
 	 * Static interface to access questions from controller (not part of unit
 	 * testing)
@@ -426,13 +462,7 @@ public class User {
 	 * @return ArrayList<Question> All questions of this user
 	 */
 	public ArrayList<Question> getQuestions() {
-		ArrayList<Question> questions = new ArrayList<Question>();
-		for (Item i : this.items) {
-			if (i instanceof Question) {
-				questions.add((Question) i);
-			}
-		}
-		return questions;
+		return this.getItemsByType(Question.class);
 	}
 
 	/**
@@ -441,13 +471,7 @@ public class User {
 	 * @return ArrayList<Answer> All answers of this user
 	 */
 	public ArrayList<Answer> getAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Item i : this.items) {
-			if (i instanceof Answer) {
-				answers.add((Answer) i);
-			}
-		}
-		return answers;
+		return this.getItemsByType(Answer.class);
 	}
 
 	/**
@@ -479,5 +503,41 @@ public class User {
 		}
 		return answers;
 
+	}
+
+	/**
+	 * Get an ArrayList of all notifications of this user
+	 * 
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	public ArrayList<Notification> getNotifications() {
+		return this.getItemsByType(Notification.class);
+	}
+
+	/**
+	 * Gets a very recent notification, if there is any
+	 * 
+	 * @return a very recent notification (or null, if there isn't any)
+	 */
+	public Notification getVeryRecentNotification() {
+		for (Notification n : this.getNotifications())
+			if (n.isVeryRecent())
+				return n;
+		return null;
+	}
+
+	/**
+	 * Get an ArrayList of all items of this user being an instance of a
+	 * specific type
+	 * 
+	 * @param type
+	 * @return ArrayList All type-items of this user
+	 */
+	protected ArrayList getItemsByType(Class type) {
+		ArrayList items = new ArrayList();
+		for (Item item : this.items)
+			if (type.isInstance(item))
+				items.add(item);
+		return items;
 	}
 }

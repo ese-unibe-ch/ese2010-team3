@@ -15,9 +15,11 @@ import play.mvc.With;
 public class Secured extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
-			Question question = Question.register(Session.get().currentUser(), content);
+			User user = Session.get().currentUser();
+			Question question = Question.register(user, content);
 			question.setTagString(tags);
-			Session.get().currentUser().addRecentQuestions(question);
+			user.startObserving(question);
+			user.addRecentQuestions(question);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -188,6 +190,22 @@ public class Secured extends Controller {
 		User user = Session.get().currentUser();
 		if (question != null && user == question.owner())
 			question.setTagString(tags);
+		Application.question(id);
+	}
+
+	public static void watchQuestion(int id) {
+		Question question = Question.get(id);
+		User user = Session.get().currentUser();
+		if (question != null)
+			user.startObserving(question);
+		Application.question(id);
+	}
+
+	public static void unwatchQuestion(int id) {
+		Question question = Question.get(id);
+		User user = Session.get().currentUser();
+		if (question != null)
+			user.stopObserving(question);
 		Application.question(id);
 	}
 }
