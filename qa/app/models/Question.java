@@ -38,13 +38,13 @@ public class Question extends Entry implements IObservable {
 	 */
 	public Question(User owner, String content) {
 		this(owner, content, null);
-		this.observers = new HashSet<IObserver>();
 	}
 
 	public Question(User owner, String content, IDTable<Question> database) {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
+		this.observers = new HashSet<IObserver>();
 		this.id = database != null ? database.add(this) : -1;
 	}
 
