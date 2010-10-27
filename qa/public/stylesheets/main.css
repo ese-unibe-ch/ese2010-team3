@@ -125,7 +125,6 @@ div.content span.vote {
 	position: absolute;
 	right: 7px;
 }
-<<<<<<< HEAD
 
 div.content span.date {
 	top: 7px;
@@ -138,16 +137,6 @@ div.content form {
 	margin: 10px 0;
 	padding: 7px;
 	position: relative;
-=======
-	
-	footer > a {
-		text-align: 		left;
-		font-size: 			0.7em;	
-		padding: 			3px;
-		background: 		#00272b;
-	}
->>>>>>> work-branch
-
 }
 			
 div.content textarea {
