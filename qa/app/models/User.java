@@ -512,7 +512,27 @@ public class User implements IObserver {
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
 	public ArrayList<Notification> getNotifications() {
-		return this.getItemsByType(Notification.class);
+		ArrayList<Notification> result = new ArrayList<Notification>();
+		/*
+		 * Hack: remove all notifications to deleted answers
+		 * 
+		 * unfortunately, there's currently no other way to achieve this, as
+		 * there is no global list of all existing notifications nor an easy way
+		 * to register all users for observing the deletion of answers (because
+		 * there's no global list of all existing users, either)
+		 */
+		ArrayList<Notification> notifications = this
+				.getItemsByType(Notification.class);
+		for (Notification n : notifications) {
+			if (n.getAbout() instanceof Answer) {
+				Answer answer = (Answer) n.getAbout();
+				if (answer.question().hasAnswer(answer))
+					result.add(n);
+				else
+					n.unregister();
+			}
+		}
+		return result;
 	}
 
 	/**

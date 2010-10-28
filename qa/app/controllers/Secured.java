@@ -221,6 +221,12 @@ public class Secured extends Controller {
 			Application.notifications();
 	}
 
+	public static void clearNewNotifications() {
+		User user = Session.get().currentUser();
+		for (Notification n : user.getNewNotifications())
+			n.unsetNew();
+		Application.notifications();
+	}
 	public static void deleteNotification(int id) {
 		User user = Session.get().currentUser();
 		Notification n = user.getNotification(id);

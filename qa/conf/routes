@@ -36,6 +36,7 @@ POST	/user/savedProfile						Secured.saveProfile
 GET		/user/notifications						Application.notifications
 GET		/notification/{id}/follow				Secured.followNotification
 GET		/notification/{id}/delete				Secured.deleteNotification
+GET		/notification/clearNew					Secured.clearNewNotifications
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
