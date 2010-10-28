@@ -463,7 +463,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Question> All questions of this user
 	 */
 	public ArrayList<Question> getQuestions() {
-		return this.getItemsByType(Question.class);
+		return this.getItemsByType(Question.class, null);
 	}
 
 	/**
@@ -472,7 +472,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Answer> All answers of this user
 	 */
 	public ArrayList<Answer> getAnswers() {
-		return this.getItemsByType(Answer.class);
+		return this.getItemsByType(Answer.class, null);
 	}
 
 	/**
@@ -481,13 +481,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Answer> All best rated answers
 	 */
 	public ArrayList<Answer> bestAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Answer a : this.getAnswers()) {
-			if (a.isBestAnswer()) {
-				answers.add(a);
-			}
-		}
-		return answers;
+		return this.getItemsByType(Answer.class, "isBestAnswer");
 	}
 
 	/**
@@ -496,22 +490,18 @@ public class User implements IObserver {
 	 * @return ArrayList<Answer> All high rated answers
 	 */
 	public ArrayList<Answer> highRatedAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Answer a : this.getAnswers()) {
-			if (a.isHighRated()) {
-				answers.add(a);
-			}
-		}
-		return answers;
+		return this.getItemsByType(Answer.class, "isHighRated");
 	}
 
 	/**
 	 * Get an ArrayList of all notifications of this user, sorted most-recent
-	 * one first
+	 * one first and optionally fulfilling one filter criterion.
 	 * 
+	 * @param filter
+	 *            an optional name of a filter method (e.g. "isNew")
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
-	public ArrayList<Notification> getNotifications() {
+	protected ArrayList<Notification> getAllNotifications(String filter) {
 		ArrayList<Notification> result = new ArrayList<Notification>();
 		/*
 		 * Hack: remove all notifications to deleted answers
@@ -521,12 +511,12 @@ public class User implements IObserver {
 		 * to register all users for observing the deletion of answers (because
 		 * there's no global list of all existing users, either)
 		 */
-		ArrayList<Notification> notifications = this
-				.getItemsByType(Notification.class);
+		ArrayList<Notification> notifications = this.getItemsByType(
+				Notification.class, filter);
 		for (Notification n : notifications) {
 			if (n.getAbout() instanceof Answer) {
 				Answer answer = (Answer) n.getAbout();
-				if (answer.question().hasAnswer(answer))
+				if (answer.question() != null)
 					result.add(n);
 				else
 					n.unregister();
@@ -536,16 +526,22 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all unred notifications of this user
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first.
+	 * 
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	public ArrayList<Notification> getNotifications() {
+		return this.getAllNotifications(null);
+	}
+
+	/**
+	 * Get an ArrayList of all unread notifications of this user
 	 * 
 	 * @return the unread notifications
 	 */
 	public ArrayList<Notification> getNewNotifications() {
-		ArrayList<Notification> notifications = new ArrayList<Notification>();
-		for (Notification n : this.getNotifications())
-			if (n.isNew())
-				notifications.add(n);
-		return notifications;
+		return this.getAllNotifications("isNew");
 	}
 
 	/**
@@ -580,16 +576,34 @@ public class User implements IObserver {
 
 	/**
 	 * Get an ArrayList of all items of this user being an instance of a
-	 * specific type
+	 * specific type and optionally fulfilling an additional filter criterion.
 	 * 
 	 * @param type
+	 *            the type
+	 * @param filter
+	 *            an optional name of a filter method which has to be available
+	 *            on all objects, must not need any arguments and must return a
+	 *            boolean value
 	 * @return ArrayList All type-items of this user
 	 */
-	protected ArrayList getItemsByType(Class type) {
+	protected ArrayList getItemsByType(Class type, String filter) {
 		ArrayList items = new ArrayList();
-		for (Item item : this.items)
-			if (type.isInstance(item))
+		for (Item item : this.items) {
+			if (type.isInstance(item)) {
+				if (filter != null) {
+					try {
+						if (!(Boolean) type.getMethod(filter).invoke(item))
+							continue;
+					} catch (Exception ex) {
+						// reflection APIs throw half a dozen different
+						// exceptions, let's just abort if we hit any of them
+						// for now
+						return null;
+					}
+				}
 				items.add(item);
+			}
+		}
 		Collections.sort(items);
 		return items;
 	}

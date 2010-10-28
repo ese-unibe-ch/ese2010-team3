@@ -7,7 +7,7 @@ package models;
 public class Notification extends Item implements Comparable {
 
 	/** What this notification is all about. */
-	protected Entry about;
+	private final Entry about;
 
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
