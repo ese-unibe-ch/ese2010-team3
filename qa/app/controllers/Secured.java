@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Comment;
+import models.Notification;
 import models.Question;
 import models.User;
 import play.data.validation.Required;
@@ -207,5 +208,24 @@ public class Secured extends Controller {
 		if (question != null)
 			user.stopObserving(question);
 		Application.question(id);
+	}
+
+	public static void followNotification(int id) {
+		User user = Session.get().currentUser();
+		Notification n = user.getNotification(id);
+		if (n != null)
+			n.unsetNew();
+		if (n != null && n.getAbout() instanceof Answer)
+			Application.question(((Answer) n.getAbout()).question().id());
+		else if (!redirectToCallingPage())
+			Application.notifications();
+	}
+
+	public static void deleteNotification(int id) {
+		User user = Session.get().currentUser();
+		Notification n = user.getNotification(id);
+		if (n != null)
+			n.unregister();
+		Application.notifications();
 	}
 }

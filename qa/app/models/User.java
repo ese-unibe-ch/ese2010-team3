@@ -378,7 +378,8 @@ public class User implements IObserver {
 	 * @see models.IObserver#observe(models.IObservable, java.lang.Object)
 	 */
 	public void observe(IObservable o, Object arg) {
-		if (o instanceof Question && arg instanceof Answer)
+		if (o instanceof Question && arg instanceof Answer
+				&& ((Answer) arg).owner() != this)
 			new Notification(this, (Answer) arg);
 	}
 
@@ -457,7 +458,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all questions of this user
+	 * Get a sorted ArrayList of all questions of this user
 	 * 
 	 * @return ArrayList<Question> All questions of this user
 	 */
@@ -466,7 +467,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all answers of this user
+	 * Get a sorted ArrayList of all answers of this user
 	 * 
 	 * @return ArrayList<Answer> All answers of this user
 	 */
@@ -502,11 +503,11 @@ public class User implements IObserver {
 			}
 		}
 		return answers;
-
 	}
 
 	/**
-	 * Get an ArrayList of all notifications of this user
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first
 	 * 
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
@@ -515,13 +516,44 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Gets a very recent notification, if there is any
+	 * Get an ArrayList of all unred notifications of this user
+	 * 
+	 * @return the unread notifications
+	 */
+	public ArrayList<Notification> getNewNotifications() {
+		ArrayList<Notification> notifications = new ArrayList<Notification>();
+		for (Notification n : this.getNotifications())
+			if (n.isNew())
+				notifications.add(n);
+		return notifications;
+	}
+
+	/**
+	 * Gets the most recent unread notification, if there is any very recent one
 	 * 
 	 * @return a very recent notification (or null, if there isn't any)
 	 */
-	public Notification getVeryRecentNotification() {
-		for (Notification n : this.getNotifications())
+	public Notification getVeryRecentNewNotification() {
+		for (Notification n : this.getNewNotifications())
 			if (n.isVeryRecent())
+				return n;
+		return null;
+	}
+
+	/**
+	 * Gets a notification by its id value.
+	 * 
+	 * NOTE: slightly hacky since we don't track notifications in a separate
+	 * IDTable but in this.items like everything else - this should get fixed
+	 * once we migrate to using a real DB.
+	 * 
+	 * @param id
+	 *            the notification's id
+	 * @return a notification with the given id
+	 */
+	public Notification getNotification(int id) {
+		for (Notification n : this.getNotifications())
+			if (n.getID() == id)
 				return n;
 		return null;
 	}
@@ -538,6 +570,7 @@ public class User implements IObserver {
 		for (Item item : this.items)
 			if (type.isInstance(item))
 				items.add(item);
+		Collections.sort(items);
 		return items;
 	}
 }

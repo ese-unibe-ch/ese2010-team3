@@ -4,13 +4,29 @@ package models;
  * A notification about a (recent) change such as a newly added answer to a
  * question.
  */
-public class Notification extends Item {
+public class Notification extends Item implements Comparable {
 
 	/** What this notification is all about. */
 	protected Entry about;
 
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
+
+	/** This notification's ID. */
+	private final int id;
+
+	/** An auto-incrementing counter for producing unique values as IDs. */
+	private static int auto_increment = 0;
+
+	/**
+	 * Since there's no ideal place for using an IDTable, we just count through
+	 * all notifications, assigning them an auto-incremented value as ID.
+	 * 
+	 * @return the next ID value
+	 */
+	private synchronized int autoIncrementID() {
+		return auto_increment++;
+	}
 
 	/**
 	 * Instantiates a new notification.
@@ -24,6 +40,7 @@ public class Notification extends Item {
 		super(owner);
 		this.about = about;
 		this.isNew = true;
+		this.id = autoIncrementID();
 	}
 
 	/**
@@ -60,5 +77,22 @@ public class Notification extends Item {
 	 */
 	public void unsetNew() {
 		this.isNew = false;
+	}
+
+	/**
+	 * Gets this notification's ID value.
+	 * 
+	 * @return this notification's ID
+	 */
+	public int getID() {
+		return this.id;
+	}
+
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object o) {
+		// sort notifications most-recent one first
+		return ((Notification) o).getID() - this.id;
 	}
 }
