@@ -17,7 +17,6 @@ public class Secured extends Controller {
 		if (!validation.hasErrors()) {
 			Question question = Question.register(Session.get().currentUser(), content);
 			question.setTagString(tags);
-			Session.get().currentUser().addRecentQuestions(question);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -26,8 +25,7 @@ public class Secured extends Controller {
 
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentAnswers(answer);
+			Question.get(questionId).answer(Session.get().currentUser(), content);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -37,8 +35,7 @@ public class Secured extends Controller {
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentComments(comment);
+			Question.get(questionId).comment(Session.get().currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -49,8 +46,7 @@ public class Secured extends Controller {
 		Answer answer = question.getAnswer(answerId);
 
 		if (!validation.hasErrors() && answer != null) {
-			Comment comment = answer.comment(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentComments(comment);
+			answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
 		}
 	}

@@ -7,9 +7,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -35,10 +37,6 @@ public class User {
 	private String biography;
 
 	private Date timestamp;
-	
-	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
-	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
-	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
 	
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -379,37 +377,55 @@ public class User {
 		return users.get(name);
 	}
 
-	public ArrayList<Question> getRecentQuestions() {
-		return this.recentQuestions;
+	/**
+	 * Get a List of the last three questions of this user
+	 * 
+	 * @return List<Question> The last three questions of this user
+	 */
+	public List<Question> getRecentQuestions() {
+		List<Question> recentQuestions = this.getQuestions();
+		Collections.sort(recentQuestions, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentQuestions.size() > 3)
+			return recentQuestions.subList(0, 3);
+		return recentQuestions;
 	}
 
-	public ArrayList<Answer> getRecentAnswers() {
-		return this.recentAnswers;
-	}
-
-	public ArrayList<Comment> getRecentComments() {
-		return this.recentComments;
+	/**
+	 * Get a List of the last three answers of this user
+	 * 
+	 * @return List<Answer> The last three answers of this user
+	 */
+	public List<Answer> getRecentAnswers() {
+		List<Answer> recentAnswers = this.getAnswers();
+		Collections.sort(recentAnswers, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentAnswers.size() > 3)
+			return recentAnswers.subList(0, 3);
+		return recentAnswers;
 	}
 	
-	public void addRecentQuestions(Question question) {
-		if (recentQuestions.size() > 2) {
-			this.recentQuestions.remove(2);
-		}
-		this.recentQuestions.add(0, question);
-	}
-
-	public void addRecentAnswers(Answer answer) {
-		if (recentAnswers.size() > 2) {
-			this.recentAnswers.remove(2);
-		}
-		this.recentAnswers.add(0, answer);
-	}
-
-	public void addRecentComments(Comment comment) {
-		if (recentComments.size() > 2) {
-			this.recentComments.remove(2);
-		}
-		this.recentComments.add(0, comment);
+	/**
+	 * Get a List of the last three comments of this user
+	 * 
+	 * @return List<Comment> The last three comments of this user
+	 */
+	public List<Comment> getRecentComments() {
+		List<Comment> recentComments = this.getComments();
+		Collections.sort(recentComments, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentComments.size() > 3)
+			return recentComments.subList(0, 3);
+		return recentComments;
 	}
 
 	/*
@@ -448,6 +464,21 @@ public class User {
 			}
 		}
 		return answers;
+	}
+	
+	/**
+	 * Get an ArrayList of all comments of this user
+	 * 
+	 * @return ArrayList<Comment> All comments of this user
+	 */
+	public ArrayList<Comment> getComments() {
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		for (Item i : this.items) {
+			if (i instanceof Comment) {
+				comments.add((Comment) i);
+			}
+		}
+		return comments;
 	}
 
 	/**
