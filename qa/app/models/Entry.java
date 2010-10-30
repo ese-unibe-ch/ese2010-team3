@@ -1,6 +1,8 @@
 package models;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -8,10 +10,9 @@ import java.util.*;
  * @author Simon Marti
  * @author Mirco Kocher
  */
-public abstract class Entry extends Item {
+public abstract class Entry extends Item implements Comparable {
 
 	private String content;
-	private Date timestamp;
 	private HashMap<String, Vote> votes;
 
 	/**
@@ -25,8 +26,7 @@ public abstract class Entry extends Item {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		this.timestamp = new Date();
-		this.votes = new HashMap();
+		this.votes = new HashMap<String,Vote>();
 	}
 
 	/**
@@ -48,11 +48,10 @@ public abstract class Entry extends Item {
 	 * Delete all {@link Vote}s if the <code>Entry</code> gets deleted.
 	 */
 	protected void unregisterVotes() {
-		Iterator<Vote> it = this.votes.values().iterator();
+		Collection<Vote> votes = this.votes.values();
 		this.votes = new HashMap();
-		while (it.hasNext()) {
-			it.next().unregister();
-		}
+		for (Vote vote : votes)
+			vote.unregister();
 	}
 
 	/**
@@ -73,15 +72,6 @@ public abstract class Entry extends Item {
 	 */
 	public String content() {
 		return this.content;
-	}
-
-	/**
-	 * Get the time the <code>Entry</code> was created.
-	 * 
-	 * @return the creation date as a UNIX timestamp
-	 */
-	public Date timestamp() {
-		return this.timestamp;
 	}
 
 	/**
@@ -111,13 +101,21 @@ public abstract class Entry extends Item {
 		return this.upVotes() - this.downVotes();
 	}
 
+	/**
+	 * Compares this <code>Entry</code> with another one with respect to their
+	 * ratings.
+	 * 
+	 * @return comparison result (-1 = this Entry has more upVotes)
+	 */
+	public int compareTo(Object o) {
+		return ((Entry) o).rating() - this.rating();
+	}
+
 	private int countVotes(boolean up) {
 		int counter = 0;
-		Iterator<Vote> it = this.votes.values().iterator();
-		while (it.hasNext()) {
-			if (it.next().up() == up)
+		for (Vote vote : this.votes.values())
+			if (vote.up() == up)
 				counter++;
-		}
 		return counter;
 	}
 
@@ -168,5 +166,14 @@ public abstract class Entry extends Item {
 			 return this.content.replaceAll("[\r\n]+", " ");
 		 return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
 	 }
+
+	/**
+	 * Get all <code>Votes</code>
+	 * 
+	 * @return votes
+	 */
+	public Collection<Vote> getVotes() {
+		return votes.values();
+	}
 
 }

@@ -66,6 +66,20 @@
 					</ul>
 				</td>
 			</tr>
+				<td class="left"><label for="numberOfQuestions">Number of questions:</label>
+				<td class="right">${showUser.getQuestions().size()}</td>
+			<tr>
+				<td class="left"><label for="numberOfAnswers">Number of answers:</label>
+				<td class="right">${showUser.getAnswers().size()}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="bestAnswers">Number of best answers:</label>
+				<td class="right">${showUser.bestAnswers().size()}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="highRatedAnswers">Number of high rated answers:</label>
+				<td class="right">${showUser.highRatedAnswers().size()}</td>
+			</tr>
 		</table>
 	  		</div><!-- end showprofile -->
 #{/if}
