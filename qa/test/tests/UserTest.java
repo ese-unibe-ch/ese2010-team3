@@ -20,7 +20,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldBeCalledJack() {
 		User user = new User("Jack", "jack");
-		assertEquals(user.name(), "Jack");
+		assertEquals(user.getName(), "Jack");
 	}
 	
 	@Test

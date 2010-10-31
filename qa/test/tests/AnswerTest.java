@@ -59,7 +59,7 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldHaveQuestion() {
-		assertEquals(this.answer.question(), this.question);
+		assertEquals(this.answer.getQuestion(), this.question);
 	}
 
 	@Test

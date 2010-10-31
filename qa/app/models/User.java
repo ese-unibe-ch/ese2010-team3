@@ -46,8 +46,7 @@ public class User {
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
-	 * @param name
-	 *            the name of the <code>User</code>
+	 * @param name the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
@@ -56,11 +55,11 @@ public class User {
 	}
 
 	/**
-	 * Returns the name of the <code>User</code>.
+	 * Gets the name of the <code>User</code>.
 	 * 
 	 * @return name of the <code>User</code>
 	 */
-	public String name() {
+	public String getName() {
 		return this.name;
 	}
 
@@ -106,8 +105,7 @@ public class User {
 	 * Registers an {@link Item} which should be deleted in case the
 	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to register
+	 * @param item the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -128,8 +126,7 @@ public class User {
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to unregister
+	 * @param item the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -139,8 +136,7 @@ public class User {
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
 	 * 
-	 * @param item
-	 *            the {@link Item}to check
+	 * @param item the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -192,10 +188,8 @@ public class User {
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers
-	 *            - whether to anonymize this user's answers as well
-	 * @param doComments
-	 *            - whether to anonymize this user's comments as well
+	 * @param doAnswers - whether to anonymize this user's answers as well
+	 * @param doComments - whether to anonymize this user's comments as well
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
@@ -361,6 +355,13 @@ public class User {
 		return (users.get(username) == null);
 	}
 
+	/**
+	 * Registers a new <code>User</code> to the database.
+	 * 
+	 * @param username
+	 * @param password of the <code>User</code>
+	 * @return user
+	 */
 	public static User register(String username, String password) {
 		User user = new User(username, password);
 		users.put(username, user);

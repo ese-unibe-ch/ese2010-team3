@@ -61,7 +61,7 @@ public abstract class Entry extends Item implements Comparable {
 	 *            the {@link Vote} to unregister
 	 */
 	public void unregister(Vote vote) {
-		this.votes.remove(vote.owner().name());
+		this.votes.remove(vote.owner().getName());
 	}
 
 	/**
@@ -144,10 +144,10 @@ public abstract class Entry extends Item implements Comparable {
 	private Vote vote(User user, boolean up) {
 		if (user == this.owner())
 			return null;
-		if (this.votes.containsKey(user.name()))
-			this.votes.get(user.name()).unregister();
+		if (this.votes.containsKey(user.getName()))
+			this.votes.get(user.getName()).unregister();
 		Vote vote = new Vote(user, this, up);
-		this.votes.put(user.name(), vote);
+		this.votes.put(user.getName(), vote);
 		return vote;
 	}
 	

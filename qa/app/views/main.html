@@ -26,7 +26,7 @@
 			<a href="@{Application.index}">Questions</a>
 			<span>
 				#{if user}
-						Hi ${user.name()}!
+						Hi ${user.getName()}!
 						<a href="@{Application.showprofile}">Profile</a>
 						<a href="@{Application.deleteuser}">Delete</a>
 						<a href="@{Secure.logout}">Logout</a>

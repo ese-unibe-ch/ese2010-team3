@@ -123,7 +123,7 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			boolean deleteSelf = name.equals(Session.get().currentUser().name());
+			boolean deleteSelf = name.equals(Session.get().currentUser().getName());
 			user.delete();
 			if (deleteSelf)
 				Secure.logout();
@@ -146,7 +146,7 @@ public class Secured extends Controller {
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.name().equals(user.name());
+		return currentUser.getName().equals(user.getName());
 	}
 
 	private static boolean redirectToCallingPage() {
@@ -176,7 +176,7 @@ public class Secured extends Controller {
 			user.setEmployer(employer);
 		if (biography != null)
 			user.setBiography(biography);
-		Application.showprofile(user.name());
+		Application.showprofile(user.getName());
 	}
 
 	public static void updateTags(int id, String tags) {

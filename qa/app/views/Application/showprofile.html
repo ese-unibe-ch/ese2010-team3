@@ -51,7 +51,7 @@
 				<td class="right">
 					<ul class="showprofile">
 						#{list items:showUser.getRecentAnswers(), as:'answer'}
-						<li><a href="@{Application.question(answer.question().id())}">${answer.content()}</a>#{date answer /}</li>
+						<li><a href="@{Application.question(answer.getQuestion().id())}">${answer.content()}</a>#{date answer /}</li>
 						#{/list}
 					</ul>				
 				</td>
