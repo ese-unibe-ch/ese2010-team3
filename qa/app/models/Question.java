@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
- * and {@link Comments}.
+ * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
+ * s and {@link Comments}.
  * 
  * @author Simon Marti
  * @author Mirco Kocher
@@ -19,9 +19,11 @@ public class Question extends Entry {
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
 	private final int id;
+
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
+
 
 	/**
 	 * Create a Question.
@@ -72,11 +74,12 @@ public class Question extends Entry {
 	public void unregister(Answer answer) {
 		this.answers.remove(answer.id());
 	}
-	
-	
+
 	/**
 	 * Unregisters a deleted {@link Comment}.
-	 * @param comment the {@link Comment} to unregister 
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
@@ -100,16 +103,20 @@ public class Question extends Entry {
 
 	/**
 	 * Post a {@link Comment} to a <code>Question</code>
-	 * @param user the {@link User} posting the {@link Comment}
-	 * @param content the comment
+	 * 
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(), user, this, content);
+		Comment comment = new Comment(this.comments.nextID(), user, this,
+				content);
 		this.comments.add(comment);
 		return comment;
 	}
-	
+
 	/**
 	 * Checks if a {@link Answer} belongs to a <code>Question</code>
 	 * 
@@ -123,7 +130,9 @@ public class Question extends Entry {
 
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Question</code>
-	 * @param comment the {@link Comment} to check
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Question</code>
 	 */
 	public boolean hasComment(Comment comment) {
@@ -133,6 +142,7 @@ public class Question extends Entry {
 	/**
 	 * Get the <code>id</code> of the <code>Question</code>. The <code>id</code>
 	 * does never change.
+	 * 
 	 * @return id of the <code>Question</code>
 	 */
 	public int id() {
@@ -147,17 +157,18 @@ public class Question extends Entry {
 	public List<Answer> answers() {
 		List<Answer> list = new ArrayList<Answer>(answers.values());
 		Collections.sort(list);
-		return list;
+		return Collections.unmodifiableList(list);
 	}
-	
+
 	/**
 	 * Get all {@link Comment}s to a <code>Question</code>
+	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
 		List<Comment> list = new ArrayList<Comment>(comments.values());
 		Collections.sort(list);
-		return list;
+		return Collections.unmodifiableList(list);
 	}
 
 	/**
@@ -170,41 +181,45 @@ public class Question extends Entry {
 	public Answer getAnswer(int id) {
 		return this.answers.get(id);
 	}
-	
+
 	/**
 	 * Get a specific {@link Comment} to a <code>Question</code>
-	 * @param id of the <code>Comment</code>
+	 * 
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
 		return this.comments.get(id);
 	}
 
-	public boolean isBestAnswerSettable(Calendar now){
+	public boolean isBestAnswerSettable(Calendar now) {
 		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
 		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return this.settingOfBestAnswer == null ||
-			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
+		return this.settingOfBestAnswer == null
+				|| !thirtyMinutesAgo.getTime().after(
+						this.settingOfBestAnswer.getTime());
 	}
-	
+
 	/**
 	 * Sets the best answer. This answer can not be changed after 30min. This
 	 * Method enforces this and fails if it can not be set.
-	 * @param bestAnswer the answer the user chose to be the best for this question.
-	 * @return true iff setting of best answer was allowed.
+	 * 
+	 * @param bestAnswer
+	 *            the answer the user chose to be the best for this question.
+	 * @return true if setting of best answer was allowed.
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
 		Calendar now = Calendar.getInstance();
 		return setBestAnswer(bestAnswer, now);
 	}
-	
+
 	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
-		if ( this.isBestAnswerSettable(now) ){
+		if (this.isBestAnswerSettable(now)) {
 			this.bestAnswer = bestAnswer;
 			this.settingOfBestAnswer = now;
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 
@@ -277,4 +292,54 @@ public class Question extends Entry {
 		return questions.get(id);
 	}
 
+	/*
+	 * Interface to access statistical data of Questions
+	 */
+
+	/**
+	 *Get all high rated answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arraylist of all high rated answers
+	 */
+	public static ArrayList<Answer> getHighRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : questions) {
+			for (Answer a : q.answers) {
+				if (a.isHighRated()) {
+					answers.add(a);
+				}
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 *Get all best answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all best answers
+	 */
+	public static ArrayList<Answer> getBestRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : questions) {
+			if (q.bestAnswer != null) {
+				answers.add(q.bestAnswer);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 *Get all answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all answers
+	 */
+	public static ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : Question.questions) {
+			for (Answer a : q.answers) {
+				answers.add(a);
+			}
+		}
+		return answers;
+	}
 }

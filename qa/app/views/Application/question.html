@@ -39,7 +39,8 @@
 		<h1>Answers</h1>
 		<ul>
 			#{list items:answers, as:'answer'}
-			<li>
+			#{if answer.isBestAnswer()}<li class="bestAnswer">#{/if}
+			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
 				#{if user != null && !user.isCheating()}
@@ -64,7 +65,7 @@
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
-								<h2>#{showProfile comments /}:</h2>
+								<h2>#{showProfile comment /}:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
 								#{if user && comment.owner() == user}

@@ -17,6 +17,7 @@ public class Answer extends Entry {
 	private final Question question;
 	private IDTable<Comment> comments;
 	private final int id;
+	
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -57,9 +58,11 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		this.comments = new IDTable<Comment>();
-		for (Comment comment : this.comments)
+		for (Comment comment : this.comments){
 			comment.unregister();
+		}
+		this.comments = new IDTable<Comment>();
+
 		this.question.unregister(this);
 		this.unregisterVotes();
 		this.unregisterUser();
@@ -73,38 +76,45 @@ public class Answer extends Entry {
 	public Question question() {
 		return this.question;
 	}
-	
+
 	/**
 	 * Unregisters a deleted {@link Comment}.
-	 * @param comment the {@link Comment} to unregister
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
 		this.comments.remove(comment.id());
 	}
-	
+
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Answer</code>
-	 * @param comment the {@link Comment} to check
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
 	 */
 	public boolean hasComment(Comment comment) {
 		return this.comments.contains(comment);
 	}
-	
+
 	/**
 	 * Get all {@link Comment}s to a <code>Answer</code>
+	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
 		List<Comment> list = new ArrayList<Comment>(comments.values());
 		Collections.sort(list);
-		return list;
+		return Collections.unmodifiableList(list);
 	}
-	
+
 	/**
 	 * Get a specific {@link Comment} to a <code>Answer</code>
-	 * @param id of the <code>Comment</code>
+	 * 
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
@@ -114,12 +124,13 @@ public class Answer extends Entry {
 	public int id() {
 		return this.id;
 	}
-	
+
 	public boolean isBestAnswer() {
 		return this.question.getBestAnswer() == this;
 	}
 
 	/**
+
 	 * Compares this <code>Answer</code> with another one with respect to their
 	 * ratings and their Best-answer state.
 	 * 
@@ -135,4 +146,14 @@ public class Answer extends Entry {
 			return -1;
 		return 1;
 	}
+
+	/**
+	 * Checks whether the answer is high-rated or not
+	 * 
+	 * @return boolean whether the answer is high rated or not
+	 */
+	public boolean isHighRated() {
+		return (this.rating() >= 5);
+	}
+
 }

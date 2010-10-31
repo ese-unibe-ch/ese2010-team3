@@ -95,6 +95,10 @@ div.content ul {
 	margin: 0;
 }
 
+div.content li.bestAnswer {
+	background: #2b6026;
+}
+
 div.content li {
 	background: #333333;
 	list-style: none;
@@ -133,7 +137,6 @@ div.content form {
 	margin: 10px 0;
 	padding: 7px;
 	position: relative;
-
 }
 			
 div.content textarea {
@@ -186,6 +189,22 @@ show profile
 ************************/
 div.showprofile {
 	color: #ff8400;
+}
+td.right{
+	width:100%;
+	color: #ff8400;
+}
+td.left {
+	vertical-align: top;
+	color: #ff8400;
+}
+li.showprofile {
+	background: #333333;
+	width: 800px;
+	list-style: none;
+	margin: 5px;
+	padding: 7px;
+	position: relative;
 }
 /*********************** 
 edit profile

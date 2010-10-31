@@ -5,10 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -31,9 +33,17 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-	private Date timestamp;
 
-	public static final String DATE_FORMAT = "dd-MM-yy";
+	private Date timestamp;
+	
+	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
+	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
+	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
+	
+	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
+	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
+
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -55,6 +65,7 @@ public class User {
 	public String name() {
 		return this.name;
 	}
+
 
 	/**
 	 * Encrypt the password with SHA-1
@@ -90,6 +101,7 @@ public class User {
 	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+
 	}
 
 	/**
@@ -157,7 +169,7 @@ public class User {
 	 *         <code>User</code> in this Hour.
 	 */
 	public int howManyItemsPerHour() {
-		Date now = new Date();
+		Date now = SystemInformation.get().now();
 		int i = 0;
 		for (Item item : this.items) {
 			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
@@ -240,7 +252,7 @@ public class User {
 	 * @return age of the <code>User</code>
 	 */
 	private int age() {
-		Date now = new Date();
+		Date now = SystemInformation.get().now();
 		if (dateOfBirth != null) {
 			long age = now.getTime() - dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
@@ -254,10 +266,10 @@ public class User {
 	 */
 	private String dateToString(Date d) {
 		if (d != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
 			return fmt.format(d);
 		} else
-			return ("dd-mm-yy");
+			return null;
 	}
 
 	/**
@@ -267,8 +279,14 @@ public class User {
 	 * @throws ParseException
 	 */
 	private Date stringToDate(String s) throws ParseException {
-		if (s != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+		if (Pattern.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{1,2}/\\d{1,2}/\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_US);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{4}-\\d{1,2}-\\d{1,2}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_ISO);
 			return fmt.parse(s);
 		} else
 			return (null);
@@ -371,5 +389,107 @@ public class User {
 	 */
 	public static User get(String name) {
 		return users.get(name.toLowerCase());
+	}
+
+	public ArrayList<Question> getRecentQuestions() {
+		return this.recentQuestions;
+	}
+
+	public ArrayList<Answer> getRecentAnswers() {
+		return this.recentAnswers;
+	}
+
+	public ArrayList<Comment> getRecentComments() {
+		return this.recentComments;
+	}
+	
+	public void addRecentQuestions(Question question) {
+		if (recentQuestions.size() > 2) {
+			this.recentQuestions.remove(2);
+		}
+		this.recentQuestions.add(0, question);
+	}
+
+	public void addRecentAnswers(Answer answer) {
+		if (recentAnswers.size() > 2) {
+			this.recentAnswers.remove(2);
+		}
+		this.recentAnswers.add(0, answer);
+	}
+
+	public void addRecentComments(Comment comment) {
+		if (recentComments.size() > 2) {
+			this.recentComments.remove(2);
+		}
+		this.recentComments.add(0, comment);
+	}
+
+	/*
+	 * Interface to gather statistical data
+	 */
+
+	public static int getUserCount() {
+		return User.users.size();
+	}
+
+	/**
+	 * Get an ArrayList of all questions of this user
+	 * 
+	 * @return ArrayList<Question> All questions of this user
+	 */
+	public ArrayList<Question> getQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Item i : this.items) {
+			if (i instanceof Question) {
+				questions.add((Question) i);
+			}
+		}
+		return questions;
+	}
+
+	/**
+	 * Get an ArrayList of all answers of this user
+	 * 
+	 * @return ArrayList<Answer> All answers of this user
+	 */
+	public ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Item i : this.items) {
+			if (i instanceof Answer) {
+				answers.add((Answer) i);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all best rated answers
+	 * 
+	 * @return ArrayList<Answer> All best rated answers
+	 */
+	public ArrayList<Answer> bestAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isBestAnswer()) {
+				answers.add(a);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 * Get an ArrayList of all highRated answers
+	 * 
+	 * @return ArrayList<Answer> All high rated answers
+	 */
+	public ArrayList<Answer> highRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Answer a : this.getAnswers()) {
+			if (a.isHighRated()) {
+				answers.add(a);
+			}
+		}
+		return answers;
+
 	}
 }

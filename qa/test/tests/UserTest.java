@@ -62,7 +62,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
 		User user = new User("Jack", "jack");
-		user.setDateOfBirth("14-09-87");
+		user.setDateOfBirth("14.9.1987");
 		user.setBiography("I lived");
 		user.setEmail("test@test.tt");
 		user.setEmployer("TestInc");
@@ -78,6 +78,7 @@ public class UserTest extends UnitTest {
 		assertTrue(user.getProfession().equals("tester"));
 		assertTrue(user.getWebsite().equals("http://www.test.ch"));
 	}
+
 	
 	@Test
 	public void checkForSpammer() {
@@ -109,6 +110,89 @@ public class UserTest extends UnitTest {
 		assertTrue(user2.isCheating());
 		assertTrue(!user.isMaybeCheater());
 		assertTrue(!user.isCheating());
+	}
+
+
+
+	@Test
+	public void shouldHaveOneQuestion() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		assertEquals(1, user.getQuestions().size());
+		q.unregister();
+	}
+
+	@Test
+	public void shouldHaveNoQuestion() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.unregister();
+		assertEquals(0, user.getQuestions().size());
+	}
+
+	@Test
+	public void shouldHaveOneAnswer() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.answer(user, "Because");
+		assertEquals(1, user.getAnswers().size());
+	}
+
+	@Test
+	public void shouldHaveNoAnswer() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.answer(user, "Because");
+		q.answers().get(0).unregister();
+		assertEquals(0, user.getAnswers().size());
+	}
+
+	@Test
+	public void shouldHaveOneBestAnswer() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.answer(user, "Because");
+		q.setBestAnswer(q.answers().get(0));
+		assertEquals(1, user.bestAnswers().size());
+	}
+
+	@Test
+	public void shouldHaveNoBestAnswer() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.answer(user, "Because");
+		q.setBestAnswer(q.answers().get(0));
+		q.answers().get(0).unregister();
+		assertEquals(0, user.bestAnswers().size());
+	}
+
+	@Test
+	public void shouldHaveOneHighRatedAnswer() {
+		User user = new User("Jack", "jack");
+		Question q = new Question(user, "Why?");
+		q.answer(user, "Because");
+
+		User a = new User("a", "a");
+		User b = new User("b", "b");
+		User c = new User("c", "c");
+		User d = new User("d", "d");
+		User e = new User("e", "e");
+
+		q.answers().get(0).voteUp(a);
+		q.answers().get(0).voteUp(b);
+		q.answers().get(0).voteUp(c);
+		q.answers().get(0).voteUp(d);
+		q.answers().get(0).voteUp(e);
+
+		assertEquals(1, user.highRatedAnswers().size());
+
+		a.delete();
+		b.delete();
+		c.delete();
+		d.delete();
+		e.delete();
+
+		assertEquals(0, user.highRatedAnswers().size());
 	}
 
 }
