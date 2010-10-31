@@ -22,10 +22,9 @@ public class Question extends Entry {
 	private IDTable<Comment> comments;
 	private final int id;
 
-	private Answer     bestAnswer;
-	private Calendar   settingOfBestAnswer;
+	private Answer bestAnswer;
+	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
-
 
 	/**
 	 * Create a Question.
@@ -261,29 +260,58 @@ public class Question extends Entry {
 	public ArrayList<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
 	}
-	
-	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> questions2) {
+
+	/**
+	 * Sorts an ArrayList of <@link Question} by comparing the ratios of
+	 * matching tags and the overall number of tags per question. <br>
+	 * Calculation:<br>
+	 * 
+	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
+	 * SizeOfTagsArrayQuestionTwo)
+	 * 
+	 * @param q
+	 *            the ArrayList of questions to be sorted
+	 * @return ArrayList<Question> the sorted ArrayList
+	 */
+	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
+		ArrayList<Question> questions = q;
 		ArrayList<Question> sorted;
+		// To monitor the matches. Needs to be reset afterwards.
 		double matchCount = 0;
 		SortedMap<Double, Question> map = new TreeMap<Double, Question>();
-		for (Question q : questions2) {
-			for (Tag t: this.getTags()) {
-				if (q.getTags().contains(t)) {
+
+		for (Question qu : questions) {
+			// Check if the tag is there
+			for (Tag t : this.getTags()) {
+				if (qu.getTags().contains(t)) {
 					matchCount += 1;
 				}
 			}
-			double ratio = (matchCount / this.getTags().size()) * (matchCount / q.getTags().size());
-			map.put(ratio, q);
+			double questionOneRatio = (matchCount / (double) this.getTags()
+					.size());
+			double questionTwoRatio = (matchCount / (double) qu.getTags()
+					.size());
+			double ratio = questionOneRatio * questionTwoRatio;
+			map.put(ratio, qu);
+			// Reset counter
+			matchCount = 0;
 		}
 		sorted = new ArrayList<Question>(map.values());
 		return sorted;
 	}
-	
+
+	/**
+	 * Get all questions that containing at least one of the tags of the
+	 * original question.
+	 * 
+	 * @return ArrayList<Question> the ArrayList containing all questions that
+	 *         contain at least one of the first question.
+	 */
 	public ArrayList<Question> getSimilarQuestions() {
 		ArrayList<Question> questions = new ArrayList<Question>();
 		for (Tag t : this.getTags()) {
-			for (Question q : t.getQuestions()){
-				if(!questions.contains(q) && !q.equals(this)) {
+			for (Question q : t.getQuestions()) {
+				if (!questions.contains(q) && !q.equals(this)) {
 					questions.add(q);
 				}
 			}

@@ -114,6 +114,39 @@ public class TagTest extends UnitTest {
 		this.question1.setTagString(null);
 	}
 
+	@Test
+	public void shouldListCorrectOrderOfSimilarQuestions() {
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		Question questionA = new Question(A, "A?");
+		Question questionB = new Question(B, "B?");
+		Question questionC = new Question(C, "C?");
+		Question questionD = new Question(D, "D?");
+		
+		
+		questionA.setTagString("A B C D");
+		questionB.setTagString("A B C D");
+		questionC.setTagString("A B C D L");
+		questionD.setTagString("A B C D L O");
+		
+		for(Question q: questionA.getSimilarQuestions()) {
+			
+			System.out.println(q.content());
+		}
+		
+		for(Tag t : questionB.getTags()) {
+			System.out.println(t.getName());
+		}
+		assertEquals(questionB, questionA.getSimilarQuestions().get(2));
+		assertEquals(questionC, questionA.getSimilarQuestions().get(1));
+		assertEquals(questionD, questionA.getSimilarQuestions().get(0));
+
+		
+		
+	}
+	
 	private static int countTags(String name) {
 		int count = 0;
 		for (Tag tag : Tag.tags())
