@@ -124,29 +124,21 @@ public class TagTest extends UnitTest {
 		Question questionB = new Question(B, "B?");
 		Question questionC = new Question(C, "C?");
 		Question questionD = new Question(D, "D?");
-		
-		
+		Question questionE = new Question(D, "E?");
+
 		questionA.setTagString("A B C D");
 		questionB.setTagString("A B C D");
 		questionC.setTagString("A B C D L");
 		questionD.setTagString("A B C D L O");
-		
-		for(Question q: questionA.getSimilarQuestions()) {
-			
-			System.out.println(q.content());
-		}
-		
-		for(Tag t : questionB.getTags()) {
-			System.out.println(t.getName());
-		}
-		assertEquals(questionB, questionA.getSimilarQuestions().get(2));
-		assertEquals(questionC, questionA.getSimilarQuestions().get(1));
-		assertEquals(questionD, questionA.getSimilarQuestions().get(0));
+		questionE.setTagString("A");
 
-		
-		
+		assertEquals(questionB, questionA.getSimilarQuestions().get(3));
+		assertEquals(questionC, questionA.getSimilarQuestions().get(2));
+		assertEquals(questionD, questionA.getSimilarQuestions().get(1));
+		assertEquals(questionE, questionA.getSimilarQuestions().get(0));
+
 	}
-	
+
 	private static int countTags(String name) {
 		int count = 0;
 		for (Tag tag : Tag.tags())
