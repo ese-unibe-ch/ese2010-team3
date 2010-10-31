@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -258,6 +260,36 @@ public class Question extends Entry {
 
 	public ArrayList<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
+	}
+	
+	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> questions2) {
+		ArrayList<Question> sorted;
+		double matchCount = 0;
+		SortedMap<Double, Question> map = new TreeMap<Double, Question>();
+		for (Question q : questions2) {
+			for (Tag t: this.getTags()) {
+				if (q.getTags().contains(t)) {
+					matchCount += 1;
+				}
+			}
+			double ratio = (matchCount / this.getTags().size()) * (matchCount / q.getTags().size());
+			map.put(ratio, q);
+		}
+		sorted = new ArrayList<Question>(map.values());
+		return sorted;
+	}
+	
+	public ArrayList<Question> getSimilarQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Tag t : this.getTags()) {
+			for (Question q : t.getQuestions()){
+				if(!questions.contains(q) && !q.equals(this)) {
+					questions.add(q);
+				}
+			}
+		}
+		questions = this.sortQuestionsByMatchRatio(questions);
+		return questions;
 	}
 
 	/*
