@@ -275,7 +275,7 @@ public class Question extends Entry {
 	 */
 	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
 		ArrayList<Question> questions = q;
-		ArrayList<Question> sorted;
+		ArrayList<Question> sorted = new ArrayList<Question>();
 		// To monitor the matches. Needs to be reset afterwards.
 		double matchCount = 0;
 		SortedMap<Double, Question> map = new TreeMap<Double, Question>();
@@ -296,7 +296,11 @@ public class Question extends Entry {
 			// Reset counter
 			matchCount = 0;
 		}
-		sorted = new ArrayList<Question>(map.values());
+		ArrayList<Question> tempList = new ArrayList<Question>(map.values());
+		for (int t = tempList.size() - 1; t >= 0; t--) {
+			sorted.add(tempList.get(t));
+		}
+
 		return sorted;
 	}
 

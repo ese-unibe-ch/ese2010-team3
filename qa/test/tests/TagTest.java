@@ -132,10 +132,10 @@ public class TagTest extends UnitTest {
 		questionD.setTagString("A B C D L O");
 		questionE.setTagString("A");
 
-		assertEquals(questionB, questionA.getSimilarQuestions().get(3));
-		assertEquals(questionC, questionA.getSimilarQuestions().get(2));
-		assertEquals(questionD, questionA.getSimilarQuestions().get(1));
-		assertEquals(questionE, questionA.getSimilarQuestions().get(0));
+		assertEquals(questionB, questionA.getSimilarQuestions().get(0));
+		assertEquals(questionC, questionA.getSimilarQuestions().get(1));
+		assertEquals(questionD, questionA.getSimilarQuestions().get(2));
+		assertEquals(questionE, questionA.getSimilarQuestions().get(3));
 
 	}
 
