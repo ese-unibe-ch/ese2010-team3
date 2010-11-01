@@ -14,10 +14,9 @@ public abstract class Item {
 	private Date timestamp;
 
 	/**
-	 * Create an <code>Item</code>
+	 * Create an <code>Item</code>.
 	 * 
-	 * @param owner
-	 *            the {@link User} who ownes the <code>Item</code>
+	 * @param owner the {@link User} who owns the <code>Item</code>
 	 */
 	public Item(User owner) {
 		this.owner = owner;
@@ -26,7 +25,7 @@ public abstract class Item {
 	}
 
 	/**
-	 * Get the owner of an <code>Item</code>
+	 * Get the owner of an <code>Item</code>.
 	 * 
 	 * @return the owner
 	 */

@@ -3,7 +3,7 @@ package models;
 import java.util.Comparator;
 
 /**
- * Compares two <code>Entrys</code> by their rating.
+ * Compares two <code>Entries</code> by their rating.
  */
 public class EntryComperator implements Comparator {
 

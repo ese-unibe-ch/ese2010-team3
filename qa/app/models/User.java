@@ -65,7 +65,7 @@ public class User {
 
 
 	/**
-	 * Encrypt the password with MD5
+	 * Encrypt the password with MD5.
 	 * 
 	 * @param password
 	 * @return the encrypted password
@@ -145,7 +145,7 @@ public class User {
 
 	/**
 	 * The amount of Comments, Answers and Questions the <code>User</code> has
-	 * posted in the last 60 Minutes
+	 * posted in the last 60 Minutes.
 	 * 
 	 * @return The amount of Comments, Answers and Questions for this
 	 *         <code>User</code> in this Hour.
@@ -163,7 +163,7 @@ public class User {
 
 	/**
 	 * The <code>User</code> is a Cheater if over 50% of his votes is for the
-	 * same <code>User</code>
+	 * same <code>User</code>.
 	 * 
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
@@ -227,7 +227,7 @@ public class User {
 	}
 
 	/**
-	 * Calculates the age of the <code>User</code> in years
+	 * Calculates the age of the <code>User</code> in years.
 	 * 
 	 * @return age of the <code>User</code>
 	 */
@@ -254,7 +254,7 @@ public class User {
 
 	/**
 	 * Turns the String object s into a Date assuming the format given in the
-	 * constant DATE_FORMAT
+	 * constant DATE_FORMAT.
 	 * 
 	 * @throws ParseException
 	 */
@@ -379,9 +379,9 @@ public class User {
 	}
 
 	/**
-	 * Get a List of the last three questions of this user
+	 * Get a List of the last three <code>Question</code>s of this <code>User</code>.
 	 * 
-	 * @return List<Question> The last three questions of this user
+	 * @return List<Question> The last three <code>Question</code>s of this <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
 		List<Question> recentQuestions = this.getQuestions();
@@ -396,9 +396,9 @@ public class User {
 	}
 
 	/**
-	 * Get a List of the last three answers of this user
+	 * Get a List of the last three <code>Answer</code>s of this <code>User</code>.
 	 * 
-	 * @return List<Answer> The last three answers of this user
+	 * @return List<Answer> The last three <code>Answer</code>s of this <code>User</code>
 	 */
 	public List<Answer> getRecentAnswers() {
 		List<Answer> recentAnswers = this.getAnswers();
@@ -413,9 +413,9 @@ public class User {
 	}
 	
 	/**
-	 * Get a List of the last three comments of this user
+	 * Get a List of the last three <code>Comment</code>s of this <code>User</code>.
 	 * 
-	 * @return List<Comment> The last three comments of this user
+	 * @return List<Comment> The last three <code>Comment</code>s of this <code>User</code>
 	 */
 	public List<Comment> getRecentComments() {
 		List<Comment> recentComments = this.getComments();
@@ -438,9 +438,9 @@ public class User {
 	}
 
 	/**
-	 * Get an ArrayList of all questions of this user
+	 * Get an ArrayList of all <code>Questions</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Question> All questions of this user
+	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public ArrayList<Question> getQuestions() {
 		ArrayList<Question> questions = new ArrayList<Question>();
@@ -453,9 +453,9 @@ public class User {
 	}
 
 	/**
-	 * Get an ArrayList of all answers of this user
+	 * Get an ArrayList of all <code>Answer</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Answer> All answers of this user
+	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
 	 */
 	public ArrayList<Answer> getAnswers() {
 		ArrayList<Answer> answers = new ArrayList<Answer>();
@@ -468,9 +468,9 @@ public class User {
 	}
 	
 	/**
-	 * Get an ArrayList of all comments of this user
+	 * Get an ArrayList of all <code>Comment</code>s of this <code>User</code>
 	 * 
-	 * @return ArrayList<Comment> All comments of this user
+	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
 	 */
 	public ArrayList<Comment> getComments() {
 		ArrayList<Comment> comments = new ArrayList<Comment>();
@@ -483,9 +483,9 @@ public class User {
 	}
 
 	/**
-	 * Get an ArrayList of all best rated answers
+	 * Get an ArrayList of all best rated <code>Answer</code>s
 	 * 
-	 * @return ArrayList<Answer> All best rated answers
+	 * @return ArrayList<Answer> All best rated <code>Answer</code>s
 	 */
 	public ArrayList<Answer> bestAnswers() {
 		ArrayList<Answer> answers = new ArrayList<Answer>();
@@ -498,9 +498,9 @@ public class User {
 	}
 
 	/**
-	 * Get an ArrayList of all highRated answers
+	 * Get an ArrayList of all highRated <code>Answer</code>s
 	 * 
-	 * @return ArrayList<Answer> All high rated answers
+	 * @return ArrayList<Answer> All high rated <code>Answer</code>s
 	 */
 	public ArrayList<Answer> highRatedAnswers() {
 		ArrayList<Answer> answers = new ArrayList<Answer>();

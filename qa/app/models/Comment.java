@@ -38,7 +38,7 @@ public class Comment extends Entry {
 	/**
 	 * Id.
 	 * 
-	 * @return the int
+	 * @return the id of the <code>Comment</code>
 	 */
 	public int id() {
 		return this.id;
@@ -57,6 +57,11 @@ public class Comment extends Entry {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Checks whether a <code>User</code> is registered in the Database.
+	 * 
+	 * @return boolean whether a User is registered or not
+	 */
 	public boolean isRegistered() {
 		return this.entry != null;
 	}

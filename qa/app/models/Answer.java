@@ -22,7 +22,7 @@ public class Answer extends Entry {
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
 	 * 
-	 * @param ic
+	 * @param id
 	 * @param owner the {@link User} who posted the <code>Answer</code>
 	 * @param question the {@link Question} this <code>Answer</code> belongs to
 	 * @param content the answer
@@ -35,7 +35,7 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Post a {@link Comment} to a <code>Answer</code>
+	 * Post a {@link Comment} to a <code>Answer</code>.
 	 * 
 	 * @param user the {@link User} posting the {@link Comment}
 	 * @param content the comment
@@ -83,7 +83,7 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Checks if a {@link Comment} belongs to a <code>Answer</code>
+	 * Checks if a {@link Comment} belongs to an <code>Answer</code>.
 	 * 
 	 * @param comment the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
@@ -93,7 +93,7 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Get all {@link Comment}s to a <code>Answer</code>
+	 * Get all {@link Comment}s to an <code>Answer</code>.
 	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
@@ -104,7 +104,7 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Get a specific {@link Comment} to a <code>Answer</code>
+	 * Get a specific {@link Comment} to an <code>Answer</code>.
 	 * 
 	 * @param id of the <code>Comment</code>
 	 * @return {@link Comment} or null
@@ -113,10 +113,20 @@ public class Answer extends Entry {
 		return this.comments.get(id);
 	}
 
+	/**
+	 * Id.
+	 * 
+	 * @return the id of the <code>Comment</code>
+	 */
 	public int id() {
 		return this.id;
 	}
 
+	/**
+	 * Get the best <code>Answer</code> to a <code>Question</code>
+	 * 
+	 * @return the best answer of a <code>Question</code>
+	 */
 	public boolean isBestAnswer() {
 		return this.question.getBestAnswer() == this;
 	}
@@ -140,7 +150,7 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Checks whether the answer is high-rated or not
+	 * Checks whether the answer is high-rated or not.
 	 * 
 	 * @return boolean whether the answer is high rated or not
 	 */
