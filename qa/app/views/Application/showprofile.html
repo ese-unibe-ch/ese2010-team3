@@ -6,7 +6,7 @@
 	<div class="profilenavi">
 		<a href="@{Application.deleteuser}">Delete </a>
 		<a href="@{Application.editProfile(showUser.name())}">Edit</a>
-	</div><!-- end profilenavie -->
+	</div><!-- end profilenavi -->
 	#{/if}
 	<div>
 		<table>
@@ -91,5 +91,5 @@
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>No such showUser ${name}</h1>
+	<h1>No such User</h1>
 #{/else}
