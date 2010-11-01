@@ -20,7 +20,7 @@
 	#{else}
 		<li>No notifications available at all - go watch some questions!
 	#{/else}
-	#{if user.getNewNotifications().size() > 0)}
+	#{if user.getNewNotifications().size() > 0}
 		<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
 	#{/if}
 	</ul>
