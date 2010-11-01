@@ -284,31 +284,33 @@ public class Question extends Entry {
 		int matchCount;
 		Map<Question, Double> map = new HashMap<Question, Double>();
 		for (Question qu : questions) {
-			List<Tag> tags = this.getTags();
-			tags.retainAll(qu.getTags());
-			matchCount = tags.size();
-			double questionOneRatio = ((double) matchCount / (double) this
-					.getTags().size());
-			double questionTwoRatio = ((double) matchCount / (double) qu
-					.getTags().size());
-			double ratio = questionOneRatio * questionTwoRatio;
-			map.put(qu, ratio);
+			if (this.getTags().size() != 0 && qu.getTags().size() != 0) {
+				List<Tag> tags = this.getTags();
+				tags.retainAll(qu.getTags());
+				matchCount = tags.size();
+				double questionOneRatio = ((double) matchCount / (double) this
+						.getTags().size());
+				double questionTwoRatio = ((double) matchCount / (double) qu
+						.getTags().size());
+				double ratio = questionOneRatio * questionTwoRatio;
+				map.put(qu, ratio);
+			}
 		}
-
 		sorted = new ArrayList<Question>(this.sortMapByValue(map));
 		Collections.reverse(sorted);
+
 		return sorted;
 	}
 
 	/**
 	 * Sorts a map by comparing the values and returns a set of the
-	 * corresponding keys
+	 * corresponding keys <br>
 	 * 
 	 * @param map
 	 *            the map to be sorted
 	 * @return Set the set of the keys
 	 */
-	private Set sortMapByValue(Map map) {
+	public static Set sortMapByValue(Map map) {
 		List list = new LinkedList(map.entrySet());
 		Collections.sort(list, new Comparator() {
 			public int compare(Object o1, Object o2) {
@@ -323,6 +325,10 @@ public class Question extends Entry {
 		}
 		return result.keySet();
 	}
+
+	// From <a
+	// href=http://www.programmersheaven.com/download/49349/download.aspx
+	// 01.11.2010
 
 	/**
 	 * Get all questions that containing at least one of the tags of the
