@@ -1,10 +1,12 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.Answer;
 import models.Comment;
+import models.Notification;
 import models.Question;
 import models.Tag;
 import models.TimeTracker;
@@ -116,6 +118,15 @@ public class Application extends Controller {
 		if (tagString.length() == 0)
 			tags = new String[0];
 		renderJSON(tags);
+	}
+
+	public static void notifications() {
+		User user = Session.get().currentUser();
+		if (user != null) {
+			ArrayList<Notification> notifications = user.getNotifications();
+			render(notifications);
+		} else
+			Application.index();
 	}
 
 	public static void showStatisticalOverview() {

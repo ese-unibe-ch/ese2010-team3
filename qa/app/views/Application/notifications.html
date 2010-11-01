@@ -1,0 +1,27 @@
+#{extends 'main.html' /}
+
+#{set title:'ajopi - Notifications for ' + user.name() /}
+<div>
+	<h2>Notification Inbox</h2>
+	<ul>
+	#{list items:notifications, as:'notification'}
+		<li>
+		<div>
+			#{if notification.isNew()}*new*#{/if}
+			#{showProfile notification.getAbout() /} answered to
+			${notification.getAbout().question().summary()}:
+		</div>
+		<div>
+			<a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content()}</a>
+			#{date notification.getAbout() /}
+			<span style="float: right;"><a href="@{Secured.deleteNotification(notification.getID())}">delete</a></span>
+		</div>
+	#{/list}
+	#{else}
+		<li>No notifications available at all - go watch some questions!
+	#{/else}
+	#{if user.getNewNotifications().size() > 0}
+		<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
+	#{/if}
+	</ul>
+</div>

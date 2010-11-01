@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Mirco Kocher
  * 
  */
-public class Question extends Entry {
+public class Question extends Entry implements IObservable {
 
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
@@ -23,6 +24,8 @@ public class Question extends Entry {
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
+	
+	protected HashSet<IObserver> observers;
 
 
 	/**
@@ -41,6 +44,7 @@ public class Question extends Entry {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
+		this.observers = new HashSet<IObserver>();
 		this.id = database != null ? database.add(this) : -1;
 	}
 
@@ -58,6 +62,7 @@ public class Question extends Entry {
 			answer.unregister();
 		for (Comment comment : comments)
 			comment.unregister();
+		this.observers.clear();
 		if (this.id != -1)
 			questions.remove(this.id);
 		this.unregisterVotes();
@@ -258,6 +263,37 @@ public class Question extends Entry {
 
 	public ArrayList<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
+	}
+
+	/**
+	 * @see models.IObservable#addObserver(models.IObserver)
+	 */
+	public void addObserver(IObserver o) {
+		if (o == null)
+			throw new IllegalArgumentException();
+		this.observers.add(o);
+	}
+
+	/**
+	 * @see models.IObservable#hasObserver(models.IObserver)
+	 */
+	public boolean hasObserver(IObserver o) {
+		return this.observers.contains(o);
+	}
+
+	/**
+	 * @see models.IObservable#removeObserver(models.IObserver)
+	 */
+	public void removeObserver(IObserver o) {
+		this.observers.remove(o);
+	}
+
+	/**
+	 * @see models.IObservable#notifyObservers(java.lang.Object)
+	 */
+	public void notifyObservers(Object arg) {
+		for (IObserver o : this.observers)
+			o.observe(this, arg);
 	}
 
 	/*

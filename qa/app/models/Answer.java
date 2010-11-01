@@ -35,6 +35,9 @@ public class Answer extends Entry {
 		this.question = question;
 		this.comments = new IDTable<Comment>();
 		this.id = id;
+
+		// make users aware of this new answer
+		question.notifyObservers(this);
 	}
 
 	/**
@@ -74,6 +77,10 @@ public class Answer extends Entry {
 	 * @return the {@link Question} this <code>Answer</code> belongs to
 	 */
 	public Question question() {
+		// if this answer has been removed from its question, no longer
+		// claim to belong to a question
+		if (!this.question.hasAnswer(this))
+			return null;
 		return this.question;
 	}
 

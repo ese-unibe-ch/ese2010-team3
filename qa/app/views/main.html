@@ -11,22 +11,32 @@
         <script src="@{'/public/javascripts/qa.js'}" type="text/javascript" charset="utf-8"></script>
         #{get 'moreScripts' /}
     </head>
-    <body>
-    #{if user && user.isCheating()}
-		<p class="cheaterWarning">
-		You are either spamming this cool Site or voting somebody up! STOP IT!!!
-		</p>
-    #{/if}
+    <body
+	#{if user && user.isCheating()}
+		class="cheaterWarning"
+	#{/if}
+    >
     	<div class="main">
     		<div class="header">
     			<a href="@{Application.index}"></a>
     		</div><!-- end header -->
+			#{if user && user.isCheating()}
+				<div class="cheaterWarning">You are either spamming this cool Site or voting somebody up! STOP IT!!!</div>
+			#{/if}
+	   		#{elseif user && user.getVeryRecentNewNotification() != null}
+    			<div class="notificationInfo">
+	    			New answer to one of your questions:
+	    			<a href="@{Secured.followNotification(user.getVeryRecentNewNotification().getID())}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
+    			</div>
+    		#{/elseif}
     		<div class="navigation">
 			<a href="@{Application.index}">Questions</a>
 			<span>
 				#{if user}
 						Hi ${user.name()}!
+						<a href="@{Application.notifications}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
 						<a href="@{Application.showprofile(user.name())}">Profile</a>
+						<a href="@{Application.deleteuser}">Delete</a>
 						<a href="@{Secure.logout}">Logout</a>
 					#{/if}
 					#{else}

@@ -1,9 +1,13 @@
+/*********************** 
+basic page style
+************************/
 body {
 	background: #00272b;
 	font-family: Helvetica, Veranda, Arial, sans-serif;
 }
-/*---------------------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------------------*/
+body.cheaterWarning {
+	background: #b92130;
+}
 /*********************** 
 headings
 ************************/
@@ -150,7 +154,6 @@ div.footer {
 	font-size: 0.7em;
 	color: #333333;
 	padding: 3px;
-	background: #00272b;
 }
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
@@ -214,12 +217,24 @@ div.profilenavi {
 /*********************** 
 Cheater Warning
 ************************/
-p.cheaterWarning {
-	color: #ffffff;
+div.cheaterWarning {
+	padding: 5px;
+	margin-bottom: 5px;
 	font-size: 1.4em;
+	color: #FFFFFF;
 	font-weight: bold;
 	text-align: center;
-	border-bottom: 15px solid #f00;
+	background: #f00;
+}
+/*********************** 
+Notification Info
+************************/
+div.notificationInfo {
+	padding: 5px;
+	margin-bottom: 5px;
+	background: #2b6026;
+	color: #222222;
+	font-weight:bold;
 }
 
 /*********************** 
