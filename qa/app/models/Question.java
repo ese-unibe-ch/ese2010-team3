@@ -24,7 +24,6 @@ public class Question extends Entry {
 	private Calendar   settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
 
-
 	/**
 	 * Create a Question.
 	 * 
@@ -341,5 +340,38 @@ public class Question extends Entry {
 			}
 		}
 		return answers;
+	}
+
+	/**
+	 * Takes a String of words with at least 4 characters and counts the
+	 * occurrence. If the word occurs more than 3 times or has more than 7
+	 * characters they are treated as important words.
+	 * 
+	 * @param input
+	 *            with all the words that contain more than 3 characters
+	 * @return output with words that occur more than 3 times
+	 */
+	public final static String importantWords(String input) {
+		String output = " ";
+		input = input.trim();
+		while (input.contains(" ")) {
+			int space = input.indexOf(" ");
+			String word = input.substring(0, space);
+			word = word.trim();
+			if (word.length() != 0) {
+				int occurrence = (input.length() - (input.replaceAll(
+						" " + word, "")).length())
+						/ word.length() + 1;
+				if (occurrence > 3) {
+					output += " " + word;
+				} else if (word.length() > 7) {
+					output += " " + word;
+				}
+				input = input.replaceAll(word + " ", "");
+			}
+			if (input.length() < 4)
+				break;
+		}
+		return output;
 	}
 }

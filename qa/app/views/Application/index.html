@@ -19,7 +19,7 @@
 	<h1>Ask Question</h1>
 	#{form @Secured.newQuestion()}
 		#{field 'content'}
-        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+        		<textarea name="${field.name}" id="newQuestion" class="${field.errorClass}"></textarea>
 		#{/field}
 		#{field 'tags'}
 			<p>
