@@ -28,7 +28,6 @@ GET		/register								Application.register
 POST	/register								Application.signup
 
 GET		/user/{userName}/showprofile/		Application.showprofile
-GET		/user/{userName}/editprofile/		Application.editProfile
 POST	/user/savedProfile						Secured.saveProfile
 
 

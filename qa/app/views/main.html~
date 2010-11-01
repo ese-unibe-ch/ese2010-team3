@@ -26,7 +26,7 @@
 			<span>
 				#{if user}
 						Hi ${user.name()}!
-						<a href="@{Application.showprofile(user.name())}">Profile</a>
+						<a href="@{Application.showprofile}">Profile</a>
 						<a href="@{Secure.logout}">Logout</a>
 					#{/if}
 					#{else}

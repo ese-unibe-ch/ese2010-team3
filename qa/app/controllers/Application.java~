@@ -89,19 +89,11 @@ public class Application extends Controller {
 			register();
 		}
 	}
-	public static void showprofile(String userName) {
+	public static void showprofile(String userName, Boolean isLoggedin) {
 		User showUser = User.get(userName);
-		boolean canEdit = true;
-		if(session.get("username") != null && session.get("username").equals(userName)) {
-			render(showUser, canEdit);
-		}
-		else {
-			canEdit = false;
-			render(showUser, canEdit);
-		}
+		render(showUser, isLoggedin);
 	}
-	
-		public static void editProfile(String userName) {
+	public static void editProfile(String userName) {
 		User user = User.get(userName);
 		render(user);
 	}

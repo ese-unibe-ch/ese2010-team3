@@ -2,12 +2,10 @@
 
 #{set title:'ajopi - Profile' /}
 #{if showUser}
-	#{if canEdit}
 	<div class="profilenavi">
 		<a href="@{Application.deleteuser}">Delete </a>
-		<a href="@{Application.editProfile(showUser.name())}">Edit</a>
+		<a href="@{Application.editProfile(user.name())}">Edit</a>
 	</div><!-- end profilenavie -->
-	#{/if}
 	<div>
 		<table>
 			<tr>
@@ -91,5 +89,5 @@
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>No such showUser ${name}</h1>
+	<h1>No such user ${name}</h1>
 #{/else}

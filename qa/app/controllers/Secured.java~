@@ -160,7 +160,6 @@ public class Secured extends Controller {
 		redirect(referer.value());
 		return true;
 	}
-	
 
 	public static void saveProfile(String name, String email, String fullname,
 			String birthday, String website, String profession,
@@ -181,7 +180,7 @@ public class Secured extends Controller {
 			user.setEmployer(employer);
 		if (biography != null)
 			user.setBiography(biography);
-		Application.showprofile(user.name());
+		Application.showprofile(user.name(),true);
 	}
 
 	public static void updateTags(int id, String tags) {
