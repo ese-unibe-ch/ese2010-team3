@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class StopWords extends HashSet<String>{
+public class StopWords {
 	private static HashSet<String> instance;
 	private static String[] starters = { "a", "about", "above", "above",
 			"across", "after", "afterwards", "again", "against", "all",
@@ -53,17 +53,13 @@ public class StopWords extends HashSet<String>{
 			"whom", "whose", "why", "will", "with", "within", "without",
 			"would", "yet", "you", "your", "yours", "yourself", "yourselves",
 			"the" };
-
-	private StopWords() {
-		instance = new HashSet<String>();
-		for (String word : starters) {
-			instance.add(word);
-		}
-	}
 	
 	public static HashSet<String> get() {
 		if (instance == null) {
-			instance = new StopWords();
+			instance = new HashSet<String>();
+			for (String word : starters) {
+				instance.add(word);
+			}
 		}
 		return instance;
 	}

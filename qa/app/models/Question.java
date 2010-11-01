@@ -10,7 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import models.SearchEngine.SearchResult;
+import models.database.Database;
+import models.database.HotDatabase.HotQuestionDatabase;
 import models.helpers.Pair;
 import models.helpers.Visitor;
 
@@ -31,20 +32,6 @@ public class Question extends Entry {
 	private Calendar   settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
 	
-	private static final Comparator byRating = new Comparator() {
-		public int compare(Object arg0, Object arg1) {
-			Pair<Integer,Question> 	x = (Pair<Integer, Question>) arg0, 
-									y = (Pair<Integer, Question>) arg1;
-			return x.left.compareTo(y.left);
-		}
-	};
-	private static final Visitor onlyQuestion = new Visitor<Question,Pair<Integer,Question>>() {
-
-		@Override
-		protected Question visit(Pair<Integer, Question> i) {
-			return i.right;
-		}
-	};
 
 	/**
 	 * Create a Question.
@@ -55,14 +42,10 @@ public class Question extends Entry {
 	 *            the question
 	 */
 	public Question(User owner, String content) {
-		this(owner, content, null);
-	}
-
-	public Question(User owner, String content, IDTable<Question> database) {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
-		this.id = database != null ? database.add(this) : -1;
+		this.id = Database.get().questions().register(this);
 	}
 
 	/**
@@ -80,7 +63,7 @@ public class Question extends Entry {
 		for (Comment comment : comments)
 			comment.unregister();
 		if (this.id != -1)
-			questions.remove(this.id);
+			Database.get().questions().remove(this.id);
 		this.unregisterVotes();
 		this.unregisterUser();
 		this.setTagString("");
@@ -266,45 +249,5 @@ public class Question extends Entry {
 
 	public ArrayList<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
-	}
-
-	/*
-	 * Static interface to access questions from controller (not part of unit
-	 * testing)
-	 */
-
-	private static IDTable<Question> questions = new IDTable();
-
-	public static Question register(User owner, String content) {
-		return new Question(owner, content, questions);
-	}
-
-	/**
-	 * Get a <@link Collection} of all <code>Questions</code>.
-	 * 
-	 * @return all <code>Questions</code>
-	 */
-	public static List<Question> questions() {
-		List<Question> list = new ArrayList<Question>(questions.values());
-		Collections.sort(list);
-		return list;
-	}
-
-	/**
-	 * Get the <code>Question</code> with the given id.
-	 * 
-	 * @param id
-	 * @return a <code>Question</code> or null if the given id doesn't exist.
-	 */
-	public static Question get(int id) {
-		return questions.get(id);
-	}
-	
-
-	public static List<Question> searchFor(String term) {
-		SearchResult search = new SearchResult(term);
-		List<Pair<Integer,Question>> results = search.over(questions);
-		Collections.sort(results, byRating);
-		return onlyQuestion.over(results);
 	}
 }

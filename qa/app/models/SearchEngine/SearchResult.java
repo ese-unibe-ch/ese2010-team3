@@ -18,7 +18,7 @@ import static models.helpers.SetOperations.*;
 public class SearchResult extends Visitor<Pair<Integer,Question>,Question> {
 	private final Set<String> queryWords;
 	public SearchResult(String query) {
-		queryWords = getWords(query);
+		queryWords = filterWords(getWords(query));
 		
 	}
 	

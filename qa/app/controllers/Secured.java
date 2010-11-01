@@ -5,6 +5,7 @@ import models.Answer;
 import models.Comment;
 import models.Question;
 import models.User;
+import models.database.Database;
 import play.data.validation.Required;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -14,7 +15,7 @@ import play.mvc.With;
 public class Secured extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
-			Question question = Question.register(Session.get().currentUser(), content);
+			Question question = Database.get().questions().add(Session.get().currentUser(), content);
 			question.setTagString(tags);
 			Application.question(question.id());
 		} else {
@@ -23,8 +24,9 @@ public class Secured extends Controller {
 	}
 
 	public static void newAnswer(int questionId, @Required String content) {
-		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
+		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
+			Answer answer = Database.get().questions().get(questionId)
+								.answer(Session.get().currentUser(), content);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -33,15 +35,15 @@ public class Secured extends Controller {
 
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
-		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
+		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
+			Comment comment = Database.get().questions().get(questionId).comment(Session.get().currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
 
 	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
 		if (!validation.hasErrors() && answer != null) {
@@ -51,8 +53,8 @@ public class Secured extends Controller {
 	}
 
 	public static void voteQuestionUp(int id) {
-		if (Question.get(id) != null) {
-			Question.get(id).voteUp(Session.get().currentUser());
+		if (Database.get().questions().get(id) != null) {
+			Database.get().questions().get(id).voteUp(Session.get().currentUser());
 			if (!redirectToCallingPage())
 				Application.question(id);
 		} else {
@@ -61,8 +63,8 @@ public class Secured extends Controller {
 	}
 
 	public static void voteQuestionDown(int id) {
-		if (Question.get(id) != null) {
-			Question.get(id).voteDown(Session.get().currentUser());
+		if (Database.get().questions().get(id) != null) {
+			Database.get().questions().get(id).voteDown(Session.get().currentUser());
 			if (!redirectToCallingPage())
 				Application.question(id);
 		} else {
@@ -71,9 +73,9 @@ public class Secured extends Controller {
 	}
 
 	public static void voteAnswerUp(int question, int id) {
-		if (Question.get(question) != null
-				&& Question.get(question).getAnswer(id) != null) {
-			Question.get(question).getAnswer(id).voteUp(Session.get().currentUser());
+		if (Database.get().questions().get(question) != null
+				&& Database.get().questions().get(question).getAnswer(id) != null) {
+			Database.get().questions().get(question).getAnswer(id).voteUp(Session.get().currentUser());
 			Application.question(question);
 		} else {
 			Application.index();
@@ -81,9 +83,9 @@ public class Secured extends Controller {
 	}
 
 	public static void voteAnswerDown(int question, int id) {
-		if (Question.get(question) != null
-				&& Question.get(question).getAnswer(id) != null) {
-			Question.get(question).getAnswer(id).voteDown(Session.get().currentUser());
+		if (Database.get().questions().get(question) != null
+				&& Database.get().questions().get(question).getAnswer(id) != null) {
+			Database.get().questions().get(question).getAnswer(id).voteDown(Session.get().currentUser());
 			Application.question(question);
 		} else {
 			Application.index();
@@ -91,20 +93,20 @@ public class Secured extends Controller {
 	}
 
 	public static void deleteQuestion(int questionId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		question.unregister();
 		Application.index();
 	}
 
 	public static void deleteAnswer(int answerId, int questionId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
 		Application.question(questionId);
 	}
 
 	public static void deleteCommentQuestion(int commentId, int questionId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
 		Application.commentQuestion(questionId);
@@ -112,7 +114,7 @@ public class Secured extends Controller {
 
 	public static void deleteCommentAnswer(int commentId, int questionId,
 			int answerId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
@@ -120,7 +122,7 @@ public class Secured extends Controller {
 	}
 
 	public static void deleteUser(String name) throws Throwable {
-		User user = User.get(name);
+		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
 			boolean deleteSelf = name.equals(Session.get().currentUser().name());
 			user.delete();
@@ -131,14 +133,14 @@ public class Secured extends Controller {
 	}
 
 	public static void anonymizeUser(String name) throws Throwable {
-		User user = User.get(name);
+		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user))
 			user.anonymize(true, false);
 		deleteUser(name);
 	}
 
 	public static void selectBestAnswer(int questionId, int answerId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
 		Application.question(questionId);
@@ -179,7 +181,7 @@ public class Secured extends Controller {
 	}
 
 	public static void updateTags(int id, String tags) {
-		Question question = Question.get(id);
+		Question question = Database.get().questions().get(id);
 		User user = Session.get().currentUser();
 		if (question != null && user == question.owner())
 			question.setTagString(tags);

@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import models.Question;
 import models.User;
+import models.database.Database;
+import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,32 +33,32 @@ public class SearchTest extends UnitTest {
 
 	@Test
 	public void shouldFindFulltext() {
-		assertTrue(Question.searchFor("relevant").contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("relevant").contains(fulltextPositive));
 	}
 	
 	@Test
 	public void shouldntFindFulltextNegative() {
-		assertFalse(Question.searchFor("relevant").contains(fulltextNegative));
+		assertFalse(Database.get().questions().searchFor("relevant").contains(fulltextNegative));
 	}
 	
 	@Test
 	public void shouldFindByTag() {
-		assertTrue(Question.searchFor("relevant").contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("relevant").contains(fulltextPositive));
 	}
 	
 	@Test
 	public void shouldntFindByTagNegative() {
-		assertFalse(Question.searchFor("relevant").contains(fulltextNegative));
+		assertFalse(Database.get().questions().searchFor("relevant").contains(fulltextNegative));
 	}
 	
 	@Test
 	public void shouldntSearchForStupidWords() {
-		assertTrue(Question.searchFor("is").isEmpty());
+		assertTrue(Database.get().questions().searchFor("is").isEmpty());
 	}
 	
 	@Test
 	public void shouldSearchMixedWord() {
-		assertTrue(Question.searchFor("is relevant").contains(fulltextPositive));
-		assertTrue(Question.searchFor("is relevant").contains(taggedPositive));
+		assertTrue(Database.get().questions().searchFor("is relevant").contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("is relevant").contains(taggedPositive));
 	}
 }

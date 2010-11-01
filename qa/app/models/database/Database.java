@@ -1,18 +1,20 @@
 package models.database;
 
+import models.database.HotDatabase.HotDatabase;
+
 
 /**
  * Database accessor. Can be swapped if necessary.  
  *
  */
-public class Database{
+public class Database {
 	private static IDatabase instance = new HotDatabase();
 	
 	/** Gain access to the database.
 	 * 
 	 * @return the database that is currently responsible.
 	 */
-	public IDatabase get() {
+	public static IDatabase get() {
 		return instance;
 	}
 	

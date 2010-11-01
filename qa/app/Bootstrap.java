@@ -1,5 +1,7 @@
 import models.Question;
 import models.User;
+import models.database.Database;
+import models.database.HotDatabase.HotQuestionDatabase;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 
@@ -10,10 +12,10 @@ public class Bootstrap extends Job {
 	public void doJob() {
     	// User
 
-	User jack = User.register("Jack", "jack");
-	User john = User.register("John", "john");
-	User bill = User.register("Bill", "bill");
-	User kate = User.register("Kate", "kate");
+	User jack = Database.get().users().register("Jack", "jack");
+	User john = Database.get().users().register("John", "john");
+	User bill = Database.get().users().register("Bill", "bill");
+	User kate = Database.get().users().register("Kate", "kate");
 
 	jack.setEmail("jack@jack.jk");
 	jack.setFullname("Jack Daniel");
@@ -22,11 +24,11 @@ public class Bootstrap extends Job {
 	jack.setBiography("Oh well, ...");
     
         // Questions
-		Question question = Question.register(jack,
+		Question question = Database.get().questions().add(jack,
 				"Why did the chicken cross the road?");
         question.answer(bill, "To get to the other side.");
         
-		question = Question.register(john,
+		question = Database.get().questions().add(john,
 				"What is the answer to life the universe and everything?");
         question.answer(kate, "42");
         question.answer(kate, "1337");

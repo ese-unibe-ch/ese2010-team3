@@ -7,6 +7,8 @@ import models.Comment;
 import models.Question;
 import models.Tag;
 import models.User;
+import models.database.Database;
+import models.database.HotDatabase.HotQuestionDatabase;
 import play.data.validation.Required;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -16,18 +18,18 @@ public class Application extends Controller {
 	@Before
 	static void setConnectedUser() {
 		if (Security.isConnected()) {
-			User user = User.get(Security.connected());
+			User user = Database.get().users().get(Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
 
 	public static void index() {
-		List<Question> questions = Question.questions();
+		List<Question> questions = Database.get().questions().all();
 		render(questions);
 	}
 
 	public static void question(int id) {
-		Question question = Question.get(id);
+		Question question = Database.get().questions().get(id);
 		if (question == null) {
 			render();
 		} else {
@@ -37,23 +39,23 @@ public class Application extends Controller {
 	}
 
 	public static void answerQuestion(int id) {
-		Question question = Question.get(id);
-		List<Question> questions = Question.questions();
+		Question question = Database.get().questions().get(id);
+		List<Question> questions = Database.get().questions().all();
 		List<Answer> answers = question.answers();
 		int count = question.answers().size();
 		render(questions, question, answers, count);
 	}
 
 	public static void commentQuestion(int id) {
-		Question question = Question.get(id);
-		List<Question> questions = Question.questions();
+		Question question = Database.get().questions().get(id);
+		List<Question> questions = Database.get().questions().all();
 		List<Comment> comments = question.comments();
 		int count = question.comments().size();
 		render(questions, question, comments, count);
 	}
 
 	public static void commentAnswer(int questionId, int answerId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		List<Comment> comments = answer.comments();
 		render(answer, comments, question);
@@ -71,7 +73,7 @@ public class Application extends Controller {
 			String passwordrepeat, String email) {
 
 		if (User.checkEmail(email) && password.equals(passwordrepeat)) {
-			User user = User.register(username, password);
+			User user = Database.get().users().register(username, password);
 			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
@@ -88,7 +90,7 @@ public class Application extends Controller {
 		}
 	}
 	public static void showprofile(String userName) {
-		User showUser = User.get(userName);
+		User showUser = Database.get().users().get(userName);
 		render(showUser);
 	}
 
@@ -105,7 +107,7 @@ public class Application extends Controller {
 	}
 	
 	public static void search(String term) {
-		List<Question> results = Question.searchFor(term);
+		List<Question> results = Database.get().questions().searchFor(term);
 		render(results);
 	}
 }

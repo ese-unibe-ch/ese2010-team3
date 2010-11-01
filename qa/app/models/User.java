@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import models.database.Database;
+
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
  * {@link Answer}s, {@link Comment}s and {@link Vote}s. When deleted, the
@@ -112,7 +114,7 @@ public class User {
 		for (Item item : clone)
 			item.unregister();
 		this.items.clear();
-		users.remove(this.name);
+		Database.get().users().remove(this.name);
 	}
 
 	/**
@@ -326,38 +328,5 @@ public class User {
 
 	public String getSHA1Password() {
 		return this.password;
-	}
-
-	/*
-	 * Static interface to access questions from controller (not part of unit
-	 * testing)
-	 */
-
-	private static HashMap<String, User> users = new HashMap();
-
-	/**
-	 * Validate if the <code>User</code> is already in our database.
-	 * 
-	 * @param username
-	 * @return True if this <code>User</code> has not yet Signed Up
-	 */
-	public static boolean needSignUp(String username) {
-		return (users.get(username) == null);
-	}
-
-	public static User register(String username, String password) {
-		User user = new User(username, password);
-		users.put(username, user);
-		return user;
-	}
-
-	/**
-	 * Get the <code>User</code> with the given name.
-	 * 
-	 * @param name
-	 * @return a <code>User</code> or null if the given name doesn't exist.
-	 */
-	public static User get(String name) {
-		return users.get(name);
 	}
 }
