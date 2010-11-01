@@ -23,7 +23,13 @@
     		</div><!-- end header -->
     		<div class="navigation">
 			<a href="@{Application.index}">Questions</a>
-			<span>
+			<span class="search">
+    			<form class="search" action="@{Application.search}" method="GET">
+    				<input type="text" name="term" />
+    				<input type="submit" value="Search" />
+				</form> 
+			</span>
+			<span class="user">
 				#{if user}
 						Hi ${user.name()}!
 						<a href="@{Application.showprofile}">Profile</a>

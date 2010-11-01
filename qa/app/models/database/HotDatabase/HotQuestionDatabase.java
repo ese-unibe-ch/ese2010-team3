@@ -22,7 +22,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		public int compare(Object arg0, Object arg1) {
 			Pair<Integer,Question> 	x = (Pair<Integer, Question>) arg0, 
 									y = (Pair<Integer, Question>) arg1;
-			return x.left.compareTo(y.left);
+			return y.left.compareTo(x.left);
 		}
 	};
 	private static final Visitor onlyQuestion = new Visitor<Question,Pair<Integer,Question>>() {

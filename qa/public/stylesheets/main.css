@@ -76,12 +76,18 @@ div.navigation {
 	color: #222222;
 }
 
-div.navigation span {			
+div.navigation span.search {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+div.navigation span.user {			
 	position: absolute;
 	right: 	5px;
 }
 
-div.navigation span a {
+div.navigation span.user a {
 	margin-left: 5px;
 }
 /*********************** 

@@ -108,6 +108,6 @@ public class Application extends Controller {
 	
 	public static void search(String term) {
 		List<Question> results = Database.get().questions().searchFor(term);
-		render(results);
+		render(results,term);
 	}
 }
