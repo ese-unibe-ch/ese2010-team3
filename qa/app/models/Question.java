@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import models.SearchEngine.SearchResult;
+import models.helpers.Pair;
+import models.helpers.Visitor;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
@@ -22,6 +30,21 @@ public class Question extends Entry {
 	private Answer     bestAnswer;
 	private Calendar   settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
+	
+	private static final Comparator byRating = new Comparator() {
+		public int compare(Object arg0, Object arg1) {
+			Pair<Integer,Question> 	x = (Pair<Integer, Question>) arg0, 
+									y = (Pair<Integer, Question>) arg1;
+			return x.left.compareTo(y.left);
+		}
+	};
+	private static final Visitor onlyQuestion = new Visitor<Question,Pair<Integer,Question>>() {
+
+		@Override
+		protected Question visit(Pair<Integer, Question> i) {
+			return i.right;
+		}
+	};
 
 	/**
 	 * Create a Question.
@@ -276,5 +299,12 @@ public class Question extends Entry {
 	public static Question get(int id) {
 		return questions.get(id);
 	}
+	
 
+	public static List<Question> searchFor(String term) {
+		SearchResult search = new SearchResult(term);
+		List<Pair<Integer,Question>> results = search.over(questions);
+		Collections.sort(results, byRating);
+		return onlyQuestion.over(results);
+	}
 }

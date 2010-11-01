@@ -103,4 +103,9 @@ public class Application extends Controller {
 			tags = new String[0];
 		renderJSON(tags);
 	}
+	
+	public static void search(String term) {
+		List<Question> results = Question.searchFor(term);
+		render(results);
+	}
 }

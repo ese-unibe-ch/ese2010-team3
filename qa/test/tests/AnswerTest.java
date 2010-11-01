@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import models.*;
@@ -19,9 +20,11 @@ public class AnswerTest extends UnitTest {
 	private Answer answer;
 	private Date questionDate;
 	private Date answerDate;
+	private ISystemInformation original;
 
 	@Before
 	public void setUp() {
+		original = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
 		this.james = new User("James", "jack");
@@ -69,6 +72,11 @@ public class AnswerTest extends UnitTest {
 	@Test
 	public void shouldFindAnswer() {
 		assertEquals(this.answer,question.getAnswer(this.answer.id()));
+	}
+	
+	@After
+	public void tearDown() {
+		SystemInformation.mockWith(original);
 	}
 	
 }
