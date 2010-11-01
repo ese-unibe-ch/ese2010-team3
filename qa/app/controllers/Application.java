@@ -38,6 +38,12 @@ public class Application extends Controller {
 		}
 	}
 
+	public static void relatedQuestions(int id) {
+		Question question = Question.get(id);
+
+		render(question);
+	}
+
 	public static void answerQuestion(int id) {
 		Question question = Question.get(id);
 		List<Question> questions = Question.questions();
@@ -89,6 +95,7 @@ public class Application extends Controller {
 			register();
 		}
 	}
+
 	public static void showprofile(String userName) {
 		User showUser = User.get(userName);
 		render(showUser);
@@ -128,7 +135,6 @@ public class Application extends Controller {
 		numberOfBestAnswers = Question.getBestRatedAnswers().size();
 		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
 		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
-		System.out.println(t.getWeeks(now));
 		questionsPerMonth = (float) numberOfQuestions
 				/ (float) t.getMonths(now);
 		answersPerDay = (float) numberOfAnswers / (float) t.getDays(now);
