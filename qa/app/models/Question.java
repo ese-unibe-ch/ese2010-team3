@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -262,8 +267,8 @@ public class Question extends Entry {
 	}
 
 	/**
-	 * Sorts an ArrayList of <@link Question} by comparing the ratios of
-	 * matching tags and the overall number of tags per question. <br>
+	 * Sorts an ArrayList in descending order of questions by comparing the
+	 * ratios of matching tags and the overall number of tags per question. <br>
 	 * Calculation:<br>
 	 * 
 	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
@@ -275,33 +280,48 @@ public class Question extends Entry {
 	 */
 	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
 		ArrayList<Question> questions = q;
-		ArrayList<Question> sorted = new ArrayList<Question>();
-		// To monitor the matches. Needs to be reset afterwards.
-		double matchCount = 0;
-		SortedMap<Double, Question> map = new TreeMap<Double, Question>();
-
+		ArrayList<Question> sorted;
+		int matchCount;
+		Map<Question, Double> map = new HashMap<Question, Double>();
 		for (Question qu : questions) {
-			// Check if the tag is there
-			for (Tag t : this.getTags()) {
-				if (qu.getTags().contains(t)) {
-					matchCount += 1;
-				}
-			}
-			double questionOneRatio = (matchCount / (double) this.getTags()
-					.size());
-			double questionTwoRatio = (matchCount / (double) qu.getTags()
-					.size());
+			List<Tag> tags = this.getTags();
+			tags.retainAll(qu.getTags());
+			matchCount = tags.size();
+			double questionOneRatio = ((double) matchCount / (double) this
+					.getTags().size());
+			double questionTwoRatio = ((double) matchCount / (double) qu
+					.getTags().size());
 			double ratio = questionOneRatio * questionTwoRatio;
-			map.put(ratio, qu);
-			// Reset counter
-			matchCount = 0;
-		}
-		ArrayList<Question> tempList = new ArrayList<Question>(map.values());
-		for (int t = tempList.size() - 1; t >= 0; t--) {
-			sorted.add(tempList.get(t));
+			map.put(qu, ratio);
 		}
 
+		sorted = new ArrayList<Question>(this.sortMapByValue(map));
+		Collections.reverse(sorted);
 		return sorted;
+	}
+
+	/**
+	 * Sorts a map by comparing the values and returns a set of the
+	 * corresponding keys
+	 * 
+	 * @param map
+	 *            the map to be sorted
+	 * @return Set the set of the keys
+	 */
+	private Set sortMapByValue(Map map) {
+		List list = new LinkedList(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+						.compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+		Map result = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result.keySet();
 	}
 
 	/**

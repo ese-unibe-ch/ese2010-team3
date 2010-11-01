@@ -125,17 +125,23 @@ public class TagTest extends UnitTest {
 		Question questionC = new Question(C, "C?");
 		Question questionD = new Question(D, "D?");
 		Question questionE = new Question(D, "E?");
+		Question questionF = new Question(A, "F?");
 
 		questionA.setTagString("A B C D");
 		questionB.setTagString("A B C D");
 		questionC.setTagString("A B C D L");
 		questionD.setTagString("A B C D L O");
 		questionE.setTagString("A");
+		// To check if duplicate values are allowed
+		questionF.setTagString("A B C D");
 
-		assertEquals(questionB, questionA.getSimilarQuestions().get(0));
-		assertEquals(questionC, questionA.getSimilarQuestions().get(1));
-		assertEquals(questionD, questionA.getSimilarQuestions().get(2));
-		assertEquals(questionE, questionA.getSimilarQuestions().get(3));
+		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(0))
+				|| questionF.equals(questionA.getSimilarQuestions().get(0)));
+		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(1))
+				|| questionF.equals(questionA.getSimilarQuestions().get(1)));
+		assertEquals(questionC, questionA.getSimilarQuestions().get(2));
+		assertEquals(questionD, questionA.getSimilarQuestions().get(3));
+		assertEquals(questionE, questionA.getSimilarQuestions().get(4));
 
 	}
 
