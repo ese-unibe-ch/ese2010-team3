@@ -3,11 +3,13 @@ package tests;
 import java.util.Collections;
 
 import models.Answer;
+import models.ISystemInformation;
 import models.Notification;
 import models.Question;
 import models.SystemInformation;
 import models.User;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,15 +18,22 @@ import tests.mocks.SystemInformationMock;
 
 public class NotificationTest extends UnitTest {
 
+	private ISystemInformation savedSysInfo;
 	private Question question;
 	private User norbert;
 	private User andrew;
 
 	@Before
 	public void setUp() {
+		this.savedSysInfo = SystemInformation.get();
 		this.norbert = new User("Norbert", "norbert");
 		this.question = new Question(this.norbert, "Need I be watched?");
 		this.andrew = new User("Andrew", "andrew");
+	}
+
+	@After
+	public void tearDown() {
+		SystemInformation.mockWith(this.savedSysInfo);
 	}
 
 	@Test
