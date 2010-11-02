@@ -472,7 +472,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all <code>Questions</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Questions</code>s of this <code>User</code>.
 	 * 
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
@@ -481,7 +481,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all <code>Answer</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Answer</code>s of this <code>User</code>.
 	 * 
 	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
 	 */
@@ -490,7 +490,7 @@ public class User implements IObserver {
 	}
 	
 	/**
-	 * Get an ArrayList of all <code>Comment</code>s of this <code>User</code>
+	 * Get a sorted ArrayList of all <code>Comment</code>s of this <code>User</code>
 	 * 
 	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
 	 */
