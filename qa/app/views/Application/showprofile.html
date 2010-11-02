@@ -61,7 +61,7 @@
 				<td class="right">
 					<ul class="showprofile">
 						#{list items:showUser.getRecentComments(), as:'comment'}
-						<li><a href="@{Application.index()}">${comment.content()}#{date comment /}</li>
+						<li><a href="@{Application.question(comment.getQuestion().id())}">${comment.content()}#{date comment /}</li>
 						#{/list}
 					</ul>
 				</td>

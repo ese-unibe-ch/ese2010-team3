@@ -65,5 +65,19 @@ public class Comment extends Entry {
 	public boolean isRegistered() {
 		return this.entry != null;
 	}
+	
+	/**
+	 * Returns the <code>Question</code> the <code>Comment</code> belongs to 
+	 * directly (<code>Comment</code> to a <code>Question</code>) or indirectly
+	 * (<code>Comment</code> to an <Code>Answer</code>). 
+	 * 
+	 * @return Entry the comment belongs to
+	 */
+	public Entry getQuestion() {
+		Entry entry = this.entry;
+		if (entry instanceof Answer)
+			return ((Answer) entry).getQuestion();
+		return entry;
+	}
 
 }
