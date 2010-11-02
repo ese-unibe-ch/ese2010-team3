@@ -1,9 +1,13 @@
+/*********************** 
+basic page style
+************************/
 body {
 	background: #00272b;
 	font-family: Helvetica, Veranda, Arial, sans-serif;
 }
-/*---------------------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------------------*/
+body.cheaterWarning {
+	background: #b92130;
+}
 /*********************** 
 headings
 ************************/
@@ -40,19 +44,11 @@ main
 div.main {
 	background: #000000;
 	margin:	20px auto;
-	width: 750px;
+	max-width: 800px;
+	min-width:500px;
 	padding: 0;
 	position: relative;
 }
-
-.cheaterWarning {
-	color: #ffffff;
-	font-size: 1.4em;
-	font-wight: bold;
-	text-align: center;
-	border-bottom: 15px solid #f00;
-}
-
 /*********************** 
 header
 ************************/
@@ -143,7 +139,6 @@ div.content form {
 	margin: 10px 0;
 	padding: 7px;
 	position: relative;
-
 }
 			
 div.content textarea {
@@ -165,7 +160,6 @@ div.footer {
 	font-size: 0.7em;
 	color: #333333;
 	padding: 3px;
-	background: #00272b;
 }
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
@@ -197,12 +191,56 @@ show profile
 div.showprofile {
 	color: #ff8400;
 }
+td.right{
+	width:100%;
+	color: #ff8400;
+}
+td.left {
+	vertical-align: top;
+	color: #ff8400;
+}
+li.showprofile {
+	background: #333333;
+	width: 800px;
+	list-style: none;
+	margin: 5px;
+	padding: 7px;
+	position: relative;
+}
 /*********************** 
 edit profile
 ************************/
 div.editprofile textarea {
 	height: 100px;
 	width: 610px;
+}
+div.profilenavi {
+	text-align:right;
+	background: #333333;
+	margin: 4px;
+	padding: 5px;	
+}
+/*********************** 
+Cheater Warning
+************************/
+div.cheaterWarning {
+	padding: 5px;
+	margin-bottom: 5px;
+	font-size: 1.4em;
+	color: #FFFFFF;
+	font-weight: bold;
+	text-align: center;
+	background: #f00;
+}
+/*********************** 
+Notification Info
+************************/
+div.notificationInfo {
+	padding: 5px;
+	margin-bottom: 5px;
+	background: #2b6026;
+	color: #222222;
+	font-weight:bold;
 }
 
 /*********************** 

@@ -1,4 +1,8 @@
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import models.Question;
+import models.TimeTracker;
 import models.User;
 import models.database.Database;
 import models.database.HotDatabase.HotQuestionDatabase;
@@ -7,9 +11,10 @@ import play.jobs.OnApplicationStart;
 
 @OnApplicationStart
 public class Bootstrap extends Job {
- 
-    @Override
+
+	@Override
 	public void doJob() {
+
     	// User
 
 	User jack = Database.get().users().register("Jack", "jack");
@@ -26,10 +31,11 @@ public class Bootstrap extends Job {
         // Questions
 		Question question = Database.get().questions().add(jack,
 				"Why did the chicken cross the road?");
-        question.answer(bill, "To get to the other side.");
-        
+		question.answer(bill, "To get to the other side.");
+
 		question = Database.get().questions().add(john,
 				"What is the answer to life the universe and everything?");
+
         question.answer(kate, "42");
         question.answer(kate, "1337");
         
@@ -38,5 +44,15 @@ public class Bootstrap extends Job {
 
 		// Tags
 		question.setTagString("numb3rs");
-    }
+    
+
+
+
+		// TimeTracker
+		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
+		TimeTracker.setRealTimeTracker(g);
+		
+		
+	}
 }
+

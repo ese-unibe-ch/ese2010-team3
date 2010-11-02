@@ -2,7 +2,6 @@ package models;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -12,7 +11,7 @@ import java.util.Iterator;
  */
 public abstract class Entry extends Item implements Comparable {
 
-	private String content;
+	private final String content;
 	private HashMap<String, Vote> votes;
 
 	/**
@@ -157,15 +156,18 @@ public abstract class Entry extends Item implements Comparable {
 	 public void anonymize() {
 		 this.unregisterUser();
 	 }
-	 
-	 /**
-	  * @return a one-line summary of an <code>Entry</code>.
-	  * */
-	 public String summary() {
-		 if (this.content.length() <= 20)
-			 return this.content.replaceAll("[\r\n]+", " ");
-		 return this.content.substring(0, 20).replaceAll("[\r\n]+", " ") + "...";
-	 }
+
+	/**
+	 * Produces a one-line summary of an Entry: the first 35 to 45 characters,
+	 * if possible cut off at a word boundary, and an ellipsis, if the content
+	 * is longer.
+	 * 
+	 * @return a one-line summary of an <code>Entry</code>.
+	 * */
+	public String summary() {
+		return this.content.replaceAll("\\s+", " ").replaceFirst(
+				"^(.{35}\\S{0,9} ?).{5,}", "$1...");
+	}
 
 	/**
 	 * Get all <code>Votes</code>

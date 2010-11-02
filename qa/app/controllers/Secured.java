@@ -1,8 +1,10 @@
 package controllers;
 
 import java.text.ParseException;
+
 import models.Answer;
 import models.Comment;
+import models.Notification;
 import models.Question;
 import models.User;
 import models.database.Database;
@@ -15,8 +17,12 @@ import play.mvc.With;
 public class Secured extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
+			User user = Session.get().currentUser();
 			Question question = Database.get().questions().add(Session.get().currentUser(), content);
+			Question question = Question.register(user, content);
 			question.setTagString(tags);
+			user.startObserving(question);
+			user.addRecentQuestions(question);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -26,7 +32,7 @@ public class Secured extends Controller {
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			Answer answer = Database.get().questions().get(questionId)
-								.answer(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentAnswers(answer);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -37,6 +43,7 @@ public class Secured extends Controller {
 			@Required String content) {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			Comment comment = Database.get().questions().get(questionId).comment(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentComments(comment);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -48,6 +55,7 @@ public class Secured extends Controller {
 
 		if (!validation.hasErrors() && answer != null) {
 			Comment comment = answer.comment(Session.get().currentUser(), content);
+			Session.get().currentUser().addRecentComments(comment);
 			Application.commentAnswer(questionId, answerId);
 		}
 	}
@@ -157,6 +165,7 @@ public class Secured extends Controller {
 		redirect(referer.value());
 		return true;
 	}
+	
 
 	public static void saveProfile(String name, String email, String fullname,
 			String birthday, String website, String profession,
@@ -186,5 +195,46 @@ public class Secured extends Controller {
 		if (question != null && user == question.owner())
 			question.setTagString(tags);
 		Application.question(id);
+	}
+
+	public static void watchQuestion(int id) {
+		Question question = Question.get(id);
+		User user = Session.get().currentUser();
+		if (question != null)
+			user.startObserving(question);
+		Application.question(id);
+	}
+
+	public static void unwatchQuestion(int id) {
+		Question question = Question.get(id);
+		User user = Session.get().currentUser();
+		if (question != null)
+			user.stopObserving(question);
+		Application.question(id);
+	}
+
+	public static void followNotification(int id) {
+		User user = Session.get().currentUser();
+		Notification n = user.getNotification(id);
+		if (n != null)
+			n.unsetNew();
+		if (n != null && n.getAbout() instanceof Answer)
+			Application.question(((Answer) n.getAbout()).question().id());
+		else if (!redirectToCallingPage())
+			Application.notifications();
+	}
+
+	public static void clearNewNotifications() {
+		User user = Session.get().currentUser();
+		for (Notification n : user.getNewNotifications())
+			n.unsetNew();
+		Application.notifications();
+	}
+	public static void deleteNotification(int id) {
+		User user = Session.get().currentUser();
+		Notification n = user.getNotification(id);
+		if (n != null)
+			n.unregister();
+		Application.notifications();
 	}
 }

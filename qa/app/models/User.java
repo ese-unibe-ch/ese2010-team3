@@ -5,10 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 import models.database.Database;
 
@@ -21,7 +23,7 @@ import models.database.Database;
  * @author Mirco Kocher
  * 
  */
-public class User {
+public class User implements IObserver {
 
 	private final String name;
 	private final String password;
@@ -33,9 +35,15 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-	private Date timestamp;
 
-	public static final String DATE_FORMAT = "dd-MM-yy";
+	private final ArrayList<Question> recentQuestions = new ArrayList<Question>();
+	private final ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
+	private final ArrayList<Comment> recentComments = new ArrayList<Comment>();
+	
+	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
+	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
+
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -57,6 +65,7 @@ public class User {
 	public String name() {
 		return this.name;
 	}
+
 
 	/**
 	 * Encrypt the password with MD5
@@ -92,6 +101,7 @@ public class User {
 	 */
 	public static boolean checkEmail(String email) {
 		return email.matches("\\S+@(?:[A-Za-z0-9-]+\\.)+\\w{2,4}");
+
 	}
 
 	/**
@@ -177,7 +187,7 @@ public class User {
 	    if (votesForUser.isEmpty())
 			return false;
 
-	    Integer maxCount = (Integer) Collections.max(votesForUser.values());
+	    Integer maxCount = Collections.max(votesForUser.values());
 		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
@@ -244,10 +254,10 @@ public class User {
 	 */
 	private String dateToString(Date d) {
 		if (d != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
 			return fmt.format(d);
 		} else
-			return ("dd-mm-yy");
+			return null;
 	}
 
 	/**
@@ -257,8 +267,14 @@ public class User {
 	 * @throws ParseException
 	 */
 	private Date stringToDate(String s) throws ParseException {
-		if (s != null) {
-			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+		if (Pattern.matches("\\d{1,2}\\.\\d{1,2}\\.\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_CH);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{1,2}/\\d{1,2}/\\d{4}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_US);
+			return fmt.parse(s);
+		} else if (Pattern.matches("\\d{4}-\\d{1,2}-\\d{1,2}", s)) {
+			SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT_ISO);
 			return fmt.parse(s);
 		} else
 			return (null);
@@ -328,5 +344,236 @@ public class User {
 
 	public String getSHA1Password() {
 		return this.password;
+	}
+	/**
+	 * Start observing changes for an entry (e.g. new answers to a question).
+	 * 
+	 * @param what
+	 *            the entry to watch
+	 */
+	public void startObserving(IObservable what) {
+		what.addObserver(this);
+	}
+
+	/**
+	 * Checks if a specific entry is being observed for changes.
+	 * 
+	 * @param what
+	 *            the entry to check
+	 */
+	public boolean isObserving(IObservable what) {
+		return what.hasObserver(this);
+	}
+
+	/**
+	 * Stop observing changes for an entry (e.g. new answers to a question).
+	 * 
+	 * @param what
+	 *            the entry to unwatch
+	 */
+	public void stopObserving(IObservable what) {
+		what.removeObserver(this);
+	}
+
+	/**
+	 * @see models.IObserver#observe(models.IObservable, java.lang.Object)
+	 */
+	public void observe(IObservable o, Object arg) {
+		if (o instanceof Question && arg instanceof Answer
+				&& ((Answer) arg).owner() != this)
+			new Notification(this, (Answer) arg);
+	}
+
+
+	public ArrayList<Question> getRecentQuestions() {
+		return this.recentQuestions;
+	}
+
+	public ArrayList<Answer> getRecentAnswers() {
+		return this.recentAnswers;
+	}
+
+	public ArrayList<Comment> getRecentComments() {
+		return this.recentComments;
+	}
+	
+	public void addRecentQuestions(Question question) {
+		if (recentQuestions.size() > 2) {
+			this.recentQuestions.remove(2);
+		}
+		this.recentQuestions.add(0, question);
+	}
+
+	public void addRecentAnswers(Answer answer) {
+		if (recentAnswers.size() > 2) {
+			this.recentAnswers.remove(2);
+		}
+		this.recentAnswers.add(0, answer);
+	}
+
+	public void addRecentComments(Comment comment) {
+		if (recentComments.size() > 2) {
+			this.recentComments.remove(2);
+		}
+		this.recentComments.add(0, comment);
+	}
+
+	/*
+	 * Interface to gather statistical data
+	 */
+
+	public static int getUserCount() {
+		return User.users.size();
+	}
+
+	/**
+	 * Get a sorted ArrayList of all questions of this user
+	 * 
+	 * @return ArrayList<Question> All questions of this user
+	 */
+	public ArrayList<Question> getQuestions() {
+		return this.getItemsByType(Question.class, null);
+	}
+
+	/**
+	 * Get a sorted ArrayList of all answers of this user
+	 * 
+	 * @return ArrayList<Answer> All answers of this user
+	 */
+	public ArrayList<Answer> getAnswers() {
+		return this.getItemsByType(Answer.class, null);
+	}
+
+	/**
+	 * Get an ArrayList of all best rated answers
+	 * 
+	 * @return ArrayList<Answer> All best rated answers
+	 */
+	public ArrayList<Answer> bestAnswers() {
+		return this.getItemsByType(Answer.class, "isBestAnswer");
+	}
+
+	/**
+	 * Get an ArrayList of all highRated answers
+	 * 
+	 * @return ArrayList<Answer> All high rated answers
+	 */
+	public ArrayList<Answer> highRatedAnswers() {
+		return this.getItemsByType(Answer.class, "isHighRated");
+	}
+
+	/**
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first and optionally fulfilling one filter criterion.
+	 * 
+	 * @param filter
+	 *            an optional name of a filter method (e.g. "isNew")
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	protected ArrayList<Notification> getAllNotifications(String filter) {
+		ArrayList<Notification> result = new ArrayList<Notification>();
+		/*
+		 * Hack: remove all notifications to deleted answers
+		 * 
+		 * unfortunately, there's currently no other way to achieve this, as
+		 * there is no global list of all existing notifications nor an easy way
+		 * to register all users for observing the deletion of answers (because
+		 * there's no global list of all existing users, either)
+		 */
+		ArrayList<Notification> notifications = this.getItemsByType(
+				Notification.class, filter);
+		for (Notification n : notifications) {
+			if (n.getAbout() instanceof Answer) {
+				Answer answer = (Answer) n.getAbout();
+				if (answer.question() != null)
+					result.add(n);
+				else
+					n.unregister();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first.
+	 * 
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	public ArrayList<Notification> getNotifications() {
+		return this.getAllNotifications(null);
+	}
+
+	/**
+	 * Get an ArrayList of all unread notifications of this user
+	 * 
+	 * @return the unread notifications
+	 */
+	public ArrayList<Notification> getNewNotifications() {
+		return this.getAllNotifications("isNew");
+	}
+
+	/**
+	 * Gets the most recent unread notification, if there is any very recent one
+	 * 
+	 * @return a very recent notification (or null, if there isn't any)
+	 */
+	public Notification getVeryRecentNewNotification() {
+		for (Notification n : this.getNewNotifications())
+			if (n.isVeryRecent())
+				return n;
+		return null;
+	}
+
+	/**
+	 * Gets a notification by its id value.
+	 * 
+	 * NOTE: slightly hacky since we don't track notifications in a separate
+	 * IDTable but in this.items like everything else - this should get fixed
+	 * once we migrate to using a real DB.
+	 * 
+	 * @param id
+	 *            the notification's id
+	 * @return a notification with the given id
+	 */
+	public Notification getNotification(int id) {
+		for (Notification n : this.getNotifications())
+			if (n.getID() == id)
+				return n;
+		return null;
+	}
+
+	/**
+	 * Get an ArrayList of all items of this user being an instance of a
+	 * specific type and optionally fulfilling an additional filter criterion.
+	 * 
+	 * @param type
+	 *            the type
+	 * @param filter
+	 *            an optional name of a filter method which has to be available
+	 *            on all objects, must not need any arguments and must return a
+	 *            boolean value
+	 * @return ArrayList All type-items of this user
+	 */
+	protected ArrayList getItemsByType(Class type, String filter) {
+		ArrayList items = new ArrayList();
+		for (Item item : this.items) {
+			if (type.isInstance(item)) {
+				if (filter != null) {
+					try {
+						if (!(Boolean) type.getMethod(filter).invoke(item))
+							continue;
+					} catch (Exception ex) {
+						// reflection APIs throw half a dozen different
+						// exceptions, let's just abort if we hit any of them
+						// for now
+						return null;
+					}
+				}
+				items.add(item);
+			}
+		}
+		Collections.sort(items);
+		return items;
 	}
 }

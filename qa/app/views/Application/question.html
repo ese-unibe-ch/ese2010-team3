@@ -8,16 +8,32 @@
 			<p>${question.content()}</p>
 			#{tags question:question, editable:question?.owner() == user /}  
 			#{if user != null}
-				<FONT SIZE="1"> <a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</FONT></a>
+				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
+				#{if user.isObserving(question)}
+					<a href="@{Secured.unwatchQuestion(question.id())}">unwatch</a>
+				#{/if}#{else}
+					<a href="@{Secured.watchQuestion(question.id())}">watch</a>
+				#{/else}
 			#{/if}
 			#{if user && question.owner() == user}
 			<a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
 			#{/if}
-			#{if user && question.owner() != user && !user.isCheating()}
 			#{date question /}
+			#{if user && question.owner() != user && !user.isCheating()}
 				#{vote question /}
 			#{/if}
 		</li>
+		#{if question.getSimilarQuestions().size() != 0}
+		<a>Related Questions</a>
+			#{list items:similarQuestions, as:'relatedQ'}<p>
+			<li>
+			#{showProfile relatedQ /}:
+				<a href="@{Application.question(relatedQ.id())}">
+				${relatedQ.summary()}</a>#{date relatedQ /}</p>
+			#{/list}
+			</li>
+		<a href="@{Application.relatedQuestions(question.id())}">More...</a> 
+		#{/if}
 		#{if question.comments().size() != 0}
 			<p class="comments">Comments</p>
 			<ul class="comments">
@@ -44,7 +60,7 @@
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
 				#{if user != null && !user.isCheating()}
-					<FONT SIZE="1"> <a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</FONT></a>
+					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</a>
 				#{/if}
 				#{date answer /}
 				
@@ -65,7 +81,7 @@
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
-								<h2>#{showProfile comments /}:</h2>
+								<h2>#{showProfile comment /}:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
 								#{if user && comment.owner() == user}
@@ -88,6 +104,10 @@
 			<input type="submit" value="Post" />
 		#{/form}
 	#{/if}
+		
+		
+		
+		
 #{/if}#{else}
 	#{set title:'Error' /}
 	<h1>Question does not exist.</h1>

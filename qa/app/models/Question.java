@@ -5,33 +5,38 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
 import models.database.Database;
 import models.database.HotDatabase.HotQuestionDatabase;
 import models.helpers.Pair;
 import models.helpers.Visitor;
 
 /**
- * A {@link Entry} containing a question as <code>content</code>, {@link Answer}s
- * and {@link Comments}.
+ * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
+ * s and {@link Comments}.
  * 
  * @author Simon Marti
  * @author Mirco Kocher
  * 
  */
-public class Question extends Entry {
+public class Question extends Entry implements IObservable {
 
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
 	private final int id;
-	private Answer     bestAnswer;
-	private Calendar   settingOfBestAnswer;
+
+	private Answer bestAnswer;
+	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
 	
+	protected HashSet<IObserver> observers;
 
 	/**
 	 * Create a Question.
@@ -45,6 +50,7 @@ public class Question extends Entry {
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
+		this.observers = new HashSet<IObserver>();
 		this.id = Database.get().questions().register(this);
 	}
 
@@ -62,6 +68,7 @@ public class Question extends Entry {
 			answer.unregister();
 		for (Comment comment : comments)
 			comment.unregister();
+		this.observers.clear();
 		if (this.id != -1)
 			Database.get().questions().remove(this.id);
 		this.unregisterVotes();
@@ -78,11 +85,12 @@ public class Question extends Entry {
 	public void unregister(Answer answer) {
 		this.answers.remove(answer.id());
 	}
-	
-	
+
 	/**
 	 * Unregisters a deleted {@link Comment}.
-	 * @param comment the {@link Comment} to unregister 
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
@@ -106,16 +114,20 @@ public class Question extends Entry {
 
 	/**
 	 * Post a {@link Comment} to a <code>Question</code>
-	 * @param user the {@link User} posting the {@link Comment}
-	 * @param content the comment
+	 * 
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(), user, this, content);
+		Comment comment = new Comment(this.comments.nextID(), user, this,
+				content);
 		this.comments.add(comment);
 		return comment;
 	}
-	
+
 	/**
 	 * Checks if a {@link Answer} belongs to a <code>Question</code>
 	 * 
@@ -129,7 +141,9 @@ public class Question extends Entry {
 
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Question</code>
-	 * @param comment the {@link Comment} to check
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Question</code>
 	 */
 	public boolean hasComment(Comment comment) {
@@ -139,6 +153,7 @@ public class Question extends Entry {
 	/**
 	 * Get the <code>id</code> of the <code>Question</code>. The <code>id</code>
 	 * does never change.
+	 * 
 	 * @return id of the <code>Question</code>
 	 */
 	public int id() {
@@ -155,9 +170,10 @@ public class Question extends Entry {
 		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
-	
+
 	/**
 	 * Get all {@link Comment}s to a <code>Question</code>
+	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
@@ -176,41 +192,45 @@ public class Question extends Entry {
 	public Answer getAnswer(int id) {
 		return this.answers.get(id);
 	}
-	
+
 	/**
 	 * Get a specific {@link Comment} to a <code>Question</code>
-	 * @param id of the <code>Comment</code>
+	 * 
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
 		return this.comments.get(id);
 	}
 
-	public boolean isBestAnswerSettable(Calendar now){
+	public boolean isBestAnswerSettable(Calendar now) {
 		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
 		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return this.settingOfBestAnswer == null ||
-			!thirtyMinutesAgo.getTime().after(this.settingOfBestAnswer.getTime());
+		return this.settingOfBestAnswer == null
+				|| !thirtyMinutesAgo.getTime().after(
+						this.settingOfBestAnswer.getTime());
 	}
-	
+
 	/**
 	 * Sets the best answer. This answer can not be changed after 30min. This
 	 * Method enforces this and fails if it can not be set.
-	 * @param bestAnswer the answer the user chose to be the best for this question.
-	 * @return true iff setting of best answer was allowed.
+	 * 
+	 * @param bestAnswer
+	 *            the answer the user chose to be the best for this question.
+	 * @return true if setting of best answer was allowed.
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
 		Calendar now = Calendar.getInstance();
 		return setBestAnswer(bestAnswer, now);
 	}
-	
+
 	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
-		if ( this.isBestAnswerSettable(now) ){
+		if (this.isBestAnswerSettable(now)) {
 			this.bestAnswer = bestAnswer;
 			this.settingOfBestAnswer = now;
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 
@@ -249,5 +269,169 @@ public class Question extends Entry {
 
 	public ArrayList<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
+	}
+	/**
+	 * @see models.IObservable#addObserver(models.IObserver)
+	 */
+	public void addObserver(IObserver o) {
+		if (o == null)
+			throw new IllegalArgumentException();
+		this.observers.add(o);
+	}
+
+	/**
+	 * @see models.IObservable#hasObserver(models.IObserver)
+	 */
+	public boolean hasObserver(IObserver o) {
+		return this.observers.contains(o);
+	}
+
+	/**
+	 * @see models.IObservable#removeObserver(models.IObserver)
+	 */
+	public void removeObserver(IObserver o) {
+		this.observers.remove(o);
+	}
+
+	/**
+	 * @see models.IObservable#notifyObservers(java.lang.Object)
+	 */
+	public void notifyObservers(Object arg) {
+		for (IObserver o : this.observers)
+			o.observe(this, arg);
+	}
+
+	/**
+	 * Sorts an ArrayList in descending order of questions by comparing the
+	 * ratios of matching tags and the overall number of tags per question. <br>
+	 * Calculation:<br>
+	 * 
+	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
+	 * SizeOfTagsArrayQuestionTwo)
+	 * 
+	 * @param q
+	 *            the ArrayList of questions to be sorted
+	 * @return ArrayList<Question> the sorted ArrayList
+	 */
+	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
+		ArrayList<Question> questions = q;
+		ArrayList<Question> sorted;
+		int matchCount;
+		Map<Question, Double> map = new HashMap<Question, Double>();
+		for (Question qu : questions) {
+			List<Tag> tags = this.getTags();
+			tags.retainAll(qu.getTags());
+			matchCount = tags.size();
+			double questionOneRatio = ((double) matchCount / (double) this
+					.getTags().size());
+			double questionTwoRatio = ((double) matchCount / (double) qu
+					.getTags().size());
+			double ratio = questionOneRatio * questionTwoRatio;
+			map.put(qu, ratio);
+		}
+		sorted = new ArrayList<Question>(this.sortMapByValue(map));
+		Collections.reverse(sorted);
+
+		return sorted;
+	}
+
+	/**
+	 * Sorts a map by comparing the values and returns a set of the
+	 * corresponding keys <br>
+	 * 
+	 * @param map
+	 *            the map to be sorted
+	 * @return Set the set of the keys
+	 */
+	public static Set sortMapByValue(Map map) {
+		List list = new LinkedList(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+						.compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+		Map result = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result.keySet();
+	}
+
+	// From <a
+	// href=http://www.programmersheaven.com/download/49349/download.aspx
+	// 01.11.2010
+
+	/**
+	 * Get all questions that containing at least one of the tags of the
+	 * original question.
+	 * 
+	 * @return ArrayList<Question> the ArrayList containing all questions that
+	 *         contain at least one of the first question.
+	 */
+	public ArrayList<Question> getSimilarQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Tag t : this.getTags()) {
+			for (Question q : t.getQuestions()) {
+				if (!questions.contains(q) && !q.equals(this)) {
+					questions.add(q);
+				}
+			}
+		}
+		questions = this.sortQuestionsByMatchRatio(questions);
+		return questions;
+
+	}
+
+	/*
+	 * Interface to access statistical data of Questions
+	 */
+
+	/**
+	 *Get all high rated answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arraylist of all high rated answers
+	 */
+	public static ArrayList<Answer> getHighRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : questions) {
+			for (Answer a : q.answers) {
+				if (a.isHighRated()) {
+					answers.add(a);
+				}
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 *Get all best answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all best answers
+	 */
+	public static ArrayList<Answer> getBestRatedAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : questions) {
+			if (q.bestAnswer != null) {
+				answers.add(q.bestAnswer);
+			}
+		}
+		return answers;
+	}
+
+	/**
+	 *Get all answers in the system
+	 * 
+	 * @return ArrayList<Answer> an arrayList of all answers
+	 */
+	public static ArrayList<Answer> getAnswers() {
+		ArrayList<Answer> answers = new ArrayList<Answer>();
+		for (Question q : Question.questions) {
+			for (Answer a : q.answers) {
+				answers.add(a);
+			}
+		}
+		return answers;
 	}
 }

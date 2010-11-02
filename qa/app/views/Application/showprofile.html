@@ -2,103 +2,94 @@
 
 #{set title:'ajopi - Profile' /}
 #{if showUser}
-	<div class="showprofile">
+	#{if canEdit}
+	<div class="profilenavi">
+		<a href="@{Application.deleteuser}">Delete </a>
+		<a href="@{Application.editProfile(showUser.name())}">Edit</a>
+	</div><!-- end profilenavi -->
+	#{/if}
+	<div>
 		<table>
 			<tr>
-				<td><label for="username">Username:</label></td>
-				<td>${showUser.name}</td>
+				<td class="left"><label for="username">Username:</label></td>
+				<td class="right">${showUser.name}</td>
 			</tr>
 			<tr>
-				<td><label for="email">Email:</label>
-				<td>${showUser.email}</td>
+				<td class="left"><label for="email">Email:</label>
+				<td class="right">${showUser.email}</td>
 			</tr>
 			<tr>
-				<td><label for="fullname">Real name:</label>
-				<td>${showUser.fullname}</td>
+				<td class="left"><label for="fullname">Real name:</label>
+				<td class="right">${showUser.fullname}</td>
 			</tr>
 			<tr>
-				<td><label for="age">Age:</label> 
-				<td>#{if showUser.age != 0} ${showUser.age}#{/if}</td> 
+				<td class="left"><label for="age">Age:</label> 
+				<td class="right">#{if showUser.age != 0} ${showUser.age}#{/if}</td> 
 			</tr>
 			<tr>
-				<td><label for="website">Website:</label>
-				<td>${showUser.website}</td>
+				<td class="left"><label for="website">Website:</label>
+				<td class="right">${showUser.website}</td>
 			</tr>
 			<tr>
-				<td><label for="profession">Profession:</label>
-				<td>${showUser.profession}</td>
+				<td class="left"><label for="profession">Profession:</label>
+				<td class="right">${showUser.profession}</td>
 			</tr>
 			<tr>
-				<td><label for="employer">Employer:</label>
-				<td>${showUser.employer}</td>
+				<td class="left"><label for="employer">Employer:</label>
+				<td class="right">${showUser.employer}</td>
 			</tr>
 			<tr>
-				<td><label for="biography">Biography:</label>
-				<td>${showUser.biography}</td>
+				<td class="left"><label for="biography">Biography:</label>
+				<td class="right">${showUser.biography}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentquestions">Recent questions:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentQuestions(), as:'question'}
+						<li><a href="@{Application.question(question.id())}">${question.content()}</a>#{date question /}</li>
+						#{/list}
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentanswers">Recent answers:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentAnswers(), as:'answer'}
+						<li><a href="@{Application.question(answer.question().id())}">${answer.content()}</a>#{date answer /}</li>
+						#{/list}
+					</ul>				
+				</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="recentcomments">Recent comments:</label>
+				<td class="right">
+					<ul class="showprofile">
+						#{list items:showUser.getRecentComments(), as:'comment'}
+						<li><a href="@{Application.index()}">${comment.content()}#{date comment /}</li>
+						#{/list}
+					</ul>
+				</td>
+			</tr>
+				<td class="left"><label for="numberOfQuestions">Number of questions:</label>
+				<td class="right">${showUser.getQuestions().size()}</td>
+			<tr>
+				<td class="left"><label for="numberOfAnswers">Number of answers:</label>
+				<td class="right">${showUser.getAnswers().size()}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="bestAnswers">Number of best answers:</label>
+				<td class="right">${showUser.bestAnswers().size()}</td>
+			</tr>
+			<tr>
+				<td class="left"><label for="highRatedAnswers">Number of high rated answers:</label>
+				<td class="right">${showUser.highRatedAnswers().size()}</td>
 			</tr>
 		</table>
 	</div><!-- end showprofile -->
 #{/if}
-#{elseif user}
-	<div class="editprofile">
-		#{form @Secured.saveProfile()}
-			<table>
-				<tr>
-					#{field 'username'}
-					<td><label for="username">&{'Username: '}</label></td>
-					<td><label for="username">${user.name}</label></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'email'}
-					<td><label for="email">&{'Email: '}</label></td>
-					<td><input type="text" name="email" id="email" value="${user.email}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'fullname'}
-					<td><label for="fullname">&{'Real Name: '}</label></td>
-					<td><input type="text" name="fullname" id="fullname" value="${user.fullname}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'birthday'}
-					<td><label for="birthday">&{'Birthday: '}</label></td>
-					<td><input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'website'}
-					<td><label for="website">&{'Website: '}</label></td>
-					<td><input type="text" name="website" id="website" value="${user.website}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'profession'}
-					<td><label for="profession">&{'Profession: '}</label>
-					<td><input type="text" name="profession" id="profession" value="${user.profession}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'employer'}
-					<td><label for="employer">&{'Employer: '}</label></td>
-					<td><input type="text" name="employer" id="employer" value="${user.employer}" /></td>
-					#{/field}
-				</tr>
-				<tr>
-					#{field 'biography'}
-					<td><label for="biography">&{'Biography: '}</label></td>
-					<td><textarea class="editprofile" name="${field.name}">${user.biography}</textarea></td>
-					#{/field}
-				</tr>
-				<tr>
-					<td><input type="submit" id="saveProfile" value="Save Profile" /></td>
-				</tr>
-			</table>
-		#{/form}
-	</div><!-- end showprofile -->
-#{/elseif}
 #{else}
 	#{set title:'Error' /}
-	<h1>No such user ${name}</h1>
+	<h1>No such User</h1>
 #{/else}
