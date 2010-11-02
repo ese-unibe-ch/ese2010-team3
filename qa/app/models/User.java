@@ -423,7 +423,7 @@ public class User implements IObserver {
 	 */
 
 	public static int getUserCount() {
-		return User.users.size();
+		return Database.get().users().count();
 	}
 
 	/**

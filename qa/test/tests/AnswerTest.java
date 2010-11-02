@@ -3,6 +3,7 @@ package tests;
 import java.util.Date;
 
 import models.Answer;
+import models.ISystemInformation;
 import models.Question;
 import models.SystemInformation;
 import models.User;

@@ -18,8 +18,7 @@ public class Secured extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!validation.hasErrors()) {
 			User user = Session.get().currentUser();
-			Question question = Database.get().questions().add(Session.get().currentUser(), content);
-			Question question = Question.register(user, content);
+			Question question = Database.get().questions().add(user, content);
 			question.setTagString(tags);
 			user.startObserving(question);
 			user.addRecentQuestions(question);
@@ -31,8 +30,10 @@ public class Secured extends Controller {
 
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
-			Answer answer = Database.get().questions().get(questionId)
-			Session.get().currentUser().addRecentAnswers(answer);
+			User thisUser = Session.get().currentUser();
+			Question thisQuestion = Database.get().questions().get(questionId);
+			Answer answer = thisQuestion.answer(thisUser, content);
+			thisUser.addRecentAnswers(answer);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -42,8 +43,10 @@ public class Secured extends Controller {
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
-			Comment comment = Database.get().questions().get(questionId).comment(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentComments(comment);
+			User thisUser = Session.get().currentUser();
+			Question thisQuestion = Database.get().questions().get(questionId);
+			Comment comment = thisQuestion.comment(thisUser, content);
+			thisUser.addRecentComments(comment);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -198,7 +201,7 @@ public class Secured extends Controller {
 	}
 
 	public static void watchQuestion(int id) {
-		Question question = Question.get(id);
+		Question question = Database.get().questions().get(id);
 		User user = Session.get().currentUser();
 		if (question != null)
 			user.startObserving(question);
@@ -206,7 +209,7 @@ public class Secured extends Controller {
 	}
 
 	public static void unwatchQuestion(int id) {
-		Question question = Question.get(id);
+		Question question =  Database.get().questions().get(id);
 		User user = Session.get().currentUser();
 		if (question != null)
 			user.stopObserving(question);
@@ -215,11 +218,11 @@ public class Secured extends Controller {
 
 	public static void followNotification(int id) {
 		User user = Session.get().currentUser();
-		Notification n = user.getNotification(id);
-		if (n != null)
-			n.unsetNew();
-		if (n != null && n.getAbout() instanceof Answer)
-			Application.question(((Answer) n.getAbout()).question().id());
+		Notification notification = user.getNotification(id);
+		if (notification != null)
+			notification.unsetNew();
+		if (notification != null && notification.getAbout() instanceof Answer)
+			Application.question(((Answer) notification.getAbout()).question().id());
 		else if (!redirectToCallingPage())
 			Application.notifications();
 	}

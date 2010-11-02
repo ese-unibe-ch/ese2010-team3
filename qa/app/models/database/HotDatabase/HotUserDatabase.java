@@ -1,7 +1,11 @@
 package models.database.HotDatabase;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import models.Item;
 import models.User;
 import models.database.IUserDatabase;
 
@@ -24,5 +28,13 @@ public class HotUserDatabase implements IUserDatabase {
 
 	public void remove(String name) {
 		users.remove(name);
+	}
+
+	public Collection<User> all() {
+		return users.values();
+	}
+
+	public int count() {
+		return users.size();
 	}
 }

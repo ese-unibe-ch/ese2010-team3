@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import models.Answer;
 import models.IDTable;
 import models.Question;
 import models.User;
 import models.SearchEngine.SearchResult;
 import models.database.IQuestionDatabase;
 import models.helpers.Pair;
-import models.helpers.Visitor;
+import models.helpers.Mapper;
 
 public class HotQuestionDatabase implements IQuestionDatabase {
 
-	public  IDTable<Question> questions = new IDTable();
+	private  IDTable<Question> questions = new IDTable();
 
 	private static final Comparator byRating = new Comparator() {
 		public int compare(Object arg0, Object arg1) {
@@ -25,7 +28,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			return y.left.compareTo(x.left);
 		}
 	};
-	private static final Visitor onlyQuestion = new Visitor<Question,Pair<Integer,Question>>() {
+	private static final Mapper onlyQuestion = new Mapper<Question,Pair<Integer,Question>>() {
 
 		@Override
 		protected Question visit(Pair<Integer, Question> i) {
@@ -73,4 +76,46 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		return questions.add(q);
 	}
 
+	public int count() {
+		return questions.size();
+	}
+
+	public Set<Answer> getBestRatedAnswers() {
+		HashSet<Answer> answers = new HashSet<Answer>();
+		for (Question q : questions) {
+			if (q.hasBestAnswer()) {
+				answers.add(q.getBestAnswer());
+			}
+		}
+		return answers;
+	}
+
+	public int countBestRatedAnswers() {
+		int count = 0;
+		for (Question q : questions) {
+			if (q.hasBestAnswer()) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int countAllAnswers() {
+		int count = 0;
+		for (Question q: questions) {
+			count += q.countAnswers();
+		}
+		return count;
+	}
+
+	public int countHighRatedAnswers() {
+		int count = 0;
+		for (Question q: questions) {
+			for (Answer a: q.answers()) {
+				if (a.isHighRated())
+					count += 1;
+			}
+		}
+		return count;
+	}
 }

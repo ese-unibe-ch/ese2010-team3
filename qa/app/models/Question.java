@@ -16,7 +16,7 @@ import java.util.Set;
 import models.database.Database;
 import models.database.HotDatabase.HotQuestionDatabase;
 import models.helpers.Pair;
-import models.helpers.Visitor;
+import models.helpers.Mapper;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -234,6 +234,10 @@ public class Question extends Entry implements IObservable {
 			return false;
 	}
 
+	public boolean hasBestAnswer() {
+		return bestAnswer != null;
+	}
+	
 	public Answer getBestAnswer() {
 		return bestAnswer;
 	}
@@ -384,54 +388,7 @@ public class Question extends Entry implements IObservable {
 
 	}
 
-	/*
-	 * Interface to access statistical data of Questions
-	 */
-
-	/**
-	 *Get all high rated answers in the system
-	 * 
-	 * @return ArrayList<Answer> an arraylist of all high rated answers
-	 */
-	public static ArrayList<Answer> getHighRatedAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Question q : questions) {
-			for (Answer a : q.answers) {
-				if (a.isHighRated()) {
-					answers.add(a);
-				}
-			}
-		}
-		return answers;
-	}
-
-	/**
-	 *Get all best answers in the system
-	 * 
-	 * @return ArrayList<Answer> an arrayList of all best answers
-	 */
-	public static ArrayList<Answer> getBestRatedAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Question q : questions) {
-			if (q.bestAnswer != null) {
-				answers.add(q.bestAnswer);
-			}
-		}
-		return answers;
-	}
-
-	/**
-	 *Get all answers in the system
-	 * 
-	 * @return ArrayList<Answer> an arrayList of all answers
-	 */
-	public static ArrayList<Answer> getAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Question q : Question.questions) {
-			for (Answer a : q.answers) {
-				answers.add(a);
-			}
-		}
-		return answers;
+	public int countAnswers() {
+		return answers.size();
 	}
 }

@@ -11,11 +11,11 @@ import java.util.Set;
 import models.Question;
 import models.Tag;
 import models.helpers.Pair;
-import models.helpers.Visitor;
+import models.helpers.Mapper;
 
 import static models.helpers.SetOperations.*;
 
-public class SearchResult extends Visitor<Pair<Integer,Question>,Question> {
+public class SearchResult extends Mapper<Pair<Integer,Question>,Question> {
 	private final Set<String> queryWords;
 	public SearchResult(String query) {
 		queryWords = filterWords(getWords(query));

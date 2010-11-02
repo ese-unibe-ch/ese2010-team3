@@ -47,7 +47,7 @@ public class Application extends Controller {
 	}
 
 	public static void relatedQuestions(int id) {
-		Question question = Question.get(id);
+		Question question = Database.get().questions().get(id);
 
 		render(question);
 	}
@@ -117,7 +117,7 @@ public class Application extends Controller {
 	}
 	
 		public static void editProfile(String userName) {
-		User user = User.get(userName);
+		User user = Database.get().users().get(userName);
 		render(user);
 	}
 
@@ -163,10 +163,10 @@ public class Application extends Controller {
 		float answersPerMonth;
 
 		numberOfUsers = User.getUserCount();
-		numberOfQuestions = Question.questions().size();
-		numberOfAnswers = Question.getAnswers().size();
-		numberOfHighRatedAnswers = Question.getHighRatedAnswers().size();
-		numberOfBestAnswers = Question.getBestRatedAnswers().size();
+		numberOfQuestions = Database.get().questions().count();
+		numberOfAnswers = Database.get().questions().countAllAnswers();
+		numberOfHighRatedAnswers = Database.get().questions().countHighRatedAnswers();
+		numberOfBestAnswers = Database.get().questions().countBestRatedAnswers();
 		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
 		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
 		questionsPerMonth = (float) numberOfQuestions
