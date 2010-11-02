@@ -24,7 +24,7 @@
 			<li>
 			#{showProfile relatedQ /}:
 				<a href="@{Application.question(relatedQ.id())}">
-				${relatedQ.summary()}</a>#{date question /}</p>
+				${relatedQ.summary()}</a>#{date relatedQ /}</p>
 			#{/list}
 			</li>
 		<a href="@{Application.relatedQuestions(question.id())}">More...</a> 
