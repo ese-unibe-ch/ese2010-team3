@@ -1,5 +1,6 @@
 package models.helpers;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -39,5 +40,23 @@ public class SetOperations {
 
 	  public static <T> boolean isSuperset(Set<T> setA, Set<T> setB) {
 	    return setA.containsAll(setB);
+	  }
+	  
+	  public static <T> boolean arrayEquals(T[] a, T[] b) {
+	        if (a.length != b.length)
+	            return false;
+	        for (int i = 0; i < a.length; i++)
+	        {
+	            if (!a[i].equals(b[i]))
+	                return false;
+	        }
+	        return true;
+	    }
+	  public static <T> boolean containsAny(Collection<T> c1, Collection<T> c2) {
+		  for (T t : c1) {
+			  if (c2.contains(t))
+				  return true;
+		  }
+		  return false;
 	  }
 }

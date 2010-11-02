@@ -22,7 +22,13 @@ public class Database {
 	 * Exchanges the Database. Useful for mocking or hot replacement to other engine.
 	 * @param d The fully functional database to take responsibility.
 	 */
-	public void swapWith(IDatabase d) {
+	public static void swapWith(IDatabase d) {
 		instance = d;
+	}
+
+	public static void clear() {
+		get().users().clear();
+		get().tags().clear();
+		get().questions().clear();
 	}
 }

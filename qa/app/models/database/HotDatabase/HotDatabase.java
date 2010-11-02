@@ -2,6 +2,7 @@ package models.database.HotDatabase;
 
 import models.database.IDatabase;
 import models.database.IQuestionDatabase;
+import models.database.ITagDatabase;
 import models.database.IUserDatabase;
 
 /**
@@ -12,6 +13,7 @@ import models.database.IUserDatabase;
 public class HotDatabase implements IDatabase {
 	static final HotQuestionDatabase questions = new HotQuestionDatabase();
 	static final HotUserDatabase users = new HotUserDatabase();
+	static final HotTagDatabase tags = new HotTagDatabase();
 
 
 	public IQuestionDatabase questions() {
@@ -20,5 +22,9 @@ public class HotDatabase implements IDatabase {
 
 	public IUserDatabase users() {
 		return users;
+	}
+
+	public ITagDatabase tags() {
+		return tags;
 	}
 }

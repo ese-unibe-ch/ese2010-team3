@@ -37,4 +37,8 @@ public class HotUserDatabase implements IUserDatabase {
 	public int count() {
 		return users.size();
 	}
+
+	public void clear() {
+		users.clear();
+	}
 }

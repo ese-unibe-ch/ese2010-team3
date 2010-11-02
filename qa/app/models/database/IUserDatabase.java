@@ -38,4 +38,6 @@ public interface IUserDatabase {
 	public Collection<User> all();
 	
 	public int count();
+
+	public void clear();
 }

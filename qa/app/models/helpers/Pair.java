@@ -8,4 +8,8 @@ public class Pair<T1, T2> {
 		left = a;
 		right = b;
 	}
+	
+	public String toString() {
+		return "("+left.toString()+","+right.toString()+")";
+	}
 }

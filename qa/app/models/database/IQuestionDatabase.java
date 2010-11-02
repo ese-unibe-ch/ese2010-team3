@@ -76,4 +76,8 @@ public interface IQuestionDatabase {
 	public int countHighRatedAnswers();
 
 	public int countAllAnswers();
+	
+	public List<Question> findSimilar(Question q);
+
+	public void clear();
 }

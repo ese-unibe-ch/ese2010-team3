@@ -5,17 +5,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import models.Answer;
 import models.IDTable;
 import models.Question;
+import models.Tag;
 import models.User;
 import models.SearchEngine.SearchResult;
 import models.database.IQuestionDatabase;
 import models.helpers.Pair;
 import models.helpers.Mapper;
+
+import static models.helpers.SetOperations.*;
 
 public class HotQuestionDatabase implements IQuestionDatabase {
 
@@ -29,7 +33,6 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		}
 	};
 	private static final Mapper onlyQuestion = new Mapper<Question,Pair<Integer,Question>>() {
-
 		@Override
 		protected Question visit(Pair<Integer, Question> i) {
 			return i.right;
@@ -37,7 +40,11 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	};
 
 	public  List<Question> searchFor(String term) {
-		SearchResult search = new SearchResult(term);
+		Set<Tag> tags = new HashSet<Tag>();
+		for (String s : term.split("\\s+")) {
+			tags.add(Tag.get(s));
+		}
+		SearchResult search = new SearchResult(term,tags);
 		List<Pair<Integer,Question>> results = search.over(questions);
 		Collections.sort(results, byRating);
 		return onlyQuestion.over(results);
@@ -117,5 +124,29 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			}
 		}
 		return count;
+	}
+	
+	private List<Question> withMatchingTag(Question q, Iterable<Question> list) {
+		List<Question> result = new LinkedList<Question>();
+		for (Question question : list) {
+			if ( containsAny(question.getTags(),q.getTags()) &&
+					q!=question) {
+				result.add(question);
+			}
+		}
+		return result;
+	}
+
+	public List<Question> findSimilar(Question q) {
+		Set<Tag> tags = new HashSet(q.getTags());
+		SearchResult search = new SearchResult(q.content(),tags);
+		List<Pair<Integer, Question>> result = search.over(questions);
+		Collections.sort(result,byRating);
+		
+		return withMatchingTag(q,onlyQuestion.over(result));
+	}
+
+	public void clear() {
+		questions.clear();
 	}
 }

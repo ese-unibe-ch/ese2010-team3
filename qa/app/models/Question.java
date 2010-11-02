@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import models.database.Database;
 import models.database.HotDatabase.HotQuestionDatabase;
+import models.helpers.MapComparator;
 import models.helpers.Pair;
 import models.helpers.Mapper;
 
@@ -271,7 +272,7 @@ public class Question extends Entry implements IObservable {
 		Collections.sort(this.tags);
 	}
 
-	public ArrayList<Tag> getTags() {
+	public List<Tag> getTags() {
 		return (ArrayList<Tag>) this.tags.clone();
 	}
 	/**
@@ -313,13 +314,14 @@ public class Question extends Entry implements IObservable {
 	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
 	 * SizeOfTagsArrayQuestionTwo)
 	 * 
-	 * @param q
+	 * @param questions2
 	 *            the ArrayList of questions to be sorted
 	 * @return ArrayList<Question> the sorted ArrayList
 	 */
-	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
-		ArrayList<Question> questions = q;
-		ArrayList<Question> sorted;
+	@Deprecated
+	private List<Question> sortQuestionsByMatchRatio(List<Question> questions2) {
+		List<Question> questions = new ArrayList<Question>();
+		Collections.copy(questions, questions2);
 		int matchCount;
 		Map<Question, Double> map = new HashMap<Question, Double>();
 		for (Question qu : questions) {
@@ -333,34 +335,11 @@ public class Question extends Entry implements IObservable {
 			double ratio = questionOneRatio * questionTwoRatio;
 			map.put(qu, ratio);
 		}
-		sorted = new ArrayList<Question>(this.sortMapByValue(map));
-		Collections.reverse(sorted);
+		Comparator<Question> byMap = new MapComparator<Question>(map);
+		Collections.sort(questions,	byMap);
+		Collections.reverse(questions);
 
-		return sorted;
-	}
-
-	/**
-	 * Sorts a map by comparing the values and returns a set of the
-	 * corresponding keys <br>
-	 * 
-	 * @param map
-	 *            the map to be sorted
-	 * @return Set the set of the keys
-	 */
-	public static Set sortMapByValue(Map map) {
-		List list = new LinkedList(map.entrySet());
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Comparable) ((Map.Entry) (o1)).getValue())
-						.compareTo(((Map.Entry) (o2)).getValue());
-			}
-		});
-		Map result = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			result.put(entry.getKey(), entry.getValue());
-		}
-		return result.keySet();
+		return questions;
 	}
 
 	// From <a
@@ -371,21 +350,12 @@ public class Question extends Entry implements IObservable {
 	 * Get all questions that containing at least one of the tags of the
 	 * original question.
 	 * 
-	 * @return ArrayList<Question> the ArrayList containing all questions that
+	 * @return List<Question> the List containing all questions that
 	 *         contain at least one of the first question.
 	 */
-	public ArrayList<Question> getSimilarQuestions() {
-		ArrayList<Question> questions = new ArrayList<Question>();
-		for (Tag t : this.getTags()) {
-			for (Question q : t.getQuestions()) {
-				if (!questions.contains(q) && !q.equals(this)) {
-					questions.add(q);
-				}
-			}
-		}
-		questions = this.sortQuestionsByMatchRatio(questions);
+	public List<Question> getSimilarQuestions() {
+		List<Question> questions = Database.get().questions().findSimilar(this);
 		return questions;
-
 	}
 
 	public int countAnswers() {

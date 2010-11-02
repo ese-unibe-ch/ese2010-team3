@@ -11,4 +11,6 @@ public interface IDatabase {
 	IQuestionDatabase questions();
 	
 	IUserDatabase users();
+	
+	ITagDatabase tags();
 }

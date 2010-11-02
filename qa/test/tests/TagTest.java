@@ -1,8 +1,13 @@
 package tests;
 
+import java.util.List;
+
 import models.Question;
 import models.Tag;
 import models.User;
+import models.database.Database;
+import models.database.HotDatabase.HotDatabase;
+import models.helpers.SetOperations;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +23,13 @@ public class TagTest extends UnitTest {
 
 	@Before
 	public void setUp() {
+		Database.clear();
 		this.douglas = new User("Douglas", "douglas");
 		this.question1 = new Question(this.douglas,
 				"Why did the chicken cross the road?");
 		this.question2 = new Question(this.douglas,
 				"Is this question meaningless?");
-		this.tagName = "" + Math.random();
+		this.tagName = "tag";
 	}
 
 	@Test
@@ -113,37 +119,7 @@ public class TagTest extends UnitTest {
 		assertEquals(this.question1.getTags().get(2), tagC);
 		this.question1.setTagString(null);
 	}
-
-	@Test
-	public void shouldListCorrectOrderOfSimilarQuestions() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
-		Question questionA = new Question(A, "A?");
-		Question questionB = new Question(B, "B?");
-		Question questionC = new Question(C, "C?");
-		Question questionD = new Question(D, "D?");
-		Question questionE = new Question(D, "E?");
-		Question questionF = new Question(A, "F?");
-
-		questionA.setTagString("A B C D");
-		questionB.setTagString("A B C D");
-		questionC.setTagString("A B C D L");
-		questionD.setTagString("A B C D L O");
-		questionE.setTagString("A");
-		// To check if duplicate values are allowed
-		questionF.setTagString("A B C D");
-
-		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(0))
-				|| questionF.equals(questionA.getSimilarQuestions().get(0)));
-		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(1))
-				|| questionF.equals(questionA.getSimilarQuestions().get(1)));
-		assertEquals(questionC, questionA.getSimilarQuestions().get(2));
-		assertEquals(questionD, questionA.getSimilarQuestions().get(3));
-		assertEquals(questionE, questionA.getSimilarQuestions().get(4));
-
-	}
+	
 
 	@Test
 	public void shouldNotListQuestionWithZeroTags() {
@@ -162,14 +138,52 @@ public class TagTest extends UnitTest {
 		questionM.setTagString(" ");
 		questionN.setTagString("");
 		questionO.setTagString("");
+		
+		List<Question> similarK = questionK.getSimilarQuestions();
+		List<Question> similarL = questionL.getSimilarQuestions();
+		List<Question> similarM = questionM.getSimilarQuestions();
+		List<Question> similarN = questionN.getSimilarQuestions();
+		List<Question> similarO = questionO.getSimilarQuestions();
 
-		assertEquals(questionK.getSimilarQuestions().size(), 0);
-		assertEquals(questionL.getSimilarQuestions().size(), 0);
-		assertEquals(questionM.getSimilarQuestions().size(), 0);
-		assertEquals(questionN.getSimilarQuestions().size(), 0);
-		assertEquals(questionO.getSimilarQuestions().size(), 0);
+		assertTrue(similarK.isEmpty());		
+		assertTrue(similarL.isEmpty());
+		assertTrue(similarM.isEmpty());
+		assertTrue(similarN.isEmpty());	
+		assertTrue(similarO.isEmpty());
+
+
 
 	}
+
+	@Test
+	public void shouldListCorrectOrderOfSimilarQuestions() {
+		Database.clear();
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		Question questionA = new Question(A, "A?");
+		Question questionB = new Question(B, "B?");
+		Question questionC = new Question(C, "C?");
+		Question questionD = new Question(D, "D?");
+		Question questionE = new Question(D, "E?");
+		Question questionF = new Question(A, "F?");
+
+		questionA.setTagString("A B C D");
+		questionB.setTagString("A B C D");
+		questionC.setTagString("A B C");
+		questionD.setTagString("A B");
+		questionE.setTagString("A");
+		// To check if duplicate values are allowed
+		questionF.setTagString("A B C D");
+		
+		Question[] possibility1 = {questionB,questionF,questionC,questionD,questionE};
+		Question[] possibility2 = {questionF,questionB,questionC,questionD,questionE};
+		List<Question> similar = Database.get().questions().findSimilar(questionA);
+		assertTrue(SetOperations.arrayEquals(possibility1,similar.toArray()) ||
+				SetOperations.arrayEquals(possibility2,similar.toArray()));
+	}
+
 
 	private static int countTags(String name) {
 		int count = 0;
