@@ -2,6 +2,7 @@ package models;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -17,10 +18,8 @@ public abstract class Entry extends Item implements Comparable {
 	/**
 	 * Create an <code>Entry</code>.
 	 * 
-	 * @param owner
-	 *            the {@link User} who owns the <code>Entry</code>
-	 * @param content
-	 *            the content of the <code>Entry</code>
+	 * @param owner the {@link User} who owns the <code>Entry</code>
+	 * @param content the content of the <code>Entry</code>
 	 */
 	public Entry(User owner, String content) {
 		super(owner);
@@ -29,8 +28,9 @@ public abstract class Entry extends Item implements Comparable {
 	}
 
 	/**
-	 * Unregisters a deleted {@link Comment} to its {@link Entry}
-	 * @param comment the <code> Comment </code> to be unregistered.
+	 * Unregisters a deleted {@link Comment} to its {@link Entry}.
+	 * 
+	 * @param comment the <code> Comment </code> to be unregistered
 	 */
 	public abstract void unregister(Comment comment);
 	
@@ -56,11 +56,10 @@ public abstract class Entry extends Item implements Comparable {
 	/**
 	 * Unregisters a deleted {@link Vote}.
 	 * 
-	 * @param vote
-	 *            the {@link Vote} to unregister
+	 * @param vote the {@link Vote} to unregister
 	 */
 	public void unregister(Vote vote) {
-		this.votes.remove(vote.owner().name());
+		this.votes.remove(vote.owner().getName());
 	}
 
 	/**
@@ -74,7 +73,7 @@ public abstract class Entry extends Item implements Comparable {
 	}
 
 	/**
-	 * Count all positive {@link Vote}s on an <code>Entry</code>
+	 * Count all positive {@link Vote}s on an <code>Entry</code>.
 	 * 
 	 * @return number of positive {@link Vote}s
 	 */
@@ -83,7 +82,7 @@ public abstract class Entry extends Item implements Comparable {
 	}
 
 	/**
-	 * Count all negative {@link Vote}s on an <code>Entry</code>
+	 * Count all negative {@link Vote}s on an <code>Entry</code>.
 	 * 
 	 * @return number of negative {@link Vote}s
 	 */
@@ -109,7 +108,13 @@ public abstract class Entry extends Item implements Comparable {
 	public int compareTo(Object o) {
 		return ((Entry) o).rating() - this.rating();
 	}
-
+	
+	/**
+	 * Counts the number of <code>Votes</code> of an <code>Entry</code>.
+	 * 
+	 * @param up boolean whether there is a <code>Vote</code> to this <code>Entry</code> or not
+	 * @return counter number of <code>Votes</code>
+	 */
 	private int countVotes(boolean up) {
 		int counter = 0;
 		for (Vote vote : this.votes.values())
@@ -121,8 +126,7 @@ public abstract class Entry extends Item implements Comparable {
 	/**
 	 * Vote an <code>Entry</code> up.
 	 * 
-	 * @param user
-	 *            the {@link User} who voted
+	 * @param user the {@link User} who voted
 	 * @return the {@link Vote}
 	 */
 	public Vote voteUp(User user) {
@@ -132,26 +136,31 @@ public abstract class Entry extends Item implements Comparable {
 	/**
 	 * Vote an <code>Entry</code> down.
 	 * 
-	 * @param user
-	 *            the {@link User} who voted
+	 * @param user the {@link User} who voted
 	 * @return the {@link Vote}
 	 */
 	public Vote voteDown(User user) {
 		return this.vote(user, false);
 	}
 
+	/**
+	 * Let an <code>User</code> vote for an <code>Entry</code>.
+	 * 
+	 * @param user who is voting
+	 * @return vote of the <code>User</code>
+	 */
 	private Vote vote(User user, boolean up) {
 		if (user == this.owner())
 			return null;
-		if (this.votes.containsKey(user.name()))
-			this.votes.get(user.name()).unregister();
+		if (this.votes.containsKey(user.getName()))
+			this.votes.get(user.getName()).unregister();
 		Vote vote = new Vote(user, this, up);
-		this.votes.put(user.name(), vote);
+		this.votes.put(user.getName(), vote);
 		return vote;
 	}
 	
 	 /**
-	  * Turns this Entry into an anonymous (user-less) one 
+	  * Turns this Entry into an anonymous (user-less) one.
 	  */
 	 public void anonymize() {
 		 this.unregisterUser();
@@ -170,7 +179,7 @@ public abstract class Entry extends Item implements Comparable {
 	}
 
 	/**
-	 * Get all <code>Votes</code>
+	 * Get all <code>Votes</code>.
 	 * 
 	 * @return votes
 	 */

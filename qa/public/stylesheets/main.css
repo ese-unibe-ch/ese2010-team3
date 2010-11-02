@@ -49,6 +49,15 @@ div.main {
 	padding: 0;
 	position: relative;
 }
+
+.cheaterWarning {
+	color: #ffffff;
+	font-size: 1.4em;
+	font-wight: bold;
+	text-align: center;
+	border-bottom: 15px solid #f00;
+}
+
 /*********************** 
 header
 ************************/

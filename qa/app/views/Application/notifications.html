@@ -1,6 +1,6 @@
 #{extends 'main.html' /}
 
-#{set title:'ajopi - Notifications for ' + user.name() /}
+#{set title:'ajopi - Notifications for ' + user.getName() /}
 <div>
 	<h2>Notification Inbox</h2>
 	<ul>
@@ -9,7 +9,7 @@
 		<div>
 			#{if notification.isNew()}*new*#{/if}
 			#{showProfile notification.getAbout() /} answered to
-			${notification.getAbout().question().summary()}:
+			${notification.getAbout().getQuestion().summary()}:
 		</div>
 		<div>
 			<a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content()}</a>
