@@ -23,6 +23,17 @@
 				#{vote question /}
 			#{/if}
 		</li>
+		#{if question.getSimilarQuestions().size() != 0}
+		<a>Related Questions</a>
+			#{list items:similarQuestions, as:'relatedQ'}<p>
+			<li>
+			#{showProfile relatedQ /}:
+				<a href="@{Application.question(relatedQ.id())}">
+				${relatedQ.summary()}</a>#{date relatedQ /}</p>
+			#{/list}
+			</li>
+		<a href="@{Application.relatedQuestions(question.id())}">More...</a> 
+		#{/if}
 		#{if question.comments().size() != 0}
 			<p class="comments">Comments</p>
 			<ul class="comments">
@@ -93,6 +104,10 @@
 			<input type="submit" value="Post" />
 		#{/form}
 	#{/if}
+		
+		
+		
+		
 #{/if}#{else}
 	#{set title:'Error' /}
 	<h1>Question does not exist.</h1>

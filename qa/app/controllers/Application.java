@@ -35,9 +35,19 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
+			List<Question> similarQuestions = question.getSimilarQuestions();
+			if (similarQuestions.size() > 3) {
+				similarQuestions = similarQuestions.subList(0, 3);
+			}
 			List<Answer> answers = question.answers();
-			render(question, answers);
+			render(question, answers, similarQuestions);
 		}
+	}
+
+	public static void relatedQuestions(int id) {
+		Question question = Question.get(id);
+
+		render(question);
 	}
 
 	public static void answerQuestion(int id) {
@@ -91,6 +101,7 @@ public class Application extends Controller {
 			register();
 		}
 	}
+
 	public static void showprofile(String userName) {
 		User showUser = User.get(userName);
 		boolean canEdit = true;
@@ -151,7 +162,6 @@ public class Application extends Controller {
 		numberOfBestAnswers = Question.getBestRatedAnswers().size();
 		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
 		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
-		System.out.println(t.getWeeks(now));
 		questionsPerMonth = (float) numberOfQuestions
 				/ (float) t.getMonths(now);
 		answersPerDay = (float) numberOfAnswers / (float) t.getDays(now);

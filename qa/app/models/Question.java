@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -21,12 +28,11 @@ public class Question extends Entry implements IObservable {
 	private IDTable<Comment> comments;
 	private final int id;
 
-	private Answer     bestAnswer;
-	private Calendar   settingOfBestAnswer;
+	private Answer bestAnswer;
+	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
-	
-	protected HashSet<IObserver> observers;
 
+	protected HashSet<IObserver> observers;
 
 	/**
 	 * Create a Question.
@@ -294,6 +300,89 @@ public class Question extends Entry implements IObservable {
 	public void notifyObservers(Object arg) {
 		for (IObserver o : this.observers)
 			o.observe(this, arg);
+	}
+
+	/**
+	 * Sorts an ArrayList in descending order of questions by comparing the
+	 * ratios of matching tags and the overall number of tags per question. <br>
+	 * Calculation:<br>
+	 * 
+	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
+	 * SizeOfTagsArrayQuestionTwo)
+	 * 
+	 * @param q
+	 *            the ArrayList of questions to be sorted
+	 * @return ArrayList<Question> the sorted ArrayList
+	 */
+	private ArrayList<Question> sortQuestionsByMatchRatio(ArrayList<Question> q) {
+		ArrayList<Question> questions = q;
+		ArrayList<Question> sorted;
+		int matchCount;
+		Map<Question, Double> map = new HashMap<Question, Double>();
+		for (Question qu : questions) {
+			List<Tag> tags = this.getTags();
+			tags.retainAll(qu.getTags());
+			matchCount = tags.size();
+			double questionOneRatio = ((double) matchCount / (double) this
+					.getTags().size());
+			double questionTwoRatio = ((double) matchCount / (double) qu
+					.getTags().size());
+			double ratio = questionOneRatio * questionTwoRatio;
+			map.put(qu, ratio);
+		}
+		sorted = new ArrayList<Question>(this.sortMapByValue(map));
+		Collections.reverse(sorted);
+
+		return sorted;
+	}
+
+	/**
+	 * Sorts a map by comparing the values and returns a set of the
+	 * corresponding keys <br>
+	 * 
+	 * @param map
+	 *            the map to be sorted
+	 * @return Set the set of the keys
+	 */
+	public static Set sortMapByValue(Map map) {
+		List list = new LinkedList(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+						.compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+		Map result = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result.keySet();
+	}
+
+	// From <a
+	// href=http://www.programmersheaven.com/download/49349/download.aspx
+	// 01.11.2010
+
+	/**
+	 * Get all questions that containing at least one of the tags of the
+	 * original question.
+	 * 
+	 * @return ArrayList<Question> the ArrayList containing all questions that
+	 *         contain at least one of the first question.
+	 */
+	public ArrayList<Question> getSimilarQuestions() {
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for (Tag t : this.getTags()) {
+			for (Question q : t.getQuestions()) {
+				if (!questions.contains(q) && !q.equals(this)) {
+					questions.add(q);
+				}
+			}
+		}
+		questions = this.sortQuestionsByMatchRatio(questions);
+		return questions;
+
 	}
 
 	/*

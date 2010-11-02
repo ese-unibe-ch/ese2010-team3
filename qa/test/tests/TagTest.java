@@ -114,6 +114,63 @@ public class TagTest extends UnitTest {
 		this.question1.setTagString(null);
 	}
 
+	@Test
+	public void shouldListCorrectOrderOfSimilarQuestions() {
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		Question questionA = new Question(A, "A?");
+		Question questionB = new Question(B, "B?");
+		Question questionC = new Question(C, "C?");
+		Question questionD = new Question(D, "D?");
+		Question questionE = new Question(D, "E?");
+		Question questionF = new Question(A, "F?");
+
+		questionA.setTagString("A B C D");
+		questionB.setTagString("A B C D");
+		questionC.setTagString("A B C D L");
+		questionD.setTagString("A B C D L O");
+		questionE.setTagString("A");
+		// To check if duplicate values are allowed
+		questionF.setTagString("A B C D");
+
+		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(0))
+				|| questionF.equals(questionA.getSimilarQuestions().get(0)));
+		assertTrue(questionB.equals(questionA.getSimilarQuestions().get(1))
+				|| questionF.equals(questionA.getSimilarQuestions().get(1)));
+		assertEquals(questionC, questionA.getSimilarQuestions().get(2));
+		assertEquals(questionD, questionA.getSimilarQuestions().get(3));
+		assertEquals(questionE, questionA.getSimilarQuestions().get(4));
+
+	}
+
+	@Test
+	public void shouldNotListQuestionWithZeroTags() {
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		Question questionK = new Question(A, "K?");
+		Question questionL = new Question(B, "L?");
+		Question questionM = new Question(C, "M?");
+		Question questionN = new Question(D, "N?");
+		Question questionO = new Question(D, "O?");
+
+		questionK.setTagString("J K Z");
+		questionL.setTagString(" ");
+		questionM.setTagString(" ");
+		questionN.setTagString("");
+		questionO.setTagString("");
+
+		assertEquals(questionK.getSimilarQuestions().size(), 0);
+		assertEquals(questionL.getSimilarQuestions().size(), 0);
+		assertEquals(questionM.getSimilarQuestions().size(), 0);
+		assertEquals(questionN.getSimilarQuestions().size(), 0);
+		assertEquals(questionO.getSimilarQuestions().size(), 0);
+
+	}
+
 	private static int countTags(String name) {
 		int count = 0;
 		for (Tag tag : Tag.tags())
