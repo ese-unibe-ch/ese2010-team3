@@ -284,17 +284,15 @@ public class Question extends Entry {
 		int matchCount;
 		Map<Question, Double> map = new HashMap<Question, Double>();
 		for (Question qu : questions) {
-			if (this.getTags().size() != 0 && qu.getTags().size() != 0) {
-				List<Tag> tags = this.getTags();
-				tags.retainAll(qu.getTags());
-				matchCount = tags.size();
-				double questionOneRatio = ((double) matchCount / (double) this
-						.getTags().size());
-				double questionTwoRatio = ((double) matchCount / (double) qu
-						.getTags().size());
-				double ratio = questionOneRatio * questionTwoRatio;
-				map.put(qu, ratio);
-			}
+			List<Tag> tags = this.getTags();
+			tags.retainAll(qu.getTags());
+			matchCount = tags.size();
+			double questionOneRatio = ((double) matchCount / (double) this
+					.getTags().size());
+			double questionTwoRatio = ((double) matchCount / (double) qu
+					.getTags().size());
+			double ratio = questionOneRatio * questionTwoRatio;
+			map.put(qu, ratio);
 		}
 		sorted = new ArrayList<Question>(this.sortMapByValue(map));
 		Collections.reverse(sorted);

@@ -145,6 +145,32 @@ public class TagTest extends UnitTest {
 
 	}
 
+	@Test
+	public void shouldNotListQuestionWithZeroTags() {
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		Question questionK = new Question(A, "K?");
+		Question questionL = new Question(B, "L?");
+		Question questionM = new Question(C, "M?");
+		Question questionN = new Question(D, "N?");
+		Question questionO = new Question(D, "O?");
+
+		questionK.setTagString("J K Z");
+		questionL.setTagString(" ");
+		questionM.setTagString(" ");
+		questionN.setTagString("");
+		questionO.setTagString("");
+
+		assertEquals(questionK.getSimilarQuestions().size(), 0);
+		assertEquals(questionL.getSimilarQuestions().size(), 0);
+		assertEquals(questionM.getSimilarQuestions().size(), 0);
+		assertEquals(questionN.getSimilarQuestions().size(), 0);
+		assertEquals(questionO.getSimilarQuestions().size(), 0);
+
+	}
+
 	private static int countTags(String name) {
 		int count = 0;
 		for (Tag tag : Tag.tags())

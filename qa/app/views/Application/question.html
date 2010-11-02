@@ -18,7 +18,17 @@
 				#{vote question /}
 			#{/if}
 		</li>
-		<a href="@{Application.relatedQuestions(question.id())}">Related questions</a> 
+		#{if question.getSimilarQuestions().size() != 0}
+		<a>Related Questions</a>
+			#{list items:similarQuestions, as:'relatedQ'}<p>
+			<li>
+			#{showProfile relatedQ /}:
+				<a href="@{Application.question(relatedQ.id())}">
+				${relatedQ.summary()}</a>#{date question /}</p>
+			#{/list}
+			</li>
+		<a href="@{Application.relatedQuestions(question.id())}">More...</a> 
+		#{/if}
 		#{if question.comments().size() != 0}
 			<p class="comments">Comments</p>
 			<ul class="comments">
