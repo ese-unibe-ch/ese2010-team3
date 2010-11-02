@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -34,9 +33,9 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			ArrayList<Question> similarQuestions = new ArrayList<Question>();
-			for (int i = 0; i < question.getSimilarQuestions().size() && i < 3; i++) {
-				similarQuestions.add(question.getSimilarQuestions().get(i));
+			List<Question> similarQuestions = question.getSimilarQuestions();
+			if (similarQuestions.size() > 3) {
+				similarQuestions = similarQuestions.subList(0, 3);
 			}
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
