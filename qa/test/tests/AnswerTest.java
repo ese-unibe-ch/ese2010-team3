@@ -47,11 +47,6 @@ public class AnswerTest extends UnitTest {
 
 	}
 
-	@After
-	public void tearDown() {
-		SystemInformation.mockWith(this.savedSysInfo);
-	}
-
 	@Test
 	public void shouldCreateAnswer() {
 		assertTrue(answer != null);
@@ -90,7 +85,7 @@ public class AnswerTest extends UnitTest {
 	
 	@After
 	public void tearDown() {
-		SystemInformation.mockWith(original);
+		SystemInformation.mockWith(savedSysInfo);
 	}
 
 	@Test

@@ -233,7 +233,6 @@ public class Question extends Entry implements IObservable {
 		return bestAnswer != null;
 	}
 	
-	 */
 	public Answer getBestAnswer() {
 		return bestAnswer;
 	}
@@ -266,12 +265,13 @@ public class Question extends Entry implements IObservable {
 		Collections.sort(this.tags);
 	}
 
-	public List<Tag> getTags() {
-	 * Get an ArrayList of all tags for a <code>Question</code>.
+	/* Get a List of all tags for a <code>Question</code>.
 	 * 
-	 * @return ArrayList of tags
+	 * @return List of tags
 	 */
-		return (ArrayList<Tag>) this.tags.clone();
+	public List<Tag> getTags() {
+	 
+		return (List<Tag>) this.tags.clone();
 	}
 	/**
 	 * @see models.IObservable#addObserver(models.IObserver)

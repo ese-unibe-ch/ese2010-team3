@@ -37,7 +37,7 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			List<Question> similarQuestions = question.getSimilarQuestions();
+			List<Question> similarQuestions = (new ArrayList(question.getSimilarQuestions()));
 			if (similarQuestions.size() > 3) {
 				similarQuestions = similarQuestions.subList(0, 3);
 			}

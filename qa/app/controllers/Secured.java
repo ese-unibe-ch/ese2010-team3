@@ -33,7 +33,6 @@ public class Secured extends Controller {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
 			Answer answer = thisQuestion.answer(thisUser, content);
-			thisUser.addRecentAnswers(answer);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -46,7 +45,6 @@ public class Secured extends Controller {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
 			Comment comment = thisQuestion.comment(thisUser, content);
-			thisUser.addRecentComments(comment);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -221,7 +219,7 @@ public class Secured extends Controller {
 		if (notification != null)
 			notification.unsetNew();
 		if (notification != null && notification.getAbout() instanceof Answer)
-			Application.question(((Answer) notification.getAbout()).question().id());
+			Application.question(((Answer) notification.getAbout()).getQuestion().id());
 		else if (!redirectToCallingPage())
 			Application.notifications();
 	}
