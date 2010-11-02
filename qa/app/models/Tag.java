@@ -25,9 +25,8 @@ public class Tag implements Comparable {
 	/**
 	 * Instantiates a new Tag.
 	 * 
-	 * @param name
-	 *            the name of this tag (should be all lowercase and not contain
-	 *            whitespace)
+	 * @param name the name of this tag (should be all lowercase and not contain
+	 *             whitespace)
 	 */
 	public Tag(String name) {
 		if (name == null || !name.matches(this.tagRegex))
@@ -50,16 +49,14 @@ public class Tag implements Comparable {
 	}
 
 	/**
-	 * @param question
-	 *            the question to associate with this Tag.
+	 * @param question the question to associate with this Tag.
 	 */
 	public void register(Question question) {
 		this.questions.add(question);
 	}
 
 	/**
-	 * @param question
-	 *            the question to de-associate from this Tag.
+	 * @param question the question to de-associate from this Tag.
 	 */
 	public void unregister(Question question) {
 		this.questions.remove(question);
@@ -82,8 +79,7 @@ public class Tag implements Comparable {
 	private static Hashtable<String, Tag> tags = new Hashtable<String, Tag>();
 
 	/**
-	 * @param name
-	 *            of the Tag to get
+	 * @param name of the Tag to get
 	 * @return a (new or pre-existing) Tag for the given Tag-name.
 	 */
 	public static Tag get(String name) {

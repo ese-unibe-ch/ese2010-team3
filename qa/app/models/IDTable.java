@@ -6,8 +6,7 @@ import java.util.Iterator;
 /**
  * A Map of Objects with IDs.
  * 
- * @param <E>
- *            Class to collect
+ * @param <E> Class to collect
  */
 public class IDTable<E> extends HashMap<Integer, E> implements Iterable<E> {
 	private int id;

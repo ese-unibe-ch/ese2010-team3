@@ -7,9 +7,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -33,10 +35,6 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
-
-	private final ArrayList<Question> recentQuestions = new ArrayList<Question>();
-	private final ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
-	private final ArrayList<Comment> recentComments = new ArrayList<Comment>();
 	
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -46,8 +44,7 @@ public class User implements IObserver {
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
-	 * @param name
-	 *            the name of the <code>User</code>
+	 * @param name the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
@@ -56,17 +53,17 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Returns the name of the <code>User</code>.
+	 * Gets the name of the <code>User</code>.
 	 * 
 	 * @return name of the <code>User</code>
 	 */
-	public String name() {
+	public String getName() {
 		return this.name;
 	}
 
 
 	/**
-	 * Encrypt the password with MD5
+	 * Encrypt the password with SHA-1.
 	 * 
 	 * @param password
 	 * @return the encrypted password
@@ -106,8 +103,7 @@ public class User implements IObserver {
 	 * Registers an {@link Item} which should be deleted in case the
 	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to register
+	 * @param item the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -128,8 +124,7 @@ public class User implements IObserver {
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to unregister
+	 * @param item the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -139,8 +134,7 @@ public class User implements IObserver {
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
 	 * 
-	 * @param item
-	 *            the {@link Item}to check
+	 * @param item the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -149,7 +143,7 @@ public class User implements IObserver {
 
 	/**
 	 * The amount of Comments, Answers and Questions the <code>User</code> has
-	 * posted in the last 60 Minutes
+	 * posted in the last 60 Minutes.
 	 * 
 	 * @return The amount of Comments, Answers and Questions for this
 	 *         <code>User</code> in this Hour.
@@ -167,7 +161,7 @@ public class User implements IObserver {
 
 	/**
 	 * The <code>User</code> is a Cheater if over 50% of his votes is for the
-	 * same <code>User</code>
+	 * same <code>User</code>.
 	 * 
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
@@ -192,10 +186,8 @@ public class User implements IObserver {
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers
-	 *            - whether to anonymize this user's answers as well
-	 * @param doComments
-	 *            - whether to anonymize this user's comments as well
+	 * @param doAnswers - whether to anonymize this user's answers as well
+	 * @param doComments - whether to anonymize this user's comments as well
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
@@ -233,7 +225,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Calculates the age of the <code>User</code> in years
+	 * Calculates the age of the <code>User</code> in years.
 	 * 
 	 * @return age of the <code>User</code>
 	 */
@@ -260,7 +252,7 @@ public class User implements IObserver {
 
 	/**
 	 * Turns the String object s into a Date assuming the format given in the
-	 * constant DATE_FORMAT
+	 * constant DATE_FORMAT.
 	 * 
 	 * @throws ParseException
 	 */
@@ -347,8 +339,7 @@ public class User implements IObserver {
 	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what
-	 *            the entry to watch
+	 * @param what the entry to watch
 	 */
 	public void startObserving(IObservable what) {
 		what.addObserver(this);
@@ -357,8 +348,7 @@ public class User implements IObserver {
 	/**
 	 * Checks if a specific entry is being observed for changes.
 	 * 
-	 * @param what
-	 *            the entry to check
+	 * @param what the entry to check
 	 */
 	public boolean isObserving(IObservable what) {
 		return what.hasObserver(this);
@@ -367,8 +357,7 @@ public class User implements IObserver {
 	/**
 	 * Stop observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what
-	 *            the entry to unwatch
+	 * @param what the entry to unwatch
 	 */
 	public void stopObserving(IObservable what) {
 		what.removeObserver(this);
@@ -400,6 +389,13 @@ public class User implements IObserver {
 		return (users.get(username) == null);
 	}
 
+	/**
+	 * Registers a new <code>User</code> to the database.
+	 * 
+	 * @param username
+	 * @param password of the <code>User</code>
+	 * @return user
+	 */
 	public static User register(String username, String password) {
 		User user = new User(username, password);
 		users.put(username, user);
@@ -416,37 +412,55 @@ public class User implements IObserver {
 		return users.get(name);
 	}
 
-	public ArrayList<Question> getRecentQuestions() {
-		return this.recentQuestions;
+	/**
+	 * Get a List of the last three <code>Question</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Question> The last three <code>Question</code>s of this <code>User</code>
+	 */
+	public List<Question> getRecentQuestions() {
+		List<Question> recentQuestions = this.getQuestions();
+		Collections.sort(recentQuestions, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentQuestions.size() > 3)
+			return recentQuestions.subList(0, 3);
+		return recentQuestions;
 	}
 
-	public ArrayList<Answer> getRecentAnswers() {
-		return this.recentAnswers;
-	}
-
-	public ArrayList<Comment> getRecentComments() {
-		return this.recentComments;
+	/**
+	 * Get a List of the last three <code>Answer</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Answer> The last three <code>Answer</code>s of this <code>User</code>
+	 */
+	public List<Answer> getRecentAnswers() {
+		List<Answer> recentAnswers = this.getAnswers();
+		Collections.sort(recentAnswers, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentAnswers.size() > 3)
+			return recentAnswers.subList(0, 3);
+		return recentAnswers;
 	}
 	
-	public void addRecentQuestions(Question question) {
-		if (recentQuestions.size() > 2) {
-			this.recentQuestions.remove(2);
-		}
-		this.recentQuestions.add(0, question);
-	}
-
-	public void addRecentAnswers(Answer answer) {
-		if (recentAnswers.size() > 2) {
-			this.recentAnswers.remove(2);
-		}
-		this.recentAnswers.add(0, answer);
-	}
-
-	public void addRecentComments(Comment comment) {
-		if (recentComments.size() > 2) {
-			this.recentComments.remove(2);
-		}
-		this.recentComments.add(0, comment);
+	/**
+	 * Get a List of the last three <code>Comment</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Comment> The last three <code>Comment</code>s of this <code>User</code>
+	 */
+	public List<Comment> getRecentComments() {
+		List<Comment> recentComments = this.getComments();
+		Collections.sort(recentComments, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentComments.size() > 3)
+			return recentComments.subList(0, 3);
+		return recentComments;
 	}
 
 	/*
@@ -458,23 +472,32 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get a sorted ArrayList of all questions of this user
+	 * Get an ArrayList of all <code>Questions</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Question> All questions of this user
+	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public ArrayList<Question> getQuestions() {
 		return this.getItemsByType(Question.class, null);
 	}
 
 	/**
-	 * Get a sorted ArrayList of all answers of this user
+	 * Get an ArrayList of all <code>Answer</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Answer> All answers of this user
+	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
 	 */
 	public ArrayList<Answer> getAnswers() {
 		return this.getItemsByType(Answer.class, null);
 	}
-
+	
+	/**
+	 * Get an ArrayList of all <code>Comment</code>s of this <code>User</code>
+	 * 
+	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
+	 */
+	public ArrayList<Comment> getComments() {
+		return this.getItemsByType(Comment.class, null);
+	}
+	
 	/**
 	 * Get an ArrayList of all best rated answers
 	 * 
@@ -516,7 +539,7 @@ public class User implements IObserver {
 		for (Notification n : notifications) {
 			if (n.getAbout() instanceof Answer) {
 				Answer answer = (Answer) n.getAbout();
-				if (answer.question() != null)
+				if (answer.getQuestion() != null)
 					result.add(n);
 				else
 					n.unregister();

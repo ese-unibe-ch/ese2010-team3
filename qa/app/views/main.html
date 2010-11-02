@@ -33,9 +33,9 @@
 			<a href="@{Application.index}">Questions</a>
 			<span>
 				#{if user}
-						Hi ${user.name()}!
+						Hi ${user.getName()}!
 						<a href="@{Application.notifications}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
-						<a href="@{Application.showprofile(user.name())}">Profile</a>
+						<a href="@{Application.showprofile(user.getName())}">Profile</a>
 						<a href="@{Application.deleteuser}">Delete</a>
 						<a href="@{Secure.logout}">Logout</a>
 					#{/if}

@@ -20,7 +20,7 @@ public class Secured extends Controller {
 			Question question = Question.register(user, content);
 			question.setTagString(tags);
 			user.startObserving(question);
-			user.addRecentQuestions(question);
+			question.setTagString(tags);
 			Application.question(question.id());
 		} else {
 			Application.index();
@@ -29,8 +29,7 @@ public class Secured extends Controller {
 
 	public static void newAnswer(int questionId, @Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Answer answer = Question.get(questionId).answer(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentAnswers(answer);
+			Question.get(questionId).answer(Session.get().currentUser(), content);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -40,8 +39,7 @@ public class Secured extends Controller {
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		if (!validation.hasErrors() && Question.get(questionId) != null) {
-			Comment comment = Question.get(questionId).comment(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentComments(comment);
+			Question.get(questionId).comment(Session.get().currentUser(), content);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -52,8 +50,7 @@ public class Secured extends Controller {
 		Answer answer = question.getAnswer(answerId);
 
 		if (!validation.hasErrors() && answer != null) {
-			Comment comment = answer.comment(Session.get().currentUser(), content);
-			Session.get().currentUser().addRecentComments(comment);
+			answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
 		}
 	}
@@ -130,7 +127,7 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = User.get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			boolean deleteSelf = name.equals(Session.get().currentUser().name());
+			boolean deleteSelf = name.equals(Session.get().currentUser().getName());
 			user.delete();
 			if (deleteSelf)
 				Secure.logout();
@@ -153,7 +150,7 @@ public class Secured extends Controller {
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.name().equals(user.name());
+		return currentUser.getName().equals(user.getName());
 	}
 
 	private static boolean redirectToCallingPage() {
@@ -184,7 +181,7 @@ public class Secured extends Controller {
 			user.setEmployer(employer);
 		if (biography != null)
 			user.setBiography(biography);
-		Application.showprofile(user.name());
+		Application.showprofile(user.getName());
 	}
 
 	public static void updateTags(int id, String tags) {
@@ -217,7 +214,7 @@ public class Secured extends Controller {
 		if (n != null)
 			n.unsetNew();
 		if (n != null && n.getAbout() instanceof Answer)
-			Application.question(((Answer) n.getAbout()).question().id());
+			Application.question(((Answer) n.getAbout()).getQuestion().id());
 		else if (!redirectToCallingPage())
 			Application.notifications();
 	}
