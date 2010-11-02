@@ -3,10 +3,12 @@ package tests;
 import java.util.Date;
 
 import models.Answer;
+import models.ISystemInformation;
 import models.Question;
 import models.SystemInformation;
 import models.User;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,17 +22,20 @@ public class AnswerTest extends UnitTest {
 	private Answer answer;
 	private Date questionDate;
 	private Date answerDate;
+	private ISystemInformation savedSysInfo;
 
 	@Before
 	public void setUp() {
+		this.savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
 		this.james = new User("James", "jack");
 
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);;
+		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 		questionDate = sys.now();
 		sys.changeTo(questionDate);
-		this.question = new Question(new User("Jack", "jack"), "Why did the chicken cross the road?");
+		this.question = new Question(new User("Jack", "jack"),
+				"Why did the chicken cross the road?");
 		sys.minute(5);
 		answerDate = sys.now();
 		sys.changeTo(answerDate);
@@ -40,6 +45,11 @@ public class AnswerTest extends UnitTest {
 
 		this.answer = this.question.answer(james, "To get to the other side.");
 
+	}
+
+	@After
+	public void tearDown() {
+		SystemInformation.mockWith(this.savedSysInfo);
 	}
 
 	@Test
@@ -64,7 +74,7 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldHaveTimestamp() {
-		assertEquals(answer.timestamp(),answerDate);
+		assertEquals(answer.timestamp(), answerDate);
 	}
 
 	@Test
@@ -73,13 +83,10 @@ public class AnswerTest extends UnitTest {
 		assertTrue(this.question.hasAnswer(this.answer));
 	}
 
-	
 	@Test
 	public void shouldFindAnswer() {
-		assertEquals(this.answer,question.getAnswer(this.answer.id()));
+		assertEquals(this.answer, question.getAnswer(this.answer.id()));
 	}
-	
-
 
 	@Test
 	public void shouldBeHighRated() {
