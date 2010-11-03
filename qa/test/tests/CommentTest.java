@@ -95,4 +95,16 @@ public class CommentTest extends UnitTest {
 		assertTrue(comments.contains(newComment));
 		assertEquals(2,comments.size());
 	}
+	
+	@Test
+	public void shouldGetQuestionBelongToQuestioncomment() {
+		Comment newComment = question.comment(james, "Blubb");
+		assertEquals(newComment.getQuestion(), this.question);
+	}
+	
+	@Test
+	public void shouldGetQuestionBelongToAnswercomment() {
+		Comment newComment = answer.comment(james, "Blubb");
+		assertEquals(newComment.getQuestion(), this.question);
+	}
 }

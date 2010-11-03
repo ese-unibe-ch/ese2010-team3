@@ -1,14 +1,17 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.Answer;
 import models.Comment;
+import models.Notification;
 import models.Question;
 import models.Tag;
 import models.TimeTracker;
 import models.User;
+import models.database.Database;
 import play.data.validation.Required;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -18,44 +21,54 @@ public class Application extends Controller {
 	@Before
 	static void setConnectedUser() {
 		if (Security.isConnected()) {
-			User user = User.get(Security.connected());
+			User user = Database.get().users().get(Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
 
 	public static void index() {
-		List<Question> questions = Question.questions();
+		List<Question> questions = Database.get().questions().all();
 		render(questions);
 	}
 
 	public static void question(int id) {
-		Question question = Question.get(id);
+		Question question = Database.get().questions().get(id);
 		if (question == null) {
 			render();
 		} else {
+			List<Question> similarQuestions = (new ArrayList(question.getSimilarQuestions()));
+			if (similarQuestions.size() > 3) {
+				similarQuestions = similarQuestions.subList(0, 3);
+			}
 			List<Answer> answers = question.answers();
-			render(question, answers);
+			render(question, answers, similarQuestions);
 		}
 	}
 
+	public static void relatedQuestions(int id) {
+		Question question = Database.get().questions().get(id);
+
+		render(question);
+	}
+
 	public static void answerQuestion(int id) {
-		Question question = Question.get(id);
-		List<Question> questions = Question.questions();
+		Question question = Database.get().questions().get(id);
+		List<Question> questions = Database.get().questions().all();
 		List<Answer> answers = question.answers();
 		int count = question.answers().size();
 		render(questions, question, answers, count);
 	}
 
 	public static void commentQuestion(int id) {
-		Question question = Question.get(id);
-		List<Question> questions = Question.questions();
+		Question question = Database.get().questions().get(id);
+		List<Question> questions = Database.get().questions().all();
 		List<Comment> comments = question.comments();
 		int count = question.comments().size();
 		render(questions, question, comments, count);
 	}
 
 	public static void commentAnswer(int questionId, int answerId) {
-		Question question = Question.get(questionId);
+		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		List<Comment> comments = answer.comments();
 		render(answer, comments, question);
@@ -74,7 +87,7 @@ public class Application extends Controller {
 
 		if (User.checkEmail(email) && password.equals(passwordrepeat)
 				&& User.isAvailable(username)) {
-			User user = User.register(username, password);
+			User user = Database.get().users().register(username, password);
 			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
@@ -94,9 +107,22 @@ public class Application extends Controller {
 			register();
 		}
 	}
+
 	public static void showprofile(String userName) {
-		User showUser = User.get(userName);
-		render(showUser);
+		User showUser = Database.get().users().get(userName);
+		boolean canEdit = true;
+		if(session.get("username") != null && session.get("username").equals(userName)) {
+			render(showUser, canEdit);
+		}
+		else {
+			canEdit = false;
+			render(showUser, canEdit);
+		}
+	}
+	
+		public static void editProfile(String userName) {
+		User user = Database.get().users().get(userName);
+		render(user);
 	}
 
 	public static void tags(String term, String content) {
@@ -111,6 +137,20 @@ public class Application extends Controller {
 		if (tagString.length() == 0)
 			tags = new String[0];
 		renderJSON(tags);
+	}
+	
+	public static void search(String term) {
+		List<Question> results = Database.get().questions().searchFor(term);
+		render(results,term);
+	}
+
+	public static void notifications() {
+		User user = Session.get().currentUser();
+		if (user != null) {
+			ArrayList<Notification> notifications = user.getNotifications();
+			render(notifications);
+		} else
+			Application.index();
 	}
 
 	public static void showStatisticalOverview() {
@@ -129,13 +169,12 @@ public class Application extends Controller {
 		float answersPerMonth;
 
 		numberOfUsers = User.getUserCount();
-		numberOfQuestions = Question.questions().size();
-		numberOfAnswers = Question.getAnswers().size();
-		numberOfHighRatedAnswers = Question.getHighRatedAnswers().size();
-		numberOfBestAnswers = Question.getBestRatedAnswers().size();
+		numberOfQuestions = Database.get().questions().count();
+		numberOfAnswers = Database.get().questions().countAllAnswers();
+		numberOfHighRatedAnswers = Database.get().questions().countHighRatedAnswers();
+		numberOfBestAnswers = Database.get().questions().countBestRatedAnswers();
 		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
 		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
-		System.out.println(t.getWeeks(now));
 		questionsPerMonth = (float) numberOfQuestions
 				/ (float) t.getMonths(now);
 		answersPerDay = (float) numberOfAnswers / (float) t.getDays(now);

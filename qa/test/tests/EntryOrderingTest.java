@@ -9,6 +9,8 @@ import models.Answer;
 import models.Entry;
 import models.Question;
 import models.User;
+import models.database.Database;
+import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +67,7 @@ public class EntryOrderingTest extends UnitTest {
 	
 	
 	public void shouldPreferMoreRecentQuestionEventhoughTheyMightBeWorse() {
-		List<Question> questions = Question.questions();
+		List<Question> questions = Database.get().questions().all();
 		assertEquals(goodQuestion,questions.get(1));
 		assertEquals(badQuestion,questions.get(0));
 	}

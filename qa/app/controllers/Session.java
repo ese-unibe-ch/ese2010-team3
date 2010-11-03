@@ -1,6 +1,7 @@
 package controllers;
 
 import models.User;
+import models.database.Database;
 
 public class Session implements ISession{
 	private static ISession instance;
@@ -17,6 +18,6 @@ public class Session implements ISession{
 	}
 	
 	public User currentUser() {
-		return User.get(Security.connected());
+		return Database.get().users().get(Security.connected());
 	}
 }

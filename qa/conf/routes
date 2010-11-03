@@ -14,6 +14,9 @@ GET     /question/{id}/comments/				Application.commentQuestion
 GET		/question/{id}/up						Secured.voteQuestionUp
 GET		/question/{id}/down						Secured.voteQuestionDown
 
+GET		/question/{id}/watch					Secured.watchQuestion
+GET		/question/{id}/unwatch					Secured.unwatchQuestion
+
 GET		/answer/{question}/{id}/up				Secured.voteAnswerUp
 GET		/answer/{question}/{id}/down			Secured.voteAnswerDown
 GET		/answer/{question}/{id}/isbest			Secured.selectBestAnswer
@@ -28,7 +31,15 @@ GET		/register								Application.register
 POST	/register								Application.signup
 
 GET		/user/{userName}/showprofile/		Application.showprofile
+GET		/user/{userName}/editprofile/		Application.editProfile
 POST	/user/savedProfile						Secured.saveProfile
+
+GET		/user/notifications						Application.notifications
+GET		/notification/{id}/follow				Secured.followNotification
+GET		/notification/{id}/delete				Secured.deleteNotification
+GET		/notification/clearNew					Secured.clearNewNotifications
+
+GET		/search/{term}							Application.search
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

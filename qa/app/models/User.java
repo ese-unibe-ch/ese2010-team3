@@ -7,10 +7,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import models.database.Database;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -21,7 +25,7 @@ import java.util.regex.Pattern;
  * @author Mirco Kocher
  * 
  */
-public class User {
+public class User implements IObserver {
 
 	private final String name;
 	private final String password;
@@ -33,12 +37,6 @@ public class User {
 	private String profession;
 	private String employer;
 	private String biography;
-
-	private Date timestamp;
-	
-	private ArrayList<Question> recentQuestions = new ArrayList<Question>();
-	private ArrayList<Answer> recentAnswers = new ArrayList<Answer>();
-	private ArrayList<Comment> recentComments = new ArrayList<Comment>();
 	
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -48,8 +46,7 @@ public class User {
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
-	 * @param name
-	 *            the name of the <code>User</code>
+	 * @param name the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
@@ -58,11 +55,11 @@ public class User {
 	}
 
 	/**
-	 * Returns the name of the <code>User</code>.
+	 * Gets the name of the <code>User</code>.
 	 * 
 	 * @return name of the <code>User</code>
 	 */
-	public String name() {
+	public String getName() {
 		return this.name;
 	}
 
@@ -108,8 +105,7 @@ public class User {
 	 * Registers an {@link Item} which should be deleted in case the
 	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to register
+	 * @param item the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -124,7 +120,7 @@ public class User {
 	 * @return true if the username is available.
 	 */
 	public static boolean isAvailable(String username) {
-		return (users.get(username.toLowerCase()) == null);
+		return (Database.get().users().get(username.toLowerCase()) == null);
 	}
 
 	/**
@@ -136,14 +132,13 @@ public class User {
 		for (Item item : clone)
 			item.unregister();
 		this.items.clear();
-		users.remove(this.name);
+		Database.get().users().remove(this.name);
 	}
 
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
-	 * @param item
-	 *            the {@link Item} to unregister
+	 * @param item the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -153,8 +148,7 @@ public class User {
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
 	 * 
-	 * @param item
-	 *            the {@link Item}to check
+	 * @param item the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -163,7 +157,7 @@ public class User {
 
 	/**
 	 * The amount of Comments, Answers and Questions the <code>User</code> has
-	 * posted in the last 60 Minutes
+	 * posted in the last 60 Minutes.
 	 * 
 	 * @return The amount of Comments, Answers and Questions for this
 	 *         <code>User</code> in this Hour.
@@ -181,7 +175,7 @@ public class User {
 
 	/**
 	 * The <code>User</code> is a Cheater if over 50% of his votes is for the
-	 * same <code>User</code>
+	 * same <code>User</code>.
 	 * 
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
@@ -199,17 +193,15 @@ public class User {
 	    if (votesForUser.isEmpty())
 			return false;
 
-	    Integer maxCount = (Integer) Collections.max(votesForUser.values());
+	    Integer maxCount = Collections.max(votesForUser.values());
 		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers
-	 *            - whether to anonymize this user's answers as well
-	 * @param doComments
-	 *            - whether to anonymize this user's comments as well
+	 * @param doAnswers - whether to anonymize this user's answers as well
+	 * @param doComments - whether to anonymize this user's comments as well
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
@@ -247,7 +239,7 @@ public class User {
 	}
 
 	/**
-	 * Calculates the age of the <code>User</code> in years
+	 * Calculates the age of the <code>User</code> in years.
 	 * 
 	 * @return age of the <code>User</code>
 	 */
@@ -274,7 +266,7 @@ public class User {
 
 	/**
 	 * Turns the String object s into a Date assuming the format given in the
-	 * constant DATE_FORMAT
+	 * constant DATE_FORMAT.
 	 * 
 	 * @throws ParseException
 	 */
@@ -357,71 +349,103 @@ public class User {
 	public String getSHA1Password() {
 		return this.password;
 	}
-
-	/*
-	 * Static interface to access questions from controller (not part of unit
-	 * testing)
-	 */
-
-	private static HashMap<String, User> users = new HashMap();
-
 	/**
-	 * Validate if the <code>User</code> is already in our database.
+	 * Start observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param username
-	 * @return True if this <code>User</code> has not yet Signed Up
+	 * @param what the entry to watch
 	 */
-	public static boolean needSignUp(String username) {
-		return (users.get(username) == null);
-	}
-
-	public static User register(String username, String password) {
-		User user = new User(username, password);
-		users.put(username.toLowerCase(), user);
-		return user;
+	public void startObserving(IObservable what) {
+		what.addObserver(this);
 	}
 
 	/**
-	 * Get the <code>User</code> with the given name.
+	 * Checks if a specific entry is being observed for changes.
 	 * 
-	 * @param name
-	 * @return a <code>User</code> or null if the given name doesn't exist.
+	 * @param what the entry to check
 	 */
-	public static User get(String name) {
-		return users.get(name.toLowerCase());
-	}
-
-	public ArrayList<Question> getRecentQuestions() {
-		return this.recentQuestions;
-	}
-
-	public ArrayList<Answer> getRecentAnswers() {
-		return this.recentAnswers;
-	}
-
-	public ArrayList<Comment> getRecentComments() {
-		return this.recentComments;
+	public boolean isObserving(IObservable what) {
+		return what.hasObserver(this);
 	}
 	
-	public void addRecentQuestions(Question question) {
-		if (recentQuestions.size() > 2) {
-			this.recentQuestions.remove(2);
-		}
-		this.recentQuestions.add(0, question);
+	public static User get(String name) {
+		return Database.get().users().get(name.toLowerCase());
 	}
 
-	public void addRecentAnswers(Answer answer) {
-		if (recentAnswers.size() > 2) {
-			this.recentAnswers.remove(2);
-		}
-		this.recentAnswers.add(0, answer);
+	/**
+	 * Stop observing changes for an entry (e.g. new answers to a question).
+	 * 
+	 * @param what the entry to unwatch
+	 */
+	public void stopObserving(IObservable what) {
+		what.removeObserver(this);
 	}
 
-	public void addRecentComments(Comment comment) {
-		if (recentComments.size() > 2) {
-			this.recentComments.remove(2);
-		}
-		this.recentComments.add(0, comment);
+	/**
+	 * @see models.IObserver#observe(models.IObservable, java.lang.Object)
+	 */
+	public void observe(IObservable o, Object arg) {
+		if (o instanceof Question && arg instanceof Answer
+				&& ((Answer) arg).owner() != this)
+			new Notification(this, (Answer) arg);
+	}
+
+	/**
+	 * Registers a new <code>User</code> to the database.
+	 * 
+	 * @param username
+	 * @param password of the <code>User</code>
+	 * @return user
+	 */
+
+	/**
+	 * Get a List of the last three <code>Question</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Question> The last three <code>Question</code>s of this <code>User</code>
+	 */
+	public List<Question> getRecentQuestions() {
+		List<Question> recentQuestions = this.getQuestions();
+		Collections.sort(recentQuestions, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentQuestions.size() > 3)
+			return recentQuestions.subList(0, 3);
+		return recentQuestions;
+	}
+
+	/**
+	 * Get a List of the last three <code>Answer</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Answer> The last three <code>Answer</code>s of this <code>User</code>
+	 */
+	public List<Answer> getRecentAnswers() {
+		List<Answer> recentAnswers = this.getAnswers();
+		Collections.sort(recentAnswers, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentAnswers.size() > 3)
+			return recentAnswers.subList(0, 3);
+		return recentAnswers;
+	}
+	
+	/**
+	 * Get a List of the last three <code>Comment</code>s of this <code>User</code>.
+	 * 
+	 * @return List<Comment> The last three <code>Comment</code>s of this <code>User</code>
+	 */
+	public List<Comment> getRecentComments() {
+		List<Comment> recentComments = this.getComments();
+		Collections.sort(recentComments, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+			}
+		}); 
+		if (recentComments.size() > 3)
+			return recentComments.subList(0, 3);
+		return recentComments;
 	}
 
 	/*
@@ -429,52 +453,43 @@ public class User {
 	 */
 
 	public static int getUserCount() {
-		return User.users.size();
+		return Database.get().users().count();
 	}
 
 	/**
-	 * Get an ArrayList of all questions of this user
+	 * Get a sorted ArrayList of all <code>Questions</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Question> All questions of this user
+	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public ArrayList<Question> getQuestions() {
-		ArrayList<Question> questions = new ArrayList<Question>();
-		for (Item i : this.items) {
-			if (i instanceof Question) {
-				questions.add((Question) i);
-			}
-		}
-		return questions;
+		return this.getItemsByType(Question.class, null);
 	}
 
 	/**
-	 * Get an ArrayList of all answers of this user
+	 * Get a sorted ArrayList of all <code>Answer</code>s of this <code>User</code>.
 	 * 
-	 * @return ArrayList<Answer> All answers of this user
+	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
 	 */
 	public ArrayList<Answer> getAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Item i : this.items) {
-			if (i instanceof Answer) {
-				answers.add((Answer) i);
-			}
-		}
-		return answers;
+		return this.getItemsByType(Answer.class, null);
 	}
-
+	
+	/**
+	 * Get a sorted ArrayList of all <code>Comment</code>s of this <code>User</code>
+	 * 
+	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
+	 */
+	public ArrayList<Comment> getComments() {
+		return this.getItemsByType(Comment.class, null);
+	}
+	
 	/**
 	 * Get an ArrayList of all best rated answers
 	 * 
 	 * @return ArrayList<Answer> All best rated answers
 	 */
 	public ArrayList<Answer> bestAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Answer a : this.getAnswers()) {
-			if (a.isBestAnswer()) {
-				answers.add(a);
-			}
-		}
-		return answers;
+		return this.getItemsByType(Answer.class, "isBestAnswer");
 	}
 
 	/**
@@ -483,13 +498,121 @@ public class User {
 	 * @return ArrayList<Answer> All high rated answers
 	 */
 	public ArrayList<Answer> highRatedAnswers() {
-		ArrayList<Answer> answers = new ArrayList<Answer>();
-		for (Answer a : this.getAnswers()) {
-			if (a.isHighRated()) {
-				answers.add(a);
+		return this.getItemsByType(Answer.class, "isHighRated");
+	}
+
+	/**
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first and optionally fulfilling one filter criterion.
+	 * 
+	 * @param filter
+	 *            an optional name of a filter method (e.g. "isNew")
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	protected ArrayList<Notification> getAllNotifications(String filter) {
+		ArrayList<Notification> result = new ArrayList<Notification>();
+		/*
+		 * Hack: remove all notifications to deleted answers
+		 * 
+		 * unfortunately, there's currently no other way to achieve this, as
+		 * there is no global list of all existing notifications nor an easy way
+		 * to register all users for observing the deletion of answers (because
+		 * there's no global list of all existing users, either)
+		 */
+		ArrayList<Notification> notifications = this.getItemsByType(
+				Notification.class, filter);
+		for (Notification n : notifications) {
+			if (n.getAbout() instanceof Answer) {
+				Answer answer = (Answer) n.getAbout();
+				if (answer.getQuestion() != null)
+					result.add(n);
+				else
+					n.unregister();
 			}
 		}
-		return answers;
+		return result;
+	}
 
+	/**
+	 * Get an ArrayList of all notifications of this user, sorted most-recent
+	 * one first.
+	 * 
+	 * @return ArrayList<Notification> All notifications of this user
+	 */
+	public ArrayList<Notification> getNotifications() {
+		return this.getAllNotifications(null);
+	}
+
+	/**
+	 * Get an ArrayList of all unread notifications of this user
+	 * 
+	 * @return the unread notifications
+	 */
+	public ArrayList<Notification> getNewNotifications() {
+		return this.getAllNotifications("isNew");
+	}
+
+	/**
+	 * Gets the most recent unread notification, if there is any very recent one
+	 * 
+	 * @return a very recent notification (or null, if there isn't any)
+	 */
+	public Notification getVeryRecentNewNotification() {
+		for (Notification n : this.getNewNotifications())
+			if (n.isVeryRecent())
+				return n;
+		return null;
+	}
+
+	/**
+	 * Gets a notification by its id value.
+	 * 
+	 * NOTE: slightly hacky since we don't track notifications in a separate
+	 * IDTable but in this.items like everything else - this should get fixed
+	 * once we migrate to using a real DB.
+	 * 
+	 * @param id
+	 *            the notification's id
+	 * @return a notification with the given id
+	 */
+	public Notification getNotification(int id) {
+		for (Notification n : this.getNotifications())
+			if (n.getID() == id)
+				return n;
+		return null;
+	}
+
+	/**
+	 * Get an ArrayList of all items of this user being an instance of a
+	 * specific type and optionally fulfilling an additional filter criterion.
+	 * 
+	 * @param type
+	 *            the type
+	 * @param filter
+	 *            an optional name of a filter method which has to be available
+	 *            on all objects, must not need any arguments and must return a
+	 *            boolean value
+	 * @return ArrayList All type-items of this user
+	 */
+	protected ArrayList getItemsByType(Class type, String filter) {
+		ArrayList items = new ArrayList();
+		for (Item item : this.items) {
+			if (type.isInstance(item)) {
+				if (filter != null) {
+					try {
+						if (!(Boolean) type.getMethod(filter).invoke(item))
+							continue;
+					} catch (Exception ex) {
+						// reflection APIs throw half a dozen different
+						// exceptions, let's just abort if we hit any of them
+						// for now
+						return null;
+					}
+				}
+				items.add(item);
+			}
+		}
+		Collections.sort(items);
+		return items;
 	}
 }

@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
+import models.database.Database;
+
 /**
  * A <code>Tag</code> can belong to several questions, allowing to associate
  * them thematically.
@@ -25,9 +27,8 @@ public class Tag implements Comparable {
 	/**
 	 * Instantiates a new Tag.
 	 * 
-	 * @param name
-	 *            the name of this tag (should be all lowercase and not contain
-	 *            whitespace)
+	 * @param name the name of this tag (should be all lowercase and not contain
+	 *             whitespace)
 	 */
 	public Tag(String name) {
 		if (name == null || !name.matches(this.tagRegex))
@@ -50,23 +51,21 @@ public class Tag implements Comparable {
 	}
 
 	/**
-	 * @param question
-	 *            the question to associate with this Tag.
+	 * @param question the question to associate with this Tag.
 	 */
 	public void register(Question question) {
 		this.questions.add(question);
 	}
 
 	/**
-	 * @param question
-	 *            the question to de-associate from this Tag.
+	 * @param question the question to de-associate from this Tag.
 	 */
 	public void unregister(Question question) {
 		this.questions.remove(question);
 
 		// remove this tag from the database
-		if (this.questions.isEmpty() && tags.contains(this))
-			tags.remove(this.name);
+		if (this.questions.isEmpty())
+			Database.get().tags().remove(this);
 	}
 
 	public int compareTo(Object o) {
@@ -78,27 +77,29 @@ public class Tag implements Comparable {
 	 * testing)
 	 */
 
-	/** A static collection of Tags (in-memory database). */
-	private static Hashtable<String, Tag> tags = new Hashtable<String, Tag>();
-
 	/**
-	 * @param name
-	 *            of the Tag to get
+	 * @param name of the Tag to get
 	 * @return a (new or pre-existing) Tag for the given Tag-name.
 	 */
 	public static Tag get(String name) {
-		Tag tag = tags.get(name);
+		Tag tag = Database.get().tags().get(name);
 		if (tag == null && name.matches(tagRegex)) {
 			tag = new Tag(name);
-			tags.put(name, tag);
+			Database.get().tags().add(tag);
 		}
 		return tag;
+	}
+
+	public String toString() {
+		return "Tag("+name+")";
 	}
 
 	/**
 	 * @return a collection of all registered Tags.
 	 */
+	@Deprecated
 	public static Collection<Tag> tags() {
-		return tags.values();
+		return Database.get().tags().all();
 	}
+	
 }

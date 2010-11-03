@@ -20,3 +20,6 @@
 
 # do not commit files that are created while merging
 *.orig
+
+#do not commit temp files
+*.*~
