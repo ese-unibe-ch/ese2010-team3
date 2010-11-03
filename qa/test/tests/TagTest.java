@@ -6,7 +6,6 @@ import models.Question;
 import models.Tag;
 import models.User;
 import models.database.Database;
-import models.database.HotDatabase.HotDatabase;
 import models.helpers.SetOperations;
 
 import org.junit.Before;
@@ -145,14 +144,11 @@ public class TagTest extends UnitTest {
 		List<Question> similarN = questionN.getSimilarQuestions();
 		List<Question> similarO = questionO.getSimilarQuestions();
 
-		assertTrue(similarK.isEmpty());		
+		assertTrue(similarK.isEmpty());
 		assertTrue(similarL.isEmpty());
 		assertTrue(similarM.isEmpty());
 		assertTrue(similarN.isEmpty());	
 		assertTrue(similarO.isEmpty());
-
-
-
 	}
 
 	@Test

@@ -2,7 +2,6 @@ package models;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
 import models.database.Database;
@@ -90,6 +89,7 @@ public class Tag implements Comparable {
 		return tag;
 	}
 
+	@Override
 	public String toString() {
 		return "Tag("+name+")";
 	}
@@ -97,7 +97,6 @@ public class Tag implements Comparable {
 	/**
 	 * @return a collection of all registered Tags.
 	 */
-	@Deprecated
 	public static Collection<Tag> tags() {
 		return Database.get().tags().all();
 	}

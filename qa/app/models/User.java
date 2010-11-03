@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import models.database.Database;
+import models.helpers.Filter;
 
 /**
  * A user with a name. Can contain {@link Item}s i.e. {@link Question}s,
@@ -466,23 +467,31 @@ public class User implements IObserver {
 	public ArrayList<Comment> getComments() {
 		return this.getItemsByType(Comment.class, null);
 	}
-	
+
 	/**
 	 * Get an ArrayList of all best rated answers
 	 * 
-	 * @return ArrayList<Answer> All best rated answers
+	 * @return List<Answer> All best rated answers
 	 */
-	public ArrayList<Answer> bestAnswers() {
-		return this.getItemsByType(Answer.class, "isBestAnswer");
+	public List<Answer> bestAnswers() {
+		return this.getItemsByType(Answer.class, new Filter<Answer, Boolean>() {
+			public Boolean visit(Answer a) {
+				return a.isBestAnswer();
+			}
+		});
 	}
 
 	/**
 	 * Get an ArrayList of all highRated answers
 	 * 
-	 * @return ArrayList<Answer> All high rated answers
+	 * @return List<Answer> All high rated answers
 	 */
-	public ArrayList<Answer> highRatedAnswers() {
-		return this.getItemsByType(Answer.class, "isHighRated");
+	public List<Answer> highRatedAnswers() {
+		return this.getItemsByType(Answer.class, new Filter<Answer, Boolean>() {
+			public Boolean visit(Answer a) {
+				return a.isHighRated();
+			}
+		});
 	}
 
 	/**
@@ -493,7 +502,7 @@ public class User implements IObserver {
 	 *            an optional name of a filter method (e.g. "isNew")
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
-	protected ArrayList<Notification> getAllNotifications(String filter) {
+	protected ArrayList<Notification> getAllNotifications(Filter filter) {
 		ArrayList<Notification> result = new ArrayList<Notification>();
 		/*
 		 * Hack: remove all notifications to deleted answers
@@ -533,7 +542,11 @@ public class User implements IObserver {
 	 * @return the unread notifications
 	 */
 	public ArrayList<Notification> getNewNotifications() {
-		return this.getAllNotifications("isNew");
+		return this.getAllNotifications(new Filter<Notification, Boolean>() {
+			public Boolean visit(Notification n) {
+				return n.isNew();
+			}
+		});
 	}
 
 	/**
@@ -578,24 +591,12 @@ public class User implements IObserver {
 	 *            boolean value
 	 * @return ArrayList All type-items of this user
 	 */
-	protected ArrayList getItemsByType(Class type, String filter) {
+	protected ArrayList getItemsByType(Class type, Filter filter) {
 		ArrayList items = new ArrayList();
-		for (Item item : this.items) {
-			if (type.isInstance(item)) {
-				if (filter != null) {
-					try {
-						if (!(Boolean) type.getMethod(filter).invoke(item))
-							continue;
-					} catch (Exception ex) {
-						// reflection APIs throw half a dozen different
-						// exceptions, let's just abort if we hit any of them
-						// for now
-						return null;
-					}
-				}
+		for (Item item : this.items)
+			if (type.isInstance(item)
+					&& (filter == null || (Boolean) filter.visit(item)))
 				items.add(item);
-			}
-		}
 		Collections.sort(items);
 		return items;
 	}

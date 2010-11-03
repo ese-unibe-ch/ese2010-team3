@@ -32,7 +32,7 @@ public class Secured extends Controller {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			Answer answer = thisQuestion.answer(thisUser, content);
+			thisQuestion.answer(thisUser, content);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -44,7 +44,7 @@ public class Secured extends Controller {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			Comment comment = thisQuestion.comment(thisUser, content);
+			thisQuestion.comment(thisUser, content);
 			Application.commentQuestion(questionId);
 		}
 	}

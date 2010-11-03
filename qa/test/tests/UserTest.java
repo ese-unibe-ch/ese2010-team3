@@ -76,9 +76,9 @@ public class UserTest extends UnitTest {
 	public void checkForSpammer() {
 		User user = new User("Spammer", "spammer");
 		assertTrue(user.howManyItemsPerHour() == 0);
-		Question question = new Question(user, "Why did the chicken cross the road?");
+		new Question(user, "Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
-		Question quest = new Question(user, "Does anybody know?");
+		new Question(user, "Does anybody know?");
 		assertFalse(user.howManyItemsPerHour() == 1);
 		for (int i = 0; i < 57; i++) {
 			new Question(user, "This is my " + i + ". question");
@@ -86,7 +86,7 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isSpammer());
 		assertTrue(user.howManyItemsPerHour() == 59);
 		assertTrue(!user.isCheating());
-		Question q = new Question(user, "My last possible Post");
+		new Question(user, "My last possible Post");
 		assertTrue(user.isSpammer());
 		assertTrue(user.isCheating());
 	}
