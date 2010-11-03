@@ -65,7 +65,6 @@
 				#{date answer /}
 				
 				#{if user && answer.owner() == user}
-					<br>
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isCheating()}

@@ -1,17 +1,15 @@
 #{extends 'main.html' /} 
 #{set title:'ajopi - Login' /} 
 
-<div id="login" class="form">
+<div class="login">
 	
-	<h2>Login</h2>
+	<h1>Login</h1>
 		
 	#{form @authenticate()}
+		#{if flash.error}
+			&{flash.error}
+		#{/if}
 		<table>	
-			<tr>
-				#{if flash.error}
-					<td>&{flash.error}</td>
-				#{/if}
-			</tr>
 			<tr>
 				#{if flash.success}
 					<td>&{flash.success}</td>

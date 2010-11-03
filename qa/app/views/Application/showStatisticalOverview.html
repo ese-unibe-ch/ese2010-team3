@@ -1,40 +1,52 @@
 #{extends 'main.html' /}
 #{set title:'ajopi - statistics overview' /}
-
-<ul>
-	<li>
-		<p id="number-of-questions">
-			 <label for="questionsNumber">Questions:</label> <div id="questionsNumber">${numberOfQuestions}</div>
-		</p>
-		<p id="number-of-answers">
-			 <label for="answersNumber">Answers:</label> <div id="answersNumber">${numberOfAnswers}</div>
-		</p>
-		<p id="number-of-users">
-			 <label for="userNumber">Users:</label> <div id="userNumber">${numberOfUsers}</div>
-		</p>
-		<p id="number-of-bestrated-answers">
-			 <label for="bestRateNumber">Best answers:</label> <div id="bestRateNumber">${numberOfBestAnswers}</div>
-		</p>
-		<p id="number-of-highrated-answers">
-			 <label for="highRateNumber">High rated answers:</label> <div id="highRateNumber">${numberOfHighRatedAnswers}</div>
-		</p>
-		<p id="questions-per-day">
-			 <label for="questionsPerDay">Questions per day:</label> <div id="questionsPerDay">${questionsPerDay}</div>
-		</p>
-		<p id="questions-per-week">
-			 <label for="questionsPerWeek">Questions per week:</label> <div id="questionsPerWeek">${questionsPerWeek}</div>
-		</p>
-		<p id="questions-per-month">
-			 <label for="questionsPerMonth">Questions per month:</label> <div id="questionsPerMonth">${questionsPerMonth}</div>
-		</p>
-		<p id="answers-per-month">
-			 <label for="answersPerDay">Answers per day:</label> <div id="answersPerDay">${answersPerDay}</div>
-		</p>
-		<p id="answers-per-month">
-			 <label for="answersPerWeek">Answers per week:</label> <div id="answersPerWeek">${answersPerWeek}</div>
-		</p>
-		<p id="answers-per-month">
-			 <label for="answersPerMonth">Answers per month:</label> <div id="answersPerMonth">${answersPerMonth}</div>
-		</p>
-	</li>
-</ul>
+<h1>Statistic</h1>
+<div class="statistic">
+	<table>
+		<tr>
+			 <td>Questions:</td>
+			 <td>${numberOfQuestions}</td>
+		</tr>
+		<tr>
+			<td>Answers:</td>
+			<td>${numberOfAnswers}</td>
+		</tr>
+		<tr>
+			<td>Users:</td>
+			<td>${numberOfUsers}</td>
+	
+		</tr>
+		<tr>
+			<td>Best answers:</td>
+			<td>${numberOfBestAnswers}</td>
+		</tr>
+		<tr>
+			<td>High rated answers:</td>
+			<td>${numberOfHighRatedAnswers}</td>
+		</tr>
+		<tr>
+			<td>Questions per day:</td>
+			<td>${questionsPerDay}</td>
+		</tr>
+		<tr>
+			<td>Questions per week:</td>
+			<td>${questionsPerWeek}</td>
+		</tr>
+		<tr>
+			<td>Questions per month:</td>
+			<td>${questionsPerMonth}</td>
+		</tr>
+		<tr>
+			<td>Answers per day:</td>
+			<td>${answersPerDay}</td>
+		</tr>
+		<tr>
+			<td>Answers per week:</td>
+			<td>${answersPerWeek}</td>
+		</tr>
+		<tr>
+			<td>Answers per month:</td>
+			<td>${answersPerMonth}</td>
+		</tr>
+	</table>
+</div><!-- end statistic -->
