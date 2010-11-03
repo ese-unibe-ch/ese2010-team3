@@ -6,7 +6,7 @@ import models.database.ITagDatabase;
 import models.database.IUserDatabase;
 
 /**
- * Provides a Database that is kept entirely in Memory.
+ * Provides a Database that is kept entirely in Memory. Server's down, data's dead.
  * @author aaron
  *
  */

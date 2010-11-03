@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import models.database.Database;
 import models.database.HotDatabase.HotQuestionDatabase;
+import models.helpers.IDTable;
 import models.helpers.MapComparator;
 import models.helpers.Pair;
 import models.helpers.Mapper;

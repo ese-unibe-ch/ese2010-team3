@@ -4,7 +4,9 @@
  * <ul>
  * <li>questions</li>
  * <li>users</li>
+ * <li>tags</li>
  * </ul>
+ * Add functionality in these where ever possible and reasonable.
  * @author Aaron
  */
 public interface IDatabase {

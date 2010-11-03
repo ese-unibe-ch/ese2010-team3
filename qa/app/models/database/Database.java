@@ -4,7 +4,7 @@ import models.database.HotDatabase.HotDatabase;
 
 
 /**
- * Database accessor. Can be swapped if necessary.  
+ * Database accessor. Can be swapped if necessary.
  *
  */
 public class Database {
@@ -25,6 +25,11 @@ public class Database {
 	public static void swapWith(IDatabase d) {
 		instance = d;
 	}
+	
+	/**
+	 * Deletes all data. This ensures that the UserDB, the QuestionDB 
+	 * and the TagDB are completely empty. Useful for tests.
+	 */
 
 	public static void clear() {
 		get().users().clear();

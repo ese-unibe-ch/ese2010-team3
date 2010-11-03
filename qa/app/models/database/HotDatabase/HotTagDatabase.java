@@ -8,18 +8,21 @@ import models.Tag;
 import models.database.ITagDatabase;
 
 public class HotTagDatabase implements ITagDatabase {
-	Map<String,Tag> tags = new HashMap<String,Tag>();
+	private Map<String,Tag> tags = new HashMap<String,Tag>();
+
+	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	public Collection<Tag> all() {
 		return tags.values();
 	}
 
 	public Tag get(String name) {
-		return tags.get(name);
-	}
-
-	public void add(Tag tag) {
-		tags.put(tag.getName(), tag);
+		Tag tag = tags.get(name);
+		if (tag == null && name.matches(tagRegex)) {
+			tag = new Tag(name);
+			tags.put(name,tag);
+		}
+		return tag;
 	}
 
 	public void remove(Tag tag) {

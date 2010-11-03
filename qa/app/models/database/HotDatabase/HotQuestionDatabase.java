@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Set;
 
 import models.Answer;
-import models.IDTable;
 import models.Question;
 import models.Tag;
 import models.User;
 import models.SearchEngine.SearchResult;
 import models.database.IQuestionDatabase;
+import models.helpers.IDTable;
 import models.helpers.Pair;
 import models.helpers.Mapper;
 

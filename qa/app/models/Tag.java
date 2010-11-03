@@ -22,6 +22,7 @@ public class Tag implements Comparable {
 	private final HashSet<Question> questions = new HashSet<Question>();
 
 	/** A regex a valid tag name has to match. */
+
 	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	/**
@@ -81,13 +82,9 @@ public class Tag implements Comparable {
 	 * @param name of the Tag to get
 	 * @return a (new or pre-existing) Tag for the given Tag-name.
 	 */
+	@Deprecated
 	public static Tag get(String name) {
-		Tag tag = Database.get().tags().get(name);
-		if (tag == null && name.matches(tagRegex)) {
-			tag = new Tag(name);
-			Database.get().tags().add(tag);
-		}
-		return tag;
+		return Database.get().tags().get(name);
 	}
 
 	public String toString() {

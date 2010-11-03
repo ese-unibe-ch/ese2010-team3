@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import models.helpers.IDTable;
+
 /**
  * A {@link Entry} containing an answer to a {@link Question}
  * 
