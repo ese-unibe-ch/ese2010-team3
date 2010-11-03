@@ -100,7 +100,7 @@ div.content a{
 	font-size: 12pt;
 }
 div.content button {
-	font-size: 16px;
+	font-size: 16pt;
 }
 div.content ul {
 	padding: 0;
@@ -146,7 +146,7 @@ div.content div.date {
 	color: #FFF;
 	position: absolute;
 	right: 7px;
-	font-size: 10px;
+	font-size: 10pt;
 }
 div.content form {
 	background: #333;
@@ -297,6 +297,7 @@ div.tags .tag {
 	background: #aecbfb;
 	border: 2px #aecbfb outset;
 	padding: 1px;
+	font-size: 10pt;
 }
 
 .ui-autocomplete {
@@ -307,6 +308,7 @@ div.tags .tag {
 	list-style: none;
 	padding: 2px;
 	margin: 0;
+	font-size: 10pt;
 }
 .ui-autocomplete .ui-menu-item a {
 	color: #000;
