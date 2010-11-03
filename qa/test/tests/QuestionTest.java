@@ -44,4 +44,20 @@ public class QuestionTest extends UnitTest {
 		assertTrue(user.hasItem(question));
 	}
 
+	@Test
+	public void getOnlyImportantWords() {
+		assertEquals(Question.importantWords(""), "");
+		assertEquals(Question.importantWords("abcde"), "");
+		assertEquals(Question.importantWords("abcd abcd abcd abcd abcd d"),
+				"abcd");
+		String txt = "asdf qwer dyxcv asdf k qwer l yxcv asdf qwer asdf yxcv qwer yxcv qwer yxcv";
+		assertEquals(Question.importantWords(txt), "yxcv qwer asdf");
+		txt += " hello hello hello hello hello";
+		assertEquals(Question.importantWords(txt), "hello yxcv qwer asdf");
+		txt += " more text more text more text more text and a lot of more text";
+		// remove yxcv from importantWords because there are more important
+		// Words
+		assertEquals(Question.importantWords(txt), "hello text more qwer asdf");
+	}
+
 }

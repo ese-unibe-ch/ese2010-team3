@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -344,34 +345,39 @@ public class Question extends Entry {
 
 	/**
 	 * Takes a String of words with at least 4 characters and counts the
-	 * occurrence. If the word occurs more than 3 times or has more than 7
-	 * characters they are treated as important words.
+	 * occurrence. Words that occur more than 3 times are treated as important
+	 * words.
 	 * 
 	 * @param input
 	 *            with all the words that contain more than 3 characters
-	 * @return output with words that occur more than 3 times
+	 * @return keywords with words that occur more than 3 times
 	 */
 	public final static String importantWords(String input) {
-		String output = " ";
 		input = input.trim();
-		while (input.contains(" ")) {
-			int space = input.indexOf(" ");
-			String word = input.substring(0, space);
-			word = word.trim();
-			if (word.length() != 0) {
-				int occurrence = (input.length() - (input.replaceAll(
-						" " + word, "")).length())
-						/ word.length() + 1;
+		HashMap<String, Integer> keywords = new HashMap();
+		keywords.put("", 1);
+		while (input.contains(" ") && input.length() > 3) {
+			String word = input.substring(0, input.indexOf(" ")).trim();
+			if (word.length() > 3) {
+				int occurrence = (input.length() - (input.replaceAll(word, ""))
+						.length()) / word.length();
 				if (occurrence > 3) {
-					output += " " + word;
-				} else if (word.length() > 7) {
-					output += " " + word;
+					if (keywords.size() < 5) {
+						keywords.put(word, occurrence);
+					} else {
+						for (String stri : keywords.keySet()) {
+							if (keywords.get(stri).intValue() < occurrence) {
+								keywords.put(word, occurrence);
+								keywords.remove(stri);
+								break;
+							}
+						}
+					}
 				}
-				input = input.replaceAll(word + " ", "");
 			}
-			if (input.length() < 4)
-				break;
+			input = input.replaceAll(word + " ", "").trim();
 		}
-		return output;
+		return keywords.keySet().toString().replaceAll("[,\\[\\]]", "")
+				.replaceAll("  ", " ").trim();
 	}
 }
