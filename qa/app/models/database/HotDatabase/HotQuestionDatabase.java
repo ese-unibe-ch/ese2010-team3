@@ -1,7 +1,8 @@
 package models.database.HotDatabase;
 
+import static models.helpers.SetOperations.containsAny;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -16,36 +17,33 @@ import models.User;
 import models.SearchEngine.SearchResult;
 import models.database.IQuestionDatabase;
 import models.helpers.IDTable;
-import models.helpers.Pair;
 import models.helpers.Mapper;
-
-import static models.helpers.SetOperations.*;
+import models.helpers.Pair;
 
 public class HotQuestionDatabase implements IQuestionDatabase {
 
-	private  IDTable<Question> questions = new IDTable();
+	private IDTable<Question> questions = new IDTable();
 
 	private static final Comparator byRating = new Comparator() {
 		public int compare(Object arg0, Object arg1) {
-			Pair<Integer,Question> 	x = (Pair<Integer, Question>) arg0, 
-									y = (Pair<Integer, Question>) arg1;
+			Pair<Integer, Question> x = (Pair<Integer, Question>) arg0, y = (Pair<Integer, Question>) arg1;
 			return y.left.compareTo(x.left);
 		}
 	};
-	private static final Mapper onlyQuestion = new Mapper<Question,Pair<Integer,Question>>() {
+	private static final Mapper onlyQuestion = new Mapper<Question, Pair<Integer, Question>>() {
 		@Override
 		protected Question visit(Pair<Integer, Question> i) {
 			return i.right;
 		}
 	};
 
-	public  List<Question> searchFor(String term) {
+	public List<Question> searchFor(String term) {
 		Set<Tag> tags = new HashSet<Tag>();
 		for (String s : term.split("\\s+")) {
 			tags.add(Tag.get(s));
 		}
-		SearchResult search = new SearchResult(term,tags);
-		List<Pair<Integer,Question>> results = search.over(questions);
+		SearchResult search = new SearchResult(term, tags);
+		List<Pair<Integer, Question>> results = search.over(questions);
 		Collections.sort(results, byRating);
 		return onlyQuestion.over(results);
 	}
@@ -109,7 +107,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countAllAnswers() {
 		int count = 0;
-		for (Question q: questions) {
+		for (Question q : questions) {
 			count += q.countAnswers();
 		}
 		return count;
@@ -117,20 +115,20 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countHighRatedAnswers() {
 		int count = 0;
-		for (Question q: questions) {
-			for (Answer a: q.answers()) {
-				if (a.isHighRated())
+		for (Question q : questions) {
+			for (Answer a : q.answers()) {
+				if (a.isHighRated()) {
 					count += 1;
+				}
 			}
 		}
 		return count;
 	}
-	
+
 	private List<Question> withMatchingTag(Question q, Iterable<Question> list) {
 		List<Question> result = new LinkedList<Question>();
 		for (Question question : list) {
-			if ( containsAny(question.getTags(),q.getTags()) &&
-					q!=question) {
+			if (containsAny(question.getTags(), q.getTags()) && q != question) {
 				result.add(question);
 			}
 		}
@@ -139,11 +137,11 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public List<Question> findSimilar(Question q) {
 		Set<Tag> tags = new HashSet(q.getTags());
-		SearchResult search = new SearchResult(q.content(),tags);
+		SearchResult search = new SearchResult(q.content(), tags);
 		List<Pair<Integer, Question>> result = search.over(questions);
-		Collections.sort(result,byRating);
-		
-		return withMatchingTag(q,onlyQuestion.over(result));
+		Collections.sort(result, byRating);
+
+		return withMatchingTag(q, onlyQuestion.over(result));
 	}
 
 	public void clear() {

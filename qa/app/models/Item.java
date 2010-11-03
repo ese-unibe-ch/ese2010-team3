@@ -16,11 +16,12 @@ public abstract class Item {
 	/**
 	 * Create an <code>Item</code>.
 	 * 
-	 * @param owner the {@link User} who owns the <code>Item</code>
+	 * @param owner
+	 *            the {@link User} who owns the <code>Item</code>
 	 */
 	public Item(User owner) {
 		this.owner = owner;
-		this.timestamp = SystemInformation.get().now();
+		timestamp = SystemInformation.get().now();
 		owner.registerItem(this);
 	}
 
@@ -30,7 +31,7 @@ public abstract class Item {
 	 * @return the owner
 	 */
 	public User owner() {
-		return this.owner;
+		return owner;
 	}
 
 	/**
@@ -39,21 +40,21 @@ public abstract class Item {
 	 * @return the creation date as a UNIX timestamp
 	 */
 	public Date timestamp() {
-		return this.timestamp;
+		return timestamp;
 	}
 
 	/**
 	 * Unregisters the <code>Item</code> if it gets deleted.
 	 */
 	public void unregister() {
-		this.unregisterUser();
+		unregisterUser();
 	}
 
 	/**
 	 * Unregisters the <code>Item</code> to it's owner.
 	 */
 	protected void unregisterUser() {
-		this.owner.unregister(this);
-		this.owner = null;
+		owner.unregister(this);
+		owner = null;
 	}
 }

@@ -30,9 +30,9 @@ public class Comment extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		this.entry.unregister(this);
-		this.unregisterUser();
-		this.entry = null;
+		entry.unregister(this);
+		unregisterUser();
+		entry = null;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class Comment extends Entry {
 	 * @return the id of the <code>Comment</code>
 	 */
 	public int id() {
-		return this.id;
+		return id;
 	}
 
 	/*
@@ -63,13 +63,13 @@ public class Comment extends Entry {
 	 * @return boolean whether a User is registered or not
 	 */
 	public boolean isRegistered() {
-		return this.entry != null;
+		return entry != null;
 	}
-	
+
 	/**
-	 * Returns the <code>Question</code> the <code>Comment</code> belongs to 
+	 * Returns the <code>Question</code> the <code>Comment</code> belongs to
 	 * directly (<code>Comment</code> to a <code>Question</code>) or indirectly
-	 * (<code>Comment</code> to an <Code>Answer</code>). 
+	 * (<code>Comment</code> to an <Code>Answer</code>).
 	 * 
 	 * @return Entry the comment belongs to
 	 */

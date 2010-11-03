@@ -16,15 +16,14 @@ public final class TimeTracker {
 	private GregorianCalendar startTime;
 	private static TimeTracker t;
 
-
 	public TimeTracker(GregorianCalendar now) {
-		this.startTime = now;
+		startTime = now;
 	}
 
 	public static void setRealTimeTracker(GregorianCalendar now) {
 		t = new TimeTracker(now);
 	}
-	
+
 	public static TimeTracker getRealTimeTracker() {
 		return t;
 	}
@@ -38,7 +37,7 @@ public final class TimeTracker {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
 
-		startClone = (GregorianCalendar) this.startTime.clone();
+		startClone = (GregorianCalendar) startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
 		startClone.clear(Calendar.MILLISECOND);
@@ -66,7 +65,7 @@ public final class TimeTracker {
 	public int getWeeks(GregorianCalendar now) {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
-		startClone = (GregorianCalendar) this.startTime.clone();
+		startClone = (GregorianCalendar) startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
 		startClone.clear(Calendar.MILLISECOND);
@@ -95,7 +94,7 @@ public final class TimeTracker {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
 
-		startClone = (GregorianCalendar) this.startTime.clone();
+		startClone = (GregorianCalendar) startTime.clone();
 		nowClone = (GregorianCalendar) now.clone();
 
 		startClone.clear(Calendar.MILLISECOND);

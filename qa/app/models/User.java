@@ -37,21 +37,21 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
-	
+
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
 	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
 
-
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
-	 * @param name the name of the <code>User</code>
+	 * @param name
+	 *            the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
 		this.password = encrypt(password);
-		this.items = new HashSet<Item>();
+		items = new HashSet<Item>();
 	}
 
 	/**
@@ -60,9 +60,8 @@ public class User implements IObserver {
 	 * @return name of the <code>User</code>
 	 */
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
 
 	/**
 	 * Encrypt the password with SHA-1.
@@ -105,10 +104,11 @@ public class User implements IObserver {
 	 * Registers an {@link Item} which should be deleted in case the
 	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item the {@link Item} to register
+	 * @param item
+	 *            the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
-		this.items.add(item);
+		items.add(item);
 	}
 
 	/*
@@ -116,31 +116,34 @@ public class User implements IObserver {
 	 */
 	public void delete() {
 		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
-		for (Item item : clone)
+		HashSet<Item> clone = (HashSet<Item>) items.clone();
+		for (Item item : clone) {
 			item.unregister();
-		this.items.clear();
-		Database.get().users().remove(this.name);
+		}
+		items.clear();
+		Database.get().users().remove(name);
 	}
 
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
-	 * @param item the {@link Item} to unregister
+	 * @param item
+	 *            the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
-		this.items.remove(item);
+		items.remove(item);
 	}
 
 	/**
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
 	 * 
-	 * @param item the {@link Item}to check
+	 * @param item
+	 *            the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
-		return this.items.contains(item);
+		return items.contains(item);
 	}
 
 	/**
@@ -153,7 +156,7 @@ public class User implements IObserver {
 	public int howManyItemsPerHour() {
 		Date now = SystemInformation.get().now();
 		int i = 0;
-		for (Item item : this.items) {
+		for (Item item : items) {
 			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
 				i++;
 			}
@@ -169,36 +172,39 @@ public class User implements IObserver {
 	 */
 	public boolean isMaybeCheater() {
 		HashMap<User, Integer> votesForUser = new HashMap<User, Integer>();
-		for (Item item : this.items) {
+		for (Item item : items) {
 			if (item instanceof Vote && ((Vote) item).up()) {
 				Integer count = votesForUser.get(item.owner());
-				if (count == null)
+				if (count == null) {
 					count = 0;
+				}
 				votesForUser.put(item.owner(), count + 1);
 			}
 		}
 
-	    if (votesForUser.isEmpty())
+		if (votesForUser.isEmpty())
 			return false;
 
-	    Integer maxCount = Collections.max(votesForUser.values());
+		Integer maxCount = Collections.max(votesForUser.values());
 		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers - whether to anonymize this user's answers as well
-	 * @param doComments - whether to anonymize this user's comments as well
+	 * @param doAnswers
+	 *            - whether to anonymize this user's answers as well
+	 * @param doComments
+	 *            - whether to anonymize this user's comments as well
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
+		HashSet<Item> clone = (HashSet<Item>) items.clone();
 		for (Item item : clone) {
 			if (item instanceof Question || doAnswers && item instanceof Answer
 					|| doComments && item instanceof Comment) {
 				((Entry) item).anonymize();
-				this.items.remove(item);
+				items.remove(item);
 			}
 		}
 	}
@@ -210,10 +216,9 @@ public class User implements IObserver {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
-		int number = this.howManyItemsPerHour();
-		if (number >= 60) {
+		int number = howManyItemsPerHour();
+		if (number >= 60)
 			return true;
-		}
 		return false;
 	}
 
@@ -279,7 +284,7 @@ public class User implements IObserver {
 	}
 
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
 
 	public void setFullname(String fullname) {
@@ -287,19 +292,19 @@ public class User implements IObserver {
 	}
 
 	public String getFullname() {
-		return this.fullname;
+		return fullname;
 	}
 
 	public void setDateOfBirth(String birthday) throws ParseException {
-		this.dateOfBirth = stringToDate(birthday);
+		dateOfBirth = stringToDate(birthday);
 	}
 
 	public String getDateOfBirth() {
-		return this.dateToString(dateOfBirth);
+		return dateToString(dateOfBirth);
 	}
 
 	public int getAge() {
-		return this.age();
+		return age();
 	}
 
 	public void setWebsite(String website) {
@@ -307,7 +312,7 @@ public class User implements IObserver {
 	}
 
 	public String getWebsite() {
-		return this.website;
+		return website;
 	}
 
 	public void setProfession(String profession) {
@@ -315,7 +320,7 @@ public class User implements IObserver {
 	}
 
 	public String getProfession() {
-		return this.profession;
+		return profession;
 	}
 
 	public void setEmployer(String employer) {
@@ -323,7 +328,7 @@ public class User implements IObserver {
 	}
 
 	public String getEmployer() {
-		return this.employer;
+		return employer;
 	}
 
 	public void setBiography(String biography) {
@@ -331,16 +336,18 @@ public class User implements IObserver {
 	}
 
 	public String getBiography() {
-		return this.biography;
+		return biography;
 	}
 
 	public String getSHA1Password() {
-		return this.password;
+		return password;
 	}
+
 	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what the entry to watch
+	 * @param what
+	 *            the entry to watch
 	 */
 	public void startObserving(IObservable what) {
 		what.addObserver(this);
@@ -349,7 +356,8 @@ public class User implements IObserver {
 	/**
 	 * Checks if a specific entry is being observed for changes.
 	 * 
-	 * @param what the entry to check
+	 * @param what
+	 *            the entry to check
 	 */
 	public boolean isObserving(IObservable what) {
 		return what.hasObserver(this);
@@ -358,7 +366,8 @@ public class User implements IObserver {
 	/**
 	 * Stop observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what the entry to unwatch
+	 * @param what
+	 *            the entry to unwatch
 	 */
 	public void stopObserving(IObservable what) {
 		what.removeObserver(this);
@@ -369,64 +378,75 @@ public class User implements IObserver {
 	 */
 	public void observe(IObservable o, Object arg) {
 		if (o instanceof Question && arg instanceof Answer
-				&& ((Answer) arg).owner() != this)
+				&& ((Answer) arg).owner() != this) {
 			new Notification(this, (Answer) arg);
+		}
 	}
 
 	/**
 	 * Registers a new <code>User</code> to the database.
 	 * 
 	 * @param username
-	 * @param password of the <code>User</code>
+	 * @param password
+	 *            of the <code>User</code>
 	 * @return user
 	 */
 
 	/**
-	 * Get a List of the last three <code>Question</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Question</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Question> The last three <code>Question</code>s of this <code>User</code>
+	 * @return List<Question> The last three <code>Question</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
-		List<Question> recentQuestions = this.getQuestions();
+		List<Question> recentQuestions = getQuestions();
 		Collections.sort(recentQuestions, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentQuestions.size() > 3)
 			return recentQuestions.subList(0, 3);
 		return recentQuestions;
 	}
 
 	/**
-	 * Get a List of the last three <code>Answer</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Answer</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Answer> The last three <code>Answer</code>s of this <code>User</code>
+	 * @return List<Answer> The last three <code>Answer</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Answer> getRecentAnswers() {
-		List<Answer> recentAnswers = this.getAnswers();
+		List<Answer> recentAnswers = getAnswers();
 		Collections.sort(recentAnswers, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentAnswers.size() > 3)
 			return recentAnswers.subList(0, 3);
 		return recentAnswers;
 	}
-	
+
 	/**
-	 * Get a List of the last three <code>Comment</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Comment</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Comment> The last three <code>Comment</code>s of this <code>User</code>
+	 * @return List<Comment> The last three <code>Comment</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Comment> getRecentComments() {
-		List<Comment> recentComments = this.getComments();
+		List<Comment> recentComments = getComments();
 		Collections.sort(recentComments, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentComments.size() > 3)
 			return recentComments.subList(0, 3);
 		return recentComments;
@@ -441,39 +461,44 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get a sorted ArrayList of all <code>Questions</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Questions</code>s of this
+	 * <code>User</code>.
 	 * 
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public ArrayList<Question> getQuestions() {
-		return this.getItemsByType(Question.class, null);
+		return getItemsByType(Question.class, null);
 	}
 
 	/**
-	 * Get a sorted ArrayList of all <code>Answer</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Answer</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
+	 * @return ArrayList<Answer> All <code>Answer</code>s of this
+	 *         <code>User</code>
 	 */
 	public ArrayList<Answer> getAnswers() {
-		return this.getItemsByType(Answer.class, null);
+		return getItemsByType(Answer.class, null);
 	}
-	
+
 	/**
-	 * Get a sorted ArrayList of all <code>Comment</code>s of this <code>User</code>
+	 * Get a sorted ArrayList of all <code>Comment</code>s of this
+	 * <code>User</code>
 	 * 
-	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
+	 * @return ArrayList<Comment> All <code>Comments</code>s of this
+	 *         <code>User</code>
 	 */
 	public ArrayList<Comment> getComments() {
-		return this.getItemsByType(Comment.class, null);
+		return getItemsByType(Comment.class, null);
 	}
-	
+
 	/**
 	 * Get an ArrayList of all best rated answers
 	 * 
 	 * @return ArrayList<Answer> All best rated answers
 	 */
 	public ArrayList<Answer> bestAnswers() {
-		return this.getItemsByType(Answer.class, "isBestAnswer");
+		return getItemsByType(Answer.class, "isBestAnswer");
 	}
 
 	/**
@@ -482,7 +507,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Answer> All high rated answers
 	 */
 	public ArrayList<Answer> highRatedAnswers() {
-		return this.getItemsByType(Answer.class, "isHighRated");
+		return getItemsByType(Answer.class, "isHighRated");
 	}
 
 	/**
@@ -503,15 +528,16 @@ public class User implements IObserver {
 		 * to register all users for observing the deletion of answers (because
 		 * there's no global list of all existing users, either)
 		 */
-		ArrayList<Notification> notifications = this.getItemsByType(
+		ArrayList<Notification> notifications = getItemsByType(
 				Notification.class, filter);
 		for (Notification n : notifications) {
 			if (n.getAbout() instanceof Answer) {
 				Answer answer = (Answer) n.getAbout();
-				if (answer.getQuestion() != null)
+				if (answer.getQuestion() != null) {
 					result.add(n);
-				else
+				} else {
 					n.unregister();
+				}
 			}
 		}
 		return result;
@@ -524,7 +550,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
 	public ArrayList<Notification> getNotifications() {
-		return this.getAllNotifications(null);
+		return getAllNotifications(null);
 	}
 
 	/**
@@ -533,7 +559,7 @@ public class User implements IObserver {
 	 * @return the unread notifications
 	 */
 	public ArrayList<Notification> getNewNotifications() {
-		return this.getAllNotifications("isNew");
+		return getAllNotifications("isNew");
 	}
 
 	/**
@@ -542,7 +568,7 @@ public class User implements IObserver {
 	 * @return a very recent notification (or null, if there isn't any)
 	 */
 	public Notification getVeryRecentNewNotification() {
-		for (Notification n : this.getNewNotifications())
+		for (Notification n : getNewNotifications())
 			if (n.isVeryRecent())
 				return n;
 		return null;
@@ -560,7 +586,7 @@ public class User implements IObserver {
 	 * @return a notification with the given id
 	 */
 	public Notification getNotification(int id) {
-		for (Notification n : this.getNotifications())
+		for (Notification n : getNotifications())
 			if (n.getID() == id)
 				return n;
 		return null;
@@ -584,8 +610,9 @@ public class User implements IObserver {
 			if (type.isInstance(item)) {
 				if (filter != null) {
 					try {
-						if (!(Boolean) type.getMethod(filter).invoke(item))
+						if (!(Boolean) type.getMethod(filter).invoke(item)) {
 							continue;
+						}
 					} catch (Exception ex) {
 						// reflection APIs throw half a dozen different
 						// exceptions, let's just abort if we hit any of them

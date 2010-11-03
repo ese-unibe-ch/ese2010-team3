@@ -14,9 +14,8 @@ public class QuestionTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.user = new User("Jack", "jack");
-		this.question = new Question(user,
-				"Why did the chicken cross the road?");
+		user = new User("Jack", "jack");
+		question = new Question(user, "Why did the chicken cross the road?");
 	}
 
 	@Test
@@ -37,7 +36,7 @@ public class QuestionTest extends UnitTest {
 	@Test
 	public void shouldHaveCorrectSummary() {
 		assertEquals(question.summary(), "Why did the chicken cross the road?");
-		Question longerQuestion = new Question(this.user,
+		Question longerQuestion = new Question(user,
 				"Why did   the chicken\ncross the road\tagain and again?");
 		assertEquals(longerQuestion.summary(),
 				"Why did the chicken cross the road again ...");

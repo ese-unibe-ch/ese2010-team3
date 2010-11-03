@@ -26,24 +26,24 @@ public class AnswerTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.savedSysInfo = SystemInformation.get();
+		savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
-		this.james = new User("James", "jack");
+		james = new User("James", "jack");
 
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 		questionDate = sys.now();
 		sys.changeTo(questionDate);
-		this.question = new Question(new User("Jack", "jack"),
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 		sys.minute(5);
 		answerDate = sys.now();
 		sys.changeTo(answerDate);
 
-		this.question = new Question(new User("Jack", "jack"),
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 
-		this.answer = this.question.answer(james, "To get to the other side.");
+		answer = question.answer(james, "To get to the other side.");
 
 	}
 
@@ -59,12 +59,12 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOwner() {
-		assertEquals(this.answer.owner(), this.james);
+		assertEquals(answer.owner(), james);
 	}
 
 	@Test
 	public void shouldHaveQuestion() {
-		assertEquals(this.answer.getQuestion(), this.question);
+		assertEquals(answer.getQuestion(), question);
 	}
 
 	@Test
@@ -74,15 +74,15 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldRegisterItself() {
-		assertTrue(this.james.hasItem(this.answer));
-		assertTrue(this.question.hasAnswer(this.answer));
+		assertTrue(james.hasItem(answer));
+		assertTrue(question.hasAnswer(answer));
 	}
 
 	@Test
 	public void shouldFindAnswer() {
-		assertEquals(this.answer, question.getAnswer(this.answer.id()));
+		assertEquals(answer, question.getAnswer(answer.id()));
 	}
-	
+
 	@After
 	public void tearDown() {
 		SystemInformation.mockWith(savedSysInfo);
@@ -102,7 +102,7 @@ public class AnswerTest extends UnitTest {
 		answer.voteUp(d);
 		answer.voteUp(e);
 
-		assertTrue(this.answer.isHighRated());
+		assertTrue(answer.isHighRated());
 
 		a.delete();
 		b.delete();
@@ -110,7 +110,7 @@ public class AnswerTest extends UnitTest {
 		d.delete();
 		e.delete();
 
-		assertFalse(this.answer.isHighRated());
+		assertFalse(answer.isHighRated());
 	}
 
 	@Test

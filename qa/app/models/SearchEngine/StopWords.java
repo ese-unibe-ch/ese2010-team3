@@ -1,8 +1,6 @@
 package models.SearchEngine;
 
 import java.util.HashSet;
-import java.util.Set;
-
 
 public class StopWords {
 	private static HashSet<String> instance;
@@ -53,7 +51,7 @@ public class StopWords {
 			"whom", "whose", "why", "will", "with", "within", "without",
 			"would", "yet", "you", "your", "yours", "yourself", "yourselves",
 			"the" };
-	
+
 	public static HashSet<String> get() {
 		if (instance == null) {
 			instance = new HashSet<String>();

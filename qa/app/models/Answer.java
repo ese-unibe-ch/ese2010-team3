@@ -19,20 +19,22 @@ public class Answer extends Entry {
 	private final Question question;
 	private IDTable<Comment> comments;
 	private final int id;
-	
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
 	 * 
 	 * @param id
-	 * @param owner the {@link User} who posted the <code>Answer</code>
-	 * @param question the {@link Question} this <code>Answer</code> belongs to
-	 * @param content the answer
+	 * @param owner
+	 *            the {@link User} who posted the <code>Answer</code>
+	 * @param question
+	 *            the {@link Question} this <code>Answer</code> belongs to
+	 * @param content
+	 *            the answer
 	 */
 	public Answer(int id, User owner, Question question, String content) {
 		super(owner, content);
 		this.question = question;
-		this.comments = new IDTable<Comment>();
+		comments = new IDTable<Comment>();
 		this.id = id;
 
 		// make users aware of this new answer
@@ -42,14 +44,15 @@ public class Answer extends Entry {
 	/**
 	 * Post a {@link Comment} to a <code>Answer</code>.
 	 * 
-	 * @param user the {@link User} posting the {@link Comment}
-	 * @param content the comment
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(), user, this,
-				content);
-		this.comments.add(comment);
+		Comment comment = new Comment(comments.nextID(), user, this, content);
+		comments.add(comment);
 		return comment;
 	}
 
@@ -58,14 +61,14 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		for (Comment comment : this.comments){
+		for (Comment comment : comments) {
 			comment.unregister();
 		}
-		this.comments = new IDTable<Comment>();
+		comments = new IDTable<Comment>();
 
-		this.question.unregister(this);
-		this.unregisterVotes();
-		this.unregisterUser();
+		question.unregister(this);
+		unregisterVotes();
+		unregisterUser();
 	}
 
 	/**
@@ -77,29 +80,31 @@ public class Answer extends Entry {
 	public Question getQuestion() {
 		// if this answer has been removed from its question, no longer
 		// claim to belong to a question
-		if (!this.question.hasAnswer(this))
+		if (!question.hasAnswer(this))
 			return null;
-		return this.question;
+		return question;
 	}
 
 	/**
 	 * Unregisters a deleted {@link Comment}.
 	 * 
-	 * @param comment the {@link Comment} to unregister
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
-		this.comments.remove(comment.id());
+		comments.remove(comment.id());
 	}
 
 	/**
 	 * Checks if a {@link Comment} belongs to an <code>Answer</code>.
 	 * 
-	 * @param comment the {@link Comment} to check
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
 	 */
 	public boolean hasComment(Comment comment) {
-		return this.comments.contains(comment);
+		return comments.contains(comment);
 	}
 
 	/**
@@ -116,11 +121,12 @@ public class Answer extends Entry {
 	/**
 	 * Get a specific {@link Comment} to an <code>Answer</code>.
 	 * 
-	 * @param id of the <code>Comment</code>
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
-		return this.comments.get(id);
+		return comments.get(id);
 	}
 
 	/**
@@ -129,7 +135,7 @@ public class Answer extends Entry {
 	 * @return the id of the <code>Comment</code>
 	 */
 	public int id() {
-		return this.id;
+		return id;
 	}
 
 	/**
@@ -138,11 +144,11 @@ public class Answer extends Entry {
 	 * @return the best answer of a <code>Question</code>
 	 */
 	public boolean isBestAnswer() {
-		return this.question.getBestAnswer() == this;
+		return question.getBestAnswer() == this;
 	}
 
 	/**
-
+	 * 
 	 * Compares this <code>Answer</code> with another one with respect to their
 	 * ratings and their Best-answer state.
 	 * 
@@ -152,9 +158,9 @@ public class Answer extends Entry {
 	public int compareTo(Object o) {
 		Entry other = (Entry) o;
 		if (!(other instanceof Answer)
-				|| this.isBestAnswer() == ((Answer) other).isBestAnswer())
+				|| isBestAnswer() == ((Answer) other).isBestAnswer())
 			return super.compareTo(o);
-		if (this.isBestAnswer())
+		if (isBestAnswer())
 			return -1;
 		return 1;
 	}
@@ -165,7 +171,7 @@ public class Answer extends Entry {
 	 * @return boolean whether the answer is high rated or not
 	 */
 	public boolean isHighRated() {
-		return (this.rating() >= 5);
+		return (rating() >= 5);
 	}
 
 }

@@ -1,38 +1,33 @@
 package models.SearchEngine;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import static models.helpers.SetOperations.difference;
+import static models.helpers.SetOperations.intersection;
+
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import models.Question;
 import models.Tag;
-import models.helpers.Pair;
 import models.helpers.Mapper;
-
-import static models.helpers.SetOperations.*;
+import models.helpers.Pair;
 
 public class SearchResult extends Mapper<Pair<Integer, Question>, Question> {
 	private final Set<String> queryFulltext;
-	private final Set<Tag>    queryTags;
+	private final Set<Tag> queryTags;
 
 	public SearchResult(String query, Set<Tag> tags) {
 		queryFulltext = filterWords(getWords(query));
-		queryTags     = tags;
+		queryTags = tags;
 	}
 
 	@Override
 	protected Pair<Integer, Question> visit(Question question) {
 		Integer tagRating = rateTags(question), textRating = rateText(question);
 		Integer rating = combine(tagRating, textRating);
-		if (rating != 0) {
+		if (rating != 0)
 			return new Pair<Integer, Question>(rating, question);
-		} else {
+		else
 			return null;
-		}
 	}
 
 	private Set<String> getWords(String string) {

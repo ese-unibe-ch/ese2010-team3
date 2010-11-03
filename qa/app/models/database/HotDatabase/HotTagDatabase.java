@@ -8,7 +8,7 @@ import models.Tag;
 import models.database.ITagDatabase;
 
 public class HotTagDatabase implements ITagDatabase {
-	private Map<String,Tag> tags = new HashMap<String,Tag>();
+	private Map<String, Tag> tags = new HashMap<String, Tag>();
 
 	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
@@ -20,7 +20,7 @@ public class HotTagDatabase implements ITagDatabase {
 		Tag tag = tags.get(name);
 		if (tag == null && name.matches(tagRegex)) {
 			tag = new Tag(name);
-			tags.put(name,tag);
+			tags.put(name, tag);
 		}
 		return tag;
 	}

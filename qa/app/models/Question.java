@@ -7,18 +7,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 import models.database.Database;
-import models.database.HotDatabase.HotQuestionDatabase;
 import models.helpers.IDTable;
 import models.helpers.MapComparator;
-import models.helpers.Pair;
-import models.helpers.Mapper;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -37,28 +31,33 @@ public class Question extends Entry implements IObservable {
 	private Answer bestAnswer;
 	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
-	
+
 	protected HashSet<IObserver> observers;
 
 	/**
 	 * Create a Question.
 	 * 
-	 * @param owner the {@link User} who posted the <code>Question</code>
-	 * @param content the question
+	 * @param owner
+	 *            the {@link User} who posted the <code>Question</code>
+	 * @param content
+	 *            the question
 	 */
 	public Question(User owner, String content) {
-	/**
-	 * Adds a <code>Question</code> to the database.
-	 * 
-	 * @param owner of the <code>Question</code>
-	 * @param content of the <code>Question</code>
-	 * @param id of the <code>Question</code>
-	 */
+		/**
+		 * Adds a <code>Question</code> to the database.
+		 * 
+		 * @param owner
+		 *            of the <code>Question</code>
+		 * @param content
+		 *            of the <code>Question</code>
+		 * @param id
+		 *            of the <code>Question</code>
+		 */
 		super(owner, content);
-		this.answers = new IDTable<Answer>();
-		this.comments = new IDTable<Comment>();
-		this.observers = new HashSet<IObserver>();
-		this.id = Database.get().questions().register(this);
+		answers = new IDTable<Answer>();
+		comments = new IDTable<Comment>();
+		observers = new HashSet<IObserver>();
+		id = Database.get().questions().register(this);
 	}
 
 	/**
@@ -71,82 +70,92 @@ public class Question extends Entry implements IObservable {
 		Collection<Comment> comments = this.comments.values();
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
-		for (Answer answer : answers)
+		for (Answer answer : answers) {
 			answer.unregister();
-		for (Comment comment : comments)
+		}
+		for (Comment comment : comments) {
 			comment.unregister();
-		this.observers.clear();
-		if (this.id != -1)
-			Database.get().questions().remove(this.id);
-		this.unregisterVotes();
-		this.unregisterUser();
-		this.setTagString("");
+		}
+		observers.clear();
+		if (id != -1) {
+			Database.get().questions().remove(id);
+		}
+		unregisterVotes();
+		unregisterUser();
+		setTagString("");
 	}
 
 	/**
 	 * Unregisters a deleted {@link Answer}.
 	 * 
-	 * @param answer the {@link Answer} to unregister
+	 * @param answer
+	 *            the {@link Answer} to unregister
 	 */
 	public void unregister(Answer answer) {
-		this.answers.remove(answer.id());
+		answers.remove(answer.id());
 	}
 
 	/**
 	 * Unregisters a deleted {@link Comment}.
 	 * 
-	 * @param comment the {@link Comment} to unregister
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
-		this.comments.remove(comment.id());
+		comments.remove(comment.id());
 	}
 
 	/**
 	 * Post a {@link Answer} to a <code>Question</code>.
 	 * 
-	 * @param user the {@link User} posting the {@link Answer}
-	 * @param content the answer
+	 * @param user
+	 *            the {@link User} posting the {@link Answer}
+	 * @param content
+	 *            the answer
 	 * @return an {@link Answer}
 	 */
 	public Answer answer(User user, String content) {
-		Answer answer = new Answer(this.answers.nextID(), user, this, content);
-		this.answers.add(answer);
+		Answer answer = new Answer(answers.nextID(), user, this, content);
+		answers.add(answer);
 		return answer;
 	}
 
 	/**
 	 * Post a {@link Comment} to a <code>Question</code>.
 	 * 
-	 * @param user the {@link User} posting the {@link Comment}
-	 * @param content the comment
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(), user, this,
-				content);
-		this.comments.add(comment);
+		Comment comment = new Comment(comments.nextID(), user, this, content);
+		comments.add(comment);
 		return comment;
 	}
 
 	/**
 	 * Checks if a {@link Answer} belongs to a <code>Question</code>.
 	 * 
-	 * @param answer the {@link Answer} to check
+	 * @param answer
+	 *            the {@link Answer} to check
 	 * @return true if the {@link Answer} belongs to the <code>Question</code>
 	 */
 	public boolean hasAnswer(Answer answer) {
-		return this.answers.contains(answer);
+		return answers.contains(answer);
 	}
 
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Question</code>.
 	 * 
-	 * @param comment the {@link Comment} to check
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Question</code>
 	 */
 	public boolean hasComment(Comment comment) {
-		return this.comments.contains(comment);
+		return comments.contains(comment);
 	}
 
 	/**
@@ -156,7 +165,7 @@ public class Question extends Entry implements IObservable {
 	 * @return id of the <code>Question</code>
 	 */
 	public int id() {
-		return this.id;
+		return id;
 	}
 
 	/**
@@ -184,36 +193,39 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Get a specific {@link Answer} to a <code>Question</code>.
 	 * 
-	 * @param id of the <code>Answer</code>
+	 * @param id
+	 *            of the <code>Answer</code>
 	 * @return {@link Answer} or null
 	 */
 	public Answer getAnswer(int id) {
-		return this.answers.get(id);
+		return answers.get(id);
 	}
 
 	/**
 	 * Get a specific {@link Comment} to a <code>Question</code>.
 	 * 
-	 * @param id of the <code>Comment</code>
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
-		return this.comments.get(id);
+		return comments.get(id);
 	}
 
 	public boolean isBestAnswerSettable(Calendar now) {
 		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
 		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return this.settingOfBestAnswer == null
+		return settingOfBestAnswer == null
 				|| !thirtyMinutesAgo.getTime().after(
-						this.settingOfBestAnswer.getTime());
+						settingOfBestAnswer.getTime());
 	}
 
 	/**
 	 * Sets the best answer. This answer can not be changed after 30min. This
 	 * Method enforces this and fails if it can not be set.
 	 * 
-	 * @param bestAnswer the answer the user chose to be the best for this question.
+	 * @param bestAnswer
+	 *            the answer the user chose to be the best for this question.
 	 * @return true if setting of best answer was allowed.
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
@@ -222,29 +234,31 @@ public class Question extends Entry implements IObservable {
 	}
 
 	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
-		if (this.isBestAnswerSettable(now)) {
+		if (isBestAnswerSettable(now)) {
 			this.bestAnswer = bestAnswer;
-			this.settingOfBestAnswer = now;
+			settingOfBestAnswer = now;
 			return true;
 		} else
 			return false;
 	}
-	
+
 	public boolean hasBestAnswer() {
 		return bestAnswer != null;
 	}
-	
+
 	public Answer getBestAnswer() {
 		return bestAnswer;
 	}
 
 	/**
-	 * @param tags a comma- or whitespace-separated list of tags to be associated
-	 * 			   with this question
+	 * @param tags
+	 *            a comma- or whitespace-separated list of tags to be associated
+	 *            with this question
 	 */
 	public void setTagString(String tags) {
-		for (Tag tag : this.tags)
+		for (Tag tag : this.tags) {
 			tag.unregister(this);
+		}
 		this.tags.clear();
 
 		if (tags == null)
@@ -254,8 +268,9 @@ public class Question extends Entry implements IObservable {
 		for (String bit : bits) {
 			// make the tag conform to Tag.tagRegex
 			bit = bit.toLowerCase();
-			if (bit.length() > 32)
+			if (bit.length() > 32) {
 				bit = bit.substring(0, 32);
+			}
 
 			Tag tag = Tag.get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
@@ -266,43 +281,46 @@ public class Question extends Entry implements IObservable {
 		Collections.sort(this.tags);
 	}
 
-	/* Get a List of all tags for a <code>Question</code>.
+	/*
+	 * Get a List of all tags for a <code>Question</code>.
 	 * 
 	 * @return List of tags
 	 */
 	public List<Tag> getTags() {
-	 
-		return (List<Tag>) this.tags.clone();
+
+		return (List<Tag>) tags.clone();
 	}
+
 	/**
 	 * @see models.IObservable#addObserver(models.IObserver)
 	 */
 	public void addObserver(IObserver o) {
 		if (o == null)
 			throw new IllegalArgumentException();
-		this.observers.add(o);
+		observers.add(o);
 	}
 
 	/**
 	 * @see models.IObservable#hasObserver(models.IObserver)
 	 */
 	public boolean hasObserver(IObserver o) {
-		return this.observers.contains(o);
+		return observers.contains(o);
 	}
 
 	/**
 	 * @see models.IObservable#removeObserver(models.IObserver)
 	 */
 	public void removeObserver(IObserver o) {
-		this.observers.remove(o);
+		observers.remove(o);
 	}
 
 	/**
 	 * @see models.IObservable#notifyObservers(java.lang.Object)
 	 */
 	public void notifyObservers(Object arg) {
-		for (IObserver o : this.observers)
+		for (IObserver o : observers) {
 			o.observe(this, arg);
+		}
 	}
 
 	/**
@@ -324,18 +342,18 @@ public class Question extends Entry implements IObservable {
 		int matchCount;
 		Map<Question, Double> map = new HashMap<Question, Double>();
 		for (Question qu : questions) {
-			List<Tag> tags = this.getTags();
+			List<Tag> tags = getTags();
 			tags.retainAll(qu.getTags());
 			matchCount = tags.size();
-			double questionOneRatio = ((double) matchCount / (double) this
-					.getTags().size());
+			double questionOneRatio = ((double) matchCount / (double) getTags()
+					.size());
 			double questionTwoRatio = ((double) matchCount / (double) qu
 					.getTags().size());
 			double ratio = questionOneRatio * questionTwoRatio;
 			map.put(qu, ratio);
 		}
 		Comparator<Question> byMap = new MapComparator<Question>(map);
-		Collections.sort(questions,	byMap);
+		Collections.sort(questions, byMap);
 		Collections.reverse(questions);
 
 		return questions;
@@ -349,8 +367,8 @@ public class Question extends Entry implements IObservable {
 	 * Get all questions that containing at least one of the tags of the
 	 * original question.
 	 * 
-	 * @return List<Question> the List containing all questions that
-	 *         contain at least one of the first question.
+	 * @return List<Question> the List containing all questions that contain at
+	 *         least one of the first question.
 	 */
 	public List<Question> getSimilarQuestions() {
 		List<Question> questions = Database.get().questions().findSimilar(this);

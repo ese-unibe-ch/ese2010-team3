@@ -8,11 +8,11 @@ public class SystemInformation implements ISystemInformation {
 	public static void mockWith(ISystemInformation mock) {
 		instance = mock;
 	}
-	
+
 	public static ISystemInformation get() {
 		return instance;
 	}
-	
+
 	public Date now() {
 		return new Date();
 	}

@@ -16,9 +16,12 @@ public class Vote extends Item {
 	/**
 	 * Create a <code>Vote</code>.
 	 * 
-	 * @param owner the {@link User} who created the <code>Vote</code>
-	 * @param entry the {@link Entry} the <code>Vote</code> belongs to.
-	 * @param up true if the <code>Vote</code> is positive
+	 * @param owner
+	 *            the {@link User} who created the <code>Vote</code>
+	 * @param entry
+	 *            the {@link Entry} the <code>Vote</code> belongs to.
+	 * @param up
+	 *            true if the <code>Vote</code> is positive
 	 */
 	public Vote(User owner, Entry entry, boolean up) {
 		super(owner);
@@ -32,7 +35,7 @@ public class Vote extends Item {
 	 */
 	public void unregister() {
 		entry.unregister(this);
-		this.unregisterUser();
+		unregisterUser();
 	}
 
 	/**
@@ -41,7 +44,7 @@ public class Vote extends Item {
 	 * @return true if the <code>Vote</code> is positive
 	 */
 	public boolean up() {
-		return this.up;
+		return up;
 	}
 
 }

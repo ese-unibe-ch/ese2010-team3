@@ -39,8 +39,8 @@ public class Notification extends Item implements Comparable {
 	public Notification(User owner, Entry about) {
 		super(owner);
 		this.about = about;
-		this.isNew = true;
-		this.id = autoIncrementID();
+		isNew = true;
+		id = autoIncrementID();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class Notification extends Item implements Comparable {
 	 * @return what the notification is all about.
 	 */
 	public Entry getAbout() {
-		return this.about;
+		return about;
 	}
 
 	/**
@@ -58,8 +58,7 @@ public class Notification extends Item implements Comparable {
 	 * @return true, if it is very recent
 	 */
 	public boolean isVeryRecent() {
-		return SystemInformation.get().now().getTime()
-				- this.timestamp().getTime() <= 5 * 60 * 1000;
+		return SystemInformation.get().now().getTime() - timestamp().getTime() <= 5 * 60 * 1000;
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class Notification extends Item implements Comparable {
 	 * @return true, if it is new
 	 */
 	public boolean isNew() {
-		return this.isNew;
+		return isNew;
 	}
 
 	/**
@@ -76,7 +75,7 @@ public class Notification extends Item implements Comparable {
 	 * yet deleted)
 	 */
 	public void unsetNew() {
-		this.isNew = false;
+		isNew = false;
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class Notification extends Item implements Comparable {
 	 * @return this notification's ID
 	 */
 	public int getID() {
-		return this.id;
+		return id;
 	}
 
 	/**
@@ -93,6 +92,6 @@ public class Notification extends Item implements Comparable {
 	 */
 	public int compareTo(Object o) {
 		// sort notifications most-recent one first
-		return ((Notification) o).getID() - this.id;
+		return ((Notification) o).getID() - id;
 	}
 }

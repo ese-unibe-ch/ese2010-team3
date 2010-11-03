@@ -7,8 +7,10 @@ import models.Answer;
 import models.Comment;
 import models.Question;
 import models.User;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import play.test.UnitTest;
 
 /**
@@ -28,18 +30,16 @@ public class CommentTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.james = new User("James", "james");
-		this.question = new Question(new User("Jack", "jack"),
+		james = new User("James", "james");
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
-		this.answer = this.question.answer(james, "To get to the other side.");
+		answer = question.answer(james, "To get to the other side.");
 		generateComments();
 	}
-	
+
 	private void generateComments() {
-		this.commentQuestion = this.question
-				.comment(james, "Strange Question!");
-		this.commentAnswer = this.answer.comment(new User("Jill", "jill"),
-				"Good point!");
+		commentQuestion = question.comment(james, "Strange Question!");
+		commentAnswer = answer.comment(new User("Jill", "jill"), "Good point!");
 	}
 
 	@Test
@@ -77,34 +77,34 @@ public class CommentTest extends UnitTest {
 		assertTrue(commentQuestion.timestamp() != null);
 		assertTrue(commentQuestion.timestamp().compareTo(new Date()) <= 0);
 	}
-	
-	@Test 
+
+	@Test
 	public void questionShouldHaveCompleteListOfComments() {
 		Comment newComment = question.comment(james, "Blubb");
 		List<Comment> comments = question.comments();
 		assertTrue(comments.contains(commentQuestion));
 		assertTrue(comments.contains(newComment));
-		assertEquals(2,comments.size());
+		assertEquals(2, comments.size());
 	}
-	
-	@Test 
+
+	@Test
 	public void answerShouldHaveCompleteListOfComments() {
 		Comment newComment = answer.comment(james, "Blubb");
 		List<Comment> comments = answer.comments();
 		assertTrue(comments.contains(commentAnswer));
 		assertTrue(comments.contains(newComment));
-		assertEquals(2,comments.size());
+		assertEquals(2, comments.size());
 	}
-	
+
 	@Test
 	public void shouldGetQuestionBelongToQuestioncomment() {
 		Comment newComment = question.comment(james, "Blubb");
-		assertEquals(newComment.getQuestion(), this.question);
+		assertEquals(newComment.getQuestion(), question);
 	}
-	
+
 	@Test
 	public void shouldGetQuestionBelongToAnswercomment() {
 		Comment newComment = answer.comment(james, "Blubb");
-		assertEquals(newComment.getQuestion(), this.question);
+		assertEquals(newComment.getQuestion(), question);
 	}
 }

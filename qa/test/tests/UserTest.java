@@ -22,33 +22,33 @@ public class UserTest extends UnitTest {
 		User user = new User("Jack", "jack");
 		assertEquals(user.getName(), "Jack");
 	}
-	
+
 	@Test
-	public void shouldCheckeMailValidation(){
+	public void shouldCheckeMailValidation() {
 		User user = new User("John", "john");
-		assertTrue(user.checkEmail("john@gmx.com"));
-		assertTrue(user.checkEmail("john.smith@students.unibe.ch"));
-		assertFalse(user.checkEmail("john@gmx.c"));
-		assertFalse(user.checkEmail("john@info.museum"));
-		assertFalse(user.checkEmail("john@...com"));
+		assertTrue(User.checkEmail("john@gmx.com"));
+		assertTrue(User.checkEmail("john.smith@students.unibe.ch"));
+		assertFalse(User.checkEmail("john@gmx.c"));
+		assertFalse(User.checkEmail("john@info.museum"));
+		assertFalse(User.checkEmail("john@...com"));
 	}
-	
+
 	@Test
-	public void checkMailAssertion(){
+	public void checkMailAssertion() {
 		User user = new User("Bill", "bill");
 		user.setEmail("bill@aol.com");
 		assertEquals(user.getEmail(), "bill@aol.com");
 	}
-	
+
 	@Test
 	public void checkPassw() {
 		User user = new User("Bill", "bill");
 		assertTrue(user.checkPW("bill"));
-		assertEquals(user.encrypt("bill"), user.getSHA1Password());
-		assertEquals(user.encrypt(""),
+		assertEquals(User.encrypt("bill"), user.getSHA1Password());
+		assertEquals(User.encrypt(""),
 				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
-																// wikipedia.org/wiki/Examples_of_SHA_digests
-		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
+		// wikipedia.org/wiki/Examples_of_SHA_digests
+		assertFalse(User.encrypt("password").equals(User.encrypt("Password")));
 	}
 
 	@Test
@@ -71,12 +71,12 @@ public class UserTest extends UnitTest {
 		assertTrue(user.getWebsite().equals("http://www.test.ch"));
 	}
 
-	
 	@Test
 	public void checkForSpammer() {
 		User user = new User("Spammer", "spammer");
 		assertTrue(user.howManyItemsPerHour() == 0);
-		Question question = new Question(user, "Why did the chicken cross the road?");
+		Question question = new Question(user,
+				"Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
 		Question quest = new Question(user, "Does anybody know?");
 		assertFalse(user.howManyItemsPerHour() == 1);
@@ -90,7 +90,7 @@ public class UserTest extends UnitTest {
 		assertTrue(user.isSpammer());
 		assertTrue(user.isCheating());
 	}
-	
+
 	@Test
 	public void checkForCheater() {
 		User user = new User("TheSupported", "supported");
@@ -103,8 +103,6 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isMaybeCheater());
 		assertTrue(!user.isCheating());
 	}
-
-
 
 	@Test
 	public void shouldHaveOneQuestion() {

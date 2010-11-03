@@ -1,4 +1,5 @@
 package tests;
+
 import models.Answer;
 import models.Comment;
 import models.Question;
@@ -10,9 +11,8 @@ import org.junit.Test;
 
 import play.test.UnitTest;
 
-
 public class UnregisterTest extends UnitTest {
-	
+
 	private User jack;
 	private User john;
 	private User bill;
@@ -28,114 +28,111 @@ public class UnregisterTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.jack = new User("Jack", "jack");
-		this.john = new User("John", "john");
-		this.bill = new User("Bill", "bill");
-		this.kate = new User("Kate", "kate");
-		this.sahra = new User("Sahra", "sahra");
-		this.michael = new User("Michael", "michael");
-		this.question = new Question(this.jack, "Why did the chicken cross the road?");
-		this.answer = this.question.answer(this.john, "To get to the other side.");
-		this.questionVote = this.question.voteUp(this.kate);
-		this.answerVote = this.answer.voteDown(this.bill);
-		this.questionComment = this.question.comment(this.michael, "Strange question");
-		this.answerComment = this.answer.comment(this.sahra, "Good answer");
+		jack = new User("Jack", "jack");
+		john = new User("John", "john");
+		bill = new User("Bill", "bill");
+		kate = new User("Kate", "kate");
+		sahra = new User("Sahra", "sahra");
+		michael = new User("Michael", "michael");
+		question = new Question(jack, "Why did the chicken cross the road?");
+		answer = question.answer(john, "To get to the other side.");
+		questionVote = question.voteUp(kate);
+		answerVote = answer.voteDown(bill);
+		questionComment = question.comment(michael, "Strange question");
+		answerComment = answer.comment(sahra, "Good answer");
 	}
-	
+
 	@Test
 	public void shouldUnregisterAnswer() {
-		assertTrue(this.question.hasAnswer(this.answer));
-		this.john.delete();
-		assertFalse(this.question.hasAnswer(this.answer));
+		assertTrue(question.hasAnswer(answer));
+		john.delete();
+		assertFalse(question.hasAnswer(answer));
 	}
-	
+
 	@Test
 	public void shouldUnregisterAnswersToQuestion() {
-		assertTrue(this.john.hasItem(this.answer));
-		this.jack.delete();
-		assertFalse(this.john.hasItem(this.answer));
+		assertTrue(john.hasItem(answer));
+		jack.delete();
+		assertFalse(john.hasItem(answer));
 	}
-	
+
 	@Test
 	public void shouldUnregisterVotesOfUser() {
-		assertEquals(this.question.upVotes(), 1);
-		this.kate.delete();
-		assertEquals(this.question.upVotes(), 0);
-		
-		assertEquals(this.answer.downVotes(), 1);
-		this.bill.delete();
-		assertEquals(this.answer.downVotes(), 0);
+		assertEquals(question.upVotes(), 1);
+		kate.delete();
+		assertEquals(question.upVotes(), 0);
+
+		assertEquals(answer.downVotes(), 1);
+		bill.delete();
+		assertEquals(answer.downVotes(), 0);
 	}
-	
+
 	@Test
 	public void shouldUnregisterVotesOfEntry() {
-		assertTrue(this.kate.hasItem(this.questionVote));
-		assertTrue(this.bill.hasItem(this.answerVote));
-		this.jack.delete();
-		assertFalse(this.kate.hasItem(this.questionVote));
-		assertFalse(this.bill.hasItem(this.answerVote));	
+		assertTrue(kate.hasItem(questionVote));
+		assertTrue(bill.hasItem(answerVote));
+		jack.delete();
+		assertFalse(kate.hasItem(questionVote));
+		assertFalse(bill.hasItem(answerVote));
 	}
-	
+
 	@Test
 	public void shouldUnregisterCommentsToQuestion() {
 		assertTrue(question.hasComment(questionComment));
-		this.michael.delete();
+		michael.delete();
 		assertFalse(question.hasComment(questionComment));
 	}
-	
+
 	@Test
 	public void shouldUnregisterCommentsToAnswer() {
 		assertTrue(answer.hasComment(answerComment));
-		this.sahra.delete();
+		sahra.delete();
 		assertFalse(answer.hasComment(answerComment));
 	}
-	
+
 	@Test
 	public void shouldDeleteAllCommentsOnQuestionDelete() {
 		assertTrue(questionComment.isRegistered());
-		this.question.unregister();
+		question.unregister();
 		assertFalse(questionComment.isRegistered());
 	}
-	
+
 	@Test
 	public void shouldDeleteAllCommentsOnAnswerDelete() {
 		assertTrue(answerComment.isRegistered());
-		this.answer.unregister();
+		answer.unregister();
 		assertFalse(answerComment.isRegistered());
 	}
 
-	
 	@Test
 	public void testUserQuestionAnonymization() {
-		this.jack.anonymize(false, false);
-		this.john.anonymize(false, false);
-		
-		assertNull(this.question.owner());
-		assertEquals(this.question.upVotes(), 1);
-		assertEquals(this.answer.owner(), this.john);
-		assertEquals(this.answer.downVotes(), 1);
-	}
-	
+		jack.anonymize(false, false);
+		john.anonymize(false, false);
 
-	
+		assertNull(question.owner());
+		assertEquals(question.upVotes(), 1);
+		assertEquals(answer.owner(), john);
+		assertEquals(answer.downVotes(), 1);
+	}
+
 	@Test
 	public void testUserAnonymization() {
-		this.jack.anonymize(true, false);
-		this.jack.delete();
-		this.john.anonymize(true, false);
-		this.john.delete();
-		
-		assertNull(this.question.owner());
-		assertEquals(this.question.upVotes(), 1);
-		assertNull(this.answer.owner());
-		assertEquals(this.answer.downVotes(), 1);
+		jack.anonymize(true, false);
+		jack.delete();
+		john.anonymize(true, false);
+		john.delete();
+
+		assertNull(question.owner());
+		assertEquals(question.upVotes(), 1);
+		assertNull(answer.owner());
+		assertEquals(answer.downVotes(), 1);
 
 		assertNotNull(questionComment.owner());
 		assertNotNull(answerComment.owner());
-		this.michael.anonymize(true, true);
-		this.michael.delete();
-		this.sahra.anonymize(true, false);
-		this.sahra.delete();
+		michael.anonymize(true, true);
+		michael.delete();
+		sahra.anonymize(true, false);
+		sahra.delete();
 		assertTrue(question.hasComment(questionComment));
 		assertNull(questionComment.owner());
 		assertFalse(answer.hasComment(answerComment));
