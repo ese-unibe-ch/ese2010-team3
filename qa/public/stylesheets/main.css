@@ -50,14 +50,6 @@ div.main {
 	position: relative;
 }
 
-.cheaterWarning {
-	color: #ffffff;
-	font-size: 1.4em;
-	font-wight: bold;
-	text-align: center;
-	border-bottom: 15px solid #f00;
-}
-
 /*********************** 
 header
 ************************/
@@ -79,21 +71,21 @@ div.navigation {
 	padding: 5px;
 	background: #555555;
 	color: #222222;
+	height:28px;
 }
 
-div.navigation span.search {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-}
-
-div.navigation span.user {			
-	position: absolute;
+div.navigation div.user {			
+	float:right;
 	right: 	5px;
+	margin-top: 4px;
 }
 
-div.navigation span.user a {
+div.navigation div.user a {
 	margin-left: 5px;
+}
+
+div.navigation div.search {
+	float:left;
 }
 /*********************** 
 content
@@ -123,7 +115,7 @@ div.content li[onclick] {
 }
 		
 div.content li[onclick]:hover {
-	background: #444444;
+	background: #333333;
 }
 		
 div.content li p {
@@ -201,10 +193,11 @@ div.showprofile {
 	color: #ff8400;
 }
 td.right{
-	width:100%;
 	color: #ff8400;
 }
 td.left {
+	width: 30%;
+	text-align:left;
 	vertical-align: top;
 	color: #ff8400;
 }

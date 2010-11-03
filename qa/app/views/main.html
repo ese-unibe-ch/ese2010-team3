@@ -30,19 +30,17 @@
     			</div>
     		#{/elseif}
     		<div class="navigation">
-			<a href="@{Application.index}">Questions</a>
-			<span class="search">
+			<div class="search">
     			<form class="search" action="@{Application.search}" method="GET">
     				<input type="text" name="term" />
     				<input type="submit" value="Search" />
 				</form> 
-			</span>
-			<span class="user">
+			</div><!-- end search -->
+			<div class="user">
 				#{if user}
 						Hi ${user.getName()}!
 						<a href="@{Application.notifications}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
 						<a href="@{Application.showprofile(user.getName())}">Profile</a>
-						<a href="@{Application.deleteuser}">Delete</a>
 						<a href="@{Secure.logout}">Logout</a>
 					#{/if}
 					#{else}
@@ -51,7 +49,7 @@
 						or
 						<a href="@{Application.register}">Sign Up</a>
 					#{/else}	
-			</span>
+			</div><!-- end user -->
     		</div><!-- end navigaion -->
     		<div class="content">
 			#{doLayout /}
