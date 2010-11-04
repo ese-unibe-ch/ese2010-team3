@@ -69,7 +69,7 @@ public interface IQuestionDatabase {
 	 * 
 	 * @return ArrayList<Answer> an arrayList of all best answers
 	 */
-	public Set<Answer> getBestRatedAnswers();
+	public List<Answer> getBestRatedAnswers();
 	
 	public int countBestRatedAnswers();
 

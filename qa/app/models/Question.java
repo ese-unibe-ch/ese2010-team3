@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import models.database.Database;
-import models.helpers.MapComparator;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -263,7 +260,6 @@ public class Question extends Entry implements IObservable {
 	 * @return List of tags
 	 */
 	public List<Tag> getTags() {
-	 
 		return (List<Tag>) this.tags.clone();
 	}
 	/**
@@ -298,46 +294,6 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Sorts an ArrayList in descending order of questions by comparing the
-	 * ratios of matching tags and the overall number of tags per question. <br>
-	 * Calculation:<br>
-	 * 
-	 * (CountOfMatches / SizeOfTagsArrayQuestionOne) * (CountOfMatches /
-	 * SizeOfTagsArrayQuestionTwo)
-	 * 
-	 * @param questions2
-	 *            the ArrayList of questions to be sorted
-	 * @return ArrayList<Question> the sorted ArrayList
-	 */
-	@Deprecated
-	private List<Question> sortQuestionsByMatchRatio(List<Question> questions2) {
-		List<Question> questions = new ArrayList<Question>();
-		Collections.copy(questions, questions2);
-		int matchCount;
-		Map<Question, Double> map = new HashMap<Question, Double>();
-		for (Question qu : questions) {
-			List<Tag> tags = this.getTags();
-			tags.retainAll(qu.getTags());
-			matchCount = tags.size();
-			double questionOneRatio = ((double) matchCount / (double) this
-					.getTags().size());
-			double questionTwoRatio = ((double) matchCount / (double) qu
-					.getTags().size());
-			double ratio = questionOneRatio * questionTwoRatio;
-			map.put(qu, ratio);
-		}
-		Comparator<Question> byMap = new MapComparator<Question>(map);
-		Collections.sort(questions,	byMap);
-		Collections.reverse(questions);
-
-		return questions;
-	}
-
-	// From <a
-	// href=http://www.programmersheaven.com/download/49349/download.aspx
-	// 01.11.2010
-
-	/**
 	 * Get all questions that containing at least one of the tags of the
 	 * original question.
 	 * 
@@ -345,8 +301,7 @@ public class Question extends Entry implements IObservable {
 	 *         contain at least one of the first question.
 	 */
 	public List<Question> getSimilarQuestions() {
-		List<Question> questions = Database.get().questions().findSimilar(this);
-		return questions;
+		return Database.get().questions().findSimilar(this);
 	}
 
 	public int countAnswers() {

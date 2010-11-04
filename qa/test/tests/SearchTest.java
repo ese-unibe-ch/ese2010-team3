@@ -1,11 +1,8 @@
 package tests;
 
-import static org.junit.Assert.*;
-
 import models.Question;
 import models.User;
 import models.database.Database;
-import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,12 +40,14 @@ public class SearchTest extends UnitTest {
 	
 	@Test
 	public void shouldFindByTag() {
-		assertTrue(Database.get().questions().searchFor("relevant").contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("relevant")
+				.contains(taggedPositive));
 	}
 	
 	@Test
 	public void shouldntFindByTagNegative() {
-		assertFalse(Database.get().questions().searchFor("relevant").contains(fulltextNegative));
+		assertFalse(Database.get().questions().searchFor("relevant")
+				.contains(taggedNegative));
 	}
 	
 	@Test
