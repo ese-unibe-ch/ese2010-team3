@@ -153,7 +153,6 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldListCorrectOrderOfSimilarQuestions() {
-		Database.clear();
 		User A = new User("A", "a");
 		User B = new User("B", "b");
 		User C = new User("C", "c");

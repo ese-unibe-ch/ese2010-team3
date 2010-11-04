@@ -38,7 +38,7 @@ public class SearchFilter implements Filter<Question, Double> {
 
 	private double rateText(Question question) {
 		Set<String> words = getWords(question.content());
-		if (queryFulltext == null || queryFulltext.isEmpty() || words.isEmpty())
+		if (queryFulltext == null)
 			return 0;
 
 		// words that aren't tags must appear in a question's content (AND
@@ -49,14 +49,20 @@ public class SearchFilter implements Filter<Question, Double> {
 		if (difference(mustHave, words).size() != 0)
 			return -1; // cancel out any value returned by rateTags [0;1]
 
+		if (queryFulltext.isEmpty() || words.isEmpty())
+			return 0;
 		return 1.0 * intersection(words, queryFulltext).size() / words.size();
 	}
 
 	private Set<String> getWords(String string) {
+		if (string == null)
+			return null;
+
 		Set<String> words = new HashSet<String>();
 		for (String word : string.split("\\W+")) {
 			words.add(word);
 		}
+		words.remove(""); // remove splitting artifact
 		return difference(words, StopWords.get());
 	}
 }

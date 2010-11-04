@@ -56,12 +56,15 @@ public class SearchTest extends UnitTest {
 	@Test
 	public void shouldntSearchForStupidWords() {
 		assertTrue(Database.get().questions().searchFor("is").isEmpty());
+		assertTrue(Database.get().questions().searchFor("???").isEmpty());
 	}
 	
 	@Test
 	public void shouldSearchMixedWord() {
 		assertTrue(Database.get().questions().searchFor("is relevant").contains(fulltextPositive));
 		assertTrue(Database.get().questions().searchFor("is relevant").contains(taggedPositive));
+		assertTrue(Database.get().questions().searchFor("??? relevant")
+				.contains(taggedPositive));
 	}
 
 	@Test
