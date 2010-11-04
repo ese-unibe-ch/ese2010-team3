@@ -1,4 +1,4 @@
-package models;
+package models.helpers;
 
 /**
  * An interface for Objects that can be changed in a way that may interest other

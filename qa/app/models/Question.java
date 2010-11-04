@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import models.database.Database;
+import models.helpers.IObservable;
+import models.helpers.IObserver;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}

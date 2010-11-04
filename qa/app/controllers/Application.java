@@ -12,7 +12,7 @@ import models.Tag;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
-import models.database.HotDatabase.HotQuestionDatabase;
+import models.helpers.Tools;
 import play.data.validation.Required;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -86,7 +86,7 @@ public class Application extends Controller {
 	public static void signup(@Required String username, String password,
 			String passwordrepeat, String email) {
 
-		if (User.checkEmail(email) && password.equals(passwordrepeat)) {
+		if (Tools.checkEmail(email) && password.equals(passwordrepeat)) {
 			User user = Database.get().users().register(username, password);
 			user.setEmail(email);
 			// Mark user as connected
@@ -94,7 +94,7 @@ public class Application extends Controller {
 			index();
 		} else {
 			flash.keep("url");
-			if (!User.checkEmail(email)) {
+			if (!Tools.checkEmail(email)) {
 				flash.error("secure.emailerror");
 			} else {
 				flash.error("secure.passworderror");
@@ -141,7 +141,7 @@ public class Application extends Controller {
 	public static void notifications() {
 		User user = Session.get().currentUser();
 		if (user != null) {
-			ArrayList<Notification> notifications = user.getNotifications();
+			List<Notification> notifications = user.getNotifications();
 			render(notifications);
 		} else
 			Application.index();
@@ -150,30 +150,20 @@ public class Application extends Controller {
 	public static void showStatisticalOverview() {
 		GregorianCalendar now = new GregorianCalendar();
 		TimeTracker t = TimeTracker.getRealTimeTracker();
-		int numberOfQuestions;
-		int numberOfAnswers;
-		int numberOfUsers;
-		int numberOfHighRatedAnswers;
-		int numberOfBestAnswers;
-		float questionsPerDay;
-		float questionsPerWeek;
-		float questionsPerMonth;
-		float answersPerDay;
-		float answersPerWeek;
-		float answersPerMonth;
 
-		numberOfUsers = User.getUserCount();
-		numberOfQuestions = Database.get().questions().count();
-		numberOfAnswers = Database.get().questions().countAllAnswers();
-		numberOfHighRatedAnswers = Database.get().questions().countHighRatedAnswers();
-		numberOfBestAnswers = Database.get().questions().countBestRatedAnswers();
-		questionsPerDay = (float) numberOfQuestions / (float) t.getDays(now);
-		questionsPerWeek = (float) numberOfQuestions / (float) t.getWeeks(now);
-		questionsPerMonth = (float) numberOfQuestions
-				/ (float) t.getMonths(now);
-		answersPerDay = (float) numberOfAnswers / (float) t.getDays(now);
-		answersPerWeek = (float) numberOfAnswers / (float) t.getWeeks(now);
-		answersPerMonth = (float) numberOfAnswers / (float) t.getMonths(now);
+		int numberOfUsers = Database.get().users().count();
+		int numberOfQuestions = Database.get().questions().count();
+		int numberOfAnswers = Database.get().questions().countAllAnswers();
+		int numberOfHighRatedAnswers = Database.get().questions()
+				.countHighRatedAnswers();
+		int numberOfBestAnswers = Database.get().questions()
+				.countBestRatedAnswers();
+		float questionsPerDay = (float) numberOfQuestions / t.getDays(now);
+		float questionsPerWeek = (float) numberOfQuestions / t.getWeeks(now);
+		float questionsPerMonth = (float) numberOfQuestions / t.getMonths(now);
+		float answersPerDay = (float) numberOfAnswers / t.getDays(now);
+		float answersPerWeek = (float) numberOfAnswers / t.getWeeks(now);
+		float answersPerMonth = (float) numberOfAnswers / t.getMonths(now);
 
 		render(numberOfQuestions, numberOfAnswers, numberOfUsers,
 				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,
