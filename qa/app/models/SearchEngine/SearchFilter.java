@@ -41,6 +41,14 @@ public class SearchFilter implements Filter<Question, Double> {
 		if (queryFulltext == null || queryFulltext.isEmpty() || words.isEmpty())
 			return 0;
 
+		// words that aren't tags must appear in a question's content (AND
+		// search)
+		Set<String> mustHave = new HashSet<String>(queryFulltext);
+		for (Tag tag : question.getTags())
+			mustHave.remove(tag.getName());
+		if (difference(mustHave, words).size() != 0)
+			return -1; // cancel out any value returned by rateTags [0;1]
+
 		return 1.0 * intersection(words, queryFulltext).size() / words.size();
 	}
 

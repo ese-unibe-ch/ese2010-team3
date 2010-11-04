@@ -298,6 +298,7 @@ div.tags .tag {
 	border: 2px #aecbfb outset;
 	padding: 1px;
 	font-size: 10pt;
+	font-weight: normal;
 }
 
 .ui-autocomplete {

@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.List;
+
 import models.Question;
 import models.User;
 import models.database.Database;
@@ -18,6 +20,7 @@ public class SearchTest extends UnitTest {
 
 	@Before
 	public void setUp() throws Exception {
+		Database.clear();
 		User jack = new User("Jack","");
 		User jill = new User("Jill","");
 		fulltextPositive = new Question(jack,"This is relevant.");
@@ -59,5 +62,16 @@ public class SearchTest extends UnitTest {
 	public void shouldSearchMixedWord() {
 		assertTrue(Database.get().questions().searchFor("is relevant").contains(fulltextPositive));
 		assertTrue(Database.get().questions().searchFor("is relevant").contains(taggedPositive));
+	}
+
+	@Test
+	public void shouldBeANDSearch() {
+		assertEquals(Database.get().questions().searchFor("relevant").size(), 2);
+		List<Question> relevantImportant = Database.get().questions()
+				.searchFor("relevant important");
+		assertEquals(relevantImportant.size(), 1);
+		assertTrue(relevantImportant.contains(taggedPositive));
+		assertTrue(Database.get().questions().searchFor("relevant dummy")
+				.isEmpty());
 	}
 }
