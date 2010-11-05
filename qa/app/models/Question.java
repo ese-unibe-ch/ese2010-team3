@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import models.database.Database;
+import models.helpers.IDTable;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 
@@ -265,7 +266,7 @@ public class Question extends Entry implements IObservable {
 		return (List<Tag>) this.tags.clone();
 	}
 	/**
-	 * @see models.IObservable#addObserver(models.IObserver)
+	 * @see models.helpers.IObservable#addObserver(models.IObserver)
 	 */
 	public void addObserver(IObserver o) {
 		if (o == null)
@@ -274,21 +275,21 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * @see models.IObservable#hasObserver(models.IObserver)
+	 * @see models.helpers.IObservable#hasObserver(models.IObserver)
 	 */
 	public boolean hasObserver(IObserver o) {
 		return this.observers.contains(o);
 	}
 
 	/**
-	 * @see models.IObservable#removeObserver(models.IObserver)
+	 * @see models.helpers.IObservable#removeObserver(models.IObserver)
 	 */
 	public void removeObserver(IObserver o) {
 		this.observers.remove(o);
 	}
 
 	/**
-	 * @see models.IObservable#notifyObservers(java.lang.Object)
+	 * @see models.helpers.IObservable#notifyObservers(java.lang.Object)
 	 */
 	public void notifyObservers(Object arg) {
 		for (IObserver o : this.observers)

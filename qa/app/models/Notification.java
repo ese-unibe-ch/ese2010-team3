@@ -4,7 +4,7 @@ package models;
  * A notification about a (recent) change such as a newly added answer to a
  * question.
  */
-public class Notification extends Item implements Comparable {
+public class Notification extends Item implements Comparable<Notification> {
 
 	/** What this notification is all about. */
 	private final Entry about;
@@ -91,8 +91,8 @@ public class Notification extends Item implements Comparable {
 	/**
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(Notification n) {
 		// sort notifications most-recent one first
-		return ((Notification) o).getID() - this.id;
+		return n.id - this.id;
 	}
 }

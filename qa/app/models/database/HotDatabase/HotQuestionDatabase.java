@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Set;
 
 import models.Answer;
-import models.IDTable;
 import models.Question;
 import models.Tag;
 import models.User;
 import models.SearchEngine.SearchFilter;
 import models.database.IQuestionDatabase;
-import models.helpers.Filter;
+import models.helpers.IDTable;
 import models.helpers.Mapper;
 
 public class HotQuestionDatabase implements IQuestionDatabase {
@@ -65,21 +64,17 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		return questions.size();
 	}
 
-	public List<Answer> getBestRatedAnswers() {
-		return Mapper.filter(questions, new Filter<Question, Boolean>() {
-			public Boolean visit(Question q) {
-				return q.hasBestAnswer();
-			}
-		});
-	}
-
 	public int countBestRatedAnswers() {
-		return getBestRatedAnswers().size();
+		int count = 0;
+		for (Question q : questions)
+			if (q.hasBestAnswer())
+				count++;
+		return count;
 	}
 
 	public int countAllAnswers() {
 		int count = 0;
-		for (Question q: questions) {
+		for (Question q : questions) {
 			count += q.countAnswers();
 		}
 		return count;
@@ -87,8 +82,8 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countHighRatedAnswers() {
 		int count = 0;
-		for (Question q: questions) {
-			for (Answer a: q.answers()) {
+		for (Question q : questions) {
+			for (Answer a : q.answers()) {
 				if (a.isHighRated())
 					count += 1;
 			}

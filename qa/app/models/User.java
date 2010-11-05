@@ -13,6 +13,7 @@ import models.database.Database;
 import models.helpers.Filter;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
+import models.helpers.Mapper;
 import models.helpers.Tools;
 
 /**
@@ -340,12 +341,12 @@ public class User implements IObserver {
 	 * @return List<Item> The last three <code>Item</code>s of this <code>User</code>
 	 */
 	protected List getRecentItemsByType(Class type) {
-		List recentItems = this.getItemsByType(type, null);
-		Collections.sort(recentItems, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+		List recentItems = this.getItemsByType(type);
+		Collections.sort(recentItems, new Comparator<Item>() {
+			public int compare(Item i1, Item i2) {
+				return i1.timestamp().compareTo(i2.timestamp());
 			}
-		}); 
+		});
 		if (recentItems.size() > 3)
 			return recentItems.subList(0, 3);
 		return recentItems;
@@ -357,7 +358,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public List<Question> getQuestions() {
-		return this.getItemsByType(Question.class, null);
+		return this.getItemsByType(Question.class);
 	}
 
 	/**
@@ -366,7 +367,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
 	 */
 	public List<Answer> getAnswers() {
-		return this.getItemsByType(Answer.class, null);
+		return this.getItemsByType(Answer.class);
 	}
 	
 	/**
@@ -375,7 +376,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
 	 */
 	public List<Comment> getComments() {
-		return this.getItemsByType(Comment.class, null);
+		return this.getItemsByType(Comment.class);
 	}
 
 	/**
@@ -384,7 +385,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All best rated answers
 	 */
 	public List<Answer> bestAnswers() {
-		return this.getItemsByType(Answer.class, new Filter<Answer, Boolean>() {
+		return Mapper.filter(this.getAnswers(), new Filter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isBestAnswer();
 			}
@@ -397,7 +398,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All high rated answers
 	 */
 	public List<Answer> highRatedAnswers() {
-		return this.getItemsByType(Answer.class, new Filter<Answer, Boolean>() {
+		return Mapper.filter(this.getAnswers(), new Filter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isHighRated();
 			}
@@ -412,7 +413,7 @@ public class User implements IObserver {
 	 *            an optional name of a filter method (e.g. "isNew")
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
-	protected List<Notification> getAllNotifications(Filter filter) {
+	protected List<Notification> getAllNotifications() {
 		ArrayList<Notification> result = new ArrayList<Notification>();
 		/*
 		 * Hack: remove all notifications to deleted answers
@@ -422,8 +423,8 @@ public class User implements IObserver {
 		 * to register all users for observing the deletion of answers (because
 		 * there's no global list of all existing users, either)
 		 */
-		List<Notification> notifications = this.getItemsByType(
-				Notification.class, filter);
+		List<Notification> notifications = this
+				.getItemsByType(Notification.class);
 		for (Notification n : notifications) {
 			if (n.getAbout() instanceof Answer) {
 				Answer answer = (Answer) n.getAbout();
@@ -443,7 +444,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
 	public List<Notification> getNotifications() {
-		return this.getAllNotifications(null);
+		return this.getAllNotifications();
 	}
 
 	/**
@@ -452,7 +453,7 @@ public class User implements IObserver {
 	 * @return the unread notifications
 	 */
 	public List<Notification> getNewNotifications() {
-		return this.getAllNotifications(new Filter<Notification, Boolean>() {
+		return Mapper.filter(this.getAllNotifications(), new Filter<Notification, Boolean>() {
 			public Boolean visit(Notification n) {
 				return n.isNew();
 			}
@@ -491,21 +492,16 @@ public class User implements IObserver {
 
 	/**
 	 * Get an ArrayList of all items of this user being an instance of a
-	 * specific type and optionally fulfilling an additional filter criterion.
+	 * specific type.
 	 * 
 	 * @param type
 	 *            the type
-	 * @param filter
-	 *            an optional name of a filter method which has to be available
-	 *            on all objects, must not need any arguments and must return a
-	 *            boolean value
 	 * @return ArrayList All type-items of this user
 	 */
-	protected List getItemsByType(Class type, Filter filter) {
+	protected List getItemsByType(Class type) {
 		List items = new ArrayList();
 		for (Item item : this.items)
-			if (type.isInstance(item)
-					&& (filter == null || (Boolean) filter.visit(item)))
+			if (type.isInstance(item))
 				items.add(item);
 		Collections.sort(items);
 		return items;

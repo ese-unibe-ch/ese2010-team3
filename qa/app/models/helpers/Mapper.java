@@ -22,16 +22,15 @@ public class Mapper {
 	 *            the map whose keys are to be sorted
 	 * @return the sorted list of keys
 	 */
-	public static List sortByValue(Map map) {
+	private static <T> List<T> sortByValue(Map<T, Comparable> map) {
 		List<Map.Entry> list = new ArrayList(map.entrySet());
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Comparable) ((Map.Entry) (o1)).getValue())
-						.compareTo(((Map.Entry) (o2)).getValue());
+		Collections.sort(list, new Comparator<Map.Entry>() {
+			public int compare(Map.Entry e1, Map.Entry e2) {
+				return ((Comparable) e1.getValue()).compareTo(e2.getValue());
 			}
 		});
-		List result = new ArrayList();
-		for (Map.Entry entry : list)
+		List<T> result = new ArrayList();
+		for (Map.Entry<T, Comparable> entry : list)
 			result.add(entry.getKey());
 		return result;
 	}
@@ -45,10 +44,11 @@ public class Mapper {
 	 *            the sorting filter to be used for generating sort keys
 	 * @return the sorted list
 	 */
-	public static List sort(Iterable iterable, Filter filter) {
-		Map map = new HashMap();
-		for (Object object : iterable) {
-			Object value = filter.visit(object);
+	public static <T> List<T> sort(Iterable<T> iterable,
+			Filter<T, ? extends Comparable> filter) {
+		Map<T, Comparable> map = new HashMap();
+		for (T object : iterable) {
+			Comparable value = filter.visit(object);
 			if (value != null)
 				map.put(object, value);
 		}
@@ -62,16 +62,13 @@ public class Mapper {
 	 *            the iterable to filter through
 	 * @param filter
 	 *            the filter to be used for deciding which objects to keep
-	 *            (return <code>null</code> or <code>false</code> to drop an
-	 *            object)
 	 * @return the filtered list
 	 */
-	public static List filter(Iterable iterable, Filter filter) {
-		List result = new ArrayList();
-		for (Object object : iterable) {
-			Object value = filter.visit(object);
-			if (value != null
-					&& !(object instanceof Boolean && object.equals(false)))
+	public static <T> List<T> filter(Iterable<T> iterable,
+			Filter<T, Boolean> filter) {
+		List<T> result = new ArrayList();
+		for (T object : iterable) {
+			if (filter.visit(object))
 				result.add(object);
 		}
 		return result;
