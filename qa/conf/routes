@@ -30,9 +30,11 @@ GET    	/user/{name}/trueanonymize        		Secured.anonymizeUser
 GET		/register								Application.register
 POST	/register								Application.signup
 
-GET		/user/{userName}/showprofile/		Application.showprofile
-GET		/user/{userName}/editprofile/		Application.editProfile
+GET		/user/{userName}/showprofile/			Application.showprofile
+GET		/user/{userName}/editprofile/			Application.editProfile
 POST	/user/savedProfile						Secured.saveProfile
+
+GET		/user/{userName}/blockuser				Application.blockUser
 
 GET		/user/notifications						Application.notifications
 GET		/notification/{id}/follow				Secured.followNotification

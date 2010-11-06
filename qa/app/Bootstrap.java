@@ -5,7 +5,6 @@ import models.Question;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
-import models.database.HotDatabase.HotQuestionDatabase;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 
@@ -27,6 +26,7 @@ public class Bootstrap extends Job {
 	jack.setWebsite("www.jack.jk");
 	jack.setProfession("Brewer");
 	jack.setBiography("Oh well, ...");
+		jack.setModerator(true);
     
         // Questions
 		Question question = Database.get().questions().add(jack,

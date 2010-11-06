@@ -237,4 +237,19 @@ public class Secured extends Controller {
 			n.unregister();
 		Application.notifications();
 	}
+
+	public static void blockUser(String username, String block, String reason) {
+		User user = Database.get().users().get(username);
+		if (reason.equals("")) {
+			reason = "no reason given";
+		}
+		if (block.equals("block")) {
+			user.setBlocked(true);
+			user.setStatusMessage(reason);
+		}
+		if (block.equals("unblock")) {
+			user.setBlocked(false);
+		}
+		Application.showprofile(user.getName());
+	}
 }

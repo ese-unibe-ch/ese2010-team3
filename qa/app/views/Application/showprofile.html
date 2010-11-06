@@ -1,19 +1,28 @@
 #{extends 'main.html' /}
 
 #{set title:'ajopi - Profile' /}
-#{if showUser}
-	#{if canEdit}
+#{if user != null && showUser}
 	<div class="profilenavi">
+	#{if canEdit}
 		<a href="@{Application.deleteuser}">Delete </a>
 		<a href="@{Application.editProfile(showUser.getName())}">Edit</a>
-	</div><!-- end profilenavi -->
 	#{/if}
+	#{if user.isModerator()}
+			<a href="@{Application.blockUser(showUser.getName())}">Block</a>
+	#{/if}
+	</div><!-- end profilenavi -->
 	<div>
 		<table>
 			<tr>
 				<td class="left"><label for="username">Username:</label></td>
 				<td class="right">${showUser.name}</td>
 			</tr>
+			#{if showUser.isBlocked()}
+				<tr>
+					<td class="blocked"><label for="blocked">Blocked because:</label></td>
+					<td class="blocked">${showUser.getStatusMessage()}</td>
+				</tr>
+			#{/if}
 			<tr>
 				<td class="left"><label for="email">Email:</label>
 				<td class="right">${showUser.email}</td>
@@ -91,5 +100,5 @@
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>No such User</h1>
+	<h1>You are not logged in or there is no such User</h1>
 #{/else}

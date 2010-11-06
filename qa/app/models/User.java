@@ -38,6 +38,9 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
+	private String statustext;
+	private boolean isBlocked = false;
+	private boolean isModerator = false;
 	
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
@@ -63,7 +66,6 @@ public class User implements IObserver {
 	public String getName() {
 		return this.name;
 	}
-
 
 	/**
 	 * Encrypt the password with SHA-1
@@ -191,11 +193,17 @@ public class User implements IObserver {
 			}
 		}
 
-	    if (votesForUser.isEmpty())
+		if (votesForUser.isEmpty())
 			return false;
 
 	    Integer maxCount = Collections.max(votesForUser.values());
-		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
+		if (maxCount > 3 && maxCount / votesForUser.size() > 0.5) {
+			this.setStatusMessage("User voted up somebody");
+			this.setBlocked(true);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -216,6 +224,7 @@ public class User implements IObserver {
 		}
 	}
 
+
 	/**
 	 * The <code>User</code> is a Spammer if he posts more than 30 comments,
 	 * answers or questions in the last hour.
@@ -225,10 +234,13 @@ public class User implements IObserver {
 	public boolean isSpammer() {
 		int number = this.howManyItemsPerHour();
 		if (number >= 60) {
+			this.setStatusMessage("User is a Spammer");
+			this.setBlocked(true);
 			return true;
 		}
 		return false;
 	}
+
 
 	/**
 	 * Set the <code>User</code> as a Cheater if he spams the Site or supports
@@ -349,6 +361,31 @@ public class User implements IObserver {
 
 	public String getSHA1Password() {
 		return this.password;
+	}
+
+	public String getStatusMessage() {
+		return this.statustext;
+	}
+
+	public void setStatusMessage(String blockreason) {
+		this.statustext = blockreason;
+	}
+	public void setBlocked(Boolean block) {
+		if (block == false)
+			this.setStatusMessage("");
+		this.isBlocked = block;
+	}
+	public boolean isBlocked() {
+		return this.isBlocked;
+	}
+
+
+	public boolean isModerator() {
+		return this.isModerator;
+	}
+
+	public void setModerator(Boolean mod) {
+		this.isModerator = mod;
 	}
 	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
