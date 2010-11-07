@@ -6,7 +6,7 @@
 		<li>
 			<h2>#{showProfile question /}:</h2>
 			<p>${question.content()}</p>
-			#{tags question:question, editable:question?.owner() == user /}  
+			#{tags question:question, editable:user?.canEdit(question) /}  
 			#{if user != null}
 				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
 				#{if user.isObserving(question)}
@@ -15,11 +15,11 @@
 					<a href="@{Secured.watchQuestion(question.id())}"> | watch</a>
 				#{/else}
 			#{/if}
-			#{if user && question.owner() == user}
+			#{if user && user.canEdit(question)}
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
 			#{/if}
 			#{date question /}
-			#{if user && question.owner() != user && !user.isCheating()}
+			#{if user && question.owner() != user && !user.isBlocked()}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -42,7 +42,7 @@
 						<h2>#{showProfile comment /}:</h2>
 						<p>${comment.content()}</p>
 						#{date comment /}
-						#{if user && comment.owner() == user}
+						#{if user && user.canEdit(comment)}
 							<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
 						#{/if}
 					</li>	
@@ -64,13 +64,13 @@
 				#{/if}
 				#{date answer /}
 				
-				#{if user && answer.owner() == user}
+				#{if user && user.canEdit(answer)}
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
 				#{/if}
-				#{if user && answer.owner() != user && !user.isCheating()}
+				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
 				#{/if}
-				#{if user && question.owner() == user && !user.isCheating()}
+				#{if user && user.canEdit(question)}
 					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
 				#{/if}
 				
@@ -83,7 +83,7 @@
 								<h2>#{showProfile comment /}:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
-								#{if user && comment.owner() == user}
+								#{if user && user.canEdit(comment)}
 									<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
 								#{/if}
 							</li>	

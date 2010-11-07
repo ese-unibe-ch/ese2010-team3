@@ -57,6 +57,14 @@ public class User implements IObserver {
 		this.password = encrypt(password);
 		this.items = new HashSet<Item>();
 	}
+	
+	public boolean canEdit(Entry entry) {
+		if (entry.owner() == this && !this.isBlocked())
+			return true;
+		else if (this.isModerator())
+			return true;
+		return false;
+	}
 
 	/**
 	 * Gets the name of the <code>User</code>.
