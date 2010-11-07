@@ -38,7 +38,7 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
-	private String statustext;
+	private String statustext = "";
 	private boolean isBlocked = false;
 	private boolean isModerator = false;
 	
@@ -123,7 +123,12 @@ public class User implements IObserver {
 	 * @return true if the username is available.
 	 */
 	public static boolean isAvailable(String username) {
-		return (Database.get().users().get(username.toLowerCase()) == null);
+		for (User user : Database.get().users().all()) {
+			if (user.getName().toLowerCase().equals(username.toLowerCase())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**

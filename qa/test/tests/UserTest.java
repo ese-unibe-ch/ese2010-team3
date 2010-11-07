@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Question;
 import models.User;
+import models.database.Database;
 
 import org.junit.Test;
 
@@ -22,16 +23,15 @@ public class UserTest extends UnitTest {
 		User user = new User("Jack", "jack");
 		assertEquals(user.getName(), "Jack");
 	}
-	
-	/*
-	 * doesn't work anymore. Method isAvailable(username) has to be modified
-	 * 
-	 * @Test public void checkUsernameAvailable() {
-	 * assertTrue(User.isAvailable("JaneSmith")); User user = new
-	 * User("JaneSmith", "janesmith");
-	 * assertFalse(User.isAvailable("JaneSmith"));
-	 * assertFalse(User.isAvailable("jAnEsMiTh")); }
-	 */
+
+	@Test
+	public void checkUsernameAvailable() {
+		assertTrue(User.isAvailable("JaneSmith"));
+		Database.get().users().register("JaneSmith", "janesmith");
+		assertFalse(User.isAvailable("JaneSmith"));
+		assertFalse(User.isAvailable("janesmith"));
+		assertFalse(User.isAvailable("jAnEsMiTh"));
+	}
 
 	@Test
 	public void shouldCheckeMailValidation(){
@@ -85,6 +85,8 @@ public class UserTest extends UnitTest {
 	@Test
 	public void checkForSpammer() {
 		User user = new User("Spammer", "spammer");
+		assertFalse(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "");
 		assertTrue(user.howManyItemsPerHour() == 0);
 		new Question(user, "Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
@@ -98,6 +100,8 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isCheating());
 		new Question(user, "My last possible Post");
 		assertTrue(user.isSpammer());
+		assertTrue(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "User is a Spammer");
 		assertTrue(user.isCheating());
 	}
 	
@@ -105,13 +109,21 @@ public class UserTest extends UnitTest {
 	public void checkForCheater() {
 		User user = new User("TheSupported", "supported");
 		User user2 = new User("Cheater", "cheater");
+		assertFalse(user.isBlocked());
+		assertFalse(user2.isBlocked());
+		assertEquals(user.getStatusMessage(), "");
+		assertEquals(user2.getStatusMessage(), "");
 		for (int i = 0; i < 4; i++) {
 			new Question(user, "This is my " + i + ". question").voteUp(user2);
 		}
 		assertTrue(user2.isMaybeCheater());
 		assertTrue(user2.isCheating());
-		assertTrue(!user.isMaybeCheater());
-		assertTrue(!user.isCheating());
+		assertTrue(user2.isBlocked());
+		assertEquals(user2.getStatusMessage(), "User voted up somebody");
+		assertFalse(user.isMaybeCheater());
+		assertFalse(user.isCheating());
+		assertFalse(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "");
 	}
 
 
@@ -166,6 +178,29 @@ public class UserTest extends UnitTest {
 		q.setBestAnswer(q.answers().get(0));
 		q.answers().get(0).unregister();
 		assertEquals(0, user.bestAnswers().size());
+	}
+
+	@Test
+	public void testModerator() {
+		User user = new User("Jack", "jack");
+		assertFalse(user.isModerator());
+		user.setModerator(true);
+		assertTrue(user.isModerator());
+	}
+
+	@Test
+	public void testBlock() {
+		User user = new User("Jack", "jack");
+		assertFalse(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "");
+		user.setBlocked(true);
+		user.setStatusMessage("offending comments");
+		assertTrue(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "offending comments");
+		user.setBlocked(false);
+		assertFalse(user.isBlocked());
+		assertEquals(user.getStatusMessage(), "");
+
 	}
 
 	@Test
