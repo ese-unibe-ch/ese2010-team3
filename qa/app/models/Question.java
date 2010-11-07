@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import models.database.Database;
+import models.helpers.IDTable;
+import models.helpers.IObservable;
+import models.helpers.IObserver;
 
 /**
  * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
@@ -263,7 +265,7 @@ public class Question extends Entry implements IObservable {
 		return (List<Tag>) this.tags.clone();
 	}
 	/**
-	 * @see models.IObservable#addObserver(models.IObserver)
+	 * @see models.helpers.IObservable#addObserver(models.IObserver)
 	 */
 	public void addObserver(IObserver o) {
 		if (o == null)
@@ -272,21 +274,21 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * @see models.IObservable#hasObserver(models.IObserver)
+	 * @see models.helpers.IObservable#hasObserver(models.IObserver)
 	 */
 	public boolean hasObserver(IObserver o) {
 		return this.observers.contains(o);
 	}
 
 	/**
-	 * @see models.IObservable#removeObserver(models.IObserver)
+	 * @see models.helpers.IObservable#removeObserver(models.IObserver)
 	 */
 	public void removeObserver(IObserver o) {
 		this.observers.remove(o);
 	}
 
 	/**
-	 * @see models.IObservable#notifyObservers(java.lang.Object)
+	 * @see models.helpers.IObservable#notifyObservers(java.lang.Object)
 	 */
 	public void notifyObservers(Object arg) {
 		for (IObserver o : this.observers)
@@ -306,43 +308,5 @@ public class Question extends Entry implements IObservable {
 
 	public int countAnswers() {
 		return answers.size();
-	}
-
-	/**
-	 * Takes a String of words with at least 4 characters and counts the
-	 * occurrence. Words that occur more than 3 times are treated as important
-	 * words.
-	 * 
-	 * @param input
-	 *            with all the words that contain more than 3 characters
-	 * @return keywords with words that occur more than 3 times
-	 */
-	public final static String importantWords(String input) {
-		input = input.trim();
-		HashMap<String, Integer> keywords = new HashMap();
-		keywords.put("", 1);
-		while (input.contains(" ") && input.length() > 3) {
-			String word = input.substring(0, input.indexOf(" ")).trim();
-			if (word.length() > 3) {
-				int occurrence = (input.length() - (input.replaceAll(word, ""))
-						.length()) / word.length();
-				if (occurrence > 3) {
-					if (keywords.size() < 5) {
-						keywords.put(word, occurrence);
-					} else {
-						for (String stri : keywords.keySet()) {
-							if (keywords.get(stri).intValue() < occurrence) {
-								keywords.put(word, occurrence);
-								keywords.remove(stri);
-								break;
-							}
-						}
-					}
-				}
-			}
-			input = input.replaceAll(word + " ", "").trim();
-		}
-		return keywords.keySet().toString().replaceAll("[,\\[\\]]", "")
-				.replaceAll("  ", " ").trim();
 	}
 }

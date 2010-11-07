@@ -1,11 +1,7 @@
 package models.database;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-import models.Answer;
 import models.Question;
 import models.User;
 
@@ -64,13 +60,6 @@ public interface IQuestionDatabase {
 
 	public int count();
 
-	/**
-	 *Get all best answers in the system
-	 * 
-	 * @return ArrayList<Answer> an arrayList of all best answers
-	 */
-	public List<Answer> getBestRatedAnswers();
-	
 	public int countBestRatedAnswers();
 
 	public int countHighRatedAnswers();

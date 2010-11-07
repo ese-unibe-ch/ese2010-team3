@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import models.helpers.IDTable;
+
 /**
  * A {@link Entry} containing an answer to a {@link Question}
  * 
@@ -18,7 +20,6 @@ public class Answer extends Entry {
 	private IDTable<Comment> comments;
 	private final int id;
 	
-
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
 	 * 
@@ -147,11 +148,10 @@ public class Answer extends Entry {
 	 * @return comparison result (-1 = this Answer has more upVotes or is best)
 	 */
 	@Override
-	public int compareTo(Object o) {
-		Entry other = (Entry) o;
+	public int compareTo(Entry other) {
 		if (!(other instanceof Answer)
 				|| this.isBestAnswer() == ((Answer) other).isBestAnswer())
-			return super.compareTo(o);
+			return super.compareTo(other);
 		if (this.isBestAnswer())
 			return -1;
 		return 1;

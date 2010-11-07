@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Question;
 import models.User;
+import models.helpers.Tools;
 
 import org.junit.Test;
 
@@ -35,12 +36,11 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldCheckeMailValidation(){
-		User user = new User("John", "john");
-		assertTrue(user.checkEmail("john@gmx.com"));
-		assertTrue(user.checkEmail("john.smith@students.unibe.ch"));
-		assertFalse(user.checkEmail("john@gmx.c"));
-		assertFalse(user.checkEmail("john@info.museum"));
-		assertFalse(user.checkEmail("john@...com"));
+		assertTrue(Tools.checkEmail("john@gmx.com"));
+		assertTrue(Tools.checkEmail("john.smith@students.unibe.ch"));
+		assertFalse(Tools.checkEmail("john@gmx.c"));
+		assertFalse(Tools.checkEmail("john@info.museum"));
+		assertFalse(Tools.checkEmail("john@...com"));
 	}
 	
 	@Test
@@ -54,11 +54,11 @@ public class UserTest extends UnitTest {
 	public void checkPassw() {
 		User user = new User("Bill", "bill");
 		assertTrue(user.checkPW("bill"));
-		assertEquals(user.encrypt("bill"), user.getSHA1Password());
-		assertEquals(user.encrypt(""),
+		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
+		assertEquals(Tools.encrypt(""),
 				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
 																// wikipedia.org/wiki/Examples_of_SHA_digests
-		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
+		assertFalse(Tools.encrypt("password").equals(Tools.encrypt("Password")));
 	}
 
 	@Test

@@ -1,4 +1,4 @@
-package models;
+package models.helpers;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class IDTable<E> extends HashMap<Integer, E> implements Iterable<E> {
 	}
 
 	public void remove(int key) {
-		this.remove((Object) key);
+		this.remove((Integer) key);
 	}
 
 	public Iterator<E> iterator() {
