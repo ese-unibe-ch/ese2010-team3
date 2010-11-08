@@ -522,4 +522,5 @@ public class User implements IObserver {
 	public static User get(String name) {
 		return Database.get().users().get(name.toLowerCase());
 	}
+
 }
