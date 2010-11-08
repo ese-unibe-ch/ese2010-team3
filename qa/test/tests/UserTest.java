@@ -86,7 +86,6 @@ public class UserTest extends UnitTest {
 		User user = new User("Spammer", "spammer");
 		assertTrue(user.howManyItemsPerHour() == 0);
 		new Question(user, "Why did the chicken cross the road?");
-				"Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
 		new Question(user, "Does anybody know?");
 		assertFalse(user.howManyItemsPerHour() == 1);

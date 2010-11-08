@@ -233,7 +233,7 @@ public class User implements IObserver {
 	}
 
 	public void setDateOfBirth(String birthday) throws ParseException {
-		this.dateOfBirth = Tools.stringToDate(birthday);
+		dateOfBirth = Tools.stringToDate(birthday);
 	}
 
 	public String getDateOfBirth() {
@@ -299,7 +299,7 @@ public class User implements IObserver {
 	public boolean isObserving(IObservable what) {
 		return what.hasObserver(this);
 	}
-	
+
 	/**
 	 * Stop observing changes for an entry (e.g. new answers to a question).
 	 * 
@@ -321,16 +321,14 @@ public class User implements IObserver {
 	}
 
 	/**
-	 *            of the <code>User</code>
-	 * Get a List of the last three <code>Question</code>s of this
-	 * <code>User</code>.
+	 * of the <code>User</code> Get a List of the last three
+	 * <code>Question</code>s of this <code>User</code>.
 	 * 
 	 * @return List<Question> The last three <code>Question</code>s of this
 	 *         <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
 		return getRecentItemsByType(Question.class);
-						((Item) o1).timestamp());
 	}
 
 	/**
@@ -342,7 +340,6 @@ public class User implements IObserver {
 	 */
 	public List<Answer> getRecentAnswers() {
 		return getRecentItemsByType(Answer.class);
-						((Item) o1).timestamp());
 	}
 
 	/**
@@ -354,16 +351,17 @@ public class User implements IObserver {
 	 */
 	public List<Comment> getRecentComments() {
 		return getRecentItemsByType(Comment.class);
-						((Item) o1).timestamp());
 	}
 
 	/**
-	 * Get a List of the last three <code>Items</code>s of type T of this <code>User</code>.
+	 * Get a List of the last three <code>Items</code>s of type T of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Item> The last three <code>Item</code>s of this <code>User</code>
+	 * @return List<Item> The last three <code>Item</code>s of this
+	 *         <code>User</code>
 	 */
 	protected List getRecentItemsByType(Class type) {
-		List recentItems = this.getItemsByType(type);
+		List recentItems = getItemsByType(type);
 		Collections.sort(recentItems, new Comparator<Item>() {
 			public int compare(Item i1, Item i2) {
 				return i1.timestamp().compareTo(i2.timestamp());
@@ -381,7 +379,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public List<Question> getQuestions() {
-		return this.getItemsByType(Question.class);
+		return getItemsByType(Question.class);
 	}
 
 	/**
@@ -392,7 +390,7 @@ public class User implements IObserver {
 	 *         <code>User</code>
 	 */
 	public List<Answer> getAnswers() {
-		return this.getItemsByType(Answer.class);
+		return getItemsByType(Answer.class);
 	}
 
 	/**
@@ -403,7 +401,7 @@ public class User implements IObserver {
 	 *         <code>User</code>
 	 */
 	public List<Comment> getComments() {
-		return this.getItemsByType(Comment.class);
+		return getItemsByType(Comment.class);
 	}
 
 	/**
@@ -412,7 +410,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All best rated answers
 	 */
 	public List<Answer> bestAnswers() {
-		return Mapper.filter(this.getAnswers(), new Filter<Answer, Boolean>() {
+		return Mapper.filter(getAnswers(), new Filter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isBestAnswer();
 			}
@@ -425,7 +423,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All high rated answers
 	 */
 	public List<Answer> highRatedAnswers() {
-		return Mapper.filter(this.getAnswers(), new Filter<Answer, Boolean>() {
+		return Mapper.filter(getAnswers(), new Filter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isHighRated();
 			}
@@ -450,8 +448,7 @@ public class User implements IObserver {
 		 * to register all users for observing the deletion of answers (because
 		 * there's no global list of all existing users, either)
 		 */
-		List<Notification> notifications = this
-				.getItemsByType(Notification.class);
+		List<Notification> notifications = getItemsByType(Notification.class);
 		for (Notification n : notifications) {
 			if (n.getAbout() instanceof Answer) {
 				Answer answer = (Answer) n.getAbout();
@@ -472,7 +469,7 @@ public class User implements IObserver {
 	 * @return ArrayList<Notification> All notifications of this user
 	 */
 	public List<Notification> getNotifications() {
-		return this.getAllNotifications();
+		return getAllNotifications();
 	}
 
 	/**
@@ -481,11 +478,12 @@ public class User implements IObserver {
 	 * @return the unread notifications
 	 */
 	public List<Notification> getNewNotifications() {
-		return Mapper.filter(this.getAllNotifications(), new Filter<Notification, Boolean>() {
-			public Boolean visit(Notification n) {
-				return n.isNew();
-			}
-		});
+		return Mapper.filter(getAllNotifications(),
+				new Filter<Notification, Boolean>() {
+					public Boolean visit(Notification n) {
+						return n.isNew();
+					}
+				});
 	}
 
 	/**
@@ -529,9 +527,9 @@ public class User implements IObserver {
 	protected List getItemsByType(Class type) {
 		List items = new ArrayList();
 		for (Item item : this.items)
-			if (type.isInstance(item))
-						}
+			if (type.isInstance(item)) {
 				items.add(item);
+			}
 		Collections.sort(items);
 		return items;
 	}

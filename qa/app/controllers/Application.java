@@ -130,9 +130,11 @@ public class Application extends Controller {
 
 	public static void tags(String term, String content) {
 		String tagString = "";
-		for (Tag tag : Tag.tags())
+		for (Tag tag : Tag.tags()) {
 			if (term == null || tag.getName().startsWith(term.toLowerCase())) {
 				tagString += tag.getName() + " ";
+			}
+		}
 		tagString += Tools.extractImportantWords(content);
 		// make sure not to return an array with a single empty string ([""])
 		String[] tags = tagString.split("\\s+");

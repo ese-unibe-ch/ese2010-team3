@@ -1,7 +1,5 @@
 package models.database.HotDatabase;
 
-import static models.helpers.SetOperations.containsAny;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,10 +14,10 @@ import models.SearchEngine.SearchFilter;
 import models.database.IQuestionDatabase;
 import models.helpers.IDTable;
 import models.helpers.Mapper;
-import models.helpers.Pair;
+
 public class HotQuestionDatabase implements IQuestionDatabase {
 
-	private final  IDTable<Question> questions = new IDTable();
+	private final IDTable<Question> questions = new IDTable();
 
 	public List<Question> searchFor(String term) {
 		Set<Tag> tags = new HashSet<Tag>();
@@ -69,8 +67,9 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public int countBestRatedAnswers() {
 		int count = 0;
 		for (Question q : questions)
-			if (q.hasBestAnswer())
+			if (q.hasBestAnswer()) {
 				count++;
+			}
 		return count;
 	}
 
