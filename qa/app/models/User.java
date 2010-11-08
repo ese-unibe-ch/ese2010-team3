@@ -203,7 +203,7 @@ public class User implements IObserver {
 			return false;
 
 	    Integer maxCount = Collections.max(votesForUser.values());
-		return (maxCount > 3 && maxCount / votesForUser.size() > 0.5);
+		return (maxCount > 3 && 1.0 * maxCount / votesForUser.size() > 0.5);
 	}
 
 	/**
@@ -257,13 +257,9 @@ public class User implements IObserver {
 	 */
 	public void updateCheaterStatus() {
 		if (this.isSpammer()) {
-			this.block(true, "User is a Spammer");
-		}
-		if (this.isMaybeCheater()) {
-			this.block(true, "User voted up somebody");
-		}
-		if (!this.isCheating()) {
-			this.block(false, "");
+			this.block("User is a Spammer");
+		} else if (this.isMaybeCheater()) {
+			this.block("User voted up somebody");
 		}
 	}
 
@@ -396,9 +392,14 @@ public class User implements IObserver {
 	 * @param reason
 	 *            , why the users is getting blocked.
 	 */
-	public void block(Boolean block, String reason) {
-		this.isBlocked = block;
+	public void block(String reason) {
+		this.isBlocked = true;
 		this.statustext = reason;
+	}
+
+	public void unblock() {
+		this.isBlocked = false;
+		this.statustext = "";
 	}
 
 	/**

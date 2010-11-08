@@ -193,10 +193,10 @@ public class UserTest extends UnitTest {
 		User user = new User("Jack", "jack");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
-		user.block(true, "offending comments");
+		user.block("offending comments");
 		assertTrue(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "offending comments");
-		user.block(false, "");
+		user.unblock();
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 
