@@ -24,9 +24,9 @@
 		<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
 	#{/if}
 	</ul>
-	<ul>
 	#{if suggestedQuestions.size() != 0}
-	<h2>By the way, you might also know the answers to these questions:</h2>
+	<h2>By the way, you might also know the answer to these questions:</h2>
+	<ul>
 	#{list items:suggestedQuestions, as:'question'}<p>
 			<li>
 			#{showProfile question /}:
@@ -36,4 +36,5 @@
 			</li>
 	#{/if}
 	</ul>
+	#{else} <h2> No recommended questions for you yet.</h2> #{/else}
 </div>

@@ -4,12 +4,19 @@ import java.text.ParseException;
 
 import models.Question;
 import models.User;
+import models.database.Database;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import play.test.UnitTest;
 
 public class UserTest extends UnitTest {
+
+	@Before
+	public void setUp() {
+		Database.clear();
+	}
 
 	@Test
 	public void shouldCreateUser() {
@@ -185,18 +192,35 @@ public class UserTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldSuggestQuestion() {
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
+		Question m = new Question(user3, "Why?");
+		Question n = new Question(user4, "Where?");
+
+		m.setTagString("demo");
+		n.setTagString("demo demo2");
+		m.answer(user3, "Because");
+		m.answer(user4, "No idea");
+		n.answer(user5, "Therefore");
+
+		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(m, user5.getSuggestedQuestions().get(0));
+
+	}
+
+	@Test
 	public void shouldNotSuggestOwnQuestions() {
 		User user = new User("Jack", "jack");
 		User user2 = new User("John", "john");
 		Question q = new Question(user, "Why?");
 		Question f = new Question(user2, "Where?");
-		q.setTagString("test");
-		f.setTagString("test");
+		q.setTagString("demo");
+		f.setTagString("demo");
 		q.answer(user2, "Because");
 		assertEquals(0, user2.getSuggestedQuestions().size());
 
-		user.delete();
-		user2.delete();
 	}
 
 	@Test
@@ -207,17 +231,14 @@ public class UserTest extends UnitTest {
 		Question k = new Question(james, "Why?");
 		Question l = new Question(john, "Where?");
 
-		k.setTagString("test");
-		l.setTagString("test");
+		k.setTagString("demo");
+		l.setTagString("demo");
 		k.answer(james, "Because");
 		k.answer(john, "No idea");
 		james.getQuestions().get(0).setBestAnswer(k.getAnswer(1));
 		l.answer(kate, "Therefore");
 		assertEquals(0, kate.getSuggestedQuestions().size());
 
-		james.delete();
-		john.delete();
-		kate.delete();
 	}
 
 }

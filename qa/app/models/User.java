@@ -421,9 +421,9 @@ public class User implements IObserver {
 		List<Question> sortedAnsweredQuestions = new ArrayList<Question>();
 		List<Answer> answers = this.getAnswers();
 		// Sort all answers - best first
-		Collections.sort(answers, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Answer) o1).compareTo((Answer) o2);
+		Collections.sort(answers, new Comparator<Answer>() {
+			public int compare(Answer o1, Answer o2) {
+				return (o1.compareTo(o2));
 			}
 		});
 		/*
@@ -448,22 +448,25 @@ public class User implements IObserver {
 		List<Question> suggestedQuestions = new ArrayList<Question>();
 		List<Question> sortedAnsweredQuestions = this
 				.getSortedAnsweredQuestions();
+
 		/*
 		 * Don't list questions that have many answers or already have a best
 		 * answer. The user should not be the owner of the suggested question.
 		 * Remove duplicates.
 		 */
 		for (Question q : sortedAnsweredQuestions) {
-			for (Question qu : q.getSimilarQuestions()) {
-				if (!suggestedQuestions.contains(qu)
-						&& !sortedAnsweredQuestions.contains(qu)
-						&& !qu.owner().equals(this) && qu.isOldQuestion()
-						&& qu.countAnswers() < 10 && !qu.hasBestAnswer())
-					suggestedQuestions.add(qu);
+			for (Question similarQ : q.getSimilarQuestions()) {
+				if (!suggestedQuestions.contains(similarQ)
+						&& !sortedAnsweredQuestions.contains(similarQ)
+						&& !similarQ.owner().equals(this)
+						&& !similarQ.isOldQuestion()
+						&& similarQ.countAnswers() < 10
+						&& !similarQ.hasBestAnswer())
+					suggestedQuestions.add(similarQ);
 			}
 		}
 		if (suggestedQuestions.size() > 6) {
-			return suggestedQuestions.subList(0, 5);
+			return suggestedQuestions.subList(0, 6);
 		}
 		return suggestedQuestions;
 
