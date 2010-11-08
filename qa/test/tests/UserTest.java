@@ -211,6 +211,103 @@ public class UserTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldSuggestThreeQuestions() {
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
+		Question m = new Question(user3, "Why?");
+		Question n = new Question(user4, "Where?");
+		Question o = new Question(user3, "Who?");
+		Question p = new Question(user4, "How old?");
+
+		m.setTagString("demo");
+		n.setTagString("demo demo2");
+		o.setTagString("demo demo3 demo4");
+		p.setTagString("demo demo3 demo4 demo5");
+		m.answer(user3, "Because");
+		m.answer(user4, "No idea");
+		n.answer(user5, "Therefore");
+
+		assertEquals(3, user5.getSuggestedQuestions().size());
+		assertEquals(m, user5.getSuggestedQuestions().get(0));
+	}
+
+	@Test
+	public void shouldSuggestQuestionsFromBestAnswersFirst() {
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
+		Question m = new Question(user3, "Why?");
+		Question n = new Question(user4, "Where?");
+		Question o = new Question(user3, "Who?");
+		Question p = new Question(user4, "How old?");
+
+		m.setTagString("demo");
+		n.setTagString("demo demo2");
+		o.setTagString("demo9 demo8");
+		p.setTagString("demo9 demo8");
+		m.answer(user3, "Because");
+		m.answer(user4, "No idea");
+		n.answer(user5, "Therefore");
+		o.answer(user5, "No");
+		o.setBestAnswer(user5.getAnswers().get(1));
+		assertEquals(2, user5.getSuggestedQuestions().size());
+		assertEquals(p, user5.getSuggestedQuestions().get(0));
+		assertEquals(m, user5.getSuggestedQuestions().get(1));
+
+	}
+
+	@Test
+	public void shouldSuggestQuestionsSortedByRatingOfAnswers() {
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
+		Question m = new Question(user3, "Why?");
+		Question n = new Question(user4, "Where?");
+		Question o = new Question(user3, "Who?");
+		Question p = new Question(user4, "How old?");
+
+		m.setTagString("demo");
+		n.setTagString("demo demo2");
+		o.setTagString("demo9 demo8");
+		p.setTagString("demo9 demo8");
+		m.answer(user3, "Because");
+		m.answer(user4, "No idea");
+		n.answer(user5, "Therefore");
+		o.answer(user5, "No");
+		user5.getAnswers().get(1).voteUp(user3);
+		user5.getAnswers().get(1).voteUp(user4);
+
+		assertEquals(2, user5.getSuggestedQuestions().size());
+		assertEquals(p, user5.getSuggestedQuestions().get(0));
+		assertEquals(m, user5.getSuggestedQuestions().get(1));
+
+	}
+
+	@Test
+	public void shouldNotSuggestQuestionsFromBadAnswers() {
+		User user6 = new User("User6", "user6");
+		User user7 = new User("User7", "user7");
+		User user8 = new User("User8", "user8");
+		System.out.println(user6.getName());
+		Question m = new Question(user6, "Why?");
+		Question n = new Question(user7, "Where?");
+		Question o = new Question(user6, "Who?");
+		Question p = new Question(user7, "How old?");
+		m.answer(user6, "Because");
+		m.answer(user7, "No idea");
+		p.answer(user8, "Therefore");
+		user8.getAnswers().get(0).voteDown(user6);
+
+		m.setTagString("demo");
+		n.setTagString("demo demo2");
+		o.setTagString("demo demo3 demo4");
+		p.setTagString("demo demo3 demo4 demo5");
+
+		assertEquals(0, user8.getSuggestedQuestions().size());
+	}
+
+	@Test
 	public void shouldNotSuggestOwnQuestions() {
 		User user = new User("Jack", "jack");
 		User user2 = new User("John", "john");
