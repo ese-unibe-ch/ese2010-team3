@@ -31,7 +31,7 @@
     		<div class="navigation">
 			<div class="search">
     			<form class="search" action="@{Application.search}" method="GET">
-    				<input type="text" name="term" />
+    				<input type="text" name="term" #{if term}value="${term}"#{/if} />
     				<input type="submit" value="Search" />
 				</form> 
 			</div><!-- end search -->

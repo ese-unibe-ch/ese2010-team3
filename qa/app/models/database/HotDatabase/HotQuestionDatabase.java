@@ -92,8 +92,8 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	}
 	
 	public List<Question> findSimilar(Question q) {
-		List<Question> result = Mapper.sort(questions,
-				new SearchFilter("", new HashSet<Tag>(q.getTags())));
+		List<Question> result = Mapper.sort(questions, new SearchFilter(null,
+				new HashSet<Tag>(q.getTags())));
 		result.remove(q); // don't find the question itself!
 		return result;
 	}
