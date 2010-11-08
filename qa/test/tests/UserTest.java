@@ -100,9 +100,9 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isCheating());
 		new Question(user, "My last possible Post");
 		assertTrue(user.isSpammer());
-		assertTrue(user.isBlocked());
-		assertEquals(user.getStatusMessage(), "User is a Spammer");
 		assertTrue(user.isCheating());
+		assertEquals(user.getStatusMessage(), "User is a Spammer");
+		assertTrue(user.isBlocked());
 	}
 	
 	@Test
@@ -113,7 +113,7 @@ public class UserTest extends UnitTest {
 		assertFalse(user2.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		assertEquals(user2.getStatusMessage(), "");
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			new Question(user, "This is my " + i + ". question").voteUp(user2);
 		}
 		assertTrue(user2.isMaybeCheater());
@@ -193,11 +193,10 @@ public class UserTest extends UnitTest {
 		User user = new User("Jack", "jack");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
-		user.setBlocked(true);
-		user.setStatusMessage("offending comments");
+		user.block(true, "offending comments");
 		assertTrue(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "offending comments");
-		user.setBlocked(false);
+		user.block(false, "");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 

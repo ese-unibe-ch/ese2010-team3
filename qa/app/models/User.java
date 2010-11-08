@@ -112,6 +112,7 @@ public class User implements IObserver {
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
+		this.updateCheaterStatus();
 	}
 
 	/**
@@ -202,13 +203,7 @@ public class User implements IObserver {
 			return false;
 
 	    Integer maxCount = Collections.max(votesForUser.values());
-		if (maxCount > 3 && maxCount / votesForUser.size() > 0.5) {
-			this.setStatusMessage("User voted up somebody");
-			this.setBlocked(true);
-			return true;
-		} else {
-			return false;
-		}
+		return (maxCount > 3 && maxCount / votesForUser.size() > 0.5);
 	}
 
 	/**
@@ -239,21 +234,37 @@ public class User implements IObserver {
 	public boolean isSpammer() {
 		int number = this.howManyItemsPerHour();
 		if (number >= 60) {
-			this.setStatusMessage("User is a Spammer");
-			this.setBlocked(true);
 			return true;
 		}
 		return false;
 	}
 
-
 	/**
-	 * Set the <code>User</code> as a Cheater if he spams the Site or supports
+	 * A <code>User</code> is a Cheater when he spams the Site or supports
 	 * somebody.
+	 * 
+	 * @return true if <code>User</code> is a Spammer or supports somebody.
 	 * 
 	 */
 	public boolean isCheating() {
 		return (isSpammer() || isMaybeCheater());
+	}
+
+	/**
+	 * Blocks the User if he is a cheater or unblocks him if he is not cheating.
+	 * The Cheater gets the appropriate status message.
+	 * 
+	 */
+	public void updateCheaterStatus() {
+		if (this.isSpammer()) {
+			this.block(true, "User is a Spammer");
+		}
+		if (this.isMaybeCheater()) {
+			this.block(true, "User voted up somebody");
+		}
+		if (!this.isCheating()) {
+			this.block(false, "");
+		}
 	}
 
 	/**
@@ -368,27 +379,52 @@ public class User implements IObserver {
 		return this.password;
 	}
 
+	/**
+	 * Get the reason for why the user is blocked.
+	 * 
+	 * @return the reason
+	 */
 	public String getStatusMessage() {
 		return this.statustext;
 	}
 
-	public void setStatusMessage(String blockreason) {
-		this.statustext = blockreason;
-	}
-	public void setBlocked(Boolean block) {
-		if (block == false)
-			this.setStatusMessage("");
+	/**
+	 * Blocks a <code>User</code> and gives him the reason.
+	 * 
+	 * @param block
+	 *            , true if the user has to be blocked
+	 * @param reason
+	 *            , why the users is getting blocked.
+	 */
+	public void block(Boolean block, String reason) {
 		this.isBlocked = block;
+		this.statustext = reason;
 	}
+
+	/**
+	 * Get the current status of the user whether he is blocked or not.
+	 * 
+	 * @return true, if the user is blocked
+	 */
 	public boolean isBlocked() {
 		return this.isBlocked;
 	}
 
-
+	/**
+	 * Get the status of the user whether he is a moderator or not.
+	 * 
+	 * @return true, if the user is moderator
+	 */
 	public boolean isModerator() {
 		return this.isModerator;
 	}
 
+	/**
+	 * Set the status of the user whether he is a moderator or not.
+	 * 
+	 * @param mod
+	 *            , true if the user will be a moderator
+	 */
 	public void setModerator(Boolean mod) {
 		this.isModerator = mod;
 	}

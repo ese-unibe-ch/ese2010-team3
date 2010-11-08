@@ -34,7 +34,7 @@ GET		/user/{userName}/showprofile/			Application.showprofile
 GET		/user/{userName}/editprofile/			Application.editProfile
 POST	/user/savedProfile						Secured.saveProfile
 
-GET		/user/{userName}/blockuser				Application.blockUser
+GET		/user/{userName}/blockuser				Secured.blockUser
 
 GET		/user/notifications						Application.notifications
 GET		/notification/{id}/follow				Secured.followNotification
