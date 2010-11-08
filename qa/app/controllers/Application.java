@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.codehaus.groovy.control.HasCleanup;
-
 import models.Answer;
 import models.Comment;
 import models.Notification;
