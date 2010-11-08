@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author Simon Marti
  * @author Mirco Kocher
  */
-public abstract class Entry extends Item implements Comparable {
+public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
 	private HashMap<String, Vote> votes;
@@ -109,8 +109,8 @@ public abstract class Entry extends Item implements Comparable {
 	 * 
 	 * @return comparison result (-1 = this Entry has more upVotes)
 	 */
-	public int compareTo(Object o) {
-		return ((Entry) o).rating() - rating();
+	public int compareTo(Entry e) {
+		return e.rating() - this.rating();
 	}
 
 	/**

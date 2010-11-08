@@ -17,16 +17,18 @@
 </ul>
 #{if user && !user.isCheating()}
 	<h1>Ask Question</h1>
-	#{form @Secured.newQuestion()}
-		#{field 'content'}
-        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
-		#{/field}
-		#{field 'tags'}
-			<p>
-				<label for="tags">Label this question:</label>
-				<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
-			</p>
-		#{/field}
-		<input type="submit" value="Post" />
-	#{/form}
+	<div class="askquestion">
+		#{form @Secured.newQuestion()}
+			#{field 'content'}
+				<textarea name="${field.name}" id="newQuestion" class="${field.errorClass}"></textarea>
+			#{/field}
+			#{field 'tags'}
+				<p>
+					<label for="tags">Label this question:</label>
+					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
+				</p>
+			#{/field}
+			<input type="submit" value="Post" />
+		#{/form}
+	</div><!-- end askquestion -->
 #{/if}

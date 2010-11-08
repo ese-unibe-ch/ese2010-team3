@@ -12,7 +12,8 @@ var TagAutocompletion = {
 	},
 	source: function(request, response) {
 		$.getJSON($(this.element[0]).attr("tagsJSON"), {
-			term: TagAutocompletion._extractTags(request.term).pop()
+			term: TagAutocompletion._extractTags(request.term).pop(),
+			content: ($("#newQuestion").val()||"").split(/(?:^|\W+)(?:\w{1,3}(?:\W+|$))*/).join(" ")
 		}, response);
 	},
 	search: function() {

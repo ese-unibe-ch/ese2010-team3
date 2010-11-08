@@ -20,6 +20,7 @@ h1 {
 h2 {
 	color: #ff8400;
 	margin: 0;
+	font-size: 12pt;
 }
 h3 {
 	color: #ff8400;
@@ -50,14 +51,6 @@ div.main {
 	position: relative;
 }
 
-.cheaterWarning {
-	color: #ffffff;
-	font-size: 1.4em;
-	font-wight: bold;
-	text-align: center;
-	border-bottom: 15px solid #f00;
-}
-
 /*********************** 
 header
 ************************/
@@ -79,27 +72,35 @@ div.navigation {
 	padding: 5px;
 	background: #555555;
 	color: #222222;
+	height:28px;
 }
 
-div.navigation span.search {
-	position: absolute;
-	right: 5px;
-	top: 5px;
-}
-
-div.navigation span.user {			
-	position: absolute;
+div.navigation div.user {			
+	float:right;
 	right: 	5px;
+	margin-top: 4px;
 }
 
-div.navigation span.user a {
+div.navigation div.user a {
 	margin-left: 5px;
 }
+
+div.navigation div.search {
+	float:left;
+}
+
 /*********************** 
 content
 ************************/	
 div.content {
 	padding: 10px;
+	font-size: 16pt;
+}
+div.content a{
+	font-size: 12pt;
+}
+div.content button {
+	font-size: 16pt;
 }
 div.content ul {
 	padding: 0;
@@ -123,7 +124,7 @@ div.content li[onclick] {
 }
 		
 div.content li[onclick]:hover {
-	background: #444444;
+	background: #333333;
 }
 		
 div.content li p {
@@ -136,12 +137,16 @@ div.content span.vote {
 	position: absolute;
 	right: 7px;
 }
+div.content span.vote a {
+	font-size: 30pt;
+}
 
-div.content span.date {
+div.content div.date {
 	top: 7px;
-	color: #222;
+	color: #FFF;
 	position: absolute;
 	right: 7px;
+	font-size: 10pt;
 }
 div.content form {
 	background: #333;
@@ -173,6 +178,19 @@ div.footer {
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 /*********************** 
+ask question
+************************/
+div.askquestion {
+	font-size: 12pt;
+}
+div.askquestion textarea {
+	height: 80px;
+	width: 760px;
+	background: #555;
+	border: 1px #000000 solid;
+	color: #000000;
+}
+/*********************** 
 comments
 ************************/
 div.content ul.comments {
@@ -198,15 +216,16 @@ li.comments h2 {
 show profile
 ************************/
 div.showprofile {
-	color: #ff8400;
+	color: #888;
 }
 td.right{
-	width:100%;
-	color: #ff8400;
+	color: #888;
 }
 td.left {
+	width: 30%;
+	text-align:left;
 	vertical-align: top;
-	color: #ff8400;
+	color: #888;
 }
 li.showprofile {
 	background: #333333;
@@ -251,7 +270,25 @@ div.notificationInfo {
 	color: #222222;
 	font-weight:bold;
 }
-
+/*********************** 
+Statistic
+************************/
+div.statistic {
+	color:#888;
+	background: #222;
+}
+/*********************** 
+Registration
+************************/
+div.register {
+	color:#888;
+}
+/*********************** 
+Login
+************************/
+div.login {
+	color:#888;
+}
 /*********************** 
 tags and tag autocomplete box
 ************************/
@@ -260,6 +297,7 @@ div.tags .tag {
 	background: #aecbfb;
 	border: 2px #aecbfb outset;
 	padding: 1px;
+	font-size: 10pt;
 }
 
 .ui-autocomplete {
@@ -270,6 +308,7 @@ div.tags .tag {
 	list-style: none;
 	padding: 2px;
 	margin: 0;
+	font-size: 10pt;
 }
 .ui-autocomplete .ui-menu-item a {
 	color: #000;

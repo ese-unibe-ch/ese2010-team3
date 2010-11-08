@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Question;
 import models.User;
+import models.helpers.Tools;
 
 import org.junit.Test;
 
@@ -23,14 +24,23 @@ public class UserTest extends UnitTest {
 		assertEquals(user.getName(), "Jack");
 	}
 
+	/*
+	 * doesn't work anymore. Method isAvailable(username) has to be modified
+	 * 
+	 * @Test public void checkUsernameAvailable() {
+	 * assertTrue(User.isAvailable("JaneSmith")); User user = new
+	 * User("JaneSmith", "janesmith");
+	 * assertFalse(User.isAvailable("JaneSmith"));
+	 * assertFalse(User.isAvailable("jAnEsMiTh")); }
+	 */
+
 	@Test
 	public void shouldCheckeMailValidation() {
-		User user = new User("John", "john");
-		assertTrue(User.checkEmail("john@gmx.com"));
-		assertTrue(User.checkEmail("john.smith@students.unibe.ch"));
-		assertFalse(User.checkEmail("john@gmx.c"));
-		assertFalse(User.checkEmail("john@info.museum"));
-		assertFalse(User.checkEmail("john@...com"));
+		assertTrue(Tools.checkEmail("john@gmx.com"));
+		assertTrue(Tools.checkEmail("john.smith@students.unibe.ch"));
+		assertFalse(Tools.checkEmail("john@gmx.c"));
+		assertFalse(Tools.checkEmail("john@info.museum"));
+		assertFalse(Tools.checkEmail("john@...com"));
 	}
 
 	@Test
@@ -44,11 +54,11 @@ public class UserTest extends UnitTest {
 	public void checkPassw() {
 		User user = new User("Bill", "bill");
 		assertTrue(user.checkPW("bill"));
-		assertEquals(User.encrypt("bill"), user.getSHA1Password());
-		assertEquals(User.encrypt(""),
+		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
+		assertEquals(Tools.encrypt(""),
 				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
 		// wikipedia.org/wiki/Examples_of_SHA_digests
-		assertFalse(User.encrypt("password").equals(User.encrypt("Password")));
+		assertFalse(Tools.encrypt("password").equals(Tools.encrypt("Password")));
 	}
 
 	@Test
@@ -75,10 +85,10 @@ public class UserTest extends UnitTest {
 	public void checkForSpammer() {
 		User user = new User("Spammer", "spammer");
 		assertTrue(user.howManyItemsPerHour() == 0);
-		Question question = new Question(user,
+		new Question(user, "Why did the chicken cross the road?");
 				"Why did the chicken cross the road?");
 		assertTrue(user.howManyItemsPerHour() == 1);
-		Question quest = new Question(user, "Does anybody know?");
+		new Question(user, "Does anybody know?");
 		assertFalse(user.howManyItemsPerHour() == 1);
 		for (int i = 0; i < 57; i++) {
 			new Question(user, "This is my " + i + ". question");
@@ -86,7 +96,7 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isSpammer());
 		assertTrue(user.howManyItemsPerHour() == 59);
 		assertTrue(!user.isCheating());
-		Question q = new Question(user, "My last possible Post");
+		new Question(user, "My last possible Post");
 		assertTrue(user.isSpammer());
 		assertTrue(user.isCheating());
 	}

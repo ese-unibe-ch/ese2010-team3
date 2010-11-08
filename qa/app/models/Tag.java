@@ -12,7 +12,7 @@ import models.database.Database;
  * 
  * @author sbuenzli
  */
-public class Tag implements Comparable {
+public class Tag implements Comparable<Tag> {
 
 	/** The name of this tag (all lowercase and without whitespace). */
 	private final String name;
@@ -72,13 +72,12 @@ public class Tag implements Comparable {
 		}
 	}
 
-	public int compareTo(Object o) {
-		return name.compareTo(((Tag) o).getName());
+	public int compareTo(Tag other) {
+		return this.name.compareTo(other.name);
 	}
 
 	/*
-	 * Static interface to access tags from controller (not part of unit
-	 * testing)
+	 * Static interface to access tags from controller
 	 */
 
 	/**
@@ -91,6 +90,7 @@ public class Tag implements Comparable {
 		return Database.get().tags().get(name);
 	}
 
+	@Override
 	public String toString() {
 		return "Tag(" + name + ")";
 	}
@@ -98,7 +98,6 @@ public class Tag implements Comparable {
 	/**
 	 * @return a collection of all registered Tags.
 	 */
-	@Deprecated
 	public static Collection<Tag> tags() {
 		return Database.get().tags().all();
 	}

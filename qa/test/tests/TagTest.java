@@ -145,7 +145,6 @@ public class TagTest extends UnitTest {
 		assertTrue(similarM.isEmpty());
 		assertTrue(similarN.isEmpty());
 		assertTrue(similarO.isEmpty());
-
 	}
 
 	@Test

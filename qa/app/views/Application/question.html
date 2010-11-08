@@ -10,13 +10,13 @@
 			#{if user != null}
 				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
 				#{if user.isObserving(question)}
-					<a href="@{Secured.unwatchQuestion(question.id())}">unwatch</a>
+					<a href="@{Secured.unwatchQuestion(question.id())}"> | unwatch</a>
 				#{/if}#{else}
-					<a href="@{Secured.watchQuestion(question.id())}">watch</a>
+					<a href="@{Secured.watchQuestion(question.id())}"> | watch</a>
 				#{/else}
 			#{/if}
 			#{if user && question.owner() == user}
-			<a href="@{Secured.deleteQuestion(question.id())}">Delete</a>
+				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
 			#{/if}
 			#{date question /}
 			#{if user && question.owner() != user && !user.isCheating()}
@@ -65,14 +65,13 @@
 				#{date answer /}
 				
 				#{if user && answer.owner() == user}
-					<br>
-					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
+					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isCheating()}
 					#{vote answer /}
 				#{/if}
 				#{if user && question.owner() == user && !user.isCheating()}
-					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}">Best</a>
+					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
 				#{/if}
 				
 			</li>

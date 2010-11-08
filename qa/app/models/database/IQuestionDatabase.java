@@ -1,9 +1,7 @@
 package models.database;
 
 import java.util.List;
-import java.util.Set;
 
-import models.Answer;
 import models.Question;
 import models.User;
 
@@ -71,13 +69,6 @@ public interface IQuestionDatabase {
 	public Question add(User owner, String content);
 
 	public int count();
-
-	/**
-	 * Get all best answers in the system.
-	 * 
-	 * @return ArrayList<Answer> an Set of all best answers
-	 */
-	public Set<Answer> getBestRatedAnswers();
 
 	/**
 	 * Number of answers voted to be the best in the DB.
