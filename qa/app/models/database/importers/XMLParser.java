@@ -24,26 +24,38 @@ public class XMLParser extends DefaultHandler {
 
 	private static ElementParser getSyntax() {
 		Syntax syntax = new Syntax("syntax");
-		syntax.by("user")
-				.read("name")
-				.read("password")
-				.call(createUser)
-				.end();
-		syntax.by("question")
-				.read("owner")
-				.read("content")
-				.by("answer")
-					.read("content")
+		syntax.by("data")
+				.by("user")
+					.read("name")
+					.read("password")
+					.call(createUser)
+				.end()
+				.by("question")
 					.read("owner")
+					.read("content")
+					.by("answer")
+						.read("content")
+						.read("owner")
 					.end()
-				.call(createQuestion)
-				.end();
+					.call(createQuestion);
 		return new ElementParser(syntax);
 	}
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) {
-		parser.start(qName, atts);
+		try {
+			parser.start(qName, atts);
+		} catch (SemanticError e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void characters(char[] str, int start, int length) {
+		parser.text(String.copyValueOf(str, start, length));
+	}
+
+	public void endElement(String uri, String localName, String qName) {
+		parser.end();
 	}
 
 	private static void createUser(Element e) {
@@ -57,6 +69,8 @@ public class XMLParser extends DefaultHandler {
 		String ownername = e.getText("owner");
 		User owner = Database.get().users().get(ownername);
 		Question question = Database.get().questions().add(owner, content);
+		if (!e.has("answer"))
+			return;
 		List<Element> answerEntries = e.get("answer");
 		for (Element answerEntry : answerEntries) {
 			content = answerEntry.getText("content");

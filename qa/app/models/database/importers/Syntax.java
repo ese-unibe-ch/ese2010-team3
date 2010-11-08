@@ -19,12 +19,15 @@ public class Syntax {
 		return name;
 	}
 
-	public Syntax get(String tag) {
+	public Syntax get(String tag) throws SemanticError {
+		Syntax syntax = subsyntax.get(tag);
+		if (syntax == null)
+			throw new SemanticError();
 		return subsyntax.get(tag);
 	}
 
 	public String toString() {
-		return "S(" + name + ")";
+		return "S[" + name + "](" + subsyntax.toString() + ")";
 	}
 
 	public Syntax(String name) {

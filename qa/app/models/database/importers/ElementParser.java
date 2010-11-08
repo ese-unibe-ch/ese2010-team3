@@ -9,17 +9,17 @@ public class ElementParser {
 
 	public ElementParser(Syntax syntax_) {
 		syntax = syntax_;
-		elt = new Element();
+		elt = new Element("base");
 	}
 
-	public void start(String tag, Attributes atts) {
-		Element subelt = new Element();
+	public void start(String tag, Attributes atts) throws SemanticError {
+		Element subelt = new Element(tag);
 		elt.addAt(tag, subelt);
 		elt = subelt;
 		syntax = syntax.get(tag);
 	}
 
-	public void start(String tag) {
+	public void start(String tag) throws SemanticError {
 		start(tag, null);
 	}
 
@@ -27,10 +27,6 @@ public class ElementParser {
 		syntax.callback(elt);
 		elt = elt.getParent();
 		syntax = syntax.getParent();
-	}
-
-	public void text(char[] txt, int start, int end) {
-		elt.addText(txt, start, end);
 	}
 
 	public void text(String txt) {

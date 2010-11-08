@@ -8,23 +8,26 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 
 public class Element {
+	private String name;
 	private Attributes attrs;
 	private StringBuilder text;
 	private Map<String, List<Element>> subelements;
 	private Element parent;
 
-	public Element() {
+	public Element(String name_) {
+		name = name_;
 		subelements = new HashMap<String, List<Element>>();
 		text = new StringBuilder();
 	}
 
-	public Element(Element parent_) {
-		this();
+	public Element(String name_, Element parent_) {
+		this(name_);
 		parent = parent_;
 	}
 
 	public String toString() {
-		return "E(\"" + (text == null ? "" : text.toString()) + "\"" +
+		return "E[" + name + "](\"" + (text == null ? "" : text.toString())
+				+ "\"" +
 					(subelements == null ? "" : "," + subelements.toString())
 				+ ")";
 	}
@@ -59,5 +62,9 @@ public class Element {
 
 	public Element getParent() {
 		return parent;
+	}
+
+	public boolean has(String string) {
+		return subelements.containsKey(string);
 	}
 }
