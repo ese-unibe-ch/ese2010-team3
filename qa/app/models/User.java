@@ -37,6 +37,9 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
+	private String statustext = "";
+	private boolean isBlocked = false;
+	private boolean isModerator = false;
 	
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -76,6 +79,7 @@ public class User implements IObserver {
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
+		this.updateCheaterStatus();
 	}
 
 	/**
@@ -145,11 +149,11 @@ public class User implements IObserver {
 			}
 		}
 
-	    if (votesForUser.isEmpty())
+		if (votesForUser.isEmpty())
 			return false;
 
 	    Integer maxCount = Collections.max(votesForUser.values());
-		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
+		return (maxCount > 3 && 1.0 * maxCount / votesForUser.size() > 0.5);
 	}
 
 	/**
@@ -170,6 +174,7 @@ public class User implements IObserver {
 		}
 	}
 
+
 	/**
 	 * The <code>User</code> is a Spammer if he posts more than 30 comments,
 	 * answers or questions in the last hour.
@@ -185,12 +190,27 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Set the <code>User</code> as a Cheater if he spams the Site or supports
+	 * A <code>User</code> is a Cheater when he spams the Site or supports
 	 * somebody.
+	 * 
+	 * @return true if <code>User</code> is a Spammer or supports somebody.
 	 * 
 	 */
 	public boolean isCheating() {
 		return (isSpammer() || isMaybeCheater());
+	}
+
+	/**
+	 * Blocks the User if he is a cheater or unblocks him if he is not cheating.
+	 * The Cheater gets the appropriate status message.
+	 * 
+	 */
+	public void updateCheaterStatus() {
+		if (this.isSpammer()) {
+			this.block("User is a Spammer");
+		} else if (this.isMaybeCheater()) {
+			this.block("User voted up somebody");
+		}
 	}
 
 	/**
@@ -271,6 +291,61 @@ public class User implements IObserver {
 
 	public String getSHA1Password() {
 		return this.password;
+	}
+
+	/**
+	 * Get the reason for why the user is blocked.
+	 * 
+	 * @return the reason
+	 */
+	public String getStatusMessage() {
+		return this.statustext;
+	}
+
+	/**
+	 * Blocks a <code>User</code> and gives him the reason.
+	 * 
+	 * @param block
+	 *            , true if the user has to be blocked
+	 * @param reason
+	 *            , why the users is getting blocked.
+	 */
+	public void block(String reason) {
+		this.isBlocked = true;
+		this.statustext = reason;
+	}
+
+	public void unblock() {
+		this.isBlocked = false;
+		this.statustext = "";
+	}
+
+	/**
+	 * Get the current status of the user whether he is blocked or not.
+	 * 
+	 * @return true, if the user is blocked
+	 */
+	public boolean isBlocked() {
+		return this.isBlocked;
+	}
+
+	/**
+	 * Get the status of the user whether he is a moderator or not.
+	 * 
+	 * @return true, if the user is moderator
+	 */
+	public boolean isModerator() {
+		return this.isModerator;
+	}
+
+	/**
+	 * Set the status of the user whether he is a moderator or not.
+	 * 
+	 * @param mod
+	 *            , true if the user will be a moderator
+	 */
+	public void setModerator(Boolean mod) {
+		this.isModerator = mod;
 	}
 	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
@@ -516,7 +591,12 @@ public class User implements IObserver {
 	 * @return true if the username is available.
 	 */
 	public static boolean isAvailable(String username) {
-		return (Database.get().users().get(username.toLowerCase()) == null);
+		for (User user : Database.get().users().all()) {
+			if (user.getName().toLowerCase().equals(username.toLowerCase())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static User get(String name) {

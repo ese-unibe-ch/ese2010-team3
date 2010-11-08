@@ -1,10 +1,7 @@
 package models.database;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
-import models.Item;
 import models.User;
 
 public interface IUserDatabase {
@@ -36,7 +33,7 @@ public interface IUserDatabase {
 	public void remove(String name);
 
 	public Collection<User> all();
-	
+
 	public int count();
 
 	public void clear();

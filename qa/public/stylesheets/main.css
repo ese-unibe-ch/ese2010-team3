@@ -235,6 +235,9 @@ li.showprofile {
 	padding: 7px;
 	position: relative;
 }
+td.blocked {
+	color: #f00;
+}
 /*********************** 
 edit profile
 ************************/

@@ -22,4 +22,5 @@
 *.orig
 
 #do not commit temp files
+*~
 *.*~
