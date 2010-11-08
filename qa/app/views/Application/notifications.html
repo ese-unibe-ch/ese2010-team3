@@ -24,4 +24,16 @@
 		<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
 	#{/if}
 	</ul>
+	<ul>
+	#{if suggestedQuestions.size() != 0}
+	<h2>By the way, you might also know the answers to these questions:</h2>
+	#{list items:suggestedQuestions, as:'question'}<p>
+			<li>
+			#{showProfile question /}:
+				<a href="@{Application.question(question.id())}">
+				${question.summary()}</a>#{date question /}</p>
+			#{/list}
+			</li>
+	#{/if}
+	</ul>
 </div>

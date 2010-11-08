@@ -22,9 +22,9 @@ public class UserTest extends UnitTest {
 		User user = new User("Jack", "jack");
 		assertEquals(user.getName(), "Jack");
 	}
-	
+
 	@Test
-	public void shouldCheckeMailValidation(){
+	public void shouldCheckeMailValidation() {
 		User user = new User("John", "john");
 		assertTrue(user.checkEmail("john@gmx.com"));
 		assertTrue(user.checkEmail("john.smith@students.unibe.ch"));
@@ -32,14 +32,14 @@ public class UserTest extends UnitTest {
 		assertFalse(user.checkEmail("john@info.museum"));
 		assertFalse(user.checkEmail("john@...com"));
 	}
-	
+
 	@Test
-	public void checkMailAssertion(){
+	public void checkMailAssertion() {
 		User user = new User("Bill", "bill");
 		user.setEmail("bill@aol.com");
 		assertEquals(user.getEmail(), "bill@aol.com");
 	}
-	
+
 	@Test
 	public void checkPassw() {
 		User user = new User("Bill", "bill");
@@ -47,7 +47,7 @@ public class UserTest extends UnitTest {
 		assertEquals(user.encrypt("bill"), user.getSHA1Password());
 		assertEquals(user.encrypt(""),
 				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
-																// wikipedia.org/wiki/Examples_of_SHA_digests
+		// wikipedia.org/wiki/Examples_of_SHA_digests
 		assertFalse(user.encrypt("password").equals(user.encrypt("Password")));
 	}
 
@@ -71,7 +71,6 @@ public class UserTest extends UnitTest {
 		assertTrue(user.getWebsite().equals("http://www.test.ch"));
 	}
 
-	
 	@Test
 	public void checkForSpammer() {
 		User user = new User("Spammer", "spammer");
@@ -90,7 +89,7 @@ public class UserTest extends UnitTest {
 		assertTrue(user.isSpammer());
 		assertTrue(user.isCheating());
 	}
-	
+
 	@Test
 	public void checkForCheater() {
 		User user = new User("TheSupported", "supported");
@@ -103,8 +102,6 @@ public class UserTest extends UnitTest {
 		assertTrue(!user.isMaybeCheater());
 		assertTrue(!user.isCheating());
 	}
-
-
 
 	@Test
 	public void shouldHaveOneQuestion() {
@@ -185,6 +182,42 @@ public class UserTest extends UnitTest {
 		e.delete();
 
 		assertEquals(0, user.highRatedAnswers().size());
+	}
+
+	@Test
+	public void shouldNotSuggestOwnQuestions() {
+		User user = new User("Jack", "jack");
+		User user2 = new User("John", "john");
+		Question q = new Question(user, "Why?");
+		Question f = new Question(user2, "Where?");
+		q.setTagString("test");
+		f.setTagString("test");
+		q.answer(user2, "Because");
+		assertEquals(0, user2.getSuggestedQuestions().size());
+
+		user.delete();
+		user2.delete();
+	}
+
+	@Test
+	public void shouldNotSuggestQuestionsWithBestAnswer() {
+		User james = new User("James", "james");
+		User john = new User("John", "john");
+		User kate = new User("Kate", "kate");
+		Question k = new Question(james, "Why?");
+		Question l = new Question(john, "Where?");
+
+		k.setTagString("test");
+		l.setTagString("test");
+		k.answer(james, "Because");
+		k.answer(john, "No idea");
+		james.getQuestions().get(0).setBestAnswer(k.getAnswer(1));
+		l.answer(kate, "Therefore");
+		assertEquals(0, kate.getSuggestedQuestions().size());
+
+		james.delete();
+		john.delete();
+		kate.delete();
 	}
 
 }

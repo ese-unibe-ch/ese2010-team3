@@ -26,23 +26,28 @@ public class Question extends Entry implements IObservable {
 	private Answer bestAnswer;
 	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
-	
+
 	protected HashSet<IObserver> observers;
 
 	/**
 	 * Create a Question.
 	 * 
-	 * @param owner the {@link User} who posted the <code>Question</code>
-	 * @param content the question
+	 * @param owner
+	 *            the {@link User} who posted the <code>Question</code>
+	 * @param content
+	 *            the question
 	 */
 	public Question(User owner, String content) {
-	/**
-	 * Adds a <code>Question</code> to the database.
-	 * 
-	 * @param owner of the <code>Question</code>
-	 * @param content of the <code>Question</code>
-	 * @param id of the <code>Question</code>
-	 */
+		/**
+		 * Adds a <code>Question</code> to the database.
+		 * 
+		 * @param owner
+		 *            of the <code>Question</code>
+		 * @param content
+		 *            of the <code>Question</code>
+		 * @param id
+		 *            of the <code>Question</code>
+		 */
 		super(owner, content);
 		this.answers = new IDTable<Answer>();
 		this.comments = new IDTable<Comment>();
@@ -75,7 +80,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Unregisters a deleted {@link Answer}.
 	 * 
-	 * @param answer the {@link Answer} to unregister
+	 * @param answer
+	 *            the {@link Answer} to unregister
 	 */
 	public void unregister(Answer answer) {
 		this.answers.remove(answer.id());
@@ -84,7 +90,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Unregisters a deleted {@link Comment}.
 	 * 
-	 * @param comment the {@link Comment} to unregister
+	 * @param comment
+	 *            the {@link Comment} to unregister
 	 */
 	@Override
 	public void unregister(Comment comment) {
@@ -94,8 +101,10 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Post a {@link Answer} to a <code>Question</code>.
 	 * 
-	 * @param user the {@link User} posting the {@link Answer}
-	 * @param content the answer
+	 * @param user
+	 *            the {@link User} posting the {@link Answer}
+	 * @param content
+	 *            the answer
 	 * @return an {@link Answer}
 	 */
 	public Answer answer(User user, String content) {
@@ -107,8 +116,10 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Post a {@link Comment} to a <code>Question</code>.
 	 * 
-	 * @param user the {@link User} posting the {@link Comment}
-	 * @param content the comment
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
@@ -121,7 +132,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Checks if a {@link Answer} belongs to a <code>Question</code>.
 	 * 
-	 * @param answer the {@link Answer} to check
+	 * @param answer
+	 *            the {@link Answer} to check
 	 * @return true if the {@link Answer} belongs to the <code>Question</code>
 	 */
 	public boolean hasAnswer(Answer answer) {
@@ -131,7 +143,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Checks if a {@link Comment} belongs to a <code>Question</code>.
 	 * 
-	 * @param comment the {@link Comment} to check
+	 * @param comment
+	 *            the {@link Comment} to check
 	 * @return true if the {@link Comment} belongs to the <code>Question</code>
 	 */
 	public boolean hasComment(Comment comment) {
@@ -173,7 +186,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Get a specific {@link Answer} to a <code>Question</code>.
 	 * 
-	 * @param id of the <code>Answer</code>
+	 * @param id
+	 *            of the <code>Answer</code>
 	 * @return {@link Answer} or null
 	 */
 	public Answer getAnswer(int id) {
@@ -183,7 +197,8 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Get a specific {@link Comment} to a <code>Question</code>.
 	 * 
-	 * @param id of the <code>Comment</code>
+	 * @param id
+	 *            of the <code>Comment</code>
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
@@ -202,7 +217,8 @@ public class Question extends Entry implements IObservable {
 	 * Sets the best answer. This answer can not be changed after 30min. This
 	 * Method enforces this and fails if it can not be set.
 	 * 
-	 * @param bestAnswer the answer the user chose to be the best for this question.
+	 * @param bestAnswer
+	 *            the answer the user chose to be the best for this question.
 	 * @return true if setting of best answer was allowed.
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
@@ -218,18 +234,19 @@ public class Question extends Entry implements IObservable {
 		} else
 			return false;
 	}
-	
+
 	public boolean hasBestAnswer() {
 		return bestAnswer != null;
 	}
-	
+
 	public Answer getBestAnswer() {
 		return bestAnswer;
 	}
 
 	/**
-	 * @param tags a comma- or whitespace-separated list of tags to be associated
-	 * 			   with this question
+	 * @param tags
+	 *            a comma- or whitespace-separated list of tags to be associated
+	 *            with this question
 	 */
 	public void setTagString(String tags) {
 		for (Tag tag : this.tags)
@@ -255,13 +272,15 @@ public class Question extends Entry implements IObservable {
 		Collections.sort(this.tags);
 	}
 
-	/* Get a List of all tags for a <code>Question</code>.
+	/*
+	 * Get a List of all tags for a <code>Question</code>.
 	 * 
 	 * @return List of tags
 	 */
 	public List<Tag> getTags() {
 		return (List<Tag>) this.tags.clone();
 	}
+
 	/**
 	 * @see models.IObservable#addObserver(models.IObserver)
 	 */
@@ -297,11 +316,22 @@ public class Question extends Entry implements IObservable {
 	 * Get all questions that containing at least one of the tags of the
 	 * original question.
 	 * 
-	 * @return List<Question> the List containing all questions that
-	 *         contain at least one of the first question.
+	 * @return List<Question> the List containing all questions that contain at
+	 *         least one of the first question.
 	 */
 	public List<Question> getSimilarQuestions() {
 		return Database.get().questions().findSimilar(this);
+	}
+
+	/**
+	 * Determines whether the question is old.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isOldQuestion() {
+		long diff = SystemInformation.get().now().getTime()
+				- this.timestamp().getTime();
+		return ((diff / 1000 * 60 * 60 * 24) > 120);
 	}
 
 	public int countAnswers() {

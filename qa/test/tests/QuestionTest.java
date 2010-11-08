@@ -48,4 +48,9 @@ public class QuestionTest extends UnitTest {
 		assertTrue(user.hasItem(question));
 	}
 
+	@Test
+	public void shouldBeOldQuestion() {
+
+	}
+
 }

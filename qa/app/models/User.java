@@ -38,16 +38,16 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
-	
+
 	public static final String DATE_FORMAT_CH = "dd.MM.yyyy";
 	public static final String DATE_FORMAT_US = "MM/dd/yyyy";
 	public static final String DATE_FORMAT_ISO = "yyyy-MM-dd";
 
-
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
-	 * @param name the name of the <code>User</code>
+	 * @param name
+	 *            the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
 		this.name = name;
@@ -63,7 +63,6 @@ public class User implements IObserver {
 	public String getName() {
 		return this.name;
 	}
-
 
 	/**
 	 * Encrypt the password with SHA-1.
@@ -106,7 +105,8 @@ public class User implements IObserver {
 	 * Registers an {@link Item} which should be deleted in case the
 	 * <code>User</code> gets deleted.
 	 * 
-	 * @param item the {@link Item} to register
+	 * @param item
+	 *            the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
@@ -127,7 +127,8 @@ public class User implements IObserver {
 	/**
 	 * Unregisters an {@link Item} which has been deleted.
 	 * 
-	 * @param item the {@link Item} to unregister
+	 * @param item
+	 *            the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
 		this.items.remove(item);
@@ -137,7 +138,8 @@ public class User implements IObserver {
 	 * Checks if an {@link Item} is registered and therefore owned by a
 	 * <code>User</code>.
 	 * 
-	 * @param item the {@link Item}to check
+	 * @param item
+	 *            the {@link Item}to check
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
@@ -179,18 +181,20 @@ public class User implements IObserver {
 			}
 		}
 
-	    if (votesForUser.isEmpty())
+		if (votesForUser.isEmpty())
 			return false;
 
-	    Integer maxCount = Collections.max(votesForUser.values());
+		Integer maxCount = Collections.max(votesForUser.values());
 		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
 	}
 
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers - whether to anonymize this user's answers as well
-	 * @param doComments - whether to anonymize this user's comments as well
+	 * @param doAnswers
+	 *            - whether to anonymize this user's answers as well
+	 * @param doComments
+	 *            - whether to anonymize this user's comments as well
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
@@ -338,10 +342,12 @@ public class User implements IObserver {
 	public String getSHA1Password() {
 		return this.password;
 	}
+
 	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what the entry to watch
+	 * @param what
+	 *            the entry to watch
 	 */
 	public void startObserving(IObservable what) {
 		what.addObserver(this);
@@ -350,7 +356,8 @@ public class User implements IObserver {
 	/**
 	 * Checks if a specific entry is being observed for changes.
 	 * 
-	 * @param what the entry to check
+	 * @param what
+	 *            the entry to check
 	 */
 	public boolean isObserving(IObservable what) {
 		return what.hasObserver(this);
@@ -359,7 +366,8 @@ public class User implements IObserver {
 	/**
 	 * Stop observing changes for an entry (e.g. new answers to a question).
 	 * 
-	 * @param what the entry to unwatch
+	 * @param what
+	 *            the entry to unwatch
 	 */
 	public void stopObserving(IObservable what) {
 		what.removeObserver(this);
@@ -378,56 +386,124 @@ public class User implements IObserver {
 	 * Registers a new <code>User</code> to the database.
 	 * 
 	 * @param username
-	 * @param password of the <code>User</code>
+	 * @param password
+	 *            of the <code>User</code>
 	 * @return user
 	 */
 
 	/**
-	 * Get a List of the last three <code>Question</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Question</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Question> The last three <code>Question</code>s of this <code>User</code>
+	 * @return List<Question> The last three <code>Question</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
 		List<Question> recentQuestions = this.getQuestions();
 		Collections.sort(recentQuestions, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentQuestions.size() > 3)
 			return recentQuestions.subList(0, 3);
 		return recentQuestions;
 	}
 
 	/**
-	 * Get a List of the last three <code>Answer</code>s of this <code>User</code>.
+	 * Get a list of all Questions the user has answered sorted by how high the
+	 * answers are rated.
 	 * 
-	 * @return List<Answer> The last three <code>Answer</code>s of this <code>User</code>
+	 * @return List<Question>
+	 */
+	public List<Question> getSortedAnsweredQuestions() {
+		List<Question> sortedAnsweredQuestions = new ArrayList<Question>();
+		List<Answer> answers = this.getAnswers();
+		// Sort all answers - best first
+		Collections.sort(answers, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Answer) o1).compareTo((Answer) o2);
+			}
+		});
+		/*
+		 * Get all questions the user has answered. Ignore duplicates. Don't add
+		 * those questions belonging to negative rated answers.
+		 */
+		for (Answer a : answers) {
+			Question q = a.getQuestion();
+			if (!sortedAnsweredQuestions.contains(q) && a.rating() >= 0)
+				sortedAnsweredQuestions.add(q);
+		}
+
+		return sortedAnsweredQuestions;
+	}
+
+	/**
+	 * Get a list of all questions that the user might also know to answer.
+	 * 
+	 * @return List<Question>
+	 */
+	public List<Question> getSuggestedQuestions() {
+		List<Question> suggestedQuestions = new ArrayList<Question>();
+		List<Question> sortedAnsweredQuestions = this
+				.getSortedAnsweredQuestions();
+		/*
+		 * Don't list questions that have many answers or already have a best
+		 * answer. The user should not be the owner of the suggested question.
+		 * Remove duplicates.
+		 */
+		for (Question q : sortedAnsweredQuestions) {
+			for (Question qu : q.getSimilarQuestions()) {
+				if (!suggestedQuestions.contains(qu)
+						&& !sortedAnsweredQuestions.contains(qu)
+						&& !qu.owner().equals(this) && qu.isOldQuestion()
+						&& qu.countAnswers() < 10 && !qu.hasBestAnswer())
+					suggestedQuestions.add(qu);
+			}
+		}
+		if (suggestedQuestions.size() > 6) {
+			return suggestedQuestions.subList(0, 5);
+		}
+		return suggestedQuestions;
+
+	}
+
+	/**
+	 * Get a List of the last three <code>Answer</code>s of this
+	 * <code>User</code>.
+	 * 
+	 * @return List<Answer> The last three <code>Answer</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Answer> getRecentAnswers() {
 		List<Answer> recentAnswers = this.getAnswers();
 		Collections.sort(recentAnswers, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentAnswers.size() > 3)
 			return recentAnswers.subList(0, 3);
 		return recentAnswers;
 	}
-	
+
 	/**
-	 * Get a List of the last three <code>Comment</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Comment</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return List<Comment> The last three <code>Comment</code>s of this <code>User</code>
+	 * @return List<Comment> The last three <code>Comment</code>s of this
+	 *         <code>User</code>
 	 */
 	public List<Comment> getRecentComments() {
 		List<Comment> recentComments = this.getComments();
 		Collections.sort(recentComments, new Comparator() {
 			public int compare(Object o1, Object o2) {
-				return ((Item) o2).timestamp().compareTo(((Item) o1).timestamp());
+				return ((Item) o2).timestamp().compareTo(
+						((Item) o1).timestamp());
 			}
-		}); 
+		});
 		if (recentComments.size() > 3)
 			return recentComments.subList(0, 3);
 		return recentComments;
@@ -442,7 +518,8 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get a sorted ArrayList of all <code>Questions</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Questions</code>s of this
+	 * <code>User</code>.
 	 * 
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
@@ -451,25 +528,29 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get a sorted ArrayList of all <code>Answer</code>s of this <code>User</code>.
+	 * Get a sorted ArrayList of all <code>Answer</code>s of this
+	 * <code>User</code>.
 	 * 
-	 * @return ArrayList<Answer> All <code>Answer</code>s of this <code>User</code>
+	 * @return ArrayList<Answer> All <code>Answer</code>s of this
+	 *         <code>User</code>
 	 */
 	public ArrayList<Answer> getAnswers() {
 		return this.getItemsByType(Answer.class, null);
 	}
-	
+
 	/**
-	 * Get a sorted ArrayList of all <code>Comment</code>s of this <code>User</code>
+	 * Get a sorted ArrayList of all <code>Comment</code>s of this
+	 * <code>User</code>
 	 * 
-	 * @return ArrayList<Comment> All <code>Comments</code>s of this <code>User</code>
+	 * @return ArrayList<Comment> All <code>Comments</code>s of this
+	 *         <code>User</code>
 	 */
 	public ArrayList<Comment> getComments() {
 		return this.getItemsByType(Comment.class, null);
 	}
 
 	/**
-	 * Get an ArrayList of all best rated answers
+	 * Get a List of all best rated answers
 	 * 
 	 * @return List<Answer> All best rated answers
 	 */
