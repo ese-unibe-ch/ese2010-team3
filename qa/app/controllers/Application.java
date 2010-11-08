@@ -37,7 +37,8 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			List<Question> similarQuestions = (new ArrayList(question.getSimilarQuestions()));
+			List<Question> similarQuestions = (new ArrayList(question
+					.getSimilarQuestions()));
 			if (similarQuestions.size() > 3) {
 				similarQuestions = similarQuestions.subList(0, 3);
 			}
@@ -112,15 +113,15 @@ public class Application extends Controller {
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
 		boolean canEdit = true;
-		if(session.get("username") != null && session.get("username").equals(userName)) {
+		if (session.get("username") != null
+				&& session.get("username").equals(userName)) {
 			render(showUser, canEdit);
-		}
-		else {
+		} else {
 			canEdit = false;
 			render(showUser, canEdit);
 		}
 	}
-	
+
 	public static void editProfile(String userName) {
 		User user = Database.get().users().get(userName);
 		render(user);
@@ -142,17 +143,19 @@ public class Application extends Controller {
 			tags = new String[0];
 		renderJSON(tags);
 	}
-	
+
 	public static void search(String term) {
 		List<Question> results = Database.get().questions().searchFor(term);
-		render(results,term);
+		render(results, term);
 	}
 
 	public static void notifications() {
 		User user = Session.get().currentUser();
 		if (user != null) {
+			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
-			render(notifications);
+			render(notifications, suggestedQuestions);
+
 		} else
 			Application.index();
 	}
@@ -160,7 +163,6 @@ public class Application extends Controller {
 	public static void showStatisticalOverview() {
 		GregorianCalendar now = new GregorianCalendar();
 		TimeTracker t = TimeTracker.getRealTimeTracker();
-
 		int numberOfUsers = Database.get().users().count();
 		int numberOfQuestions = Database.get().questions().count();
 		int numberOfAnswers = Database.get().questions().countAllAnswers();
@@ -180,5 +182,4 @@ public class Application extends Controller {
 				questionsPerWeek, questionsPerMonth, answersPerDay,
 				answersPerWeek, answersPerMonth);
 	}
-
 }
