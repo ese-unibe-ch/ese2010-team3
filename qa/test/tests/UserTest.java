@@ -266,11 +266,15 @@ public class UserTest extends UnitTest {
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
 		Question p = new Question(user4, "How old?");
+		Question q = new Question(user3, "So?");
+		Question r = new Question(user4, "For ho long?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
 		o.setTagString("demo9 demo8");
 		p.setTagString("demo9 demo8");
+		q.setTagString("demo demo2 demo10");
+		r.setTagString("tag");
 		m.answer(user3, "Because");
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
@@ -278,9 +282,10 @@ public class UserTest extends UnitTest {
 		user5.getAnswers().get(1).voteUp(user3);
 		user5.getAnswers().get(1).voteUp(user4);
 
-		assertEquals(2, user5.getSuggestedQuestions().size());
+		assertEquals(3, user5.getSuggestedQuestions().size());
 		assertEquals(p, user5.getSuggestedQuestions().get(0));
-		assertEquals(m, user5.getSuggestedQuestions().get(1));
+		assertEquals(q, user5.getSuggestedQuestions().get(1));
+		assertEquals(m, user5.getSuggestedQuestions().get(2));
 
 	}
 
