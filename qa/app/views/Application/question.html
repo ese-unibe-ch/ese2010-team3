@@ -7,13 +7,20 @@
 			<h2>#{showProfile question /}:</h2>
 			<p>${question.content()}</p>
 			#{tags question:question, editable:user?.canEdit(question) /}  
-			#{if user != null}
+			#{if user != null && !question.isLocked()}
 				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
 				#{if user.isObserving(question)}
-					<a href="@{Secured.unwatchQuestion(question.id())}"> | unwatch</a>
+					<a href="@{Secured.unwatchQuestion(question.id())}"> | Unwatch</a>
 				#{/if}#{else}
-					<a href="@{Secured.watchQuestion(question.id())}"> | watch</a>
+					<a href="@{Secured.watchQuestion(question.id())}"> | Watch</a>
 				#{/else}
+			#{/if}
+			#{else} Question is locked! #{/else}
+			#{if user && user.isModerator() && !question.isLocked()}
+				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
+			#{/if}
+			#{if user && user.isModerator() && question.isLocked()}
+				<a href="@{Secured.unlockQuestion(question.id())}">| Unlock</a>
 			#{/if}
 			#{if user && user.canEdit(question)}
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
@@ -59,19 +66,25 @@
 			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
-				#{if user != null && !user.isCheating()}
+				#{if user != null && !user.isBlocked() && !question.isLocked()}
 					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</a>
 				#{/if}
 				#{date answer /}
 				
-				#{if user && user.canEdit(answer)}
+				#{if user && user.canEdit(answer) && !question.isLocked()}
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
+				#{/if}
+				#{if user && user.canEdit(answer) && question.isLocked()}
+					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
 				#{/if}
-				#{if user && user.canEdit(question)}
+				#{if user && user.canEdit(question) && !question.isLocked() || user.isModerator()}
 					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
+				#{/if}
+				#{if user && user.canEdit(question) && question.isLocked() && !user.isModerator()}
+					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}">Best</a>
 				#{/if}
 				
 			</li>
@@ -94,7 +107,7 @@
 			#{/list}
 		</ul>
 	#{/if}
-	#{if user && !user.isCheating()}
+	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>Add Answer</h1>
 		#{form @Secured.newAnswer(question.id())}
 			#{field 'content'}

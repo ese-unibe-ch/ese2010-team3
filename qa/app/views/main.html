@@ -12,14 +12,14 @@
         #{get 'moreScripts' /}
     </head>
     <body>
-	#{if user && user.isCheating()}
+	#{if user && user.isBlocked()}
 		class="cheaterWarning"
 	#{/if}
     	<div class="main">
     		<div class="header">
     			<a href="@{Application.index}"></a>
     		</div><!-- end header -->
-			#{if user && user.isCheating()}
+			#{if user && user.isBlocked()}
 				<div class="cheaterWarning">You are either spamming this cool Site or voting somebody up! STOP IT!!!</div>
 			#{/if}
 	   		#{elseif user && user.getVeryRecentNewNotification() != null}

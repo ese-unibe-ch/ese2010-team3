@@ -59,11 +59,7 @@ public class User implements IObserver {
 	}
 	
 	public boolean canEdit(Entry entry) {
-		if (entry.owner() == this && !this.isBlocked())
-			return true;
-		else if (this.isModerator())
-			return true;
-		return false;
+		return (entry.owner() == this && !this.isBlocked()) || this.isModerator();
 	}
 
 	/**
@@ -378,11 +374,13 @@ public class User implements IObserver {
 	public void setStatusMessage(String blockreason) {
 		this.statustext = blockreason;
 	}
+	
 	public void setBlocked(Boolean block) {
 		if (block == false)
 			this.setStatusMessage("");
 		this.isBlocked = block;
 	}
+	
 	public boolean isBlocked() {
 		return this.isBlocked;
 	}

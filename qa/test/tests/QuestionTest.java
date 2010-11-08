@@ -63,5 +63,13 @@ public class QuestionTest extends UnitTest {
 		// Words
 		assertEquals(Question.importantWords(txt), "hello text more qwer asdf");
 	}
+	
+	@Test
+	public void shouldLockQuestion() {
+		question.setLocked();
+		assertTrue(question.isLocked());
+		question.setUnlocked();
+		assertFalse(question.isLocked());
+	}
 
 }

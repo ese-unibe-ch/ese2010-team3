@@ -252,4 +252,16 @@ public class Secured extends Controller {
 		}
 		Application.showprofile(user.getName());
 	}
+	
+	public static void lockQuestion(int id) {
+		Question question = Database.get().questions().get(id);
+		question.setLocked();
+		Application.question(id);
+	}
+	
+	public static void unlockQuestion(int id) {
+		Question question = Database.get().questions().get(id);
+		question.setUnlocked();
+		Application.question(id);
+	}
 }
