@@ -52,16 +52,17 @@ public class QuestionTest extends UnitTest {
 	public void getOnlyImportantWords() {
 		assertEquals(Question.importantWords(""), "");
 		assertEquals(Question.importantWords("abcde"), "");
-		assertEquals(Question.importantWords("abcd abcd abcd abcd abcd d"),
-				"abcd");
-		String txt = "asdf qwer dyxcv asdf k qwer l yxcv asdf qwer asdf yxcv qwer yxcv qwer yxcv";
+		assertEquals(Question.importantWords("abcd abcd abcd abcd d"), "abcd");
+		// "more" is a StopWord and should not be suggested
+		assertEquals(Question.importantWords("some some some some s"), "");
+		String txt = "asdf asdf asdf asdf qwer qwer qwer qwer yxcv yxcv yxcv";
 		assertEquals(Question.importantWords(txt), "yxcv qwer asdf");
-		txt += " hello hello hello hello hello";
+		txt += " hello hello hello hello";
 		assertEquals(Question.importantWords(txt), "hello yxcv qwer asdf");
+		txt += "mnbv text mnbv text mnbv text mnbv text ";
+		// remove "yxcv" because there are more important words
+		assertEquals(Question.importantWords(txt), "mnbv hello text qwer asdf");
 		txt += " more text more text more text more text and a lot of more text";
-		// remove yxcv from importantWords because there are more important
-		// Words
-		assertEquals(Question.importantWords(txt), "hello text more qwer asdf");
 	}
 
 }

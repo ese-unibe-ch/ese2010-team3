@@ -328,17 +328,14 @@ public class Question extends Entry implements IObservable {
 				int occurrence = (input.length() - (input.replaceAll(word, ""))
 						.length()) / word.length();
 				if (occurrence > 1) {
-					for (String stopword : StopWords.get()) {
-						if (keywords.size() < 6 && !stopword.equals(word)) {
-							keywords.put(word, occurrence);
-						}
-						if (keywords.size() >= 6 && !stopword.equals(word)) {
-							for (String stri : keywords.keySet()) {
-								if (keywords.get(stri).intValue() < occurrence) {
-									keywords.put(word, occurrence);
-									keywords.remove(stri);
-									break;
-								}
+					if (keywords.size() < 5 && !StopWords.get().contains(word)) {
+						keywords.put(word, occurrence);
+					} else if (!StopWords.get().contains(word)) {
+						for (String stri : keywords.keySet()) {
+							if (keywords.get(stri).intValue() < occurrence) {
+								keywords.put(word, occurrence);
+								keywords.remove(stri);
+								break;
 							}
 						}
 					}
