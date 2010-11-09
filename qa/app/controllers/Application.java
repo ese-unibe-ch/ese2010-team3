@@ -21,9 +21,8 @@ public class Application extends Controller {
 
 	@Before
 	static void setConnectedUser() {
-		if (controllers.Secure.Security.isConnected()) {
-			User user = Database.get().users().get(
-					controllers.Secure.Security.connected());
+		if (Security.isConnected()) {
+			User user = Database.get().users().get(Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
@@ -128,6 +127,10 @@ public class Application extends Controller {
 		render(user);
 	}
 
+	public static void blockuser(String blockuser) {
+		render(blockuser);
+	}
+
 	public static void tags(String term, String content) {
 		String tagString = "";
 		for (Tag tag : Tag.tags()) {
@@ -152,8 +155,16 @@ public class Application extends Controller {
 	public static void notifications() {
 		User user = Session.get().currentUser();
 		if (user != null) {
+			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
-			render(notifications);
+			List<Question> questions = Database.get().questions().all();
+			ArrayList<Question> watchingQuestions = new ArrayList<Question>();
+			for (Question question : questions) {
+				if (question.hasObserver(user)) {
+					watchingQuestions.add(question);
+				}
+			}
+			render(notifications, watchingQuestions, suggestedQuestions);
 		} else {
 			Application.index();
 		}
@@ -162,7 +173,6 @@ public class Application extends Controller {
 	public static void showStatisticalOverview() {
 		GregorianCalendar now = new GregorianCalendar();
 		TimeTracker t = TimeTracker.getRealTimeTracker();
-
 		int numberOfUsers = Database.get().users().count();
 		int numberOfQuestions = Database.get().questions().count();
 		int numberOfAnswers = Database.get().questions().countAllAnswers();
@@ -182,5 +192,4 @@ public class Application extends Controller {
 				questionsPerWeek, questionsPerMonth, answersPerDay,
 				answersPerWeek, answersPerMonth);
 	}
-
 }

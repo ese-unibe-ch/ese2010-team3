@@ -29,6 +29,7 @@ public class Question extends Entry implements IObservable {
 	private Answer bestAnswer;
 	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
+
 	protected HashSet<IObserver> observers;
 
 	/**
@@ -328,6 +329,19 @@ public class Question extends Entry implements IObservable {
 	 */
 	public List<Question> getSimilarQuestions() {
 		return Database.get().questions().findSimilar(this);
+	}
+
+	/**
+	 * Determines whether the question is old (Older than 120 days).
+	 * 
+	 * 
+	 * 
+	 * @return boolean
+	 */
+	public boolean isOldQuestion() {
+		long diff = SystemInformation.get().now().getTime()
+				- this.timestamp().getTime();
+		return ((diff / (1000 * 60 * 60 * 24) > 120));
 	}
 
 	public int countAnswers() {

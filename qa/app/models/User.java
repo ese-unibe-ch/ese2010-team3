@@ -38,6 +38,10 @@ public class User implements IObserver {
 	private String employer;
 	private String biography;
 
+	private String statustext = "";
+	private boolean isBlocked = false;
+	private boolean isModerator = false;
+
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
@@ -78,6 +82,7 @@ public class User implements IObserver {
 	 */
 	public void registerItem(Item item) {
 		items.add(item);
+		updateCheaterStatus();
 	}
 
 	/**
@@ -155,7 +160,7 @@ public class User implements IObserver {
 			return false;
 
 		Integer maxCount = Collections.max(votesForUser.values());
-		return maxCount > 3 && maxCount / votesForUser.size() > 0.5;
+		return (maxCount > 3 && 1.0 * maxCount / votesForUser.size() > 0.5);
 	}
 
 	/**
@@ -192,12 +197,27 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Set the <code>User</code> as a Cheater if he spams the Site or supports
+	 * A <code>User</code> is a Cheater when he spams the Site or supports
 	 * somebody.
+	 * 
+	 * @return true if <code>User</code> is a Spammer or supports somebody.
 	 * 
 	 */
 	public boolean isCheating() {
 		return (isSpammer() || isMaybeCheater());
+	}
+
+	/**
+	 * Blocks the User if he is a cheater or unblocks him if he is not cheating.
+	 * The Cheater gets the appropriate status message.
+	 * 
+	 */
+	public void updateCheaterStatus() {
+		if (isSpammer()) {
+			block("User is a Spammer");
+		} else if (isMaybeCheater()) {
+			block("User voted up somebody");
+		}
 	}
 
 	/**
@@ -281,6 +301,61 @@ public class User implements IObserver {
 	}
 
 	/**
+	 * Get the reason for why the user is blocked.
+	 * 
+	 * @return the reason
+	 */
+	public String getStatusMessage() {
+		return statustext;
+	}
+
+	/**
+	 * Blocks a <code>User</code> and gives him the reason.
+	 * 
+	 * @param block
+	 *            , true if the user has to be blocked
+	 * @param reason
+	 *            , why the users is getting blocked.
+	 */
+	public void block(String reason) {
+		isBlocked = true;
+		statustext = reason;
+	}
+
+	public void unblock() {
+		isBlocked = false;
+		statustext = "";
+	}
+
+	/**
+	 * Get the current status of the user whether he is blocked or not.
+	 * 
+	 * @return true, if the user is blocked
+	 */
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	/**
+	 * Get the status of the user whether he is a moderator or not.
+	 * 
+	 * @return true, if the user is moderator
+	 */
+	public boolean isModerator() {
+		return isModerator;
+	}
+
+	/**
+	 * Set the status of the user whether he is a moderator or not.
+	 * 
+	 * @param mod
+	 *            , true if the user will be a moderator
+	 */
+	public void setModerator(Boolean mod) {
+		isModerator = mod;
+	}
+
+	/**
 	 * Start observing changes for an entry (e.g. new answers to a question).
 	 * 
 	 * @param what
@@ -321,14 +396,86 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * of the <code>User</code> Get a List of the last three
-	 * <code>Question</code>s of this <code>User</code>.
+	 * Get a List of the last three <code>Question</code>s of this
+	 * <code>User</code>. Registers a new <code>User</code> to the
+	 * database.
+	 * 
+	 * @param username
+	 * @param password
+	 *            of the <code>User</code>
+	 * @return user
+	 */
+
+	/**
+	 * Get a List of the last three <code>Question</code>s of this
+	 * <code>User</code>. >>>>>>> suggest-Questions
 	 * 
 	 * @return List<Question> The last three <code>Question</code>s of this
 	 *         <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
 		return getRecentItemsByType(Question.class);
+	}
+
+	/**
+	 * Get a list of all Questions the user has answered sorted by how high the
+	 * answers are rated.
+	 * 
+	 * @return List<Question>
+	 */
+	public List<Question> getSortedAnsweredQuestions() {
+		List<Question> sortedAnsweredQuestions = new ArrayList<Question>();
+		List<Answer> answers = getAnswers();
+		// Sort all answers - best first
+		Collections.sort(answers, new Comparator<Answer>() {
+			public int compare(Answer o1, Answer o2) {
+				return (o1.compareTo(o2));
+			}
+		});
+		/*
+		 * Get all questions the user has answered. Ignore duplicates. Don't add
+		 * those questions belonging to negative rated answers.
+		 */
+		for (Answer a : answers) {
+			Question q = a.getQuestion();
+			if (!sortedAnsweredQuestions.contains(q) && a.rating() >= 0) {
+				sortedAnsweredQuestions.add(q);
+			}
+		}
+
+		return sortedAnsweredQuestions;
+	}
+
+	/**
+	 * Get a list of all questions that the user might also know to answer.
+	 * 
+	 * @return List<Question>
+	 */
+	public List<Question> getSuggestedQuestions() {
+		List<Question> suggestedQuestions = new ArrayList<Question>();
+		List<Question> sortedAnsweredQuestions = getSortedAnsweredQuestions();
+
+		/*
+		 * Don't list questions that have many answers or already have a best
+		 * answer. The user should not be the owner of the suggested question.
+		 * Remove duplicates.
+		 */
+		for (Question q : sortedAnsweredQuestions) {
+			for (Question similarQ : q.getSimilarQuestions()) {
+				if (!suggestedQuestions.contains(similarQ)
+						&& !sortedAnsweredQuestions.contains(similarQ)
+						&& !similarQ.owner().equals(this)
+						&& !similarQ.isOldQuestion()
+						&& similarQ.countAnswers() < 10
+						&& !similarQ.hasBestAnswer()) {
+					suggestedQuestions.add(similarQ);
+				}
+			}
+		}
+		if (suggestedQuestions.size() > 6)
+			return suggestedQuestions.subList(0, 6);
+		return suggestedQuestions;
+
 	}
 
 	/**
@@ -405,7 +552,7 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get an ArrayList of all best rated answers
+	 * Get a List of all best rated answers
 	 * 
 	 * @return List<Answer> All best rated answers
 	 */
@@ -543,10 +690,15 @@ public class User implements IObserver {
 	 * @return true if the username is available.
 	 */
 	public static boolean isAvailable(String username) {
-		return (Database.get().users().get(username.toLowerCase()) == null);
+		for (User user : Database.get().users().all()) {
+			if (user.getName().toLowerCase().equals(username.toLowerCase()))
+				return false;
+		}
+		return true;
 	}
 
 	public static User get(String name) {
 		return Database.get().users().get(name.toLowerCase());
 	}
+
 }

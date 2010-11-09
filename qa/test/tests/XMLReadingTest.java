@@ -34,6 +34,7 @@ public class XMLReadingTest extends UnitTest {
 			ParserConfigurationException {
 		old = Database.get();
 		Database.swapWith(mock);
+		Database.clear();
 	}
 
 	@After

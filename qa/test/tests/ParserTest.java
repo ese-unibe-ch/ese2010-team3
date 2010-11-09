@@ -3,6 +3,7 @@ package tests;
 import models.database.importers.Action;
 import models.database.importers.Element;
 import models.database.importers.ElementParser;
+import models.database.importers.SemanticError;
 import models.database.importers.Syntax;
 
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldReadEasyExample() {
+	public void shouldReadEasyExample() throws SemanticError {
 		parser.start("user");
 		parser.start("name");
 		parser.text("Anton");
@@ -52,7 +53,7 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldReadTwoUsers() {
+	public void shouldReadTwoUsers() throws SemanticError {
 		parser.start("user");
 		parser.start("name");
 		parser.text("Anton");
@@ -70,7 +71,7 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldCallback() {
+	public void shouldCallback() throws SemanticError {
 		parser.start("question");
 		assertFalse(isUpdated);
 		parser.end();
