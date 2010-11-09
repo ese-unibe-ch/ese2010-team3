@@ -204,10 +204,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	public String toString() {
-		if (content.length() > 15)
-			return "Entry(" + content.substring(0, 20) + "...)";
-		else
-			return "Entry(" + content + ")";
+		return "Entry(" + summary() + ")";
 	}
 
 }

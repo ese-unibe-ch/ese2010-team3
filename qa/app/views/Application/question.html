@@ -15,7 +15,6 @@
 					<a href="@{Secured.watchQuestion(question.id())}"> | Watch</a>
 				#{/else}
 			#{/if}
-			#{else} Question is locked! #{/else}
 			#{if user && user.isModerator() && !question.isLocked()}
 				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
 			#{/if}
@@ -74,17 +73,11 @@
 				#{if user && user.canEdit(answer) && !question.isLocked()}
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
 				#{/if}
-				#{if user && user.canEdit(answer) && question.isLocked()}
-					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
+				#{if user && user.canEdit(question) && !question.isLocked()}
+					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
-				#{/if}
-				#{if user && user.canEdit(question) && !question.isLocked() || user.isModerator()}
-					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
-				#{/if}
-				#{if user && user.canEdit(question) && question.isLocked() && !user.isModerator()}
-					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}">Best</a>
 				#{/if}
 				
 			</li>
@@ -116,9 +109,9 @@
 			<input type="submit" value="Post" />
 		#{/form}
 	#{/if}
-		
-		
-		
+	#{if question.isLocked()}
+		<ul><li>This question is locked &mdash; no further answers can be posted.</ul>
+	#{/if}
 		
 #{/if}#{else}
 	#{set title:'Error' /}
