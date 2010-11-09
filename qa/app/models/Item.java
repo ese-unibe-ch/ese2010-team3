@@ -10,8 +10,25 @@ import java.util.Date;
  * 
  */
 public abstract class Item {
+
 	private User owner;
-	private Date timestamp;
+	private final Date timestamp;
+
+	/** This entry's ID. */
+	private final int id;
+
+	/** An auto-incrementing counter for producing unique values as IDs. */
+	private static int auto_increment = 0;
+
+	/**
+	 * Since there's no ideal place for using an IDTable, we just count through
+	 * all items, assigning them an auto-incremented value as ID.
+	 * 
+	 * @return the next ID value
+	 */
+	private synchronized int autoIncrementID() {
+		return auto_increment++;
+	}
 
 	/**
 	 * Create an <code>Item</code>.
@@ -21,7 +38,8 @@ public abstract class Item {
 	 */
 	public Item(User owner) {
 		this.owner = owner;
-		timestamp = SystemInformation.get().now();
+		this.timestamp = SystemInformation.get().now();
+		this.id = autoIncrementID();
 		owner.registerItem(this);
 	}
 
@@ -41,6 +59,15 @@ public abstract class Item {
 	 */
 	public Date timestamp() {
 		return timestamp;
+	}
+
+	/**
+	 * Gets this notification's ID value.
+	 * 
+	 * @return this notification's ID
+	 */
+	public int getID() {
+		return this.id;
 	}
 
 	/**

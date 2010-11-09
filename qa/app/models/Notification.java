@@ -12,22 +12,6 @@ public class Notification extends Item implements Comparable<Notification> {
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
 
-	/** This notification's ID. */
-	private final int id;
-
-	/** An auto-incrementing counter for producing unique values as IDs. */
-	private static int auto_increment = 0;
-
-	/**
-	 * Since there's no ideal place for using an IDTable, we just count through
-	 * all notifications, assigning them an auto-incremented value as ID.
-	 * 
-	 * @return the next ID value
-	 */
-	private synchronized int autoIncrementID() {
-		return auto_increment++;
-	}
-
 	/**
 	 * Instantiates a new notification.
 	 * 
@@ -39,8 +23,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	public Notification(User owner, Entry about) {
 		super(owner);
 		this.about = about;
-		isNew = true;
-		id = autoIncrementID();
+		this.isNew = true;
 	}
 
 	/**
@@ -67,7 +50,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * @return true, if it is new
 	 */
 	public boolean isNew() {
-		return isNew;
+		return this.isNew;
 	}
 
 	/**
@@ -75,16 +58,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * yet deleted)
 	 */
 	public void unsetNew() {
-		isNew = false;
-	}
-
-	/**
-	 * Gets this notification's ID value.
-	 * 
-	 * @return this notification's ID
-	 */
-	public int getID() {
-		return id;
+		this.isNew = false;
 	}
 
 	/**
@@ -92,6 +66,6 @@ public class Notification extends Item implements Comparable<Notification> {
 	 */
 	public int compareTo(Notification n) {
 		// sort notifications most-recent one first
-		return n.id - this.id;
+		return n.getID() - this.getID();
 	}
 }

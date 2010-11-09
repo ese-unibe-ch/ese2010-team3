@@ -105,12 +105,17 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	/**
 	 * Compares this <code>Entry</code> with another one with respect to their
-	 * ratings.
+	 * ratings (or their age, if they've got identical ratings).
 	 * 
 	 * @return comparison result (-1 = this Entry has more upVotes)
 	 */
 	public int compareTo(Entry e) {
-		return e.rating() - this.rating();
+		int diff = e.rating() - this.rating();
+		if (diff == 0)
+			// compare by ID instead of - potentially identical - timestamp
+			// for a guaranteed stable sorting (makes testing easier)
+			return this.getID() - e.getID();
+		return diff;
 	}
 
 	/**
@@ -199,10 +204,14 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	public String toString() {
+<<<<<<< HEAD
 		if (content.length() > 15)
 			return "Entry(" + content.substring(0, 20) + "...)";
 		else
 			return "Entry(" + content + ")";
+=======
+		return "Entry("+summary()+")";
+>>>>>>> 9cef6adbfe2a5ce991d6f865069dee6fbf45866f
 	}
 
 }
