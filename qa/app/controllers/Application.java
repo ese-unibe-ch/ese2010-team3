@@ -151,11 +151,17 @@ public class Application extends Controller {
 
 	public static void notifications() {
 		User user = Session.get().currentUser();
+		List<Question> questions = Database.get().questions().all();
 		if (user != null) {
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
-			render(notifications, suggestedQuestions);
 
+			ArrayList<Question> watchingQuestions = new ArrayList<Question>();
+			for(Question question:questions) {
+				if(question.hasObserver(user))
+					watchingQuestions.add(question);
+			}
+			render(notifications,watchingQuestions,suggestedQuestions);
 		} else
 			Application.index();
 	}

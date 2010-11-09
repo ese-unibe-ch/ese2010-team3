@@ -394,8 +394,8 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * <<<<<<< HEAD Get a List of the last three <code>Question</code>s of this
-	 * <code>User</code>. ======= Registers a new <code>User</code> to the
+	 * Get a List of the last three <code>Question</code>s of this
+	 * <code>User</code>. Registers a new <code>User</code> to the
 	 * database.
 	 * 
 	 * @param username
@@ -698,4 +698,5 @@ public class User implements IObserver {
 	public static User get(String name) {
 		return Database.get().users().get(name.toLowerCase());
 	}
+
 }

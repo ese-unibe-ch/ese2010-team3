@@ -37,4 +37,15 @@
 	#{/if}
 	</ul>
 	#{else} <h2> No recommended questions for you yet.</h2> #{/else}
+	<h2>Watchinglist</h2>
+	<ul>
+		#{list items:watchingQuestions, as:'question'}
+			<li onclick="goto('@@{Application.question(question.id())}')">
+				<a href="@{Application.question(question.id())}">
+					<h2>#{showProfile question /}:</h2>
+				</a>
+				<p>${question.content()}</p>
+			</li>
+		#{/list}
+	</ul>
 </div>
