@@ -242,14 +242,14 @@ public class Question extends Entry implements IObservable {
 	 * Sets a <code>Question</code> to the locked status. Locked questions
 	 * cannot be answered or commented.
 	 */
-	public void setLocked() {
+	public void lock() {
 			this.isLocked = true;
 	}
 	
 	/**
 	 * Unlocks a <code>Question</code>.
 	 */
-	public void setUnlocked() {
+	public void unlock() {
 			this.isLocked = false;
 	}
 

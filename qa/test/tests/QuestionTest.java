@@ -66,9 +66,9 @@ public class QuestionTest extends UnitTest {
 	
 	@Test
 	public void shouldLockQuestion() {
-		question.setLocked();
+		question.lock();
 		assertTrue(question.isLocked());
-		question.setUnlocked();
+		question.unlock();
 		assertFalse(question.isLocked());
 	}
 

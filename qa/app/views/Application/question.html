@@ -20,7 +20,7 @@
 				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
 			#{/if}
 			#{if user && user.isModerator() && question.isLocked()}
-				<a href="@{Secured.unlockQuestion(question.id())}">| Unlock</a>
+				<a href="@{Secured.unlockQuestion(question.id())}"> | Unlock</a>
 			#{/if}
 			#{if user && user.canEdit(question)}
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>

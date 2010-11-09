@@ -32,7 +32,8 @@ public class Secured extends Controller {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			thisQuestion.answer(thisUser, content);
+			if (!thisQuestion.isLocked())
+				thisQuestion.answer(thisUser, content);
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -44,7 +45,8 @@ public class Secured extends Controller {
 		if (!validation.hasErrors() && Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			thisQuestion.comment(thisUser, content);
+			if (!thisQuestion.isLocked())
+				thisQuestion.comment(thisUser, content);
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -54,7 +56,7 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 
-		if (!validation.hasErrors() && answer != null) {
+		if (!validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
 		}
@@ -254,14 +256,20 @@ public class Secured extends Controller {
 	}
 	
 	public static void lockQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		question.setLocked();
-		Application.question(id);
+		User user = Session.get().currentUser();
+		if (user.isModerator()) {
+			Question question = Database.get().questions().get(id);
+			question.lock();
+			Application.question(id);
+		}
 	}
 	
 	public static void unlockQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		question.setUnlocked();
-		Application.question(id);
+		User user = Session.get().currentUser();
+		if (user.isModerator()) {
+			Question question = Database.get().questions().get(id);
+			question.unlock();
+			Application.question(id);
+		}
 	}
 }
