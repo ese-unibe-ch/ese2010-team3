@@ -4,6 +4,7 @@ import java.util.Calendar;
 import models.Answer;
 import models.Question;
 import models.User;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +102,8 @@ public class VoteTest extends UnitTest {
 
 	@Test
 	public void shouldSortCorrectly() {
-		assertEquals(this.answer.compareTo(this.secondAnswer), 0);
+		// for equal ratings, sort the older answer first
+		assertEquals(this.answer.compareTo(this.secondAnswer), -1);
 		this.answer.voteUp(bill);
 		assertEquals(this.answer.compareTo(this.secondAnswer), -1);
 		assertSame(this.question.answers().get(0), this.answer);
@@ -111,5 +113,8 @@ public class VoteTest extends UnitTest {
 		this.question.setBestAnswer(this.answer);
 		assertEquals(this.answer.compareTo(this.secondAnswer), -1);
 		assertSame(this.question.answers().get(0), this.answer);
+		this.question.setBestAnswer(this.secondAnswer);
+		assertEquals(this.answer.compareTo(this.secondAnswer), 1);
+		assertSame(this.question.answers().get(0), this.secondAnswer);
 	}
 }

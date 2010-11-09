@@ -423,18 +423,12 @@ public class User implements IObserver {
 	 */
 	public List<Question> getSortedAnsweredQuestions() {
 		List<Question> sortedAnsweredQuestions = new ArrayList<Question>();
-		List<Answer> answers = this.getAnswers();
-		// Sort all answers - best first
-		Collections.sort(answers, new Comparator<Answer>() {
-			public int compare(Answer o1, Answer o2) {
-				return (o1.compareTo(o2));
-			}
-		});
 		/*
 		 * Get all questions the user has answered. Ignore duplicates. Don't add
 		 * those questions belonging to negative rated answers.
 		 */
-		for (Answer a : answers) {
+		// getAnswers already sorts all answers - best first
+		for (Answer a : this.getAnswers()) {
 			Question q = a.getQuestion();
 			if (!sortedAnsweredQuestions.contains(q) && a.rating() >= 0)
 				sortedAnsweredQuestions.add(q);

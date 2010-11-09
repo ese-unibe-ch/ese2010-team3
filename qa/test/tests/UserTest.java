@@ -328,9 +328,9 @@ public class UserTest extends UnitTest {
 		user5.getAnswers().get(1).voteUp(user4);
 
 		assertEquals(3, user5.getSuggestedQuestions().size());
-		assertEquals(p, user5.getSuggestedQuestions().get(0));
-		assertEquals(q, user5.getSuggestedQuestions().get(1));
-		assertEquals(m, user5.getSuggestedQuestions().get(2));
+		assertEquals(q, user5.getSuggestedQuestions().get(0));
+		assertEquals(m, user5.getSuggestedQuestions().get(1));
+		assertEquals(p, user5.getSuggestedQuestions().get(2));
 
 	}
 

@@ -2,7 +2,6 @@ package models;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -101,12 +100,17 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	/**
 	 * Compares this <code>Entry</code> with another one with respect to their
-	 * ratings.
+	 * ratings (or their age, if they've got identical ratings).
 	 * 
 	 * @return comparison result (-1 = this Entry has more upVotes)
 	 */
 	public int compareTo(Entry e) {
-		return e.rating() - this.rating();
+		int diff = e.rating() - this.rating();
+		if (diff == 0)
+			// compare by ID instead of - potentially identical - timestamp
+			// for a guaranteed stable sorting (makes testing easier)
+			return this.getID() - e.getID();
+		return diff;
 	}
 	
 	/**
@@ -188,12 +192,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 	
 	public String toString() {
-		if (content.length() > 15) {
-			return "Entry("+content.substring(0, 20)+"...)";
-		}
-		else {
-			return "Entry("+content+")";
-		}
+		return "Entry("+summary()+")";
 	}
 
 }
