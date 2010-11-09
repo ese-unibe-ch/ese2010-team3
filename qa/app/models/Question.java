@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import models.SearchEngine.StopWords;
 import models.database.Database;
 import models.helpers.IDTable;
 import models.helpers.IObservable;
