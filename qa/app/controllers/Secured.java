@@ -244,10 +244,10 @@ public class Secured extends Controller {
 		if (reason.equals("")) {
 			reason = "no reason given";
 		}
-		if (block.equals("block") && mod.isModerator()) {
+		if (block.equals("block") && mod.isModerator() && !mod.equals(user)) {
 			user.block(reason);
 		}
-		if (block.equals("unblock") && mod.isModerator()) {
+		if (block.equals("unblock") && mod.isModerator() && !mod.equals(user)) {
 			user.unblock();
 		}
 		Application.showprofile(user.getName());
