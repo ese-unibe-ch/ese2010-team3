@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import models.SearchEngine.StopWords;
+
 public class Tools {
 
 	/**
@@ -84,7 +86,7 @@ public class Tools {
 			if (word.length() > 3) {
 				int occurrence = (input.length() - (input.replaceAll(word, ""))
 						.length()) / word.length();
-				if (occurrence > 3) {
+				if (occurrence > 1 && !StopWords.get().contains(word)) {
 					if (keywords.size() < 5) {
 						keywords.put(word, occurrence);
 					} else {
