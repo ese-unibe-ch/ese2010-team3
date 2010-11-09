@@ -327,10 +327,10 @@ public class Question extends Entry implements IObservable {
 			if (word.length() > 3) {
 				int occurrence = (input.length() - (input.replaceAll(word, ""))
 						.length()) / word.length();
-				if (occurrence > 1) {
-					if (keywords.size() < 5 && !StopWords.get().contains(word)) {
+				if (occurrence > 1 && !StopWords.get().contains(word)) {
+					if (keywords.size() < 5) {
 						keywords.put(word, occurrence);
-					} else if (!StopWords.get().contains(word)) {
+					} else {
 						for (String stri : keywords.keySet()) {
 							if (keywords.get(stri).intValue() < occurrence) {
 								keywords.put(word, occurrence);
