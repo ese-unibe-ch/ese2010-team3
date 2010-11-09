@@ -132,6 +132,22 @@ public class UserTest extends UnitTest {
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 	}
+	
+	@Test
+	public void shouldNotBeAbleToEditForeignPosts() {
+		User user1 = new User("Jack", "jack");
+		User user2 = new User("John", "john");
+		User user3 = new User("Geronimo", "geronimo");
+		user1.setModerator(true);
+		Question q = new Question(user2, "Can you edit this post?");
+		/* moderator should be able to edit the question */
+		assertTrue(user1.canEdit(q));
+		/* owner should be able to edit the question */
+		assertTrue(user2.canEdit(q));
+		/* user that is neither a moderator nor the owner of
+		   the question should NOT be able to edit the question */
+		assertFalse(user3.canEdit(q));
+	}
 
 	@Test
 	public void shouldHaveOneQuestion() {

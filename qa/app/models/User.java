@@ -53,6 +53,10 @@ public class User implements IObserver {
 		this.password = Tools.encrypt(password);
 		items = new HashSet<Item>();
 	}
+	
+	public boolean canEdit(Entry entry) {
+		return (entry.owner() == this && !this.isBlocked()) || this.isModerator();
+	}
 
 	/**
 	 * Gets the name of the <code>User</code>.
@@ -327,7 +331,7 @@ public class User implements IObserver {
 		isBlocked = false;
 		statustext = "";
 	}
-
+	
 	/**
 	 * Get the current status of the user whether he is blocked or not.
 	 * 

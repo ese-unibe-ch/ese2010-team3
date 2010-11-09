@@ -26,6 +26,7 @@ public class Question extends Entry implements IObservable {
 	private IDTable<Answer> answers;
 	private IDTable<Comment> comments;
 	private final int id;
+	private boolean isLocked = false;
 
 	private Answer bestAnswer;
 	private Calendar settingOfBestAnswer;
@@ -247,6 +248,31 @@ public class Question extends Entry implements IObservable {
 
 	public Answer getBestAnswer() {
 		return bestAnswer;
+	}
+	
+	/**
+	 * Boolean whether a <code>Question</code> is locked or not. Locked questions
+	 * cannot be answered or commented.
+	 * 
+	 * @return boolean whether the <code>Question</code> is locked or not
+	 */
+	public boolean isLocked() {
+		return this.isLocked;
+	}
+	
+	/**
+	 * Sets a <code>Question</code> to the locked status. Locked questions
+	 * cannot be answered or commented.
+	 */
+	public void lock() {
+			this.isLocked = true;
+	}
+	
+	/**
+	 * Unlocks a <code>Question</code>.
+	 */
+	public void unlock() {
+			this.isLocked = false;
 	}
 
 	/**

@@ -6,20 +6,27 @@
 		<li>
 			<h2>#{showProfile question /}:</h2>
 			<p>${question.content()}</p>
-			#{tags question:question, editable:question?.owner() == user /}  
-			#{if user != null}
+			#{tags question:question, editable:user?.canEdit(question) /}  
+			#{if user != null && !question.isLocked()}
 				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
 				#{if user.isObserving(question)}
-					<a href="@{Secured.unwatchQuestion(question.id())}"> | unwatch</a>
+					<a href="@{Secured.unwatchQuestion(question.id())}"> | Unwatch</a>
 				#{/if}#{else}
-					<a href="@{Secured.watchQuestion(question.id())}"> | watch</a>
+					<a href="@{Secured.watchQuestion(question.id())}"> | Watch</a>
 				#{/else}
 			#{/if}
-			#{if user && question.owner() == user}
+			#{else} Question is locked! #{/else}
+			#{if user && user.isModerator() && !question.isLocked()}
+				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
+			#{/if}
+			#{if user && user.isModerator() && question.isLocked()}
+				<a href="@{Secured.unlockQuestion(question.id())}"> | Unlock</a>
+			#{/if}
+			#{if user && user.canEdit(question)}
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
 			#{/if}
 			#{date question /}
-			#{if user && question.owner() != user && !user.isCheating()}
+			#{if user && question.owner() != user && !user.isBlocked()}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -42,7 +49,7 @@
 						<h2>#{showProfile comment /}:</h2>
 						<p>${comment.content()}</p>
 						#{date comment /}
-						#{if user && comment.owner() == user}
+						#{if user && user.canEdit(comment)}
 							<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
 						#{/if}
 					</li>	
@@ -59,19 +66,25 @@
 			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
-				#{if user != null && !user.isCheating()}
+				#{if user != null && !user.isBlocked() && !question.isLocked()}
 					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</a>
 				#{/if}
 				#{date answer /}
 				
-				#{if user && answer.owner() == user}
+				#{if user && user.canEdit(answer) && !question.isLocked()}
 					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
 				#{/if}
-				#{if user && answer.owner() != user && !user.isCheating()}
+				#{if user && user.canEdit(answer) && question.isLocked()}
+					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}">Delete</a>
+				#{/if}
+				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
 				#{/if}
-				#{if user && question.owner() == user && !user.isCheating()}
+				#{if user && user.canEdit(question) && !question.isLocked() || user.isModerator()}
 					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
+				#{/if}
+				#{if user && user.canEdit(question) && question.isLocked() && !user.isModerator()}
+					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}">Best</a>
 				#{/if}
 				
 			</li>
@@ -83,7 +96,7 @@
 								<h2>#{showProfile comment /}:</h2>
 								<p>${comment.content()}</p>
 								#{date comment /}
-								#{if user && comment.owner() == user}
+								#{if user && user.canEdit(comment)}
 									<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
 								#{/if}
 							</li>	
@@ -94,7 +107,7 @@
 			#{/list}
 		</ul>
 	#{/if}
-	#{if user && !user.isCheating()}
+	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>Add Answer</h1>
 		#{form @Secured.newAnswer(question.id())}
 			#{field 'content'}

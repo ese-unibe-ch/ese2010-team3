@@ -100,5 +100,13 @@ public class QuestionTest extends UnitTest {
 	public void tearDown() {
 		SystemInformation.mockWith(this.savedSysInfo);
 	}
+	
+	@Test
+	public void shouldLockQuestion() {
+		question.lock();
+		assertTrue(question.isLocked());
+		question.unlock();
+		assertFalse(question.isLocked());
+	}
 
 }
