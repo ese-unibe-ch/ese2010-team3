@@ -7,7 +7,7 @@
 		<a href="@{Application.deleteuser}">Delete </a>
 		<a href="@{Application.editProfile(showUser.getName())}">Edit</a>
 	#{/if}
-	#{if user.isModerator() && !user.equals(showUser)}
+	#{if user.isModerator() && user != showUser}
 			<a href="@{Application.blockUser(showUser.getName())}">Block</a>
 	#{/if}
 	</div><!-- end profilenavi -->
