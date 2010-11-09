@@ -61,7 +61,7 @@ public class QuestionTest extends UnitTest {
 		assertEquals(Tools.extractImportantWords("abcde"), "");
 		assertEquals(Tools.extractImportantWords("abcd abcd abcd abcd d"),
 				"abcd");
-		// "more" is a StopWord and should not be suggested
+		// "some" is a StopWord and should not be suggested
 		assertEquals(Tools.extractImportantWords("some some some some s"), "");
 		String txt = "asdf asdf asdf asdf qwer qwer qwer qwer yxcv yxcv yxcv";
 		assertEquals(Tools.extractImportantWords(txt), "yxcv qwer asdf");
@@ -71,7 +71,6 @@ public class QuestionTest extends UnitTest {
 		// remove "yxcv" because there are more important words
 		assertEquals(Tools.extractImportantWords(txt),
 				"mnbv hello text qwer asdf");
-		txt += " more text more text more text more text and a lot of more text";
 	}
 
 	public void shouldBeOldQuestion() {
