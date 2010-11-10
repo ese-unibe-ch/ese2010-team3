@@ -13,23 +13,23 @@ public class HotTagDatabase implements ITagDatabase {
 	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	public Collection<Tag> all() {
-		return tags.values();
+		return this.tags.values();
 	}
 
 	public Tag get(String name) {
-		Tag tag = tags.get(name);
+		Tag tag = this.tags.get(name);
 		if (tag == null && name.matches(tagRegex)) {
 			tag = new Tag(name);
-			tags.put(name, tag);
+			this.tags.put(name, tag);
 		}
 		return tag;
 	}
 
 	public void remove(Tag tag) {
-		tags.remove(tag.getName());
+		this.tags.remove(tag.getName());
 	}
 
 	public void clear() {
-		tags.clear();
+		this.tags.clear();
 	}
 }

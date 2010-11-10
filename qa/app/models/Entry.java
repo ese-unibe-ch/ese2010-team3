@@ -25,7 +25,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		votes = new HashMap<String, Vote>();
+		this.votes = new HashMap<String, Vote>();
 	}
 
 	/**
@@ -63,7 +63,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 *            the {@link Vote} to unregister
 	 */
 	public void unregister(Vote vote) {
-		votes.remove(vote.owner().getName());
+		this.votes.remove(vote.owner().getName());
 	}
 
 	/**
@@ -73,7 +73,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return the content of the <code>Entry</code>
 	 */
 	public String content() {
-		return content;
+		return this.content;
 	}
 
 	/**
@@ -110,11 +110,11 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return comparison result (-1 = this Entry has more upVotes)
 	 */
 	public int compareTo(Entry e) {
-		int diff = e.rating() - this.rating();
+		int diff = e.rating() - rating();
 		if (diff == 0)
 			// compare by ID instead of - potentially identical - timestamp
 			// for a guaranteed stable sorting (makes testing easier)
-			return this.getID() - e.getID();
+			return getID() - e.getID();
 		return diff;
 	}
 
@@ -128,7 +128,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	private int countVotes(boolean up) {
 		int counter = 0;
-		for (Vote vote : votes.values())
+		for (Vote vote : this.votes.values())
 			if (vote.up() == up) {
 				counter++;
 			}
@@ -167,11 +167,11 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	private Vote vote(User user, boolean up) {
 		if (user == owner())
 			return null;
-		if (votes.containsKey(user.getName())) {
-			votes.get(user.getName()).unregister();
+		if (this.votes.containsKey(user.getName())) {
+			this.votes.get(user.getName()).unregister();
 		}
 		Vote vote = new Vote(user, this, up);
-		votes.put(user.getName(), vote);
+		this.votes.put(user.getName(), vote);
 		return vote;
 	}
 
@@ -190,7 +190,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return a one-line summary of an <code>Entry</code>.
 	 * */
 	public String summary() {
-		return content.replaceAll("\\s+", " ").replaceFirst(
+		return this.content.replaceAll("\\s+", " ").replaceFirst(
 				"^(.{35}\\S{0,9} ?).{5,}", "$1...");
 	}
 
@@ -200,7 +200,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return votes
 	 */
 	public Collection<Vote> getVotes() {
-		return votes.values();
+		return this.votes.values();
 	}
 
 	public String toString() {

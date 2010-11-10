@@ -49,7 +49,7 @@ public abstract class Item {
 	 * @return the owner
 	 */
 	public User owner() {
-		return owner;
+		return this.owner;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public abstract class Item {
 	 * @return the creation date as a UNIX timestamp
 	 */
 	public Date timestamp() {
-		return timestamp;
+		return this.timestamp;
 	}
 
 	/**
@@ -81,7 +81,7 @@ public abstract class Item {
 	 * Unregisters the <code>Item</code> to it's owner.
 	 */
 	protected void unregisterUser() {
-		owner.unregister(this);
-		owner = null;
+		this.owner.unregister(this);
+		this.owner = null;
 	}
 }

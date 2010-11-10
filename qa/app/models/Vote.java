@@ -34,7 +34,7 @@ public class Vote extends Item {
 	 * and the {@link Entry}.
 	 */
 	public void unregister() {
-		entry.unregister(this);
+		this.entry.unregister(this);
 		unregisterUser();
 	}
 
@@ -44,7 +44,7 @@ public class Vote extends Item {
 	 * @return true if the <code>Vote</code> is positive
 	 */
 	public boolean up() {
-		return up;
+		return this.up;
 	}
 
 }

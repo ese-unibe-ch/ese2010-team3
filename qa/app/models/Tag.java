@@ -41,14 +41,14 @@ public class Tag implements Comparable<Tag> {
 	 * @return the name of this Tag.
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * @return a list of all the questions associated with this tag.
 	 */
 	public Set<Question> getQuestions() {
-		return (Set<Question>) questions.clone();
+		return (Set<Question>) this.questions.clone();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class Tag implements Comparable<Tag> {
 	 *            the question to associate with this Tag.
 	 */
 	public void register(Question question) {
-		questions.add(question);
+		this.questions.add(question);
 	}
 
 	/**
@@ -64,10 +64,10 @@ public class Tag implements Comparable<Tag> {
 	 *            the question to de-associate from this Tag.
 	 */
 	public void unregister(Question question) {
-		questions.remove(question);
+		this.questions.remove(question);
 
 		// remove this tag from the database
-		if (questions.isEmpty()) {
+		if (this.questions.isEmpty()) {
 			Database.get().tags().remove(this);
 		}
 	}
@@ -92,7 +92,7 @@ public class Tag implements Comparable<Tag> {
 
 	@Override
 	public String toString() {
-		return "Tag(" + name + ")";
+		return "Tag(" + this.name + ")";
 	}
 
 	/**

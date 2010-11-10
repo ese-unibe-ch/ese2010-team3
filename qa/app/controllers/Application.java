@@ -21,8 +21,9 @@ public class Application extends Controller {
 
 	@Before
 	static void setConnectedUser() {
-		if (Security.isConnected()) {
-			User user = Database.get().users().get(Security.connected());
+		if (controllers.Secure.Security.isConnected()) {
+			User user = Database.get().users().get(
+					controllers.Secure.Security.connected());
 			renderArgs.put("user", user);
 		}
 	}

@@ -44,18 +44,18 @@ public class XMLParser extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) {
 		try {
-			parser.start(qName, atts);
+			this.parser.start(qName, atts);
 		} catch (SemanticError e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void characters(char[] str, int start, int length) {
-		parser.text(String.copyValueOf(str, start, length));
+		this.parser.text(String.copyValueOf(str, start, length));
 	}
 
 	public void endElement(String uri, String localName, String qName) {
-		parser.end();
+		this.parser.end();
 	}
 
 	private static void createUser(Element e) {

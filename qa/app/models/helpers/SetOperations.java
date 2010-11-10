@@ -4,6 +4,12 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * {@link http://www.java2s.com/Code/Java/Collections-Data-Structure/
+ * Setoperationsunionintersectiondifferencesymmetricdifferenceissubsetissuperset
+ * .htm}
+ * 
+ */
 public class SetOperations {
 	public static <T> Set<T> union(Set<T> setA, Set<T> setB) {
 		Set<T> tmp = new TreeSet<T>(setA);

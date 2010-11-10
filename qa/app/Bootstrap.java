@@ -21,14 +21,14 @@ public class Bootstrap extends Job {
 		User bill = Database.get().users().register("Bill", "bill");
 		User kate = Database.get().users().register("Kate", "kate");
 
-	jack.setEmail("jack@jack.jk");
-	jack.setFullname("Jack Daniel");
-	jack.setWebsite("www.jack.jk");
-	jack.setProfession("Brewer");
-	jack.setBiography("Oh well, ...");
+		jack.setEmail("jack@jack.jk");
+		jack.setFullname("Jack Daniel");
+		jack.setWebsite("www.jack.jk");
+		jack.setProfession("Brewer");
+		jack.setBiography("Oh well, ...");
 		jack.setModerator(true);
-    
-        // Questions
+
+		// Questions
 		Question question = Database.get().questions().add(jack,
 				"Why did the chicken cross the road?");
 		question.answer(bill, "To get to the other side.");

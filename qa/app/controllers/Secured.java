@@ -34,8 +34,9 @@ public class Secured extends Controller {
 				&& Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			if (!thisQuestion.isLocked())
+			if (!thisQuestion.isLocked()) {
 				thisQuestion.answer(thisUser, content);
+			}
 			Application.question(questionId);
 		} else {
 			Application.index();
@@ -48,8 +49,9 @@ public class Secured extends Controller {
 				&& Database.get().questions().get(questionId) != null) {
 			User thisUser = Session.get().currentUser();
 			Question thisQuestion = Database.get().questions().get(questionId);
-			if (!thisQuestion.isLocked())
+			if (!thisQuestion.isLocked()) {
 				thisQuestion.comment(thisUser, content);
+			}
 			Application.commentQuestion(questionId);
 		}
 	}
@@ -58,7 +60,7 @@ public class Secured extends Controller {
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
-		if (!validation.hasErrors() && answer != null && !question.isLocked()) {
+		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
 			Application.commentAnswer(questionId, answerId);
 		}
@@ -280,7 +282,7 @@ public class Secured extends Controller {
 		}
 		Application.showprofile(user.getName());
 	}
-	
+
 	public static void lockQuestion(int id) {
 		User user = Session.get().currentUser();
 		if (user.isModerator()) {
@@ -289,7 +291,7 @@ public class Secured extends Controller {
 			Application.question(id);
 		}
 	}
-	
+
 	public static void unlockQuestion(int id) {
 		User user = Session.get().currentUser();
 		if (user.isModerator()) {

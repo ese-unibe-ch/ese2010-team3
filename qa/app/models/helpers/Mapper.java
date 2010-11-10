@@ -30,8 +30,9 @@ public class Mapper {
 			}
 		});
 		List<T> result = new ArrayList();
-		for (Map.Entry<T, Comparable> entry : list)
+		for (Map.Entry<T, Comparable> entry : list) {
 			result.add(entry.getKey());
+		}
 		return result;
 	}
 
@@ -49,8 +50,9 @@ public class Mapper {
 		Map<T, Comparable> map = new HashMap();
 		for (T object : iterable) {
 			Comparable value = filter.visit(object);
-			if (value != null)
+			if (value != null) {
 				map.put(object, value);
+			}
 		}
 		return sortByValue(map);
 	}
@@ -68,8 +70,9 @@ public class Mapper {
 			Filter<T, Boolean> filter) {
 		List<T> result = new ArrayList();
 		for (T object : iterable) {
-			if (filter.visit(object))
+			if (filter.visit(object)) {
 				result.add(object);
+			}
 		}
 		return result;
 	}

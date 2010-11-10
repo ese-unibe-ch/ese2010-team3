@@ -15,29 +15,34 @@ public class Element {
 	private Element parent;
 
 	public Element(String name_) {
-		name = name_;
-		subelements = new HashMap<String, List<Element>>();
-		text = new StringBuilder();
+		this.name = name_;
+		this.subelements = new HashMap<String, List<Element>>();
+		this.text = new StringBuilder();
 	}
 
 	public Element(String name_, Element parent_) {
 		this(name_);
-		parent = parent_;
+		this.parent = parent_;
 	}
 
 	public String toString() {
-		return "E[" + name + "](\"" + (text == null ? "" : text.toString())
-				+ "\"" +
-					(subelements == null ? "" : "," + subelements.toString())
+		return "E["
+				+ this.name
+				+ "](\""
+				+ (this.text == null ? "" : this.text.toString())
+				+ "\""
+				+
+					(this.subelements == null ? "" : ","
+							+ this.subelements.toString())
 				+ ")";
 	}
 
 	public List<Element> get(String tag) {
-		return subelements.get(tag);
+		return this.subelements.get(tag);
 	}
 
 	public String getText() {
-		return text.toString();
+		return this.text.toString();
 	}
 
 	public String getText(String tag) {
@@ -45,26 +50,26 @@ public class Element {
 	}
 
 	public void addText(String str) {
-		text.append(str);
+		this.text.append(str);
 	}
 
 	public void addText(char[] str, int start, int finish) {
-		text.append(str, start, finish);
+		this.text.append(str, start, finish);
 	}
 
 	public void addAt(String tag, Element subelt) {
-		if (!subelements.containsKey(tag)) {
-			subelements.put(tag, new LinkedList());
+		if (!this.subelements.containsKey(tag)) {
+			this.subelements.put(tag, new LinkedList());
 		}
-		subelements.get(tag).add(subelt);
+		this.subelements.get(tag).add(subelt);
 		subelt.parent = this;
 	}
 
 	public Element getParent() {
-		return parent;
+		return this.parent;
 	}
 
 	public boolean has(String string) {
-		return subelements.containsKey(string);
+		return this.subelements.containsKey(string);
 	}
 }

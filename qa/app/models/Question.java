@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import models.SearchEngine.StopWords;
 import models.database.Database;
 import models.helpers.IDTable;
 import models.helpers.IObservable;
@@ -54,10 +53,10 @@ public class Question extends Entry implements IObservable {
 		 *            of the <code>Question</code>
 		 */
 		super(owner, content);
-		answers = new IDTable<Answer>();
-		comments = new IDTable<Comment>();
-		observers = new HashSet<IObserver>();
-		id = Database.get().questions().register(this);
+		this.answers = new IDTable<Answer>();
+		this.comments = new IDTable<Comment>();
+		this.observers = new HashSet<IObserver>();
+		this.id = Database.get().questions().register(this);
 	}
 
 	/**
@@ -76,9 +75,9 @@ public class Question extends Entry implements IObservable {
 		for (Comment comment : comments) {
 			comment.unregister();
 		}
-		observers.clear();
-		if (id != -1) {
-			Database.get().questions().remove(id);
+		this.observers.clear();
+		if (this.id != -1) {
+			Database.get().questions().remove(this.id);
 		}
 		unregisterVotes();
 		unregisterUser();
@@ -92,7 +91,7 @@ public class Question extends Entry implements IObservable {
 	 *            the {@link Answer} to unregister
 	 */
 	public void unregister(Answer answer) {
-		answers.remove(answer.id());
+		this.answers.remove(answer.id());
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class Question extends Entry implements IObservable {
 	 */
 	@Override
 	public void unregister(Comment comment) {
-		comments.remove(comment.id());
+		this.comments.remove(comment.id());
 	}
 
 	/**
@@ -116,8 +115,8 @@ public class Question extends Entry implements IObservable {
 	 * @return an {@link Answer}
 	 */
 	public Answer answer(User user, String content) {
-		Answer answer = new Answer(answers.nextID(), user, this, content);
-		answers.add(answer);
+		Answer answer = new Answer(this.answers.nextID(), user, this, content);
+		this.answers.add(answer);
 		return answer;
 	}
 
@@ -131,8 +130,9 @@ public class Question extends Entry implements IObservable {
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(comments.nextID(), user, this, content);
-		comments.add(comment);
+		Comment comment = new Comment(this.comments.nextID(), user, this,
+				content);
+		this.comments.add(comment);
 		return comment;
 	}
 
@@ -144,7 +144,7 @@ public class Question extends Entry implements IObservable {
 	 * @return true if the {@link Answer} belongs to the <code>Question</code>
 	 */
 	public boolean hasAnswer(Answer answer) {
-		return answers.contains(answer);
+		return this.answers.contains(answer);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class Question extends Entry implements IObservable {
 	 * @return true if the {@link Comment} belongs to the <code>Question</code>
 	 */
 	public boolean hasComment(Comment comment) {
-		return comments.contains(comment);
+		return this.comments.contains(comment);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class Question extends Entry implements IObservable {
 	 * @return id of the <code>Question</code>
 	 */
 	public int id() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class Question extends Entry implements IObservable {
 	 * @return {@link Collection} of {@link Answers}
 	 */
 	public List<Answer> answers() {
-		List<Answer> list = new ArrayList<Answer>(answers.values());
+		List<Answer> list = new ArrayList<Answer>(this.answers.values());
 		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
@@ -185,7 +185,7 @@ public class Question extends Entry implements IObservable {
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>(comments.values());
+		List<Comment> list = new ArrayList<Comment>(this.comments.values());
 		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
@@ -198,7 +198,7 @@ public class Question extends Entry implements IObservable {
 	 * @return {@link Answer} or null
 	 */
 	public Answer getAnswer(int id) {
-		return answers.get(id);
+		return this.answers.get(id);
 	}
 
 	/**
@@ -209,15 +209,15 @@ public class Question extends Entry implements IObservable {
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
-		return comments.get(id);
+		return this.comments.get(id);
 	}
 
 	public boolean isBestAnswerSettable(Calendar now) {
 		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
 		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return settingOfBestAnswer == null
+		return this.settingOfBestAnswer == null
 				|| !thirtyMinutesAgo.getTime().after(
-						settingOfBestAnswer.getTime());
+						this.settingOfBestAnswer.getTime());
 	}
 
 	/**
@@ -236,22 +236,23 @@ public class Question extends Entry implements IObservable {
 	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
 		if (isBestAnswerSettable(now)) {
 			this.bestAnswer = bestAnswer;
-			settingOfBestAnswer = now;
+			this.settingOfBestAnswer = now;
 			return true;
 		} else
 			return false;
 	}
 
 	public boolean hasBestAnswer() {
-		return bestAnswer != null;
+		return this.bestAnswer != null;
 	}
 
 	public Answer getBestAnswer() {
-		return bestAnswer;
+		return this.bestAnswer;
 	}
-	
+
 	/**
-	 * Boolean whether a <code>Question</code> is locked or not. Locked questions
+	 * Boolean whether a <code>Question</code> is locked or not. Locked
+	 * questions
 	 * cannot be answered or commented.
 	 * 
 	 * @return boolean whether the <code>Question</code> is locked or not
@@ -259,20 +260,20 @@ public class Question extends Entry implements IObservable {
 	public boolean isLocked() {
 		return this.isLocked;
 	}
-	
+
 	/**
 	 * Sets a <code>Question</code> to the locked status. Locked questions
 	 * cannot be answered or commented.
 	 */
 	public void lock() {
-			this.isLocked = true;
+		this.isLocked = true;
 	}
-	
+
 	/**
 	 * Unlocks a <code>Question</code>.
 	 */
 	public void unlock() {
-			this.isLocked = false;
+		this.isLocked = false;
 	}
 
 	/**
@@ -312,7 +313,7 @@ public class Question extends Entry implements IObservable {
 	 * @return List of tags
 	 */
 	public List<Tag> getTags() {
-		return (List<Tag>) tags.clone();
+		return (List<Tag>) this.tags.clone();
 	}
 
 	/**
@@ -321,28 +322,28 @@ public class Question extends Entry implements IObservable {
 	public void addObserver(IObserver o) {
 		if (o == null)
 			throw new IllegalArgumentException();
-		observers.add(o);
+		this.observers.add(o);
 	}
 
 	/**
 	 * @see models.helpers.IObservable#hasObserver(models.IObserver)
 	 */
 	public boolean hasObserver(IObserver o) {
-		return observers.contains(o);
+		return this.observers.contains(o);
 	}
 
 	/**
 	 * @see models.helpers.IObservable#removeObserver(models.IObserver)
 	 */
 	public void removeObserver(IObserver o) {
-		observers.remove(o);
+		this.observers.remove(o);
 	}
 
 	/**
 	 * @see models.helpers.IObservable#notifyObservers(java.lang.Object)
 	 */
 	public void notifyObservers(Object arg) {
-		for (IObserver o : observers) {
+		for (IObserver o : this.observers) {
 			o.observe(this, arg);
 		}
 	}
@@ -367,11 +368,11 @@ public class Question extends Entry implements IObservable {
 	 */
 	public boolean isOldQuestion() {
 		long diff = SystemInformation.get().now().getTime()
-				- this.timestamp().getTime();
+				- timestamp().getTime();
 		return ((diff / (1000 * 60 * 60 * 24) > 120));
 	}
 
 	public int countAnswers() {
-		return answers.size();
+		return this.answers.size();
 	}
 }

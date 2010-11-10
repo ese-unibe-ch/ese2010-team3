@@ -12,22 +12,22 @@ public class Syntax {
 	private Syntax(String name, Syntax parent) {
 		this.name = name;
 		this.parent = parent;
-		subsyntax = new HashMap<String, Syntax>();
+		this.subsyntax = new HashMap<String, Syntax>();
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public Syntax get(String tag) throws SemanticError {
-		Syntax syntax = subsyntax.get(tag);
+		Syntax syntax = this.subsyntax.get(tag);
 		if (syntax == null)
 			throw new SemanticError();
-		return subsyntax.get(tag);
+		return this.subsyntax.get(tag);
 	}
 
 	public String toString() {
-		return "S[" + name + "](" + subsyntax.toString() + ")";
+		return "S[" + this.name + "](" + this.subsyntax.toString() + ")";
 	}
 
 	public Syntax(String name) {
@@ -36,18 +36,18 @@ public class Syntax {
 
 	public Syntax by(String tag) {
 		Syntax sub = new Syntax(tag, this);
-		subsyntax.put(tag, sub);
+		this.subsyntax.put(tag, sub);
 		return sub;
 	}
 
 	public Syntax read(String tag) {
 		Syntax sub = new Syntax(tag, this);
-		subsyntax.put(tag, sub);
+		this.subsyntax.put(tag, sub);
 		return this;
 	}
 
 	public Syntax end() {
-		return parent;
+		return this.parent;
 	}
 
 	public ElementParser done() {
@@ -55,21 +55,21 @@ public class Syntax {
 	}
 
 	public Syntax getParent() {
-		return parent;
+		return this.parent;
 	}
 
 	public Syntax call(Action action) {
-		callback = action;
+		this.callback = action;
 		return this;
 	}
 
 	public boolean hasCallback() {
-		return callback != null;
+		return this.callback != null;
 	}
 
 	public void callback(Element elt) {
 		if (hasCallback()) {
-			callback.call(elt);
+			this.callback.call(elt);
 		}
 	}
 }

@@ -6,7 +6,8 @@ import java.util.Iterator;
 /**
  * A Map of Objects with IDs.
  * 
- * @param <E> Class to collect
+ * @param <E>
+ *            Class to collect
  */
 public class IDTable<E> extends HashMap<Integer, E> implements Iterable<E> {
 	private int id;
@@ -20,7 +21,7 @@ public class IDTable<E> extends HashMap<Integer, E> implements Iterable<E> {
 	}
 
 	public int add(E o) {
-		this.put(this.id, o);
+		put(this.id, o);
 		return this.id++;
 	}
 
@@ -29,10 +30,10 @@ public class IDTable<E> extends HashMap<Integer, E> implements Iterable<E> {
 	}
 
 	public Iterator<E> iterator() {
-		return this.values().iterator();
+		return values().iterator();
 	}
 
 	public boolean contains(E o) {
-		return this.containsValue(o);
+		return containsValue(o);
 	}
 }

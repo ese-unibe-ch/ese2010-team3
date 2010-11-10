@@ -30,9 +30,9 @@ public class Comment extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		entry.unregister(this);
+		this.entry.unregister(this);
 		unregisterUser();
-		entry = null;
+		this.entry = null;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class Comment extends Entry {
 	 * @return the id of the <code>Comment</code>
 	 */
 	public int id() {
-		return id;
+		return this.id;
 	}
 
 	/*
@@ -63,7 +63,7 @@ public class Comment extends Entry {
 	 * @return boolean whether a User is registered or not
 	 */
 	public boolean isRegistered() {
-		return entry != null;
+		return this.entry != null;
 	}
 
 	/**

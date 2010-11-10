@@ -8,15 +8,15 @@ public class ElementParser {
 	private Element elt;
 
 	public ElementParser(Syntax syntax_) {
-		syntax = syntax_;
-		elt = new Element("base");
+		this.syntax = syntax_;
+		this.elt = new Element("base");
 	}
 
 	public void start(String tag, Attributes atts) throws SemanticError {
 		Element subelt = new Element(tag);
-		elt.addAt(tag, subelt);
-		elt = subelt;
-		syntax = syntax.get(tag);
+		this.elt.addAt(tag, subelt);
+		this.elt = subelt;
+		this.syntax = this.syntax.get(tag);
 	}
 
 	public void start(String tag) throws SemanticError {
@@ -24,20 +24,20 @@ public class ElementParser {
 	}
 
 	public void end() {
-		syntax.callback(elt);
-		elt = elt.getParent();
-		syntax = syntax.getParent();
+		this.syntax.callback(this.elt);
+		this.elt = this.elt.getParent();
+		this.syntax = this.syntax.getParent();
 	}
 
 	public void text(String txt) {
-		elt.addText(txt);
+		this.elt.addText(txt);
 	}
 
 	public Element getElement() {
-		return elt;
+		return this.elt;
 	}
 
 	public String toString() {
-		return "P" + syntax.toString();
+		return "P" + this.syntax.toString();
 	}
 }

@@ -34,7 +34,7 @@ public class Answer extends Entry {
 	public Answer(int id, User owner, Question question, String content) {
 		super(owner, content);
 		this.question = question;
-		comments = new IDTable<Comment>();
+		this.comments = new IDTable<Comment>();
 		this.id = id;
 
 		// make users aware of this new answer
@@ -51,8 +51,9 @@ public class Answer extends Entry {
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(comments.nextID(), user, this, content);
-		comments.add(comment);
+		Comment comment = new Comment(this.comments.nextID(), user, this,
+				content);
+		this.comments.add(comment);
 		return comment;
 	}
 
@@ -61,12 +62,12 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		for (Comment comment : comments) {
+		for (Comment comment : this.comments) {
 			comment.unregister();
 		}
-		comments = new IDTable<Comment>();
+		this.comments = new IDTable<Comment>();
 
-		question.unregister(this);
+		this.question.unregister(this);
 		unregisterVotes();
 		unregisterUser();
 	}
@@ -80,9 +81,9 @@ public class Answer extends Entry {
 	public Question getQuestion() {
 		// if this answer has been removed from its question, no longer
 		// claim to belong to a question
-		if (!question.hasAnswer(this))
+		if (!this.question.hasAnswer(this))
 			return null;
-		return question;
+		return this.question;
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister(Comment comment) {
-		comments.remove(comment.id());
+		this.comments.remove(comment.id());
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class Answer extends Entry {
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
 	 */
 	public boolean hasComment(Comment comment) {
-		return comments.contains(comment);
+		return this.comments.contains(comment);
 	}
 
 	/**
@@ -113,7 +114,7 @@ public class Answer extends Entry {
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>(comments.values());
+		List<Comment> list = new ArrayList<Comment>(this.comments.values());
 		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
@@ -126,7 +127,7 @@ public class Answer extends Entry {
 	 * @return {@link Comment} or null
 	 */
 	public Comment getComment(int id) {
-		return comments.get(id);
+		return this.comments.get(id);
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class Answer extends Entry {
 	 * @return the id of the <code>Comment</code>
 	 */
 	public int id() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class Answer extends Entry {
 	 * @return the best answer of a <code>Question</code>
 	 */
 	public boolean isBestAnswer() {
-		return question.getBestAnswer() == this;
+		return this.question.getBestAnswer() == this;
 	}
 
 	/**

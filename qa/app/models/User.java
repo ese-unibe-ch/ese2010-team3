@@ -51,11 +51,11 @@ public class User implements IObserver {
 	public User(String name, String password) {
 		this.name = name;
 		this.password = Tools.encrypt(password);
-		items = new HashSet<Item>();
+		this.items = new HashSet<Item>();
 	}
-	
+
 	public boolean canEdit(Entry entry) {
-		return (entry.owner() == this && !this.isBlocked()) || this.isModerator();
+		return (entry.owner() == this && !isBlocked()) || isModerator();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class User implements IObserver {
 	 * @return name of the <code>User</code>
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class User implements IObserver {
 	 *            the {@link Item} to register
 	 */
 	public void registerItem(Item item) {
-		items.add(item);
+		this.items.add(item);
 		updateCheaterStatus();
 	}
 
@@ -94,12 +94,12 @@ public class User implements IObserver {
 	 */
 	public void delete() {
 		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) items.clone();
+		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
 			item.unregister();
 		}
-		items.clear();
-		Database.get().users().remove(name);
+		this.items.clear();
+		Database.get().users().remove(this.name);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class User implements IObserver {
 	 *            the {@link Item} to unregister
 	 */
 	public void unregister(Item item) {
-		items.remove(item);
+		this.items.remove(item);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class User implements IObserver {
 	 * @return true if the {@link Item} is registered
 	 */
 	public boolean hasItem(Item item) {
-		return items.contains(item);
+		return this.items.contains(item);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class User implements IObserver {
 	public int howManyItemsPerHour() {
 		Date now = SystemInformation.get().now();
 		int i = 0;
-		for (Item item : items) {
+		for (Item item : this.items) {
 			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
 				i++;
 			}
@@ -150,7 +150,7 @@ public class User implements IObserver {
 	 */
 	public boolean isMaybeCheater() {
 		HashMap<User, Integer> votesForUser = new HashMap<User, Integer>();
-		for (Item item : items) {
+		for (Item item : this.items) {
 			if (item instanceof Vote && ((Vote) item).up()) {
 				Integer count = votesForUser.get(item.owner());
 				if (count == null) {
@@ -177,12 +177,12 @@ public class User implements IObserver {
 	 */
 	public void anonymize(boolean doAnswers, boolean doComments) {
 		// operate on a clone to prevent a ConcurrentModificationException
-		HashSet<Item> clone = (HashSet<Item>) items.clone();
+		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
 			if (item instanceof Question || doAnswers && item instanceof Answer
 					|| doComments && item instanceof Comment) {
 				((Entry) item).anonymize();
-				items.remove(item);
+				this.items.remove(item);
 			}
 		}
 	}
@@ -194,10 +194,9 @@ public class User implements IObserver {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
-		int number = this.howManyItemsPerHour();
-		if (number >= 60) {
+		int number = howManyItemsPerHour();
+		if (number >= 60)
 			return true;
-		}
 		return false;
 	}
 
@@ -232,8 +231,8 @@ public class User implements IObserver {
 	 */
 	private int age() {
 		Date now = SystemInformation.get().now();
-		if (dateOfBirth != null) {
-			long age = now.getTime() - dateOfBirth.getTime();
+		if (this.dateOfBirth != null) {
+			long age = now.getTime() - this.dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
 		} else
 			return (0);
@@ -246,7 +245,7 @@ public class User implements IObserver {
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setFullname(String fullname) {
@@ -254,15 +253,15 @@ public class User implements IObserver {
 	}
 
 	public String getFullname() {
-		return fullname;
+		return this.fullname;
 	}
 
 	public void setDateOfBirth(String birthday) throws ParseException {
-		dateOfBirth = Tools.stringToDate(birthday);
+		this.dateOfBirth = Tools.stringToDate(birthday);
 	}
 
 	public String getDateOfBirth() {
-		return Tools.dateToString(dateOfBirth);
+		return Tools.dateToString(this.dateOfBirth);
 	}
 
 	public int getAge() {
@@ -274,7 +273,7 @@ public class User implements IObserver {
 	}
 
 	public String getWebsite() {
-		return website;
+		return this.website;
 	}
 
 	public void setProfession(String profession) {
@@ -282,7 +281,7 @@ public class User implements IObserver {
 	}
 
 	public String getProfession() {
-		return profession;
+		return this.profession;
 	}
 
 	public void setEmployer(String employer) {
@@ -290,7 +289,7 @@ public class User implements IObserver {
 	}
 
 	public String getEmployer() {
-		return employer;
+		return this.employer;
 	}
 
 	public void setBiography(String biography) {
@@ -298,11 +297,11 @@ public class User implements IObserver {
 	}
 
 	public String getBiography() {
-		return biography;
+		return this.biography;
 	}
 
 	public String getSHA1Password() {
-		return password;
+		return this.password;
 	}
 
 	/**
@@ -311,7 +310,7 @@ public class User implements IObserver {
 	 * @return the reason
 	 */
 	public String getStatusMessage() {
-		return statustext;
+		return this.statustext;
 	}
 
 	/**
@@ -323,22 +322,22 @@ public class User implements IObserver {
 	 *            , why the users is getting blocked.
 	 */
 	public void block(String reason) {
-		isBlocked = true;
-		statustext = reason;
+		this.isBlocked = true;
+		this.statustext = reason;
 	}
 
 	public void unblock() {
-		isBlocked = false;
-		statustext = "";
+		this.isBlocked = false;
+		this.statustext = "";
 	}
-	
+
 	/**
 	 * Get the current status of the user whether he is blocked or not.
 	 * 
 	 * @return true, if the user is blocked
 	 */
 	public boolean isBlocked() {
-		return isBlocked;
+		return this.isBlocked;
 	}
 
 	/**
@@ -347,7 +346,7 @@ public class User implements IObserver {
 	 * @return true, if the user is moderator
 	 */
 	public boolean isModerator() {
-		return isModerator;
+		return this.isModerator;
 	}
 
 	/**
@@ -357,7 +356,7 @@ public class User implements IObserver {
 	 *            , true if the user will be a moderator
 	 */
 	public void setModerator(Boolean mod) {
-		isModerator = mod;
+		this.isModerator = mod;
 	}
 
 	/**
@@ -435,7 +434,7 @@ public class User implements IObserver {
 		 * those questions belonging to negative rated answers.
 		 */
 		// getAnswers already sorts all answers - best first
-		for (Answer a : this.getAnswers()) {
+		for (Answer a : getAnswers()) {
 			Question q = a.getQuestion();
 			if (!sortedAnsweredQuestions.contains(q) && a.rating() >= 0) {
 				sortedAnsweredQuestions.add(q);

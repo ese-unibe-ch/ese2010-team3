@@ -32,7 +32,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * @return what the notification is all about.
 	 */
 	public Entry getAbout() {
-		return about;
+		return this.about;
 	}
 
 	/**
@@ -66,6 +66,6 @@ public class Notification extends Item implements Comparable<Notification> {
 	 */
 	public int compareTo(Notification n) {
 		// sort notifications most-recent one first
-		return n.getID() - this.getID();
+		return n.getID() - getID();
 	}
 }
