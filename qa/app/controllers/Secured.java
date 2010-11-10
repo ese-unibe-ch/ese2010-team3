@@ -245,7 +245,7 @@ public class Secured extends Controller {
 			Application.question(((Answer) notification.getAbout())
 					.getQuestion().id());
 		} else if (!redirectToCallingPage()) {
-			Application.notifications();
+			Application.notifications(0);
 		}
 	}
 
@@ -254,7 +254,7 @@ public class Secured extends Controller {
 		for (Notification n : user.getNewNotifications()) {
 			n.unsetNew();
 		}
-		Application.notifications();
+		Application.notifications(0);
 	}
 
 	public static void deleteNotification(int id) {
@@ -263,7 +263,7 @@ public class Secured extends Controller {
 		if (n != null) {
 			n.unregister();
 		}
-		Application.notifications();
+		Application.notifications(0);
 	}
 
 	public static void blockUser(String username, String block, String reason) {

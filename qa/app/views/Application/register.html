@@ -3,37 +3,39 @@
 #{set title:'ajopi - register'  /}
 <div class="register">
 	<h1>Registration</h1>
-	#{form @signup()}
-		<table>	
-			<tr>
-				#{if flash.error}
-					<td>&{flash.error}</td>
-				#{/if}
-			</tr>
-			<tr>
-				#{if flash.success}
-					<td>&{flash.success}</td>
-				#{/if}
-			</tr>
-			<tr>
-				<td>&{'secure.username'}</td>
-				<td><input type="text" name="username" id="username" value="${flash.username}" /></td>
-			</tr>
-			<tr>
-				<td>&{'secure.password'}</td>
-				<td><input type="password" name="password" id="password" value="" /></td>
-			</tr>
-			<tr>
-				<td>&{'secure.passwordrepeat'}</td>
-				<td><input type="password" name="passwordrepeat" id="password" value="" /></td>
-			</tr>
-			<tr>
-				<td>E-Mail:</td>
-				<td><input type="text" name="email" id="email" value="" /></td>
-			</tr>
-			<tr>
-				<td><input type="submit" id="register" value="Sign Up" /><td>
-			</tr>
-		</table>
-	#{/form}
+	<div class="message">
+		#{form @signup()}
+			<table>	
+				<tr>
+					#{if flash.error}
+						<td>&{flash.error}</td>
+					#{/if}
+				</tr>
+				<tr>
+					#{if flash.success}
+						<td>&{flash.success}</td>
+					#{/if}
+				</tr>
+				<tr>
+					<td>&{'secure.username'}</td>
+					<td><input type="text" name="username" id="username" value="${flash.username}" /></td>
+				</tr>
+				<tr>
+					<td>&{'secure.password'}</td>
+					<td><input type="password" name="password" id="password" value="" /></td>
+				</tr>
+				<tr>
+					<td>&{'secure.passwordrepeat'}</td>
+					<td><input type="password" name="passwordrepeat" id="password" value="" /></td>
+				</tr>
+				<tr>
+					<td>E-Mail:</td>
+					<td><input type="text" name="email" id="email" value="" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" id="register" value="Sign Up" /><td>
+				</tr>
+			</table>
+		#{/form}
+	</div><!-- end message -->
 </div><!-- end register -->

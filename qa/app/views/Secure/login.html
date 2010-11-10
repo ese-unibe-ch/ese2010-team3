@@ -1,39 +1,38 @@
 #{extends 'main.html' /} 
 #{set title:'ajopi - Login' /} 
-
 <div class="login">
-	
 	<h1>Login</h1>
+	<div class="message">	
+		#{form @authenticate()}
+			#{if flash.error}
+				&{flash.error}
+			#{/if}
+			<table>	
+				<tr>
+					#{if flash.success}
+						<td>&{flash.success}</td>
+					#{/if}
+				</tr>
+				<tr>
 		
-	#{form @authenticate()}
-		#{if flash.error}
-			&{flash.error}
-		#{/if}
-		<table>	
-			<tr>
-				#{if flash.success}
-					<td>&{flash.success}</td>
-				#{/if}
-			</tr>
-			<tr>
-		
-				<td>&{'secure.username'}</td>
-				<td><input type="text" name="username" id="username" value="${flash.username}" /></td>
-			</tr>
-			<tr>
-				<td>&{'secure.password'}</td>
-				<td><input type="password" name="password" id="password" value="" /></td>
-			</tr>
-			<tr>
-			<tr>
+					<td>&{'secure.username'}</td>
+					<td><input type="text" name="username" id="username" value="${flash.username}" /></td>
+				</tr>
+				<tr>
+					<td>&{'secure.password'}</td>
+					<td><input type="password" name="password" id="password" value="" /></td>
+				</tr>
+				<tr>
+				<tr>
 				
-				<td></td>
-				<td><input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />&{'secure.remember'}</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" id="signin" value="&{'secure.signin'}" /></td>
-			</tr>
-		</table>
-	#{/form}
+					<td></td>
+					<td><input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />&{'secure.remember'}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" id="signin" value="&{'secure.signin'}" /></td>
+				</tr>
+			</table>
+		#{/form}
+	</div><!-- end message -->
 </div>

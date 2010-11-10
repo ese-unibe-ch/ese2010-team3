@@ -152,7 +152,7 @@ public class Application extends Controller {
 		render(results, term);
 	}
 
-	public static void notifications() {
+	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
@@ -164,7 +164,7 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
-			render(notifications, watchingQuestions, suggestedQuestions);
+			render(notifications, watchingQuestions, suggestedQuestions, content);
 		} else {
 			Application.index();
 		}

@@ -19,7 +19,7 @@
 				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
 			#{/if}
 			#{if user && user.isModerator() && question.isLocked()}
-				<a href="@{Secured.unlockQuestion(question.id())}"> | Unlock</a>
+				<a href="@{Secured.unlockQuestion(question.id())}"> Unlock</a>
 			#{/if}
 			#{if user && user.canEdit(question)}
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
@@ -30,23 +30,23 @@
 			#{/if}
 		</li>
 		#{if question.getSimilarQuestions().size() != 0}
-		<a>Related Questions</a>
-			#{list items:similarQuestions, as:'relatedQ'}<p>
-			<li>
-			#{showProfile relatedQ /}:
+			<a>Related Questions</a>
+				#{list items:similarQuestions, as:'relatedQ'}
+				<li>
+				<p class="relatedQ">
 				<a href="@{Application.question(relatedQ.id())}">
-				${relatedQ.summary()}</a>#{date relatedQ /}</p>
-			#{/list}
-			</li>
-		<a href="@{Application.relatedQuestions(question.id())}">More...</a> 
+				${relatedQ.summary()}</a></p>
+				#{/list}
+				</li>
+			<a href="@{Application.relatedQuestions(question.id())}">more</a> 
 		#{/if}
 		#{if question.comments().size() != 0}
-			<p class="comments">Comments</p>
+			<h2>Comments</h2>
 			<ul class="comments">
 				#{list items:question.comments(), as:'comment'}
 					<li class="comments">
-						<h2>#{showProfile comment /}:</h2>
-						<p>${comment.content()}</p>
+						<p>#{showProfile comment /}:
+						${comment.content()}</p>
 						#{date comment /}
 						#{if user && user.canEdit(comment)}
 							<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
@@ -61,7 +61,8 @@
 		<h1>Answers</h1>
 		<ul>
 			#{list items:answers, as:'answer'}
-			#{if answer.isBestAnswer()}<li class="bestAnswer">#{/if}
+			#{if answer.owner() == user}<li class="own">#{/if}
+			#{elseif answer.isBestAnswer()}<li class="bestAnswer">#{/elseif}
 			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content()}</p>
@@ -82,12 +83,12 @@
 				
 			</li>
 				#{if answer.comments().size() != 0}
-					<p class="comments">Comments</h3>
+					<h2>Comments</h2>
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
-								<h2>#{showProfile comment /}:</h2>
-								<p>${comment.content()}</p>
+								<p>#{showProfile comment /}:
+								${comment.content()}</p>
 								#{date comment /}
 								#{if user && user.canEdit(comment)}
 									<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
@@ -102,12 +103,14 @@
 	#{/if}
 	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>Add Answer</h1>
-		#{form @Secured.newAnswer(question.id())}
-			#{field 'content'}
-	        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
-			#{/field}
-			<input type="submit" value="Post" />
-		#{/form}
+		<div class="message">
+			#{form @Secured.newAnswer(question.id())}
+				#{field 'content'}
+					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+				#{/field}
+				<input type="submit" value="Post" />
+			#{/form}
+		</div><!-- end message -->
 	#{/if}
 	#{if question.isLocked()}
 		<ul><li>This question is locked &mdash; no further answers can be posted.</ul>

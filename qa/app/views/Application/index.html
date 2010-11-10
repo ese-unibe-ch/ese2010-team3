@@ -2,7 +2,11 @@
 #{set title:'ajopi' /}
 <ul>
 	#{list items:questions, as:'question'}
-		<li onclick="goto('@@{Application.question(question.id())}')">
+		#{if question.owner() == user}
+			<li class="own" onclick="goto('@@{Application.question(question.id())}')">#{/if}
+		#{else}
+			<li onclick="goto('@@{Application.question(question.id())}')">
+		#{/else}
 			<a href="@{Application.question(question.id())}">
 				<h2>#{showProfile question /}:</h2>
 			</a>
@@ -17,7 +21,7 @@
 </ul>
 #{if user && !user.isBlocked()}
 	<h1>Ask Question</h1>
-	<div class="askquestion">
+	<div class="message">
 		#{form @Secured.newQuestion()}
 			#{field 'content'}
 				<textarea name="${field.name}" id="newQuestion" class="${field.errorClass}"></textarea>

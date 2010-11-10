@@ -2,7 +2,7 @@
 #{set title:'ajopi - Block User' /}
 #{if user != null && user.isModerator()}
 <h1>You are about to block the User ${blockuser}</h1>
-	<div class="profilenavi">
+	<div class="message">
 		#{form @Secured.blockUser()}
 		<table>
 			<tr>
@@ -20,7 +20,7 @@
 			<tr>
 				#{field 'block'}
 				<td><label for="block">&{'User will be: '}</label></td>
-				<td align="center"><input type="radio" name="block" id="block" value="block" />blocked<br>
+				<td align="left"><input type="radio" name="block" id="block" value="block" />blocked<br>
 				<input type="radio" name="block" id="block" value="unblock" />unblocked</td>
 				#{/field}
 			</tr>
@@ -29,9 +29,11 @@
 			</tr>
 		</table>
 		#{/form}
-	</div><!-- end showprofile -->
+	</div><!-- end message -->
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>You are not a Moderator or there is no such User to block</h1>
+	<div class="message">
+		<p>You are not a Moderator or there is no such User to block</p>
+	</div><!-- end message -->
 #{/else}

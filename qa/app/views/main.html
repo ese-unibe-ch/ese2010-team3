@@ -11,10 +11,12 @@
         <script src="@{'/public/javascripts/qa.js'}" type="text/javascript" charset="utf-8"></script>
         #{get 'moreScripts' /}
     </head>
-    <body>
 	#{if user && user.isBlocked()}
-		class="cheaterWarning"
+		<body class="cheaterWarning">
 	#{/if}
+	#{else}
+		<body>
+	#{/else}
     	<div class="main">
     		<div class="header">
     			<a href="@{Application.index}"></a>
@@ -41,7 +43,7 @@
 			<div class="user">
 				#{if user}
 						Hi ${user.getName()}!
-						<a href="@{Application.notifications}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
+						<a href="@{Application.notifications(0)}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
 						<a href="@{Application.showprofile(user.getName())}">Profile</a>
 						<a href="@{Secure.logout}">Logout</a>
 					#{/if}

@@ -29,11 +29,13 @@
 #{/if}
 	#{if user}
 		<h1>Add Comment</h1>
-		#{form @Secured.newCommentQuestion(question.id())}
-			#{field 'content'}
-        			<textarea name="${field.name}" class="${field.errorClass}"></textarea>
-			#{/field}
-			<input type="submit" value="Post" />
-		#{/form}
+		<div class="message">
+			#{form @Secured.newCommentQuestion(question.id())}
+				#{field 'content'}
+					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
+				#{/field}
+				<input type="submit" value="Post" />
+			#{/form}
+		</div><!-- end message -->
 	#{/if}
 #{/if}

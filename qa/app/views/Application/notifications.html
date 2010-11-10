@@ -2,50 +2,75 @@
 
 #{set title:'ajopi - Notifications for ' + user.getName() /}
 <div>
-	<h2>Notification Inbox</h2>
-	<ul>
-	#{list items:notifications, as:'notification'}
-		<li>
-		<div>
-			#{if notification.isNew()}*new*#{/if}
-			#{showProfile notification.getAbout() /} answered to
-			${notification.getAbout().getQuestion().summary()}:
-		</div>
-		<div>
-			<a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content()}</a>
-			#{date notification.getAbout() /}
-			<span style="float: right;"><a href="@{Secured.deleteNotification(notification.getID())}">delete</a></span>
-		</div>
-	#{/list}
-	#{else}
-		<li>No notifications available at all - go watch some questions!
-	#{/else}
-	#{if user.getNewNotifications().size() > 0}
-		<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
-	#{/if}
-	</ul>
-	#{if suggestedQuestions.size() != 0}
-	<h2>By the way, you might also know the answer to these questions:</h2>
-	<ul>
-	#{list items:suggestedQuestions, as:'question'}<p>
+	<div class="notificationnavi">
+		<a href="@{Application.notifications(0)}">Notification</a> | 
+		<a href="@{Application.notifications(1)}">Watchinglist</a> | 
+		<a href="@{Application.notifications(2)}">Recommended Question</a>
+	</div><!-- end profilenavi -->
+	#{if content == 0}
+		<h1>Notification Inbox</h1>
+		<ul>
+		#{list items:notifications, as:'notification'}
 			<li>
-			#{showProfile question /}:
-				<a href="@{Application.question(question.id())}">
-				${question.summary()}</a>#{date question /}</p>
-			#{/list}
-			</li>
-	#{/if}
-	</ul>
-	#{else} <h2> No recommended questions for you yet.</h2> #{/else}
-	<h2>Watchinglist</h2>
-	<ul>
-		#{list items:watchingQuestions, as:'question'}
-			<li onclick="goto('@@{Application.question(question.id())}')">
-				<a href="@{Application.question(question.id())}">
-					<h2>#{showProfile question /}:</h2>
-				</a>
-				<p>${question.content()}</p>
-			</li>
+			<div class="message">
+				#{if notification.isNew()}<p>*new*#{/if}
+				#{showProfile notification.getAbout() /} answered to
+				${notification.getAbout().getQuestion().summary()}:
+				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content()}</a></p>
+				#{date notification.getAbout() /}
+				<p><a href="@{Secured.deleteNotification(notification.getID())}">delete</a></p>
+			</div><!-- end message -->
 		#{/list}
-	</ul>
+		#{else}
+			<div class="message">
+				<p>No notifications available at all - go watch some questions!</p>
+			</div><!-- end message -->
+		#{/else}
+		#{if user.getNewNotifications().size() > 0}
+			<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
+		#{/if}
+		</ul>
+
+	#{/if}
+	#{elseif content == 1}
+		<h1>Watchinglist</h1>
+		#{if watchingQuestions.size() != 0}
+			<ul>
+				#{list items:watchingQuestions, as:'question'}
+					<li onclick="goto('@@{Application.question(question.id())}')">
+						<a href="@{Application.question(question.id())}">
+							<h2>#{showProfile question /}:</h2>
+						</a>
+						<p>${question.content()}</p>
+						<a href="@{Secured.unwatchQuestion(question.id())}">Unwatch</a>
+					</li>
+				#{/list}
+			</ul>
+		#{/if}
+		#{else}
+			<div class="message">
+				<p>No questions in your list.</p>
+			</div><!-- end message -->
+		#{/else}
+	#{/elseif}
+	#{elseif content == 2}
+		<h1>Recommended Question</h1>
+		#{if suggestedQuestions.size() != 0}
+		<h2>By the way, you might also know the answer to these questions:</h2>
+		<ul>
+		#{list items:suggestedQuestions, as:'question'}<p>
+				<li>
+				#{showProfile question /}:
+					<a href="@{Application.question(question.id())}">
+					${question.summary()}</a>#{date question /}</p>
+				#{/list}
+				</li>
+		#{/if}
+		</ul>
+		#{else} 
+			<div class="message">
+				<p>No recommended questions for you yet.</p>
+			</div><!-- end message -->
+		#{/else}
+	#{/elseif}
 </div>
