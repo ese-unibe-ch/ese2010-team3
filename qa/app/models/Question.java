@@ -298,7 +298,7 @@ public class Question extends Entry implements IObservable {
 				bit = bit.substring(0, 32);
 			}
 
-			Tag tag = Tag.get(bit);
+			Tag tag = Database.get().tags().get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);
 				tag.register(this);

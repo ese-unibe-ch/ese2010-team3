@@ -5,13 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.xml.sax.Attributes;
-
 public class Element {
-	private String name;
-	private Attributes attrs;
-	private StringBuilder text;
-	private Map<String, List<Element>> subelements;
+	private final String name;
+	private final StringBuilder text;
+	private final Map<String, List<Element>> subelements;
 	private Element parent;
 
 	public Element(String name_) {
@@ -25,6 +22,7 @@ public class Element {
 		this.parent = parent_;
 	}
 
+	@Override
 	public String toString() {
 		return "E["
 				+ this.name

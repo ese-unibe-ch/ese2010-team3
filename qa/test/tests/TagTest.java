@@ -6,6 +6,7 @@ import models.Question;
 import models.Tag;
 import models.User;
 import models.database.Database;
+import models.database.ITagDatabase;
 import models.helpers.SetOperations;
 
 import org.junit.Before;
@@ -15,6 +16,7 @@ import play.test.UnitTest;
 
 public class TagTest extends UnitTest {
 
+	private ITagDatabase tagDB;
 	private Question question1;
 	private Question question2;
 	private User douglas;
@@ -23,6 +25,7 @@ public class TagTest extends UnitTest {
 	@Before
 	public void setUp() {
 		Database.clear();
+		tagDB = Database.get().tags();
 		douglas = new User("Douglas", "douglas");
 		question1 = new Question(douglas, "Why did the chicken cross the road?");
 		question2 = new Question(douglas, "Is this question meaningless?");
@@ -35,7 +38,7 @@ public class TagTest extends UnitTest {
 		assertNotNull(tag.getName());
 		assertEquals(tag.getName(), tagName);
 
-		assertNull(Tag.get("space "));
+		assertNull(tagDB.get("space "));
 		try {
 			new Tag(null);
 			assertTrue(false);
@@ -65,7 +68,7 @@ public class TagTest extends UnitTest {
 		assertEquals(question1.getTags().size(), 1);
 		assertEquals(countTags(tagName), 1);
 
-		Tag tag1 = Tag.get(tagName);
+		Tag tag1 = tagDB.get(tagName);
 		assertNotNull(tag1);
 		assertTrue(question1.getTags().contains(tag1));
 		assertTrue(tag1.getQuestions().contains(question1));
@@ -104,9 +107,9 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldOrderAlphabetically() {
-		Tag tagC = Tag.get("c" + tagName);
-		Tag tagA = Tag.get("a" + tagName);
-		Tag tagB = Tag.get("b" + tagName);
+		Tag tagC = tagDB.get("c" + tagName);
+		Tag tagA = tagDB.get("a" + tagName);
+		Tag tagB = tagDB.get("b" + tagName);
 
 		question1.setTagString(tagC.getName() + " " + tagA.getName() + ","
 				+ tagB.getName());
@@ -178,12 +181,11 @@ public class TagTest extends UnitTest {
 				|| SetOperations.arrayEquals(possibility2, similar.toArray()));
 	}
 
-	private static int countTags(String name) {
+	private int countTags(String name) {
 		int count = 0;
-		for (Tag tag : Tag.tags())
-			if (tag.getName().equals(name)) {
+		for (Tag tag : tagDB.all())
+			if (tag.getName().equals(name))
 				count++;
-			}
 		return count;
 	}
 }

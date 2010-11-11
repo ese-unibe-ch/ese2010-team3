@@ -134,7 +134,7 @@ public class Application extends Controller {
 
 	public static void tags(String term, String content) {
 		String tagString = "";
-		for (Tag tag : Tag.tags()) {
+		for (Tag tag : Database.get().tags().all()) {
 			if (term == null || tag.getName().startsWith(term.toLowerCase())) {
 				tagString += tag.getName() + " ";
 			}
