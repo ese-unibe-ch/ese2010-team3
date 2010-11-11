@@ -36,7 +36,7 @@ POST	/user/savedProfile						Secured.saveProfile
 
 GET		/user/{userName}/blockuser				Secured.blockUser
 
-GET		/user/notifications						Application.notifications
+GET		/user/notifications					Application.notifications
 GET		/notification/{id}/follow				Secured.followNotification
 GET		/notification/{id}/delete				Secured.deleteNotification
 GET		/notification/clearNew					Secured.clearNewNotifications

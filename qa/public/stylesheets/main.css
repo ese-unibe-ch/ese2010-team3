@@ -24,7 +24,7 @@ h2 {
 }
 h3 {
 	color: #ff8400;
-	margin: 0;
+	font-size: 12pt;
 }
 /*********************** 
 links
@@ -111,6 +111,10 @@ div.content li.bestAnswer {
 	background: #2b6026;
 }
 
+div.content li.own {
+	background: #666666;
+}
+
 div.content li {
 	background: #333333;
 	list-style: none;
@@ -124,11 +128,15 @@ div.content li[onclick] {
 }
 		
 div.content li[onclick]:hover {
-	background: #333333;
+	background: #222;
 }
 		
 div.content li p {
 	color: #aecbfb;
+}
+div.content li p.relatedQ {
+	margin: 2px;
+	color: #ff8400;
 }
 	
 div.content span.vote {
@@ -149,7 +157,6 @@ div.content div.date {
 	font-size: 10pt;
 }
 div.content form {
-	background: #333;
 	margin: 10px 0;
 	padding: 7px;
 	position: relative;
@@ -178,14 +185,23 @@ div.footer {
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 /*********************** 
-ask question
+message
 ************************/
-div.askquestion {
-	font-size: 12pt;
+div.message {
+	background: #333333;
+	margin: 4px;
+	padding: 5px;	
 }
-div.askquestion textarea {
+div.message p {
+	margin: 5px;
+	color: #aecbfb;
+}
+div.message table {
+	color: #aecbfb;
+}
+div.message textarea {
 	height: 80px;
-	width: 760px;
+	width: 740px;
 	background: #555;
 	border: 1px #000000 solid;
 	color: #000000;
@@ -199,16 +215,15 @@ div.content ul.comments {
 
 div.content li.comments {
 	background:#181818;
-	font-size: 0.9em;
+	font-size: 10pt;
+}
+li.comments a {
+	font-size: 10pt;
 }
 p.comments {
 	color: #ff8400;
 	font-weight: bold;
 	padding-left:30px;
-}
-li.comments h2 {
-	color: #ff8400;
-	font-weight: bold;
 	font-size: 0.9em;
 }
 
@@ -241,6 +256,10 @@ td.blocked {
 /*********************** 
 edit profile
 ************************/
+div.editprofile {
+	background: #333333;
+	color: #aecbfb;
+}
 div.editprofile textarea {
 	height: 100px;
 	width: 610px;
@@ -250,6 +269,7 @@ div.profilenavi {
 	background: #333333;
 	margin: 4px;
 	padding: 5px;	
+	color: #ff8400;
 }
 /*********************** 
 Cheater Warning
@@ -266,31 +286,18 @@ div.cheaterWarning {
 /*********************** 
 Notification Info
 ************************/
-div.notificationInfo {
+div.notificationnavi {
+	text-align:left;
+	background: #333333;
 	padding: 5px;
-	margin-bottom: 5px;
+	margin: 4px;	
+	color: #ff8400;
+}
+div.notificationInfo {
+	text-align:left;
+	margin: 8px;
+	padding: 5px;	
 	background: #2b6026;
-	color: #222222;
-	font-weight:bold;
-}
-/*********************** 
-Statistic
-************************/
-div.statistic {
-	color:#888;
-	background: #222;
-}
-/*********************** 
-Registration
-************************/
-div.register {
-	color:#888;
-}
-/*********************** 
-Login
-************************/
-div.login {
-	color:#888;
 }
 /*********************** 
 tags and tag autocomplete box

@@ -4,7 +4,7 @@
 #{if user != null && showUser}
 	<div class="profilenavi">
 	#{if canEdit}
-		<a href="@{Application.deleteuser}">Delete </a>
+		<a href="@{Application.deleteuser}">Delete</a> | 
 		<a href="@{Application.editProfile(showUser.getName())}">Edit</a>
 	#{/if}
 	#{if user.isModerator() && user != showUser}
@@ -100,5 +100,7 @@
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>You are not logged in or there is no such User</h1>
+	<div class="message">
+		<p>You are not logged in or there is no such User</p>
+
 #{/else}
