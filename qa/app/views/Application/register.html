@@ -6,16 +6,16 @@
 	<div class="message">
 		#{form @signup()}
 			<table>	
-				<tr>
-					#{if flash.error}
-						<td>&{flash.error}</td>
-					#{/if}
-				</tr>
-				<tr>
-					#{if flash.success}
-						<td>&{flash.success}</td>
-					#{/if}
-				</tr>
+				#{if flash.error}
+					<tr>
+						<td colspan="2">&{flash.error}</td>
+					</tr>
+				#{/if}
+				#{if flash.success}
+					<tr>
+						<td colspan="2">&{flash.success}</td>
+					</tr>
+				#{/if}
 				<tr>
 					<td>&{'secure.username'}</td>
 					<td><input type="text" name="username" id="username" value="${flash.username}" required autofocus /></td>
@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td>E-Mail:</td>
-					<td><input type="email" name="email" id="email" /> <object /></td>
+					<td><input type="email" name="email" id="email" required /> <object /></td>
 				</tr>
 				<tr>
 					<td><input type="submit" id="register" value="Sign Up" /><td>

@@ -14,7 +14,7 @@ headings
 h1 {
 	color: #ff8400;
 	font-size: 1.3em;
-	margin-top: 30px;
+	margin-top: 20px;
 }
 
 h2 {
@@ -211,7 +211,10 @@ div.message textarea {
 comments
 ************************/
 div.content ul.comments {
-	padding-left:30px;
+	padding-left: 50px;
+}
+div.content ul.comments p {
+	margin: 0px;
 }
 
 div.content li.comments {
@@ -224,7 +227,7 @@ li.comments a {
 p.comments {
 	color: #ff8400;
 	font-weight: bold;
-	padding-left:30px;
+	padding-left: 50px;
 	font-size: 0.9em;
 }
 
@@ -369,7 +372,7 @@ input.valid:focus + object {
 	background-position: 0px -64px;
 }
 /* source: http://flowplayer.org/tools/demos/validator/ */
-body div.error {
+body > div.error {
 	/* supply height to ensure consistent positioning for every browser */
 	height: 15px;
 	background-color: #FFFE36;
@@ -390,6 +393,6 @@ body div.error {
 	-moz-box-shadow:0 0 6px #ddd;
 	-webkit-box-shadow:0 0 6px #ddd;
 }
-body div.error p {
+body > div.error p {
 	margin: 0px;
 }

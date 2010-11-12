@@ -30,7 +30,6 @@
 			#{/if}
 		</li>
 		#{if question.comments().size() != 0}
-			<h2>Comments</h2>
 			<ul class="comments">
 				#{list items:question.comments(), as:'comment'}
 					<li class="comments">
@@ -43,7 +42,6 @@
 					</li>	
 				#{/list}
 			</ul>
-			<br />
 		#{/if}
 	</ul>
 	#{if answers.size() > 0}
@@ -64,7 +62,7 @@
 					<a href="@{Secured.deleteAnswer(question.id(), answer.id())}"> | Delete</a>
 				#{/if}
 				#{if user && user.canEdit(question) && !question.isLocked()}
-					<a href="@{Secured.selectBestAnswer(question.id(), answer.id())}"> | Best</a>
+					<a href="@{Secured.selectBestAnswer(question.id(), answer.id())}"> | Select as Best</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
@@ -72,7 +70,6 @@
 				
 			</li>
 				#{if answer.comments().size() != 0}
-					<h2>Comments</h2>
 					<ul class="comments">
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
@@ -85,7 +82,6 @@
 							</li>	
 						#{/list}
 					</ul>
-					<br>
 				#{/if}
 			#{/list}
 		</ul>
@@ -95,13 +91,10 @@
 		<ul>
 		#{list items:similarQuestions, as:'relatedQ'}
 			<li class="relatedQ">
-				<a href="@{Application.question(relatedQ.id())}">
-					${relatedQ.summary()}
-				</a>
+				<a href="@{Application.question(relatedQ.id())}">${relatedQ.summary()}</a>
 			</li>
 		#{/list}
 		</ul>
-		<!-- DROPME --> <a href="@{Application.relatedQuestions(question.id())}">more</a>
 	#{/if}
 	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>Add Answer</h1>
