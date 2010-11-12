@@ -1,11 +1,11 @@
 #{extends 'main.html' /}
 #{if question}
 #{set title:'ajopi -' + question.summary() /}
-<a href="@{Application.index}">back</a>
+<a href="@{Application.question(question.id())}">back</a>
 <ul>
-	<li onclick="goto('@@{Application.question(question.id())}')">
+	<li class="question" onclick="goto('@@{Application.question(question.id())}')">
 		<h2>#{showProfile question /}:</h2>
-		<p>${question.content()}</p>
+		<p>${question.content().nl2br()}</p>
 		#{date question /}
 		#{if user && question.owner() != user}
 			#{vote question /}
@@ -18,10 +18,10 @@
 		#{list items:comments, as:'comment'}
 		<li class="comments">
 			<h2>#{showProfile comment /}:</h2>
-			<p>${comment.content()}</p>
+			<p>${comment.content().nl2br()}</p>
 			#{date comment /}
 			#{if user && comment.owner() == user}
-				<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
+				<a href="@{Secured.deleteCommentQuestion(question.id(), comment.id())}">Delete</a>
 			#{/if}
 		</li>
 		#{/list}

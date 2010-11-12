@@ -2,15 +2,12 @@
 #{set title:'ajopi' /}
 <ul>
 	#{list items:questions, as:'question'}
-		#{if question.owner() == user}
-			<li class="own" onclick="goto('@@{Application.question(question.id())}')">#{/if}
-		#{else}
-			<li onclick="goto('@@{Application.question(question.id())}')">
-		#{/else}
+		<li class="question #{if question.owner() == user}own#{/if}"
+			onclick="goto('@@{Application.question(question.id())}')">
 			<a href="@{Application.question(question.id())}">
 				<h2>#{showProfile question /}:</h2>
 			</a>
-			<p>${question.content()}</p>
+			<p>${question.content().nl2br()}</p>
 			#{date question /}
 			#{tags question:question, editable:false /}  
 			#{if user && question.owner() != user && !user.isBlocked()}
@@ -29,7 +26,7 @@
 			#{field 'tags'}
 				<p>
 					<label for="tags">Label this question:</label>
-					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
+					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}" placeholder="e.g. java, design, idea" />
 				</p>
 			#{/field}
 			<input type="submit" value="Post" />

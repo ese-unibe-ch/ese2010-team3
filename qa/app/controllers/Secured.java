@@ -52,7 +52,7 @@ public class Secured extends Controller {
 			if (!thisQuestion.isLocked()) {
 				thisQuestion.comment(thisUser, content);
 			}
-			Application.commentQuestion(questionId);
+			Application.question(questionId);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class Secured extends Controller {
 		Answer answer = question.getAnswer(answerId);
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
-			Application.commentAnswer(questionId, answerId);
+			Application.question(questionId);
 		}
 	}
 
@@ -112,33 +112,33 @@ public class Secured extends Controller {
 		}
 	}
 
-	public static void deleteQuestion(int questionId) {
-		Question question = Database.get().questions().get(questionId);
+	public static void deleteQuestion(int id) {
+		Question question = Database.get().questions().get(id);
 		question.unregister();
 		Application.index();
 	}
 
-	public static void deleteAnswer(int answerId, int questionId) {
+	public static void deleteAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
 		Application.question(questionId);
 	}
 
-	public static void deleteCommentQuestion(int commentId, int questionId) {
+	public static void deleteCommentQuestion(int questionId, int commentId) {
 		Question question = Database.get().questions().get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
-		Application.commentQuestion(questionId);
+		Application.question(questionId);
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId,
-			int answerId) {
+	public static void deleteCommentAnswer(int questionId, int answerId,
+			int commentId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
-		Application.commentAnswer(questionId, answerId);
+		Application.question(questionId);
 	}
 
 	public static void deleteUser(String name) throws Throwable {
@@ -235,6 +235,15 @@ public class Secured extends Controller {
 			user.stopObserving(question);
 		}
 		Application.question(id);
+	}
+
+	public static void unwatchQuestionFromList(int id) {
+		Question question = Database.get().questions().get(id);
+		User user = Session.get().currentUser();
+		if (question != null) {
+			user.stopObserving(question);
+		}
+		Application.notifications(1);
 	}
 
 	public static void followNotification(int id) {

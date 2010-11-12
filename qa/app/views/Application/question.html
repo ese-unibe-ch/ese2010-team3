@@ -1,22 +1,22 @@
 #{extends 'main.html' /}
 
 #{if question}
-#{set title:'ajopi - ' + question.summary()  /}
+	#{set title:'ajopi - ' + question.summary()  /}
 	<ul>
-		<li>
+		<li class="question #{if question.owner() == user}own#{/if}">
 			<h2>#{showProfile question /}:</h2>
-			<p>${question.content()}</p>
+			<p>${question.content().nl2br()}</p>
 			#{tags question:question, editable:user?.canEdit(question) /}  
 			#{if user != null && !question.isLocked()}
-				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
+				<a href ="@{Application.commentQuestion(question.id())}">Add a new comment</a>
 				#{if user.isObserving(question)}
 					<a href="@{Secured.unwatchQuestion(question.id())}"> | Unwatch</a>
 				#{/if}#{else}
 					<a href="@{Secured.watchQuestion(question.id())}"> | Watch</a>
 				#{/else}
-			#{/if}
-			#{if user && user.isModerator() && !question.isLocked()}
-				<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
+				#{if user.isModerator()}
+					<a href="@{Secured.lockQuestion(question.id())}"> | Lock</a>
+				#{/if}
 			#{/if}
 			#{if user && user.isModerator() && question.isLocked()}
 				<a href="@{Secured.unlockQuestion(question.id())}"> Unlock</a>
@@ -29,27 +29,16 @@
 				#{vote question /}
 			#{/if}
 		</li>
-		#{if question.getSimilarQuestions().size() != 0}
-			<a>Related Questions</a>
-				#{list items:similarQuestions, as:'relatedQ'}
-				<li>
-				<p class="relatedQ">
-				<a href="@{Application.question(relatedQ.id())}">
-				${relatedQ.summary()}</a></p>
-				#{/list}
-				</li>
-			<a href="@{Application.relatedQuestions(question.id())}">more</a> 
-		#{/if}
 		#{if question.comments().size() != 0}
 			<h2>Comments</h2>
 			<ul class="comments">
 				#{list items:question.comments(), as:'comment'}
 					<li class="comments">
 						<p>#{showProfile comment /}:
-						${comment.content()}</p>
+						${comment.content().nl2br()}</p>
 						#{date comment /}
 						#{if user && user.canEdit(comment)}
-							<a href="@{Secured.deleteCommentQuestion(comment.id(), question.id())}">Delete</a>
+							<a href="@{Secured.deleteCommentQuestion(question.id(), comment.id())}">Delete</a>
 						#{/if}
 					</li>	
 				#{/list}
@@ -59,23 +48,23 @@
 	</ul>
 	#{if answers.size() > 0}
 		<h1>Answers</h1>
-		<ul>
+		<ul class="answers">
 			#{list items:answers, as:'answer'}
 			#{if answer.owner() == user}<li class="own">#{/if}
 			#{elseif answer.isBestAnswer()}<li class="bestAnswer">#{/elseif}
 			#{else}<li>#{/else}
 				<h2>#{showProfile answer /}:</h2>
-				<p>${answer.content()}</p>
+				<p>${answer.content().nl2br()}</p>
 				#{if user != null && !user.isBlocked() && !question.isLocked()}
 					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</a>
 				#{/if}
 				#{date answer /}
 				
 				#{if user && user.canEdit(answer) && !question.isLocked()}
-					<a href="@{Secured.deleteAnswer(answer.id(), question.id())}"> | Delete</a>
+					<a href="@{Secured.deleteAnswer(question.id(), answer.id())}"> | Delete</a>
 				#{/if}
 				#{if user && user.canEdit(question) && !question.isLocked()}
-					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
+					<a href="@{Secured.selectBestAnswer(question.id(), answer.id())}"> | Best</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isBlocked()}
 					#{vote answer /}
@@ -88,10 +77,10 @@
 						#{list items:answer.comments(), as:'comment'}
 							<li class="comments">
 								<p>#{showProfile comment /}:
-								${comment.content()}</p>
+								${comment.content().nl2br()}</p>
 								#{date comment /}
 								#{if user && user.canEdit(comment)}
-									<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
+									<a href="@{Secured.deleteCommentAnswer(question.id(), answer.id(), comment.id())}">Delete</a>
 								#{/if}
 							</li>	
 						#{/list}
@@ -100,6 +89,19 @@
 				#{/if}
 			#{/list}
 		</ul>
+	#{/if}
+	#{if similarQuestions && similarQuestions.size() != 0}
+		<h2>Related Questions</h2>
+		<ul>
+		#{list items:similarQuestions, as:'relatedQ'}
+			<li class="relatedQ">
+				<a href="@{Application.question(relatedQ.id())}">
+					${relatedQ.summary()}
+				</a>
+			</li>
+		#{/list}
+		</ul>
+		<!-- DROPME --> <a href="@{Application.relatedQuestions(question.id())}">more</a>
 	#{/if}
 	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>Add Answer</h1>
@@ -115,7 +117,6 @@
 	#{if question.isLocked()}
 		<ul><li>This question is locked &mdash; no further answers can be posted.</ul>
 	#{/if}
-		
 #{/if}#{else}
 	#{set title:'Error' /}
 	<h1>Question does not exist.</h1>

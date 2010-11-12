@@ -4,12 +4,12 @@
 	#{set title:'ajopi - delete ' + user.getName() + '?'  /}
 	<ul>
 		<li>
-			<h2>Do you want to delete the Account ${user.name}?</h2>
+			<h2>Do you really want to delete the Account ${user.name}?</h2>
 			<p>
-			<ul>
-				<li><a href="@{Secured.deleteUser(user.getName())}">Yes, delete everything</a></li>
-				<li><a href="@{Secured.anonymizeUser(user.getName())}">Yes, but keep my questions and answers</a></li>
-				<li><a href="@{Application.index()}">No, just kidding</a></li>
+			<ul class="optionLinks">
+				<li><a href="@{Secured.anonymizeUser(user.getName())}">Yes, but keep my questions and answers.</a></li>
+				<li><a href="@{Secured.deleteUser(user.getName())}">Yes, delete everything.</a></li>
+				<li><a href="@{Application.showprofile(user.getName())}">No, I've changed my mind.</a></li>
 			</p>
 		</li>
 	</ul>

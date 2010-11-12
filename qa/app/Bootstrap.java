@@ -23,7 +23,7 @@ public class Bootstrap extends Job {
 
 		jack.setEmail("jack@jack.jk");
 		jack.setFullname("Jack Daniel");
-		jack.setWebsite("www.jack.jk");
+		jack.setWebsite("http://www.jack.jk");
 		jack.setProfession("Brewer");
 		jack.setBiography("Oh well, ...");
 		jack.setModerator(true);

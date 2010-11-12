@@ -4,11 +4,11 @@
 #{if user != null && showUser}
 	<div class="profilenavi">
 	#{if canEdit}
-		<a href="@{Application.deleteuser}">Delete</a> | 
-		<a href="@{Application.editProfile(showUser.getName())}">Edit</a>
+		<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
+		<a href="@{Application.deleteuser}">Delete Account</a>
 	#{/if}
 	#{if user.isModerator() && user != showUser}
-			<a href="@{Application.blockUser(showUser.getName())}">Block</a>
+		<a href="@{Application.blockUser(showUser.getName())}">Block</a>
 	#{/if}
 	</div><!-- end profilenavi -->
 	<div>
@@ -56,7 +56,7 @@
 				<td class="right">
 					<ul class="showprofile">
 						#{list items:showUser.getRecentQuestions(), as:'question'}
-						<li><a href="@{Application.question(question.id())}">${question.content()}</a>#{date question /}</li>
+						<li><a href="@{Application.question(question.id())}">${question.summary()}</a>#{date question /}</li>
 						#{/list}
 					</ul>
 				</td>
@@ -66,7 +66,7 @@
 				<td class="right">
 					<ul class="showprofile">
 						#{list items:showUser.getRecentAnswers(), as:'answer'}
-						<li><a href="@{Application.question(answer.getQuestion().id())}">${answer.content()}</a>#{date answer /}</li>
+						<li><a href="@{Application.question(answer.getQuestion().id())}">${answer.summary()}</a>#{date answer /}</li>
 						#{/list}
 					</ul>				
 				</td>
@@ -76,7 +76,7 @@
 				<td class="right">
 					<ul class="showprofile">
 						#{list items:showUser.getRecentComments(), as:'comment'}
-						<li><a href="@{Application.question(comment.getQuestion().id())}">${comment.content()}</a>#{date comment /}</li>
+						<li><a href="@{Application.question(comment.getQuestion().id())}">${comment.summary()}</a>#{date comment /}</li>
 						#{/list}
 					</ul>
 				</td>

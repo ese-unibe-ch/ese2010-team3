@@ -3,31 +3,14 @@
 <h2>Search: ${term}</h2>
 <ul>
 	#{list items:results, as:'question'}
-		<li onclick="goto('@@{Application.question(question.id())}')">
+		<li class="question #{if question.owner() == user}own#{/if}"
+			onclick="goto('@@{Application.question(question.id())}')">
 			<a href="@{Application.question(question.id())}">
 				<h2>#{showProfile question /}:</h2>
 			</a>
-			<p>${question.content()}</p>
+			<p>${question.content().nl2br()}</p>
 			#{date question /}
 			#{tags question:question, editable:false /}  
-			#{if user && question.owner() != user && !user.isBlocked()}
-				#{vote question /}
-			#{/if}
 		</li>
 	#{/list}
 </ul>
-#{if user && !user.isBlocked()}
-	<h1>Ask Question</h1>
-	#{form @Secured.newQuestion()}
-		#{field 'content'}
-        		<textarea name="${field.name}" class="${field.errorClass}"></textarea>
-		#{/field}
-		#{field 'tags'}
-			<p>
-				<label for="tags">Label this question:</label>
-				<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}">
-			</p>
-		#{/field}
-		<input type="submit" value="Post" />
-	#{/form}
-#{/if}

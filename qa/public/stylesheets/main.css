@@ -94,13 +94,13 @@ content
 ************************/	
 div.content {
 	padding: 10px;
-	font-size: 16pt;
+	font-size: 14pt;
 }
-div.content a{
-	font-size: 12pt;
+div.content a {
+	font-size: 10pt;
 }
 div.content button {
-	font-size: 16pt;
+	font-size: 14pt;
 }
 div.content ul {
 	padding: 0;
@@ -110,9 +110,8 @@ div.content ul {
 div.content li.bestAnswer {
 	background: #2b6026;
 }
-
 div.content li.own {
-	background: #666666;
+	background: #320;
 }
 
 div.content li {
@@ -128,9 +127,15 @@ div.content li[onclick] {
 }
 		
 div.content li[onclick]:hover {
-	background: #222;
+	background: #666;
 }
-		
+
+div.content li.question p,
+div.content ul.answers p {
+	margin-top: 0.2em;
+	margin-bottom: 0.5em;
+}
+	
 div.content li p {
 	color: #aecbfb;
 }
@@ -156,23 +161,15 @@ div.content div.date {
 	right: 7px;
 	font-size: 10pt;
 }
-div.content form {
-	margin: 10px 0;
-	padding: 7px;
-	position: relative;
-}
 			
 div.content textarea {
 	height: 50px;
 	width: 710px;
-	background: #555;
+	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;
 }
-		
-div.content input[type="submit"] {
-	display: block;
-}
+	
 /*********************** 
 footer
 ************************/
@@ -199,10 +196,14 @@ div.message p {
 div.message table {
 	color: #aecbfb;
 }
+div.message form {
+	margin: 10px 0;
+	padding: 7px;
+}
 div.message textarea {
 	height: 80px;
 	width: 740px;
-	background: #555;
+	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;
 }
@@ -271,6 +272,9 @@ div.profilenavi {
 	padding: 5px;	
 	color: #ff8400;
 }
+ul.optionLinks a {
+	font-size: 1.2em;
+}
 /*********************** 
 Cheater Warning
 ************************/
@@ -298,6 +302,10 @@ div.notificationInfo {
 	margin: 8px;
 	padding: 5px;	
 	background: #2b6026;
+}
+div.message p.hint {
+	font-size: 0.8em;
+	color: #888;
 }
 /*********************** 
 tags and tag autocomplete box
@@ -334,3 +342,28 @@ div.tags .tag {
 }
 .ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
+/*********************** 
+HTML5 form validation
+************************/
+input[type="text"], input[type="password"], input[type="email"], input[type="url"] {
+	min-width: 200px;
+}
+input[required] + object,
+input[pattern] + object,
+input[type="email"] + object,
+input[type="url"] + object {
+	background: url(../images/h5f_validation.png) 0px 24px no-repeat;
+	width: 17px; height: 17px;
+}
+input:invalid + object,
+input.error + object {
+	background-position: 0px 0px;
+}
+input:required:invalid + object,
+input.required + object {
+	background-position: 0px -32px;
+}
+input:valid:focus + object,
+input.valid:focus + object { 
+	background-position: 0px -64px;
+}

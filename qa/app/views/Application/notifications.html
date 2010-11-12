@@ -16,7 +16,7 @@
 				#{if notification.isNew()}<p>*new*#{/if}
 				#{showProfile notification.getAbout() /} answered to
 				${notification.getAbout().getQuestion().summary()}:
-				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content()}</a></p>
+				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content().nl2br()}</a></p>
 				#{date notification.getAbout() /}
 				<p><a href="@{Secured.deleteNotification(notification.getID())}">delete</a></p>
 			</div><!-- end message -->
@@ -29,6 +29,10 @@
 		#{if user.getNewNotifications().size() > 0}
 			<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
 		#{/if}
+		<div class="message">
+			<p class="hint">You'll find a <a>watch</a> link on the page of every individual question.
+			You're also automatically set to watch your own questions after asking them.</p>
+		</div><!-- end message -->
 		</ul>
 
 	#{/if}
@@ -37,21 +41,25 @@
 		#{if watchingQuestions.size() != 0}
 			<ul>
 				#{list items:watchingQuestions, as:'question'}
-					<li onclick="goto('@@{Application.question(question.id())}')">
+					<li class="question" onclick="goto('@@{Application.question(question.id())}')">
 						<a href="@{Application.question(question.id())}">
 							<h2>#{showProfile question /}:</h2>
 						</a>
-						<p>${question.content()}</p>
-						<a href="@{Secured.unwatchQuestion(question.id())}">Unwatch</a>
+						<p>${question.content().nl2br()}</p>
+						<a href="@{Secured.unwatchQuestionFromList(question.id())}">Unwatch</a>
 					</li>
 				#{/list}
 			</ul>
 		#{/if}
 		#{else}
 			<div class="message">
-				<p>No questions in your list.</p>
+				<p>You're not watching any questions - go watch some!</p>
 			</div><!-- end message -->
 		#{/else}
+		<div class="message">
+			<p class="hint">You'll find a <a>watch</a> link on the page of every individual question.
+			You're also automatically set to watch your own questions after asking them.</p>
+		</div><!-- end message -->
 	#{/elseif}
 	#{elseif content == 2}
 		<h1>Recommended Question</h1>
@@ -69,8 +77,11 @@
 		</ul>
 		#{else} 
 			<div class="message">
-				<p>No recommended questions for you yet.</p>
+				<p>We're not able to recommend any (more) questions for you to answer at the moment.</p>
 			</div><!-- end message -->
 		#{/else}
+		<div class="message">
+			<p class="hint">We'll try to list here questions having similar labels or content to those that you've already successfully answered.</p>
+		</div><!-- end message -->
 	#{/elseif}
 </div>

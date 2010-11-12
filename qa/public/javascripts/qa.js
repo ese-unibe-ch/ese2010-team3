@@ -54,4 +54,8 @@ $(document).ready(function() {
 			.attr("tagsJSON", $(this).attr("tagsJSON")).val(tags.join(" "));
 		$("input[type=text][tagsJSON]").autocomplete(TagAutocompletion);
 	});
+	
+	// simulate autofocus for non-HTML5 browsers
+	if (!("autofocus" in document.createElement("input")))
+		$("input[autofocus]").focus();
 });

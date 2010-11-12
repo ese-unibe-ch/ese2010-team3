@@ -40,18 +40,11 @@ public class Application extends Controller {
 		} else {
 			List<Question> similarQuestions = (new ArrayList(question
 					.getSimilarQuestions()));
-			if (similarQuestions.size() > 3) {
-				similarQuestions = similarQuestions.subList(0, 3);
-			}
+			if (similarQuestions.size() > 5)
+				similarQuestions = similarQuestions.subList(0, 5);
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
-	}
-
-	public static void relatedQuestions(int id) {
-		Question question = Database.get().questions().get(id);
-
-		render(question);
 	}
 
 	public static void answerQuestion(int id) {

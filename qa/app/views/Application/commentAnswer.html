@@ -1,12 +1,12 @@
 #{extends 'main.html' /}
 #{if answer}
 	#{set title:'ajopi - ' + answer.summary()  /}
-<a href="@{Application.question(question.id())}">back</a>
-	<ul>
+	<a href="@{Application.question(question.id())}">back</a>
+	<ul class="answers">
 		<li>
 			<h2>#{showProfile answer /}:</h2>
 			<p>
-				${answer.content()}
+				${answer.content().nl2br()}
 			</p>
 			#{date question /}
 			#{if user && question.owner() != user}
@@ -20,10 +20,10 @@
 			#{list items:comments, as:'comment'}
 			<li class="comments">
 				<h2>#{showProfile comment /}:</h2>
-				<p>${comment.content()}</p>
+				<p>${comment.content().nl2br()}</p>
 				#{date comment /}
 				#{if user && comment.owner() == user}
-					<a href="@{Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id())}">Delete</a>
+					<a href="@{Secured.deleteCommentAnswer(question.id(), answer.id(), comment.id())}">Delete</a>
 				#{/if}
 			</li>
 			#{/list}

@@ -6,7 +6,7 @@
 		#{/if}#{else}
 			@{Secured.voteQuestionDown(_arg.id())}
 		#{/else}
-	">-</a>
+	" title="vote down">-</a>
 	
 	${_arg.rating()}
 
@@ -16,6 +16,6 @@
 		#{/if}#{else}
 			@{Secured.voteQuestionUp(_arg.id())}
 		#{/else}
-	">+</a>
+	" title="vote up">+</a>
 
 </span>
