@@ -58,4 +58,7 @@ $(document).ready(function() {
 	// simulate autofocus for non-HTML5 browsers
 	if (!("autofocus" in document.createElement("input")))
 		$("input[autofocus]").focus();
+	
+	// enable the HTML5 validator for all forms
+	$("form").validator();
 });
