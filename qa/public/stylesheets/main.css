@@ -199,11 +199,10 @@ message
 ************************/
 div.message {
 	background: #333333;
-	margin: 4px;
 	padding: 5px;	
 }
 div.message p {
-	margin: 5px;
+	margin: 5px 0px;
 	color: #aecbfb;
 }
 div.message table {
@@ -211,7 +210,7 @@ div.message table {
 }
 div.message form {
 	margin: 10px 0;
-	padding: 7px;
+	padding: 5px;
 }
 div.message textarea {
 	height: 80px;
@@ -309,7 +308,7 @@ div.notificationnavi {
 	text-align:left;
 	background: #333333;
 	padding: 5px;
-	margin: 4px;	
+	margin: 4px 0px;	
 	color: #ff8400;
 }
 div.notificationInfo {
@@ -323,7 +322,7 @@ div.notificationInfo.error {
 	background: #602b26;
 }
 div.message p.hint {
-	font-size: 80%;
+	font-size: 0.8em;
 	color: #888;
 }
 /*********************** 
@@ -365,7 +364,7 @@ div.tags .tag {
 HTML5 form validation
 ************************/
 span.placeholder {
-	font-size: 80%;
+	font-size: 0.8em;
 	color: #888;
 }
 /* source: https://github.com/ryanseddon/H5F */

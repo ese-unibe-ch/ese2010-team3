@@ -3,32 +3,9 @@
 	#{set title:'ajopi - ' + answer.summary()  /}
 	<a href="@{Application.question(question.id())}">back</a>
 	<ul class="answers">
-		<li>
-			<h2>#{showProfile answer /}:</h2>
-			<p>
-				${answer.content().nl2br()}
-			</p>
-			#{date question /}
-			#{if user && question.owner() != user}
-				#{vote question /}
-			#{/if}
-		</li>
+		#{answer answer:answer, user:user, extended:false /}
 	</ul>
-	#{if comments.size() > 0}
-		<p class="comments">Comments</p>
-		<ul class="comments">
-			#{list items:comments, as:'comment'}
-			<li class="comments">
-				<h2>#{showProfile comment /}:</h2>
-				<p>${comment.content().nl2br()}</p>
-				#{date comment /}
-				#{if user && comment.owner() == user}
-					<a href="@{Secured.deleteCommentAnswer(question.id(), answer.id(), comment.id())}">Delete</a>
-				#{/if}
-			</li>
-			#{/list}
-		</ul>
-	#{/if}
+	#{comments entry:answer, user:user /}
 	#{if user}
 		<h1>Add Comment</h1>
 		<div class="message">

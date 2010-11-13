@@ -1,3 +1,4 @@
+#{if false} Arguments: _question, _editable #{/if}
 <div class="tags">
 	#{form @Secured.updateTags(_question.id())}
 	#{list items:_question.getTags(), as:'tag'}

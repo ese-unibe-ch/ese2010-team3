@@ -1,22 +1,15 @@
 #{extends 'main.html' /}
 #{set title:'Search: '+term /}
 <h1>Search: ${term}</h1>
+
 #{if results.size() > 0}
-<ul>
-	#{list items:results, as:'question'}
-		<li class="question #{if question.owner() == user}own#{/if}"
-			onclick="goto('@@{Application.question(question.id())}')">
-			<a href="@{Application.question(question.id())}">
-				<h2>#{showProfile question /}:</h2>
-			</a>
-			<p>${question.content().nl2br()}</p>
-			#{date question /}
-			#{tags question:question, editable:false /}  
-		</li>
-	#{/list}
-</ul>
+	<ul>
+		#{list items:results, as:'question'}
+			#{question question:question, user:user, extended:false /}
+		#{/list}
+	</ul>
 #{/if}#{else}
-<div class="message">
-	<p>No questions matching '${term}' found!</p>
-</div><!-- end message -->
+	<div class="message">
+		<p>No questions matching '${term}' found!</p>
+	</div><!-- end message -->
 #{/else}

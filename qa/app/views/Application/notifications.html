@@ -13,7 +13,7 @@
 		#{list items:notifications, as:'notification'}
 			<li>
 			<div class="message">
-				#{if notification.isNew()}<p>*new*#{/if}
+				#{if notification.isNew()}*new*#{/if}
 				#{showProfile notification.getAbout() /} answered to
 				${notification.getAbout().getQuestion().summary()}:
 				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content().nl2br()}</a></p>
@@ -41,13 +41,7 @@
 		#{if watchingQuestions.size() != 0}
 			<ul>
 				#{list items:watchingQuestions, as:'question'}
-					<li class="question" onclick="goto('@@{Application.question(question.id())}')">
-						<a href="@{Application.question(question.id())}">
-							<h2>#{showProfile question /}:</h2>
-						</a>
-						<p>${question.content().nl2br()}</p>
-						<a href="@{Secured.unwatchQuestionFromList(question.id())}">Unwatch</a>
-					</li>
+					#{question question:question, user:user, extended:false, custom:'watchlist' /}
 				#{/list}
 			</ul>
 		#{/if}
@@ -64,17 +58,13 @@
 	#{elseif content == 2}
 		<h1>Recommended Question</h1>
 		#{if suggestedQuestions.size() != 0}
-		<h2>By the way, you might also know the answer to these questions:</h2>
-		<ul>
-		#{list items:suggestedQuestions, as:'question'}<p>
-				<li>
-				#{showProfile question /}:
-					<a href="@{Application.question(question.id())}">
-					${question.summary()}</a>#{date question /}</p>
+			<h2>By the way, you might also know the answer to these questions:</h2>
+			<ul>
+				#{list items:suggestedQuestions, as:'question'}
+					#{question question:question, user:user, extended:false /}
 				#{/list}
-				</li>
+			</ul>
 		#{/if}
-		</ul>
 		#{else} 
 			<div class="message">
 				<p>We're not able to recommend any (more) questions for you to answer at the moment.</p>
