@@ -5,15 +5,17 @@
 	#{date _answer /}
 	
 	#{if _extended && _user}
-		#{if !_user.isBlocked() && !_answer.getQuestion().isLocked()}
-			<a href ="@{Application.commentAnswer(_answer.getQuestion().id(), _answer.id())}">Add a new comment</a>
-		#{/if}
-		#{if _user.canEdit(_answer) && !_answer.getQuestion().isLocked()}
-			<a href="@{Secured.deleteAnswer(_answer.getQuestion().id(), _answer.id())}"> | Delete</a>
-		#{/if}
-		#{if _user.canEdit(_answer.getQuestion()) && !_answer.getQuestion().isLocked() && _answer.getQuestion().isBestAnswerSettable() && _answer.getQuestion().getBestAnswer() != _answer}
-			<a href="@{Secured.selectBestAnswer(_answer.getQuestion().id(), _answer.id())}"> | Select as Best</a>
-		#{/if}
+		<div class="commands">
+			#{if !_user.isBlocked() && !_answer.getQuestion().isLocked()}
+				<a href ="@{Application.commentAnswer(_answer.getQuestion().id(), _answer.id())}">Add a new comment</a>
+			#{/if}
+			#{if _user.canEdit(_answer) && !_answer.getQuestion().isLocked()}
+				<a href="@{Secured.deleteAnswer(_answer.getQuestion().id(), _answer.id())}"> | Delete</a>
+			#{/if}
+			#{if _user.canEdit(_answer.getQuestion()) && !_answer.getQuestion().isLocked() && _answer.getQuestion().isBestAnswerSettable() && _answer.getQuestion().getBestAnswer() != _answer}
+				<a href="@{Secured.selectBestAnswer(_answer.getQuestion().id(), _answer.id())}"> | Select as Best</a>
+			#{/if}
+		</div>
 	#{/if}
 	#{if _user && _answer.owner() != _user && !_user.isBlocked()}
 		#{vote _answer /}

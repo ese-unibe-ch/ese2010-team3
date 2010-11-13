@@ -109,7 +109,7 @@ div.content {
 	padding: 5px 10px;
 	font-size: 14pt;
 }
-div.content a {
+div.content div.commands a {
 	font-size: 10pt;
 }
 div.content button {
@@ -200,13 +200,10 @@ message
 div.message {
 	background: #333333;
 	padding: 5px;	
+	color: #aecbfb;
 }
 div.message p {
 	margin: 5px 0px;
-	color: #aecbfb;
-}
-div.message table {
-	color: #aecbfb;
 }
 div.message form {
 	margin: 10px 0;
@@ -283,8 +280,9 @@ div.editprofile textarea {
 div.profilenavi {
 	background: #333333;
 	margin: 4px;
-	padding: 5px;	
+	padding: 5px;
 	color: #ff8400;
+	font-size: 12pt;
 }
 ul.optionLinks a {
 	font-size: 1.2em;
@@ -310,6 +308,7 @@ div.notificationnavi {
 	padding: 5px;
 	margin: 4px 0px;	
 	color: #ff8400;
+	font-size: 12pt;
 }
 div.notificationInfo {
 	text-align:left;
@@ -324,6 +323,12 @@ div.notificationInfo.error {
 div.message p.hint {
 	font-size: 0.8em;
 	color: #888;
+}
+div.message p.commands {
+	position: absolute;
+	top: 15px;
+	right: 5px;
+	font-size: 10pt;
 }
 /*********************** 
 tags and tag autocomplete box

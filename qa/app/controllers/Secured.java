@@ -286,7 +286,7 @@ public class Secured extends Controller {
 		for (Notification n : user.getNewNotifications()) {
 			n.unsetNew();
 		}
-		flash.success("All notifications have been set as read.");
+		flash.success("All notifications have been marked as read.");
 		Application.notifications(0);
 	}
 
