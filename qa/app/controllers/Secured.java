@@ -32,19 +32,17 @@ public class Secured extends Controller {
 	}
 
 	public static void newAnswer(int questionId, @Required String content) {
-		if (!Validation.hasErrors()
-				&& Database.get().questions().get(questionId) != null) {
+		Question question = Database.get().questions().get(questionId);
+		if (!Validation.hasErrors() && question != null) {
 			User thisUser = Session.get().currentUser();
-			Question thisQuestion = Database.get().questions().get(questionId);
-			if (!thisQuestion.isLocked()) {
-				thisQuestion.answer(thisUser, content);
+			if (!question.isLocked()) {
+				question.answer(thisUser, content);
+				flash.success("Thanks for posting an answer.");
 			}
-			flash.success("Thanks for posting an answer.");
-			Application.question(questionId);
 		} else {
 			flash.error("Please don't give empty answers.");
-			Application.index();
 		}
+		Application.question(questionId);
 	}
 
 	public static void newCommentQuestion(int questionId,

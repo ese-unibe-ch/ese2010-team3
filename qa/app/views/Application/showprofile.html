@@ -97,6 +97,15 @@
 			</tr>
 		</table>
 	</div><!-- end showprofile -->
+	#{if canEdit}
+		<div class="profilenavi">
+			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
+			<a href="@{Application.deleteuser}">Delete Account</a>
+			#{if user.isModerator() && user != showUser}
+				| <a href="@{Application.blockUser(showUser.getName())}">Block</a>
+			#{/if}
+		</div><!-- end profilenavi -->
+	#{/if}
 #{/if}
 #{else}
 	#{set title:'Error' /}

@@ -7,7 +7,6 @@ GET     /                                       Application.index
 POST	/										Secured.newQuestion
 
 GET		/question/{id}							Application.question
-POST	/question/{id}							Secured.newAnswer
 POST	/question/{questionId}					Secured.newAnswer
 
 GET     /question/{id}/comments/				Application.commentQuestion
