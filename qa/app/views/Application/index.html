@@ -3,7 +3,7 @@
 <ul>
 	#{list items:questions, as:'question'}
 		<li class="question #{if question.owner() == user}own#{/if}"
-			onclick="goto('@@{Application.question(question.id())}')">
+			onclick="goto('@{Application.question(question.id())}')">
 			<a href="@{Application.question(question.id())}">
 				<h2>#{showProfile question /}:</h2>
 			</a>
@@ -29,7 +29,7 @@
 					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}" placeholder="e.g. java, design, idea" />
 				</p>
 			#{/field}
-			<input type="submit" value="Post" />
+			<input type="submit" value="Add new question" />
 		#{/form}
 	</div><!-- end askquestion -->
 #{/if}

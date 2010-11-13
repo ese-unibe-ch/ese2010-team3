@@ -13,7 +13,7 @@
 				<tr>
 					#{field 'email'}
 					<td><label for="email">&{'Email: '}</label></td>
-					<td><input type="email" name="email" id="email" value="${user.email}" /> <object /></td>
+					<td><input type="email" name="email" id="email" value="${user.email}" /></td>
 					#{/field}
 				</tr>
 				<tr>
@@ -25,13 +25,13 @@
 				<tr>
 					#{field 'birthday'}
 					<td><label for="birthday">&{'Birthday: '}</label></td>
-					<td><input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" pattern="[0-3]?\d[./][0-3]?\d[./]\d\d(?:\d\d)?|\d{4}-[01]\d-[0-3]\d" placeholder="DD.MM.YYYY or MM/DD/YYYY" /> <object /></td>
+					<td><input type="text" name="birthday" id="birthday" value="${user.getDateOfBirth()}" pattern="[0-3]?\d[./][0-3]?\d[./]\d\d(?:\d\d)?|\d{4}-[01]\d-[0-3]\d" placeholder="DD.MM.YYYY or MM/DD/YYYY" /></td>
 					#{/field}
 				</tr>
 				<tr>
 					#{field 'website'}
 					<td><label for="website">&{'Website: '}</label></td>
-					<td><input type="url" name="website" id="website" value="${user.website}" placeholder="http://" /> <object /></td>
+					<td><input type="url" name="website" id="website" value="${user.website}" placeholder="http://" /></td>
 					#{/field}
 				</tr>
 				<tr>
@@ -53,6 +53,7 @@
 					#{/field}
 				</tr>
 				<tr>
+					<td></td>
 					<td><input type="submit" id="saveProfile" value="Save Profile" /></td>
 				</tr>
 			</table>

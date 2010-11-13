@@ -106,14 +106,10 @@ public class Application extends Controller {
 
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		boolean canEdit = true;
-		if (session.get("username") != null
-				&& session.get("username").equals(userName)) {
-			render(showUser, canEdit);
-		} else {
-			canEdit = false;
-			render(showUser, canEdit);
-		}
+		User user = Session.get().currentUser();
+		boolean canEdit = user != null
+				&& (user == showUser || user.isModerator());
+		render(showUser, canEdit);
 	}
 
 	public static void editProfile(String userName) {

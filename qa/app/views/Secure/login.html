@@ -4,15 +4,7 @@
 	<h1>Login</h1>
 	<div class="message">	
 		#{form @authenticate()}
-			#{if flash.error}
-				&{flash.error}
-			#{/if}
 			<table>	
-				<tr>
-					#{if flash.success}
-						<td colspan="2">&{flash.success}</td>
-					#{/if}
-				</tr>
 				<tr>
 		
 					<td>&{'secure.username'}</td>
@@ -25,7 +17,7 @@
 				<tr>
 				<tr>
 					<td></td>
-					<td><input type="submit" id="signin" value="&{'secure.signin'}" /></td>
+					<td><input type="submit" id="signin" value="Log in" /></td>
 				</tr>
 			</table>
 		#{/form}

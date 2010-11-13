@@ -16,6 +16,9 @@ h1 {
 	font-size: 1.3em;
 	margin-top: 20px;
 }
+h1:first-child {
+	margin-top: 0px;
+}
 
 h2 {
 	color: #ff8400;
@@ -62,7 +65,6 @@ div.header a {
 	display: block;
 	height: 131px;
 	width: 250px;
-	margin: 16px;
 	background: url(../images/logo.png) no-repeat center;
 }
 /*********************** 
@@ -76,8 +78,8 @@ div.navigation {
 }
 
 div.navigation div.user {			
-	float:right;
-	right: 	5px;
+	float: right;
+	right: 5px;
 	margin-top: 4px;
 }
 
@@ -89,11 +91,22 @@ div.navigation div.search {
 	float:left;
 }
 
+#mini_login {
+	float: right;
+	right: 5px;
+}
+#mini_login input {
+	max-width: 100px;
+}
+#mini_login + .user {
+	display: none;
+}
+
 /*********************** 
 content
 ************************/	
 div.content {
-	padding: 10px;
+	padding: 5px 10px;
 	font-size: 14pt;
 }
 div.content a {
@@ -302,12 +315,16 @@ div.notificationnavi {
 }
 div.notificationInfo {
 	text-align:left;
-	margin: 8px;
-	padding: 5px;	
+	margin: 5px 0px;
+	padding: 5px;
+	color: #fff;
 	background: #2b6026;
 }
+div.notificationInfo.error {
+	background: #602b26;
+}
 div.message p.hint {
-	font-size: 0.8em;
+	font-size: 80%;
 	color: #888;
 }
 /*********************** 
@@ -348,8 +365,13 @@ div.tags .tag {
 /*********************** 
 HTML5 form validation
 ************************/
+span.placeholder {
+	font-size: 80%;
+	color: #888;
+}
 /* source: https://github.com/ryanseddon/H5F */
-input[type="text"], input[type="password"], input[type="email"], input[type="url"] {
+.content input[type="text"], .content input[type="password"],
+.content input[type="email"], .content input[type="url"] {
 	min-width: 200px;
 }
 input[required] + object,

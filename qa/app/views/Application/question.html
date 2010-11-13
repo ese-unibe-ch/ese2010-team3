@@ -54,14 +54,14 @@
 				<h2>#{showProfile answer /}:</h2>
 				<p>${answer.content().nl2br()}</p>
 				#{if user != null && !user.isBlocked() && !question.isLocked()}
-					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">  &#160; &#160;Add a new comment</a>
+					<a href ="@{Application.commentAnswer(question.id(),answer.id())}">Add a new comment</a>
 				#{/if}
 				#{date answer /}
 				
 				#{if user && user.canEdit(answer) && !question.isLocked()}
 					<a href="@{Secured.deleteAnswer(question.id(), answer.id())}"> | Delete</a>
 				#{/if}
-				#{if user && user.canEdit(question) && !question.isLocked()}
+				#{if user && user.canEdit(question) && !question.isLocked() && question.isBestAnswerSettable() && question.getBestAnswer() != answer}
 					<a href="@{Secured.selectBestAnswer(question.id(), answer.id())}"> | Select as Best</a>
 				#{/if}
 				#{if user && answer.owner() != user && !user.isBlocked()}
@@ -103,7 +103,7 @@
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 				#{/field}
-				<input type="submit" value="Post" />
+				<input type="submit" value="Add new answer" />
 			#{/form}
 		</div><!-- end message -->
 	#{/if}

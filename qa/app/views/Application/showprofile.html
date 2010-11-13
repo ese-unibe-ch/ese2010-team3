@@ -2,15 +2,15 @@
 
 #{set title:'ajopi - Profile' /}
 #{if user != null && showUser}
-	<div class="profilenavi">
 	#{if canEdit}
-		<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
-		<a href="@{Application.deleteuser}">Delete Account</a>
+		<div class="profilenavi">
+			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
+			<a href="@{Application.deleteuser}">Delete Account</a>
+			#{if user.isModerator() && user != showUser}
+				| <a href="@{Application.blockUser(showUser.getName())}">Block</a>
+			#{/if}
+		</div><!-- end profilenavi -->
 	#{/if}
-	#{if user.isModerator() && user != showUser}
-		<a href="@{Application.blockUser(showUser.getName())}">Block</a>
-	#{/if}
-	</div><!-- end profilenavi -->
 	<div>
 		<table>
 			<tr>

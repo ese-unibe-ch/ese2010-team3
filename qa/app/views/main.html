@@ -12,20 +12,11 @@
 		<script src="@{'/public/javascripts/qa.js'}" type="text/javascript"></script>
 		#{get 'moreScripts' /}
 	</head>
-	<body #{if user && user.isBlocked()}class="cheaterWarning">#{/if}>
+	<body #{if user && user.isBlocked()}class="cheaterWarning"#{/if}>
 		<div class="main">
 			<div class="header">
 				<a href="@{Application.index}"></a>
 			</div><!-- end header -->
-			#{if user && user.isBlocked()}
-				<div class="cheaterWarning">You have been blocked by a moderator. Reason: ${user.getStatusMessage()}</div>
-			#{/if}
-	 		#{elseif user && user.getVeryRecentNewNotification() != null}
-				<div class="notificationInfo">
-					New answer to one of your questions:
-					<a href="@{Secured.followNotification(user.getVeryRecentNewNotification().getID())}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
-				</div>
-			#{/elseif}
 			<div class="navigation">
 			<div class="search">
 				<form class="search" action="@{Application.search}" method="GET">
@@ -47,6 +38,25 @@
 					#{/else}	
 			</div><!-- end user -->
 			</div><!-- end navigaion -->
+			#{if flash.error}
+				<div class="notificationInfo error">
+					&{flash.error}
+				</div>
+			#{/if}
+			#{elseif flash.success}
+				<div class="notificationInfo">
+					&{flash.success}
+				</div>
+			#{/elseif}
+	 		#{elseif user && user.getVeryRecentNewNotification() != null}
+				<div class="notificationInfo">
+					New answer to one of your questions:
+					<a href="@{Secured.followNotification(user.getVeryRecentNewNotification().getID())}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
+				</div>
+			#{/elseif}
+			#{elseif user && user.isBlocked()}
+				<div class="cheaterWarning">You have been blocked by a moderator. Reason: ${user.getStatusMessage()}</div>
+			#{/elseif}
 			<div class="content">
 			#{doLayout /}
 			</div><!-- end content -->
