@@ -1,6 +1,6 @@
 package models.database.importers;
 
-import java.io.ByteArrayInputStream;
+import java.io.CharArrayReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,19 +13,55 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * Static collection of methods to import data from external sources, the most
+ * prominent being XML.
+ * 
+ * @author aaron
+ * 
+ */
 public class Importer {
+
+	/**
+	 * Imports data from a XML string with the syntax specified by the
+	 * {@link XMLParser}.
+	 * 
+	 * @param string
+	 *            XML formated string
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	public static void importXML(String string) throws SAXException,
 			IOException, ParserConfigurationException {
-		ByteArrayInputStream stream = new ByteArrayInputStream(string
-				.getBytes());
-		importXML(new InputSource(stream));
+		importXML(new InputSource(new CharArrayReader(string.toCharArray())));
 	}
 
+	/**
+	 * Imports data from a XML file with the syntax specified by the
+	 * {@link XMLParser}.
+	 * 
+	 * @param file
+	 *            File object to import
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	public static void importXML(File file) throws SAXException,
 			IOException, ParserConfigurationException {
 		importXML(new InputSource(new FileReader(file)));
 	}
 
+	/**
+	 * Imports data from a XML InputSource with the syntax specified by the
+	 * {@link XMLParser}.
+	 * 
+	 * @param stream
+	 *            arbitrary input source
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	public static void importXML(InputSource stream) throws SAXException,
 			IOException,
 			ParserConfigurationException {

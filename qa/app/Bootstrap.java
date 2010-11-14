@@ -1,18 +1,37 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import models.Question;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
+import models.database.importers.Importer;
+
+import org.xml.sax.SAXException;
+
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 
 @OnApplicationStart
 public class Bootstrap extends Job {
 
-	@Override
 	public void doJob() {
+		try {
+			Importer.importXML(new File("conf/fixtures/QA3.xml"));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void doJobx() {
 
 		// User
 
