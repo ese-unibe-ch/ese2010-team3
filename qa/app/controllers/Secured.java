@@ -268,16 +268,15 @@ public class Secured extends Controller {
 		Application.notifications(0);
 	}
 
-	public static void blockUser(String username, String block, String reason) {
+	public static void blockUser(String username, String reason) {
 		User user = Database.get().users().get(username);
 		User mod = Session.get().currentUser();
-		if (reason.equals("")) {
-			reason = "no reason given";
-		}
-		if (block.equals("block") && mod.isModerator() && mod != user) {
+		if (mod.isModerator() && mod != user && !user.isBlocked()) {
+			if (reason.equals("")) {
+				reason = "no reason given";
+			}
 			user.block(reason);
-		}
-		if (block.equals("unblock") && mod.isModerator() && mod != user) {
+		} else if (mod.isModerator() && mod != user && user.isBlocked()) {
 			user.unblock();
 		}
 		Application.showprofile(user.getName());

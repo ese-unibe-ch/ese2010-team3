@@ -7,9 +7,6 @@
 		<a href="@{Application.deleteuser}">Delete</a> | 
 		<a href="@{Application.editProfile(showUser.getName())}">Edit</a>
 	#{/if}
-	#{if user.isModerator() && user != showUser}
-			<a href="@{Application.blockUser(showUser.getName())}">Block</a>
-	#{/if}
 	</div><!-- end profilenavi -->
 	<div>
 		<table>
@@ -97,6 +94,32 @@
 			</tr>
 		</table>
 	</div><!-- end showprofile -->
+	#{if user.isModerator() && user != showUser}
+	<div class="profilenavi">
+		#{form @Secured.blockuser(showUser.getName())}
+		<table>
+			#{if !showUser.isBlocked()}
+			<td class="blocked">Block this User</td>
+			<tr>
+				#{field 'reason'}
+				<td class="blocked"><label for="reason">&{'Reason: '}</label></td>
+				<td><input type="text" name="reason" id="reason" value="" /></td>
+				#{/field}
+			</tr>
+			<tr>
+				<td></td><td><input type="submit" id="blockUser" value="Block User" /></td>
+			</tr>
+			#{/if}
+			#{if showUser.isBlocked()}
+			<td class="blocked">This User is blocked. Unblock now?</td>
+			<tr>
+				<td><input type="submit" id="blockUser" value="Unblock User" /></td>
+			</tr>
+			#{/if}
+		</table>
+		#{/form}
+	</div><!-- end profilenavi -->
+	#{/if}
 #{/if}
 #{else}
 	#{set title:'Error' /}

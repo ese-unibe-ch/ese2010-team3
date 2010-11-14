@@ -7,7 +7,7 @@
 			<h2>#{showProfile question /}:</h2>
 			<p>${question.content()}</p>
 			#{tags question:question, editable:user?.canEdit(question) /}  
-			#{if user != null && !question.isLocked()}
+			#{if user != null && !question.isLocked() && !user.isBlocked()}
 				<a href ="@{Application.commentQuestion(question.id())}">  &#160; &#160;Add a new comment</a>
 				#{if user.isObserving(question)}
 					<a href="@{Secured.unwatchQuestion(question.id())}"> | Unwatch</a>
@@ -25,7 +25,7 @@
 				<a href="@{Secured.deleteQuestion(question.id())}"> | Delete</a>
 			#{/if}
 			#{date question /}
-			#{if user && question.owner() != user && !user.isBlocked()}
+			#{if user && question.owner() != user && !user.isBlocked() && !question.isLocked()}
 				#{vote question /}
 			#{/if}
 		</li>
@@ -77,7 +77,7 @@
 				#{if user && user.canEdit(question) && !question.isLocked()}
 					<a href="@{Secured.selectBestAnswer(question.id(),answer.id())}"> | Best</a>
 				#{/if}
-				#{if user && answer.owner() != user && !user.isBlocked()}
+				#{if user && answer.owner() != user && !user.isBlocked() && !question.isLocked()}
 					#{vote answer /}
 				#{/if}
 				

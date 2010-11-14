@@ -699,4 +699,21 @@ public class User implements IObserver {
 		return Database.get().users().get(name.toLowerCase());
 	}
 
+	/**
+	 * Get the real username of a user if we do not know which and if some
+	 * letters are uppercase or small letters. To carry on the example in
+	 * isAvailable() the getCaseName(something) would be SoMeThInG
+	 * 
+	 * @param username
+	 * @return the username in the same way the user is registered
+	 */
+
+	public static String getCaseName(String username) {
+		for (User user : Database.get().users().all()) {
+			if (user.getName().toLowerCase().equals(username.toLowerCase()))
+				return user.getName();
+		}
+		return "";
+	}
+
 }
