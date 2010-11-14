@@ -40,18 +40,11 @@ public class Application extends Controller {
 		} else {
 			List<Question> similarQuestions = (new ArrayList(question
 					.getSimilarQuestions()));
-			if (similarQuestions.size() > 3) {
-				similarQuestions = similarQuestions.subList(0, 3);
-			}
+			if (similarQuestions.size() > 5)
+				similarQuestions = similarQuestions.subList(0, 5);
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
-	}
-
-	public static void relatedQuestions(int id) {
-		Question question = Database.get().questions().get(id);
-
-		render(question);
 	}
 
 	public static void answerQuestion(int id) {
@@ -113,14 +106,10 @@ public class Application extends Controller {
 
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		boolean canEdit = true;
-		if (session.get("username") != null
-				&& session.get("username").equals(userName)) {
-			render(showUser, canEdit);
-		} else {
-			canEdit = false;
-			render(showUser, canEdit);
-		}
+		User user = Session.get().currentUser();
+		boolean canEdit = user != null
+				&& (user == showUser || user.isModerator());
+		render(showUser, canEdit);
 	}
 
 	public static void editProfile(String userName) {
@@ -134,7 +123,7 @@ public class Application extends Controller {
 
 	public static void tags(String term, String content) {
 		String tagString = "";
-		for (Tag tag : Tag.tags()) {
+		for (Tag tag : Database.get().tags().all()) {
 			if (term == null || tag.getName().startsWith(term.toLowerCase())) {
 				tagString += tag.getName() + " ";
 			}

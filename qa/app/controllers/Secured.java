@@ -23,53 +23,56 @@ public class Secured extends Controller {
 			question.setTagString(tags);
 			user.startObserving(question);
 			question.setTagString(tags);
+			flash.success("Good luck for getting a reasonable answer!");
 			Application.question(question.id());
 		} else {
+			flash.error("Please don't ask empty questions.");
 			Application.index();
 		}
 	}
 
 	public static void newAnswer(int questionId, @Required String content) {
-		if (!Validation.hasErrors()
-				&& Database.get().questions().get(questionId) != null) {
+		Question question = Database.get().questions().get(questionId);
+		if (!Validation.hasErrors() && question != null) {
 			User thisUser = Session.get().currentUser();
-			Question thisQuestion = Database.get().questions().get(questionId);
-			if (!thisQuestion.isLocked()) {
-				thisQuestion.answer(thisUser, content);
+			if (!question.isLocked()) {
+				question.answer(thisUser, content);
+				flash.success("Thanks for posting an answer.");
 			}
-			Application.question(questionId);
 		} else {
-			Application.index();
+			flash.error("Please don't give empty answers.");
 		}
+		Application.question(questionId);
 	}
 
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
-		if (!Validation.hasErrors()
-				&& Database.get().questions().get(questionId) != null) {
+		Question question = Database.get().questions().get(questionId);
+
+		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
 			User thisUser = Session.get().currentUser();
-			Question thisQuestion = Database.get().questions().get(questionId);
-			if (!thisQuestion.isLocked()) {
-				thisQuestion.comment(thisUser, content);
-			}
-			Application.commentQuestion(questionId);
+			question.comment(thisUser, content);
+			flash.success("May your comment be helpful in clarifying the question!");
+			Application.question(questionId);
 		}
 	}
 
 	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
-		Answer answer = question.getAnswer(answerId);
+		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
-			Application.commentAnswer(questionId, answerId);
+			flash.success("May your comment be helpful in clarifying the answer!");
+			Application.question(questionId);
 		}
 	}
 
 	public static void voteQuestionUp(int id) {
-		if (Database.get().questions().get(id) != null) {
-			Database.get().questions().get(id).voteUp(
-					Session.get().currentUser());
+		Question question = Database.get().questions().get(id);
+		if (question != null) {
+			question.voteUp(Session.get().currentUser());
+			flash.success("Your up-vote has been registered.");
 			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
@@ -79,9 +82,10 @@ public class Secured extends Controller {
 	}
 
 	public static void voteQuestionDown(int id) {
-		if (Database.get().questions().get(id) != null) {
-			Database.get().questions().get(id).voteDown(
-					Session.get().currentUser());
+		Question question = Database.get().questions().get(id);
+		if (question != null) {
+			question.voteDown(Session.get().currentUser());
+			flash.success("Your down-vote has been registered.");
 			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
@@ -91,10 +95,11 @@ public class Secured extends Controller {
 	}
 
 	public static void voteAnswerUp(int question, int id) {
-		if (Database.get().questions().get(question) != null
-				&& Database.get().questions().get(question).getAnswer(id) != null) {
-			Database.get().questions().get(question).getAnswer(id).voteUp(
-					Session.get().currentUser());
+		Question q = Database.get().questions().get(question);
+		Answer answer = q.getAnswer(id);
+		if (answer != null) {
+			answer.voteUp(Session.get().currentUser());
+			flash.success("Your up-vote has been registered");
 			Application.question(question);
 		} else {
 			Application.index();
@@ -102,43 +107,48 @@ public class Secured extends Controller {
 	}
 
 	public static void voteAnswerDown(int question, int id) {
-		if (Database.get().questions().get(question) != null
-				&& Database.get().questions().get(question).getAnswer(id) != null) {
-			Database.get().questions().get(question).getAnswer(id).voteDown(
-					Session.get().currentUser());
+		Question q = Database.get().questions().get(question);
+		Answer answer = q.getAnswer(id);
+		if (answer != null) {
+			answer.voteDown(Session.get().currentUser());
+			flash.success("Your down-vote has been registered.");
 			Application.question(question);
 		} else {
 			Application.index();
 		}
 	}
 
-	public static void deleteQuestion(int questionId) {
-		Question question = Database.get().questions().get(questionId);
+	public static void deleteQuestion(int id) {
+		Question question = Database.get().questions().get(id);
+		flash.success("The question '%s' has been deleted.", question.summary());
 		question.unregister();
 		Application.index();
 	}
 
-	public static void deleteAnswer(int answerId, int questionId) {
+	public static void deleteAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
+		flash.success("The answer '%s' has been deleted.", answer.summary());
 		Application.question(questionId);
 	}
 
-	public static void deleteCommentQuestion(int commentId, int questionId) {
+	public static void deleteCommentQuestion(int questionId, int commentId) {
 		Question question = Database.get().questions().get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
-		Application.commentQuestion(questionId);
+		flash.success("The comment '%s' has been deleted.", comment.summary());
+		Application.question(questionId);
 	}
 
-	public static void deleteCommentAnswer(int commentId, int questionId,
-			int answerId) {
+	public static void deleteCommentAnswer(int questionId, int answerId,
+			int commentId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
-		Application.commentAnswer(questionId, answerId);
+		flash.success("The comment '%s' has been deleted.", comment.summary());
+		Application.question(questionId);
 	}
 
 	public static void deleteUser(String name) throws Throwable {
@@ -147,11 +157,14 @@ public class Secured extends Controller {
 			boolean deleteSelf = name.equals(Session.get().currentUser()
 					.getName());
 			user.delete();
+			flash.success("User %s has been deleted.", name);
 			if (deleteSelf) {
 				Secure.logout();
 			}
 		}
-		Application.index();
+		flash.error("You're not allowed to delete user %s!", name);
+		if (!redirectToCallingPage())
+			Application.index();
 	}
 
 	public static void anonymizeUser(String name) throws Throwable {
@@ -166,6 +179,7 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
+		flash.success("We're glad that you've been helped!");
 		Application.question(questionId);
 	}
 
@@ -207,13 +221,15 @@ public class Secured extends Controller {
 		if (biography != null) {
 			user.setBiography(biography);
 		}
+		flash.success("Thanks for keeping your profile up-to-date.");
 		Application.showprofile(user.getName());
 	}
 
 	public static void updateTags(int id, String tags) {
 		Question question = Database.get().questions().get(id);
 		User user = Session.get().currentUser();
-		if (question != null && user == question.owner()) {
+		if (question != null && user.canEdit(question)) {
+			flash.success("Thanks for keeping this question's labels up-to-date.");
 			question.setTagString(tags);
 		}
 		Application.question(id);
@@ -224,6 +240,7 @@ public class Secured extends Controller {
 		User user = Session.get().currentUser();
 		if (question != null) {
 			user.startObserving(question);
+			flash.success("You're now watching this question.");
 		}
 		Application.question(id);
 	}
@@ -233,8 +250,21 @@ public class Secured extends Controller {
 		User user = Session.get().currentUser();
 		if (question != null) {
 			user.stopObserving(question);
+			flash.success("You're no longer watching this question.");
 		}
 		Application.question(id);
+	}
+
+	public static void unwatchQuestionFromList(int id) {
+		Question question = Database.get().questions().get(id);
+		User user = Session.get().currentUser();
+		if (question != null) {
+			user.stopObserving(question);
+			flash.success(
+					"You're no longer watching <a href='/question/%d'>%s</a>.",
+					id, question.summary());
+		}
+		Application.notifications(1);
 	}
 
 	public static void followNotification(int id) {
@@ -256,6 +286,7 @@ public class Secured extends Controller {
 		for (Notification n : user.getNewNotifications()) {
 			n.unsetNew();
 		}
+		flash.success("All notifications have been marked as read.");
 		Application.notifications(0);
 	}
 
@@ -264,6 +295,7 @@ public class Secured extends Controller {
 		Notification n = user.getNotification(id);
 		if (n != null) {
 			n.unregister();
+			flash.success("You've got one notification less to care about.");
 		}
 		Application.notifications(0);
 	}
@@ -276,9 +308,11 @@ public class Secured extends Controller {
 		}
 		if (block.equals("block") && mod.isModerator() && mod != user) {
 			user.block(reason);
+			flash.success("User %s has been blocked (%s).", username, reason);
 		}
 		if (block.equals("unblock") && mod.isModerator() && mod != user) {
 			user.unblock();
+			flash.success("User %s has been unblocked).", username);
 		}
 		Application.showprofile(user.getName());
 	}
@@ -288,6 +322,7 @@ public class Secured extends Controller {
 		if (user.isModerator()) {
 			Question question = Database.get().questions().get(id);
 			question.lock();
+			flash.success("This question has been locked.");
 			Application.question(id);
 		}
 	}
@@ -297,6 +332,7 @@ public class Secured extends Controller {
 		if (user.isModerator()) {
 			Question question = Database.get().questions().get(id);
 			question.unlock();
+			flash.success("This question has been unlocked.");
 			Application.question(id);
 		}
 	}

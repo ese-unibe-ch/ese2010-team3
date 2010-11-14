@@ -54,4 +54,38 @@ $(document).ready(function() {
 			.attr("tagsJSON", $(this).attr("tagsJSON")).val(tags.join(" "));
 		$("input[type=text][tagsJSON]").autocomplete(TagAutocompletion);
 	});
+	
+	// simulate autofocus for non-HTML5 browsers
+	if (!("autofocus" in document.createElement("input")))
+		$("input[autofocus]").focus();
+	
+	// display placeholder text for non-HTML5 browsers
+	if (!("placeholder" in document.createElement("input")))
+		$("input[placeholder]:not([type=search])").each(function() {
+			$('<span class="placeholder">' + this.getAttribute("placeholder") + '</span>')
+				.insertAfter(this.parentNode.lastChild);
+		});
+	
+	// enable the HTML5 validator for all forms
+	$("form").validator();
+	if ("required" in document.createElement("input"))
+		$("input[pattern], input[required]:not([type=search]):not([type=password]), input[type=email], input[type=url]").each(function() {
+			$('<object />').insertAfter(this);
+		});
+	
+	// add an inline login form
+	$(".navigation .user a[href=/login]").click(function() {
+		$('<form action="/login" method="POST" id="mini_login"> \
+			<span class="placeholder">Username:</span> \
+			<input type="text" name="username" placeholder="user name"> \
+			<span class="placeholder">Password:</span> \
+			<input type="password" name="password" placeholder="password"> \
+			<input type="submit" value="Log in"> \
+			<a href="javascript:void($(\'#mini_login\').remove())" title="hide login">[x]</a></form>')
+			.insertBefore(this.parentNode);
+		if ("placeholder" in document.createElement("input"))
+			$("#mini_login .placeholder").remove();
+		$("#mini_login input[name=username]").focus();
+		return false;
+	});
 });

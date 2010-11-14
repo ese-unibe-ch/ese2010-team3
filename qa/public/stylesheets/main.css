@@ -14,7 +14,10 @@ headings
 h1 {
 	color: #ff8400;
 	font-size: 1.3em;
-	margin-top: 30px;
+	margin-top: 20px;
+}
+h1:first-child {
+	margin-top: 0px;
 }
 
 h2 {
@@ -62,7 +65,6 @@ div.header a {
 	display: block;
 	height: 131px;
 	width: 250px;
-	margin: 16px;
 	background: url(../images/logo.png) no-repeat center;
 }
 /*********************** 
@@ -76,8 +78,8 @@ div.navigation {
 }
 
 div.navigation div.user {			
-	float:right;
-	right: 	5px;
+	float: right;
+	right: 5px;
 	margin-top: 4px;
 }
 
@@ -89,18 +91,29 @@ div.navigation div.search {
 	float:left;
 }
 
+#mini_login {
+	float: right;
+	right: 5px;
+}
+#mini_login input {
+	max-width: 100px;
+}
+#mini_login + .user {
+	display: none;
+}
+
 /*********************** 
 content
 ************************/	
 div.content {
-	padding: 10px;
-	font-size: 16pt;
+	padding: 5px 10px;
+	font-size: 14pt;
 }
-div.content a{
-	font-size: 12pt;
+div.content div.commands a {
+	font-size: 10pt;
 }
 div.content button {
-	font-size: 16pt;
+	font-size: 14pt;
 }
 div.content ul {
 	padding: 0;
@@ -110,9 +123,8 @@ div.content ul {
 div.content li.bestAnswer {
 	background: #2b6026;
 }
-
 div.content li.own {
-	background: #666666;
+	background: #320;
 }
 
 div.content li {
@@ -128,9 +140,15 @@ div.content li[onclick] {
 }
 		
 div.content li[onclick]:hover {
-	background: #222;
+	background: #666;
 }
-		
+
+div.content li.question p,
+div.content ul.answers p {
+	margin-top: 0.2em;
+	margin-bottom: 0.5em;
+}
+	
 div.content li p {
 	color: #aecbfb;
 }
@@ -156,23 +174,15 @@ div.content div.date {
 	right: 7px;
 	font-size: 10pt;
 }
-div.content form {
-	margin: 10px 0;
-	padding: 7px;
-	position: relative;
-}
 			
 div.content textarea {
 	height: 50px;
 	width: 710px;
-	background: #555;
+	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;
 }
-		
-div.content input[type="submit"] {
-	display: block;
-}
+	
 /*********************** 
 footer
 ************************/
@@ -189,20 +199,20 @@ message
 ************************/
 div.message {
 	background: #333333;
-	margin: 4px;
 	padding: 5px;	
+	color: #aecbfb;
 }
 div.message p {
-	margin: 5px;
-	color: #aecbfb;
+	margin: 5px 0px;
 }
-div.message table {
-	color: #aecbfb;
+div.message form {
+	margin: 10px 0;
+	padding: 5px;
 }
 div.message textarea {
 	height: 80px;
 	width: 740px;
-	background: #555;
+	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;
 }
@@ -210,7 +220,10 @@ div.message textarea {
 comments
 ************************/
 div.content ul.comments {
-	padding-left:30px;
+	padding-left: 50px;
+}
+div.content ul.comments p {
+	margin: 0px;
 }
 
 div.content li.comments {
@@ -223,7 +236,7 @@ li.comments a {
 p.comments {
 	color: #ff8400;
 	font-weight: bold;
-	padding-left:30px;
+	padding-left: 50px;
 	font-size: 0.9em;
 }
 
@@ -265,11 +278,14 @@ div.editprofile textarea {
 	width: 610px;
 }
 div.profilenavi {
-	text-align:right;
 	background: #333333;
 	margin: 4px;
-	padding: 5px;	
+	padding: 5px;
 	color: #ff8400;
+	font-size: 12pt;
+}
+ul.optionLinks a {
+	font-size: 1.2em;
 }
 /*********************** 
 Cheater Warning
@@ -290,14 +306,29 @@ div.notificationnavi {
 	text-align:left;
 	background: #333333;
 	padding: 5px;
-	margin: 4px;	
+	margin: 4px 0px;	
 	color: #ff8400;
+	font-size: 12pt;
 }
 div.notificationInfo {
 	text-align:left;
-	margin: 8px;
-	padding: 5px;	
+	margin: 5px 0px;
+	padding: 5px;
+	color: #fff;
 	background: #2b6026;
+}
+div.notificationInfo.error {
+	background: #602b26;
+}
+div.message p.hint {
+	font-size: 0.8em;
+	color: #888;
+}
+div.message p.commands {
+	position: absolute;
+	top: 15px;
+	right: 5px;
+	font-size: 10pt;
 }
 /*********************** 
 tags and tag autocomplete box
@@ -334,3 +365,59 @@ div.tags .tag {
 }
 .ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
+/*********************** 
+HTML5 form validation
+************************/
+span.placeholder {
+	font-size: 0.8em;
+	color: #888;
+}
+/* source: https://github.com/ryanseddon/H5F */
+.content input[type="text"], .content input[type="password"],
+.content input[type="email"], .content input[type="url"] {
+	min-width: 200px;
+}
+input[required] + object,
+input[pattern] + object,
+input[type="email"] + object,
+input[type="url"] + object {
+	background: url(../images/h5f_validation.png) 0px 24px no-repeat;
+	width: 17px; height: 17px;
+}
+input:invalid + object,
+input.error + object {
+	background-position: 0px 0px;
+}
+input:required:invalid + object,
+input.required + object {
+	background-position: 0px -32px;
+}
+input:valid:focus + object,
+input.valid:focus + object { 
+	background-position: 0px -64px;
+}
+/* source: http://flowplayer.org/tools/demos/validator/ */
+body > div.error {
+	/* supply height to ensure consistent positioning for every browser */
+	height: 15px;
+	background-color: #FFFE36;
+	border: 1px solid #E1E16D;
+	font-size: 11px;
+	color: #000;
+	padding: 3px 10px;
+	margin-left: -2px;
+
+	/* CSS3 spicing for mozilla and webkit */
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	-moz-border-radius-bottomleft:0;
+	-moz-border-radius-topleft:0;
+	-webkit-border-bottom-left-radius:0;
+	-webkit-border-top-left-radius:0;
+
+	-moz-box-shadow:0 0 6px #ddd;
+	-webkit-box-shadow:0 0 6px #ddd;
+}
+body > div.error p {
+	margin: 0px;
+}

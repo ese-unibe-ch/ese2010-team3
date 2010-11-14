@@ -11,6 +11,7 @@ import models.Question;
 import models.Tag;
 import models.User;
 import models.SearchEngine.SearchFilter;
+import models.database.Database;
 import models.database.IQuestionDatabase;
 import models.helpers.IDTable;
 import models.helpers.Mapper;
@@ -22,7 +23,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public List<Question> searchFor(String term) {
 		Set<Tag> tags = new HashSet<Tag>();
 		for (String s : term.split("\\W+")) {
-			tags.add(Tag.get(s));
+			tags.add(Database.get().tags().get(s));
 		}
 		return Mapper.sort(this.questions, new SearchFilter(term, tags));
 	}

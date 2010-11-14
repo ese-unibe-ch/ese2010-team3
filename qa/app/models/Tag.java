@@ -1,6 +1,5 @@
 package models;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,26 +79,8 @@ public class Tag implements Comparable<Tag> {
 	 * Static interface to access tags from controller
 	 */
 
-	/**
-	 * @param name
-	 *            of the Tag to get
-	 * @return a (new or pre-existing) Tag for the given Tag-name.
-	 */
-	@Deprecated
-	public static Tag get(String name) {
-		return Database.get().tags().get(name);
-	}
-
 	@Override
 	public String toString() {
 		return "Tag(" + this.name + ")";
 	}
-
-	/**
-	 * @return a collection of all registered Tags.
-	 */
-	public static Collection<Tag> tags() {
-		return Database.get().tags().all();
-	}
-
 }

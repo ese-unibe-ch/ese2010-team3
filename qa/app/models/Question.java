@@ -220,6 +220,10 @@ public class Question extends Entry implements IObservable {
 						this.settingOfBestAnswer.getTime());
 	}
 
+	public boolean isBestAnswerSettable() {
+		return isBestAnswerSettable(Calendar.getInstance());
+	}
+
 	/**
 	 * Sets the best answer. This answer can not be changed after 30min. This
 	 * Method enforces this and fails if it can not be set.
@@ -298,7 +302,7 @@ public class Question extends Entry implements IObservable {
 				bit = bit.substring(0, 32);
 			}
 
-			Tag tag = Tag.get(bit);
+			Tag tag = Database.get().tags().get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);
 				tag.register(this);

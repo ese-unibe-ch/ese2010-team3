@@ -7,7 +7,7 @@ GET     /                                       Application.index
 POST	/										Secured.newQuestion
 
 GET		/question/{id}							Application.question
-POST	/question/{id}							Secured.newAnswer
+POST	/question/{questionId}					Secured.newAnswer
 
 GET     /question/{id}/comments/				Application.commentQuestion
 
@@ -17,11 +17,20 @@ GET		/question/{id}/down						Secured.voteQuestionDown
 GET		/question/{id}/watch					Secured.watchQuestion
 GET		/question/{id}/unwatch					Secured.unwatchQuestion
 
+POST	/question/{id}/tag						Secured.updateTags
+GET		/question/{id}/lock						Secured.lockQuestion
+GET		/question/{id}/delete					Secured.deleteQuestion
+
 GET		/answer/{question}/{id}/up				Secured.voteAnswerUp
 GET		/answer/{question}/{id}/down			Secured.voteAnswerDown
-GET		/answer/{question}/{id}/isbest			Secured.selectBestAnswer
+GET		/answer/{questionId}/{answerId}/comment	Application.commentAnswer
+GET		/answer/{questionId}/{answerId}/isbest	Secured.selectBestAnswer
+GET		/answer/{questionId}/{answerId}/delete	Secured.deleteAnswer
 
-POST	/question/{id}/tag						Secured.updateTags
+POST	/comment/{questionId}					Secured.newCommentQuestion
+POST	/comment/{questionId}/{answerId}		Secured.newCommentAnswer
+GET		/comment/{questionId}/{commentId}/delete	Secured.deleteCommentQuestion
+GET		/comment/{questionId}/{answerId}/{commentId}/delete	Secured.deleteCommentAnswer
 
 GET    	/user/{name}/delete            			Application.deleteuser
 GET    	/user/{name}/truedelete         	 	Secured.deleteUser
@@ -36,8 +45,9 @@ POST	/user/savedProfile						Secured.saveProfile
 
 GET		/user/{userName}/blockuser				Secured.blockUser
 
-GET		/user/notifications					Application.notifications
+GET		/user/notifications/{content}			Application.notifications
 GET		/notification/{id}/follow				Secured.followNotification
+GET		/notification/{id}/unwatch				Secured.unwatchQuestionFromList
 GET		/notification/{id}/delete				Secured.deleteNotification
 GET		/notification/clearNew					Secured.clearNewNotifications
 
