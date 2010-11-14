@@ -235,18 +235,18 @@ public class XMLParser extends DefaultHandler {
 	}
 
 	private class ProtoQuestion {
-		public List<String> tags = new LinkedList();
-		public int ownerid;
-		public Date creation;
-		public String body;
-		public int id;
+		private List<String> tags = new LinkedList();
+		private int ownerid;
+		private Date creation;
+		private String body;
+		private int id;
 	}
 
 	private class ProtoAnswer {
-		public int ownerid, questionid;
-		public Date creation;
-		public String body;
-		public boolean accepted;
-		public int id;
+		private int ownerid, questionid;
+		private Date creation;
+		private String body;
+		private boolean accepted;
+		private int id;
 	}
 }
