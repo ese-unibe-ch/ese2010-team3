@@ -9,6 +9,9 @@
 			#{if user.isModerator() && user != showUser}
 				| <a href="@{Application.blockUser(showUser.getName())}">Block</a>
 			#{/if}
+			#{if user.isModerator() && user == showUser}
+				| <a href="@{Application.loadXML}">Import XML</a>
+			#{/if}
 		</div><!-- end profilenavi -->
 	#{/if}
 	<div>

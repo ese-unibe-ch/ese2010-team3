@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.text.ParseException;
 
 import models.Answer;
@@ -8,6 +9,7 @@ import models.Notification;
 import models.Question;
 import models.User;
 import models.database.Database;
+import models.database.importers.Importer;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
@@ -52,7 +54,8 @@ public class Secured extends Controller {
 		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
 			User thisUser = Session.get().currentUser();
 			question.comment(thisUser, content);
-			flash.success("May your comment be helpful in clarifying the question!");
+			flash
+					.success("May your comment be helpful in clarifying the question!");
 			Application.question(questionId);
 		}
 	}
@@ -63,7 +66,8 @@ public class Secured extends Controller {
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
-			flash.success("May your comment be helpful in clarifying the answer!");
+			flash
+					.success("May your comment be helpful in clarifying the answer!");
 			Application.question(questionId);
 		}
 	}
@@ -120,7 +124,9 @@ public class Secured extends Controller {
 
 	public static void deleteQuestion(int id) {
 		Question question = Database.get().questions().get(id);
-		flash.success("The question '%s' has been deleted.", question.summary());
+		flash
+				.success("The question '%s' has been deleted.", question
+						.summary());
 		question.unregister();
 		Application.index();
 	}
@@ -163,8 +169,9 @@ public class Secured extends Controller {
 			}
 		}
 		flash.error("You're not allowed to delete user %s!", name);
-		if (!redirectToCallingPage())
+		if (!redirectToCallingPage()) {
 			Application.index();
+		}
 	}
 
 	public static void anonymizeUser(String name) throws Throwable {
@@ -229,7 +236,8 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(id);
 		User user = Session.get().currentUser();
 		if (question != null && user.canEdit(question)) {
-			flash.success("Thanks for keeping this question's labels up-to-date.");
+			flash
+					.success("Thanks for keeping this question's labels up-to-date.");
 			question.setTagString(tags);
 		}
 		Application.question(id);
@@ -335,5 +343,19 @@ public class Secured extends Controller {
 			flash.success("This question has been unlocked.");
 			Application.question(id);
 		}
+	}
+
+	public static void loadXML(@Required File xml) {
+		try {
+			Importer.importXML(xml);
+			flash.success("XML file successfully loaded to the database.");
+		} catch (Throwable e) {
+			flash.error("Couldn't load xml file!", e.getMessage());
+			e.printStackTrace();
+		}
+		if (xml != null) {
+			xml.delete();
+		}
+		Application.index();
 	}
 }

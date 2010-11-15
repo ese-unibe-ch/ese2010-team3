@@ -40,8 +40,9 @@ public class Application extends Controller {
 		} else {
 			List<Question> similarQuestions = (new ArrayList(question
 					.getSimilarQuestions()));
-			if (similarQuestions.size() > 5)
+			if (similarQuestions.size() > 5) {
 				similarQuestions = similarQuestions.subList(0, 5);
+			}
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
@@ -154,7 +155,8 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
-			render(notifications, watchingQuestions, suggestedQuestions, content);
+			render(notifications, watchingQuestions, suggestedQuestions,
+					content);
 		} else {
 			Application.index();
 		}
@@ -181,5 +183,13 @@ public class Application extends Controller {
 				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,
 				questionsPerWeek, questionsPerMonth, answersPerDay,
 				answersPerWeek, answersPerMonth);
+	}
+
+	public static void loadXML() {
+		if (!Session.get().currentUser().isModerator()) {
+			Application.index();
+		} else {
+			render();
+		}
 	}
 }

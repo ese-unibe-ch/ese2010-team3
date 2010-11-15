@@ -86,7 +86,7 @@ public class XMLExample extends FunctionalTest {
 		assertEquals(51, Database.get().questions().countAllAnswers());
 	}
 
-	@Ignore("Answers are not correctly read")
+	@Ignore("Answers are not read correctly. I guess")
 	@Test
 	public void withIncompleteData() throws SAXException, IOException,
 			ParserConfigurationException {
