@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,7 +18,6 @@ import models.helpers.Tools;
 import play.data.validation.Required;
 import play.mvc.Before;
 import play.mvc.Controller;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class Application extends Controller {
 
