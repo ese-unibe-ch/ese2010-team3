@@ -192,4 +192,20 @@ public class Application extends Controller {
 			render();
 		}
 	}
+
+	public static void admin() {
+		if (!Session.get().currentUser().isModerator()) {
+			flash.error("You're not logged in as a Moderator");
+			Application.index();
+		}
+		render();
+	}
+
+	public static void clearDB() {
+		if (!Session.get().currentUser().isModerator()) {
+			flash.error("You're not logged in as a Moderator");
+			Application.index();
+		}
+		render();
+	}
 }

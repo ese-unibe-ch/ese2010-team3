@@ -55,6 +55,8 @@ GET		/search/{term}							Application.search
 
 GET		/import/								Application.loadXML
 
+GET		/admin									Application.admin
+
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 

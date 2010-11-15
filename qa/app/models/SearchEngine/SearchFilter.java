@@ -78,7 +78,7 @@ public class SearchFilter implements Filter<Question, Double> {
 
 		Set<String> words = new HashSet<String>();
 		for (String word : string.split("\\W+")) {
-			words.add(word);
+			words.add(word.toLowerCase());
 		}
 		words.remove(""); // remove splitting artifact
 		return difference(words, StopWords.get());

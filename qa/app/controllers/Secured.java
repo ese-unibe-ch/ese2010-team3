@@ -346,6 +346,10 @@ public class Secured extends Controller {
 	}
 
 	public static void loadXML(@Required File xml) {
+		if (!Session.get().currentUser().isModerator()) {
+			Application.index();
+		}
+
 		try {
 			Importer.importXML(xml);
 			flash.success("XML file successfully loaded to the database.");
@@ -356,6 +360,15 @@ public class Secured extends Controller {
 		if (xml != null) {
 			xml.delete();
 		}
+		Application.index();
+	}
+
+	public static void clearDB() {
+		if (!Session.get().currentUser().isModerator()) {
+			flash.error("You're a naughty boy");
+			Application.index();
+		}
+		Database.clearKeepAdmins();
 		Application.index();
 	}
 }

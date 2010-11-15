@@ -1,0 +1,13 @@
+#{extends 'main.html' /}
+#{set title:'ajopi DELETE DATABASE' /}
+<ul>
+		<li>
+			<h2>Do you really want to delete the entire Database? There is no way back.</h2>
+			<p>
+			<ul class="optionLinks">
+				<li><a href="@{Secured.clearDB}">Yes, nuke it!</a></li>
+				<li><a href="@{Application.showprofile(user.getName())}">No, I've changed my mind.</a></li>
+				</ul>
+			</p>
+		</li>
+	</ul>

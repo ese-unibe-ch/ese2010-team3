@@ -1,0 +1,12 @@
+#{extends 'main.html' /}
+#{set title:'ajopi Admin Interface' /}
+<ul>
+		<li>
+			<h2>Administration</h2>
+			<h3>Database</h3>
+			<ul>
+				<li><a href="@{Application.clearDB}">Clear the Database</a>
+				<li><a href="@{Application.loadXML}">Load XML file</a>
+			</ul>
+		</li>
+	</ul>
