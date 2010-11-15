@@ -132,25 +132,14 @@ public class Tools {
 		if (upperBound <= limit) {
 			return entries.subList(index * entriesPerPage, upperBound);
 		}
-
-		if (upperBound > limit) {
+		if (index * entriesPerPage <= limit)
 			return entries.subList(index * entriesPerPage, limit);
-		}
 
 		return entries;
 	}
 
 	public static int determineMaximumIndex(List<Question> questions,
 			int entriesPerPage) {
-		int maxIndex = 0;
-		if (questions.size() > entriesPerPage) {
-			if (questions.size() % entriesPerPage != 0) {
-				maxIndex = (questions.size() - (questions.size() % entriesPerPage))
-						/ entriesPerPage;
-			} else {
-				maxIndex = (questions.size() / entriesPerPage) - 1;
-			}
-		}
-		return maxIndex;
+		return (questions.size() - 1) / entriesPerPage;
 	}
 }

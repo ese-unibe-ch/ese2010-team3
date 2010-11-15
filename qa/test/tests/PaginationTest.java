@@ -19,7 +19,6 @@ import tests.mocks.SystemInformationMock;
 public class PaginationTest extends UnitTest {
 
 	private Question question1;
-	private Question question2;
 	private Question question3;
 	User jack = new User("Jack", "jack");
 	private int questionsPerPage;
@@ -34,7 +33,7 @@ public class PaginationTest extends UnitTest {
 		sys.year(2010).month(9).day(3).hour(0).minute(0).second(0);
 		question3 = new Question(jack, "Who?");
 		sys.year(2010).month(10).day(3).hour(0).minute(0).second(0);
-		question2 = new Question(jack, "Where?");
+		new Question(jack, "Where?");
 		sys.year(2010).month(10).day(3).hour(0).minute(0).second(5);
 		question1 = new Question(jack, "Why?");
 		// To make sure all other questions have a different timestamp
@@ -71,19 +70,24 @@ public class PaginationTest extends UnitTest {
 
 	}
 
-	/*
-	 * @Test public void shouldPaginateCorrectlyForThreePages() { for (int i =
-	 * 0; i < 42; i++) { new Question(jack, "Could you repeat this please?"); }
-	 * int index = 0; List<Question> questions =
-	 * Tools.paginate(Database.get().questions() .all(), questionsPerPage,
-	 * index); assertEquals(15, questions.size()); index = 1; questions =
-	 * Tools.paginate(Database.get().questions().all(), questionsPerPage,
-	 * index); assertEquals(15, questions.size()); index = 2; questions =
-	 * Tools.paginate(Database.get().questions().all(), questionsPerPage,
-	 * index); assertEquals(15, questions.size()); assertEquals(question1,
-	 * questions.get(12)); assertEquals(question2, questions.get(13));
-	 * assertEquals(question3, questions.get(14)); }
-	 */
+	@Test
+	public void shouldPaginateCorrectlyForThreePages() {
+		for (int i = 0; i < 42; i++) {
+			new Question(jack, "Could you repeat this please?");
+		}
+		int index = 0;
+		List<Question> questions = Tools.paginate(Database.get().questions()
+				.all(), questionsPerPage, index);
+		assertEquals(15, questions.size());
+		index = 1;
+		questions = Tools.paginate(Database.get().questions().all(),
+				questionsPerPage, index);
+		assertEquals(15, questions.size());
+		index = 2;
+		questions = Tools.paginate(Database.get().questions().all(),
+				questionsPerPage, index);
+		assertEquals(15, questions.size());
+	}
 
 	@Test
 	public void shouldPaginateCorrectlyForZeroQuestions() {
@@ -91,7 +95,7 @@ public class PaginationTest extends UnitTest {
 		int index = 0;
 		List<Question> questions = Tools.paginate(Database.get().questions()
 				.all(), questionsPerPage, index);
-		// assertEquals(0, questions.size());
+		assertEquals(0, questions.size());
 	}
 
 	@Test
@@ -102,7 +106,6 @@ public class PaginationTest extends UnitTest {
 		List<Question> questions = Tools.paginate(Database.get().questions()
 				.all(), questionsPerPage, index);
 		assertEquals(1, questions.size());
-		// assertEquals(question2, questions.get(0));
 	}
 
 	@Test
@@ -118,7 +121,6 @@ public class PaginationTest extends UnitTest {
 		questions = Tools.paginate(Database.get().questions().all(),
 				questionsPerPage, index);
 		assertEquals(0, questions.size());
-		// assertEquals(question3, questions.get(14));
 	}
 
 	@Test
@@ -130,11 +132,9 @@ public class PaginationTest extends UnitTest {
 		List<Question> questions = Tools.paginate(Database.get().questions()
 				.all(), questionsPerPage, index);
 		assertEquals(15, questions.size());
-		// assertEquals(question2, questions.get(14));
 		index = 1;
 		questions = Tools.paginate(Database.get().questions().all(),
 				questionsPerPage, index);
 		assertEquals(1, questions.size());
-		// assertEquals(question3, questions.get(0));
 	}
 }
