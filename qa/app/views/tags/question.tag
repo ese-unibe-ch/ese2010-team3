@@ -10,11 +10,13 @@
 	#{if _extended && _user}
 		<div class="commands">
 		#{if !_question.isLocked()}
-			<a href ="@{Application.commentQuestion(_question.id())}">Add a new comment</a>
+			#{if !_user.isBlocked()}
+				<a href ="@{Application.commentQuestion(_question.id())}">Add a new comment | </a>
+			#{/if}
 			#{if _user.isObserving(_question)}
-				<a href="@{Secured.unwatchQuestion(_question.id())}"> | Stop watching</a>
+				<a href="@{Secured.unwatchQuestion(_question.id())}">Stop watching</a>
 			#{/if}#{else}
-				<a href="@{Secured.watchQuestion(_question.id())}"> | Watch</a>
+				<a href="@{Secured.watchQuestion(_question.id())}">Watch</a>
 			#{/else}
 			#{if _user.isModerator()}
 				<a href="@{Secured.lockQuestion(_question.id())}"> | Lock</a>

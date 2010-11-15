@@ -6,12 +6,6 @@
 		<div class="profilenavi">
 			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
 			<a href="@{Application.deleteuser}">Delete Account</a>
-			#{if user.isModerator() && user != showUser}
-				| <a href="@{Application.blockUser(showUser.getName())}">Block</a>
-			#{/if}
-			#{if user.isModerator() && user == showUser}
-				| <a href="@{Application.loadXML}">Import XML</a>
-			#{/if}
 		</div><!-- end profilenavi -->
 	#{/if}
 	<div>
@@ -104,10 +98,35 @@
 		<div class="profilenavi">
 			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
 			<a href="@{Application.deleteuser}">Delete Account</a>
-			#{if user.isModerator() && user != showUser}
-				| <a href="@{Application.blockUser(showUser.getName())}">Block</a>
-			#{/if}
 		</div><!-- end profilenavi -->
+	#{/if}
+	#{if user.isModerator() && user != showUser}
+	<div class="message">
+		<table>
+			#{if !showUser.isBlocked()}
+			#{form @Secured.blockuser(showUser.getName())}
+			<td class="blocked">Block this User</td>
+			<tr>
+				#{field 'reason'}
+				<td class="blocked"><label for="reason">&{'Reason: '}</label></td>
+				<td><input required type="text" name="reason" id="reason" value="" /></td>
+				#{/field}
+			</tr>
+			<tr>
+				<td></td><td><input type="submit" id="blockUser" value="Block User" /></td>
+			</tr>
+			#{/form}
+			#{/if}
+			#{if showUser.isBlocked()}
+			#{form @Secured.unblockuser(showUser.getName())}
+			<td class="blocked">This User is blocked. Unblock now?</td>
+			<tr>
+				<td><input type="submit" id="blockUser" value="Unblock User" /></td>
+			</tr>
+			#{/form}
+			#{/if}
+		</table>
+	</div><!-- end message -->
 	#{/if}
 #{/if}
 #{else}
