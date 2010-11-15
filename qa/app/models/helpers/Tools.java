@@ -112,8 +112,8 @@ public class Tools {
 	}
 
 	/**
-	 * Segments a given List into parts according to a certain number of entries
-	 * per part.
+	 * Sorts a list of Questions and segments them into parts according to a
+	 * certain number of entries per part.
 	 * 
 	 * @param entries
 	 *            the list to be segmented
