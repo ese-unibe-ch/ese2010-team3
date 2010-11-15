@@ -48,7 +48,6 @@ public class Secured extends Controller {
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
-
 		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
 			User thisUser = Session.get().currentUser();
 			question.comment(thisUser, content);
@@ -300,19 +299,25 @@ public class Secured extends Controller {
 		Application.notifications(0);
 	}
 
-	public static void blockUser(String username, String block, String reason) {
+	public static void blockUser(String username, String reason) {
 		User user = Database.get().users().get(username);
 		User mod = Session.get().currentUser();
-		if (reason.equals("")) {
-			reason = "no reason given";
-		}
-		if (block.equals("block") && mod.isModerator() && mod != user) {
+		if (mod.isModerator() && mod != user) {
+			if (reason.equals("")) {
+				reason = "no reason given";
+			}
 			user.block(reason);
 			flash.success("User %s has been blocked (%s).", username, reason);
 		}
-		if (block.equals("unblock") && mod.isModerator() && mod != user) {
+		Application.showprofile(user.getName());
+	}
+
+	public static void unblockUser(String username) {
+		User user = Database.get().users().get(username);
+		User mod = Session.get().currentUser();
+		if (mod.isModerator() && mod != user) {
 			user.unblock();
-			flash.success("User %s has been unblocked).", username);
+			flash.success("User %s has been unblocked.", username);
 		}
 		Application.showprofile(user.getName());
 	}

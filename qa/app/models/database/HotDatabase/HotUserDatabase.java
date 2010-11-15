@@ -20,7 +20,11 @@ public class HotUserDatabase implements IUserDatabase {
 	}
 
 	public User get(String name) {
-		return users.get(name);
+		for (User user : users.values()) {
+			if (user.getName().toLowerCase().equals(name.toLowerCase()))
+				return users.get(user.getName());
+		}
+		return null;
 	}
 
 	public void remove(String name) {

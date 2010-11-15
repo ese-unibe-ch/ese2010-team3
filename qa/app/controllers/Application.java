@@ -22,8 +22,8 @@ public class Application extends Controller {
 	@Before
 	static void setConnectedUser() {
 		if (controllers.Secure.Security.isConnected()) {
-			User user = Database.get().users().get(
-					controllers.Secure.Security.connected());
+			User user = Database.get().users()
+					.get(controllers.Secure.Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
@@ -115,10 +115,6 @@ public class Application extends Controller {
 	public static void editProfile(String userName) {
 		User user = Database.get().users().get(userName);
 		render(user);
-	}
-
-	public static void blockuser(String blockuser) {
-		render(blockuser);
 	}
 
 	public static void tags(String term, String content) {
