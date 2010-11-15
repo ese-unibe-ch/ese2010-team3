@@ -287,11 +287,11 @@ div.profilenavi {
 ul.optionLinks a {
 	font-size: 1.2em;
 }
-div.right {
+dd {
 	text-align: right;
 }
-div.left {
-	text.align: left;
+dt {
+	text-align: left;
 }
 /*********************** 
 Cheater Warning

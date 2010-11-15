@@ -4,13 +4,15 @@
 		<li>
 			<h2>Administration</h2>
 			<h3>Database</h3>
-			<p class="left">Clear the Database</p>
-			<div class="right"><a href="@{Application.clearDB}">Do it</a></div>
-			<p class="left">Load XML File to the Database</p>
-			<div class="right">
+			<dl>
+			<dt>Clear the Database</dt>
+			<dd><a href="@{Application.clearDB}">Do it</a></dd>
+			<dt>Load XML File to the Database</dt>
+			<dd>
 				<form action=@{Secured.loadXML()} method="POST" enctype="multipart/form-data">
 				<input type="file" id="xml" name="xml" />
 				<input type="submit" value="Upload" />
-			</form></div>
+			</form></dd>
+			</dd>
 		</li>
 	</ul>
