@@ -181,14 +181,6 @@ public class Application extends Controller {
 				answersPerWeek, answersPerMonth);
 	}
 
-	public static void loadXML() {
-		if (!Session.get().currentUser().isModerator()) {
-			Application.index();
-		} else {
-			render();
-		}
-	}
-
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("You're not logged in as a Moderator");
