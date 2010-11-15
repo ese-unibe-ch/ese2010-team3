@@ -23,8 +23,7 @@ public class Application extends Controller {
 	static void setConnectedUser() {
 		if (controllers.Secure.Security.isConnected()) {
 			User user = Database.get().users()
-					.get(User.getCaseName(controllers.Secure.Security
-							.connected()));
+					.get(controllers.Secure.Security.connected());
 			renderArgs.put("user", user);
 		}
 	}

@@ -271,12 +271,19 @@ public class Secured extends Controller {
 	public static void blockUser(String username, String reason) {
 		User user = Database.get().users().get(username);
 		User mod = Session.get().currentUser();
-		if (mod.isModerator() && mod != user && !user.isBlocked()) {
+		if (mod.isModerator() && mod != user) {
 			if (reason.equals("")) {
 				reason = "no reason given";
 			}
 			user.block(reason);
-		} else if (mod.isModerator() && mod != user && user.isBlocked()) {
+		}
+		Application.showprofile(user.getName());
+	}
+
+	public static void unblockUser(String username) {
+		User user = Database.get().users().get(username);
+		User mod = Session.get().currentUser();
+		if (mod.isModerator() && mod != user) {
 			user.unblock();
 		}
 		Application.showprofile(user.getName());

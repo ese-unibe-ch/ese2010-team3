@@ -95,29 +95,31 @@
 		</table>
 	</div><!-- end showprofile -->
 	#{if user.isModerator() && user != showUser}
-	<div class="profilenavi">
-		#{form @Secured.blockuser(showUser.getName())}
+	<div class="message">
 		<table>
 			#{if !showUser.isBlocked()}
+			#{form @Secured.blockuser(showUser.getName())}
 			<td class="blocked">Block this User</td>
 			<tr>
 				#{field 'reason'}
 				<td class="blocked"><label for="reason">&{'Reason: '}</label></td>
-				<td><input type="text" name="reason" id="reason" value="" /></td>
+				<td><input required type="text" name="reason" id="reason" value="" /></td>
 				#{/field}
 			</tr>
 			<tr>
 				<td></td><td><input type="submit" id="blockUser" value="Block User" /></td>
 			</tr>
+			#{/form}
 			#{/if}
 			#{if showUser.isBlocked()}
+			#{form @Secured.unblockuser(showUser.getName())}
 			<td class="blocked">This User is blocked. Unblock now?</td>
 			<tr>
 				<td><input type="submit" id="blockUser" value="Unblock User" /></td>
 			</tr>
+			#{/form}
 			#{/if}
 		</table>
-		#{/form}
 	</div><!-- end profilenavi -->
 	#{/if}
 #{/if}
