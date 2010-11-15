@@ -27,7 +27,7 @@ public class Secured extends Controller {
 			Application.question(question.id());
 		} else {
 			flash.error("Please don't ask empty questions.");
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -52,7 +52,8 @@ public class Secured extends Controller {
 		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
 			User thisUser = Session.get().currentUser();
 			question.comment(thisUser, content);
-			flash.success("May your comment be helpful in clarifying the question!");
+			flash
+					.success("May your comment be helpful in clarifying the question!");
 			Application.question(questionId);
 		}
 	}
@@ -63,7 +64,8 @@ public class Secured extends Controller {
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
 			answer.comment(Session.get().currentUser(), content);
-			flash.success("May your comment be helpful in clarifying the answer!");
+			flash
+					.success("May your comment be helpful in clarifying the answer!");
 			Application.question(questionId);
 		}
 	}
@@ -77,7 +79,7 @@ public class Secured extends Controller {
 				Application.question(id);
 			}
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -90,7 +92,7 @@ public class Secured extends Controller {
 				Application.question(id);
 			}
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -102,7 +104,7 @@ public class Secured extends Controller {
 			flash.success("Your up-vote has been registered");
 			Application.question(question);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -114,15 +116,17 @@ public class Secured extends Controller {
 			flash.success("Your down-vote has been registered.");
 			Application.question(question);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
 	public static void deleteQuestion(int id) {
 		Question question = Database.get().questions().get(id);
-		flash.success("The question '%s' has been deleted.", question.summary());
+		flash
+				.success("The question '%s' has been deleted.", question
+						.summary());
 		question.unregister();
-		Application.index();
+		Application.index(0);
 	}
 
 	public static void deleteAnswer(int questionId, int answerId) {
@@ -164,7 +168,7 @@ public class Secured extends Controller {
 		}
 		flash.error("You're not allowed to delete user %s!", name);
 		if (!redirectToCallingPage())
-			Application.index();
+			Application.index(0);
 	}
 
 	public static void anonymizeUser(String name) throws Throwable {
@@ -229,7 +233,8 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(id);
 		User user = Session.get().currentUser();
 		if (question != null && user.canEdit(question)) {
-			flash.success("Thanks for keeping this question's labels up-to-date.");
+			flash
+					.success("Thanks for keeping this question's labels up-to-date.");
 			question.setTagString(tags);
 		}
 		Application.question(id);

@@ -28,9 +28,36 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void index() {
+	public static void index(int index) {
 		List<Question> questions = Database.get().questions().all();
-		render(questions);
+		final int entriesPerPage = 15;
+		int MAXINDEX = 0;
+		if (questions.size() > entriesPerPage) {
+			if (questions.size() % entriesPerPage != 0) {
+				MAXINDEX = (questions.size() - (questions.size() % entriesPerPage))
+						/ entriesPerPage;
+			} else {
+				MAXINDEX = (questions.size() / entriesPerPage) - 1;
+			}
+		}
+		if (index > MAXINDEX) {
+			index = MAXINDEX;
+		}
+		if (index < 0) {
+			index = 0;
+		}
+
+		questions = Tools.paginate(questions, entriesPerPage, index);
+		render(questions, index, MAXINDEX);
+	}
+
+	public static void nextPage(int index) {
+		index(index + 1);
+	}
+
+	public static void previousPage(int index) {
+		index(index - 1);
+
 	}
 
 	public static void question(int id) {
@@ -87,7 +114,7 @@ public class Application extends Controller {
 			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
-			index();
+			index(0);
 		} else {
 			flash.keep("url");
 			if (!Tools.checkEmail(email)) {
@@ -154,9 +181,10 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
-			render(notifications, watchingQuestions, suggestedQuestions, content);
+			render(notifications, watchingQuestions, suggestedQuestions,
+					content);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 

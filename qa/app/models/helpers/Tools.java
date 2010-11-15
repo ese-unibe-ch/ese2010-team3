@@ -5,10 +5,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import models.Question;
 import models.SearchEngine.StopWords;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 public class Tools {
 
@@ -85,7 +89,8 @@ public class Tools {
 			String word = input.substring(0, input.indexOf(" ")).trim();
 			if (word.length() > 3) {
 				int occurrence = (input.length() - (input.replaceAll(word, ""))
-						.length()) / word.length();
+						.length())
+						/ word.length();
 				if (occurrence > 1 && !StopWords.get().contains(word)) {
 					if (keywords.size() < 5) {
 						keywords.put(word, occurrence);
@@ -104,5 +109,46 @@ public class Tools {
 		}
 		return keywords.keySet().toString().replaceAll("[,\\[\\]]", "")
 				.replaceAll("  ", " ").trim();
+	}
+
+	/**
+	 * Segments a given List into parts according to a certain number of entries
+	 * per part.
+	 * 
+	 * @param entries
+	 *            the list to be segmented
+	 * @param entriesPerPage
+	 *            the amount of entries on one page
+	 * @param pageNumber
+	 *            the number of the requested page
+	 * 
+	 * @param MAXPAGES
+	 *            the maximum number of pages
+	 * 
+	 * @return a list of the entries on the given page number.
+	 * 
+	 */
+	public static List<Question> paginate(List<Question> entries,
+			int entriesPerPage, int index) {
+		int LIMIT = entries.size();
+		int UPPERBOUND = ((index + 1) * entriesPerPage);
+		Collections.sort(entries, new Comparator<Question>() {
+			public int compare(Question q1, Question q2) {
+				return (q2.timestamp()).compareTo(q1.timestamp());
+			}
+		});
+
+		if (index == 0 && LIMIT > entriesPerPage) {
+			return entries.subList(0, entriesPerPage);
+		}
+		if (index > 0 && UPPERBOUND <= LIMIT) {
+			return entries.subList(index * entriesPerPage, UPPERBOUND);
+		}
+
+		if (index > 0 && UPPERBOUND > LIMIT) {
+			return entries.subList(index * entriesPerPage, LIMIT);
+		}
+
+		return entries;
 	}
 }

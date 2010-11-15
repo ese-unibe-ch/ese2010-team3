@@ -5,6 +5,9 @@
 		#{question question:question, user:user, extended:false /}
 	#{/list}
 </ul>
+<a href="@{Application.previousPage(index)}">Previous</a>
+${index+1}/${MAXINDEX+1}
+<a href="@{Application.nextPage(index)}">Next</a>
 #{if user && !user.isBlocked()}
 	<h1>Ask Question</h1>
 	<div class="message">
