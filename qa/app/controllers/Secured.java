@@ -19,12 +19,14 @@ public class Secured extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
-			Question question = Database.get().questions().add(user, content);
-			question.setTagString(tags);
-			user.startObserving(question);
-			question.setTagString(tags);
-			flash.success("Good luck for getting a reasonable answer!");
-			Application.question(question.id());
+			if (!user.isBlocked()) {
+				Question question = Database.get().questions().add(user, content);
+				question.setTagString(tags);
+				user.startObserving(question);
+				question.setTagString(tags);
+				flash.success("Good luck for getting a reasonable answer!");
+				Application.question(question.id());
+			}
 		} else {
 			flash.error("Please don't ask empty questions.");
 			Application.index();
@@ -35,7 +37,7 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		if (!Validation.hasErrors() && question != null) {
 			User thisUser = Session.get().currentUser();
-			if (!question.isLocked()) {
+			if (!question.isLocked() && !thisUser.isBlocked()) {
 				question.answer(thisUser, content);
 				flash.success("Thanks for posting an answer.");
 			}
@@ -48,9 +50,8 @@ public class Secured extends Controller {
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
-
-		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
-			User thisUser = Session.get().currentUser();
+		User thisUser = Session.get().currentUser();
+		if (!Validation.hasErrors() && question != null && !question.isLocked() && !thisUser.isBlocked()) {
 			question.comment(thisUser, content);
 			flash.success("May your comment be helpful in clarifying the question!");
 			Application.question(questionId);
@@ -61,8 +62,9 @@ public class Secured extends Controller {
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
-		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
-			answer.comment(Session.get().currentUser(), content);
+		User thisUser = Session.get().currentUser();
+		if (!Validation.hasErrors() && answer != null && !question.isLocked() && !thisUser.isBlocked()) {
+			answer.comment(thisUser, content);
 			flash.success("May your comment be helpful in clarifying the answer!");
 			Application.question(questionId);
 		}

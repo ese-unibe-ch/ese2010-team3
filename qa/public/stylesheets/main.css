@@ -331,6 +331,14 @@ div.message p.commands {
 	font-size: 10pt;
 }
 /*********************** 
+delete question
+************************/
+h2 {
+	color: #888;
+	margin: 0;
+	font-size: 12pt;
+}
+/*********************** 
 tags and tag autocomplete box
 ************************/
 div.tags .tag {
