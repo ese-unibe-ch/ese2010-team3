@@ -5,14 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import models.Question;
 import models.SearchEngine.StopWords;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class Tools {
 
@@ -122,33 +120,37 @@ public class Tools {
 	 * @param pageNumber
 	 *            the number of the requested page
 	 * 
-	 * @param MAXPAGES
-	 *            the maximum number of pages
 	 * 
 	 * @return a list of the entries on the given page number.
 	 * 
 	 */
 	public static List<Question> paginate(List<Question> entries,
 			int entriesPerPage, int index) {
-		int LIMIT = entries.size();
-		int UPPERBOUND = ((index + 1) * entriesPerPage);
-		Collections.sort(entries, new Comparator<Question>() {
-			public int compare(Question q1, Question q2) {
-				return (q2.timestamp()).compareTo(q1.timestamp());
-			}
-		});
+		int limit = entries.size();
+		int upperBound = ((index + 1) * entriesPerPage);
 
-		if (index == 0 && LIMIT > entriesPerPage) {
-			return entries.subList(0, entriesPerPage);
-		}
-		if (index > 0 && UPPERBOUND <= LIMIT) {
-			return entries.subList(index * entriesPerPage, UPPERBOUND);
+		if (upperBound <= limit) {
+			return entries.subList(index * entriesPerPage, upperBound);
 		}
 
-		if (index > 0 && UPPERBOUND > LIMIT) {
-			return entries.subList(index * entriesPerPage, LIMIT);
+		if (upperBound > limit) {
+			return entries.subList(index * entriesPerPage, limit);
 		}
 
 		return entries;
+	}
+
+	public static int determineMaximumIndex(List<Question> questions,
+			int entriesPerPage) {
+		int maxIndex = 0;
+		if (questions.size() > entriesPerPage) {
+			if (questions.size() % entriesPerPage != 0) {
+				maxIndex = (questions.size() - (questions.size() % entriesPerPage))
+						/ entriesPerPage;
+			} else {
+				maxIndex = (questions.size() / entriesPerPage) - 1;
+			}
+		}
+		return maxIndex;
 	}
 }

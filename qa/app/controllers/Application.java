@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -16,8 +17,11 @@ import models.helpers.Tools;
 import play.data.validation.Required;
 import play.mvc.Before;
 import play.mvc.Controller;
+import edu.emory.mathcs.backport.java.util.Collections;
 
 public class Application extends Controller {
+
+	private static final int entriesPerPage = 15;
 
 	@Before
 	static void setConnectedUser() {
@@ -30,34 +34,14 @@ public class Application extends Controller {
 
 	public static void index(int index) {
 		List<Question> questions = Database.get().questions().all();
-		final int entriesPerPage = 15;
-		int MAXINDEX = 0;
-		if (questions.size() > entriesPerPage) {
-			if (questions.size() % entriesPerPage != 0) {
-				MAXINDEX = (questions.size() - (questions.size() % entriesPerPage))
-						/ entriesPerPage;
-			} else {
-				MAXINDEX = (questions.size() / entriesPerPage) - 1;
+		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
+		Collections.sort(questions, new Comparator<Question>() {
+			public int compare(Question q1, Question q2) {
+				return (q2.timestamp()).compareTo(q1.timestamp());
 			}
-		}
-		if (index > MAXINDEX) {
-			index = MAXINDEX;
-		}
-		if (index < 0) {
-			index = 0;
-		}
-
+		});
 		questions = Tools.paginate(questions, entriesPerPage, index);
-		render(questions, index, MAXINDEX);
-	}
-
-	public static void nextPage(int index) {
-		index(index + 1);
-	}
-
-	public static void previousPage(int index) {
-		index(index - 1);
-
+		render(questions, index, maxIndex);
 	}
 
 	public static void question(int id) {
@@ -164,9 +148,12 @@ public class Application extends Controller {
 		renderJSON(tags);
 	}
 
-	public static void search(String term) {
+	public static void search(String term, int index) {
 		List<Question> results = Database.get().questions().searchFor(term);
-		render(results, term);
+		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
+
+		results = Tools.paginate(results, entriesPerPage, index);
+		render(results, term, index, maxIndex);
 	}
 
 	public static void notifications(int content) {
