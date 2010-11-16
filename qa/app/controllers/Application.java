@@ -115,17 +115,24 @@ public class Application extends Controller {
 		}
 	}
 
+	public static boolean mayLoggedInUserEditProfileOf(User showUser) {
+		User user = Session.get().currentUser();
+		if (user == null)
+			return false;
+		return user == showUser && !showUser.isBlocked() || user.isModerator();
+	}
+
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		User user = Session.get().currentUser();
-		boolean canEdit = user != null
-				&& (user == showUser || user.isModerator());
+		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
 		render(showUser, canEdit);
 	}
 
 	public static void editProfile(String userName) {
-		User user = Database.get().users().get(userName);
-		render(user);
+		User showUser = Database.get().users().get(userName);
+		if (!mayLoggedInUserEditProfileOf(showUser))
+			showprofile(userName);
+		render(showUser);
 	}
 
 	public static void tags(String term, String content) {
