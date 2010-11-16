@@ -169,7 +169,7 @@ public class Secured extends Controller {
 		}
 		flash.error("You're not allowed to delete user %s!", name);
 		if (!redirectToCallingPage()) {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -355,7 +355,7 @@ public class Secured extends Controller {
 
 	public static void loadXML(@Required File xml) {
 		if (!Session.get().currentUser().isModerator()) {
-			Application.index();
+			Application.index(0);
 		}
 
 		try {
@@ -368,15 +368,15 @@ public class Secured extends Controller {
 		if (xml != null) {
 			xml.delete();
 		}
-		Application.index();
+		Application.index(0);
 	}
 
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("You're a naughty boy");
-			Application.index();
+			Application.index(0);
 		}
 		Database.clearKeepAdmins();
-		Application.index();
+		Application.index(0);
 	}
 }

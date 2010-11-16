@@ -44,10 +44,6 @@ public class Application extends Controller {
 		render(questions, index, maxIndex);
 	}
 
-	public static void index() {
-		Application.index(0);
-	}
-
 	public static void question(int id) {
 		Question question = Database.get().questions().get(id);
 		if (question == null) {
@@ -210,7 +206,7 @@ public class Application extends Controller {
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("You're not logged in as a Moderator");
-			Application.index();
+			Application.index(0);
 		}
 		render();
 	}
@@ -218,7 +214,7 @@ public class Application extends Controller {
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("You're not logged in as a Moderator");
-			Application.index();
+			Application.index(0);
 		}
 		render();
 	}

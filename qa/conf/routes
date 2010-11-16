@@ -3,6 +3,7 @@
 # ~~~~
 
 # Home page
+GET		/index/{index}							Application.index
 GET     /                                       Application.index
 POST	/										Secured.newQuestion
 
@@ -52,6 +53,7 @@ GET		/notification/{id}/delete				Secured.deleteNotification
 GET		/notification/clearNew					Secured.clearNewNotifications
 
 GET		/search/{term}							Application.search
+GET		/search/{term}/{index}					Application.search
 
 GET		/admin									Application.admin
 

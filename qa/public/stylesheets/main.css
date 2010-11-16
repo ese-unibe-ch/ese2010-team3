@@ -53,6 +53,10 @@ div.main {
 	padding: 0;
 	position: relative;
 }
+p.pagination {
+	color: #888;
+	text-align: center;
+}
 
 /*********************** 
 header
@@ -286,12 +290,6 @@ div.profilenavi {
 }
 ul.optionLinks a {
 	font-size: 1.2em;
-}
-dd {
-	text-align: right;
-}
-dt {
-	text-align: left;
 }
 /*********************** 
 Cheater Warning
