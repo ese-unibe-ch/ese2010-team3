@@ -44,6 +44,10 @@ public class Application extends Controller {
 		render(questions, index, maxIndex);
 	}
 
+	public static void index() {
+		Application.index(0);
+	}
+
 	public static void question(int id) {
 		Question question = Database.get().questions().get(id);
 		if (question == null) {
@@ -131,8 +135,9 @@ public class Application extends Controller {
 
 	public static void editProfile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		if (!mayLoggedInUserEditProfileOf(showUser))
+		if (!mayLoggedInUserEditProfileOf(showUser)) {
 			showprofile(userName);
+		}
 		render(showUser);
 	}
 
