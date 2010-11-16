@@ -197,8 +197,11 @@ public class Secured extends Controller {
 	public static void saveProfile(String name, String email, String fullname,
 			String birthday, String website, String profession,
 			String employer, String biography) throws ParseException {
-
-		User user = Session.get().currentUser();
+		User user = Database.get().users().get(name);
+		if (!Application.mayLoggedInUserEditProfileOf(user)) {
+			flash.error("You're not allowed to edit %s's profile!", name);
+			Application.showprofile(user.getName());
+		}
 		if (email != null) {
 			user.setEmail(email);
 		}
