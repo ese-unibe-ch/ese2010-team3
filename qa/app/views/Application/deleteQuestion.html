@@ -1,0 +1,21 @@
+#{extends 'main.html' /}
+
+#{if question}
+	#{set title:'ajopi - delete question: ' + question.summary() /}
+	<ul>
+		<li>
+			<h2>Do you really want to delete the following question?</h2>
+			<ul>#{question question:question, user:user, extended:false /}</ul>
+			<h2>Please notice that every answer and comment referring to this question will also be deleted.</h2>
+			<p>
+			<ul class="optionLinks">
+				<li><a href="@{Secured.deleteQuestion(question.id())}">Yes, delete this question.</a></li>
+				<li><a href="@{Application.question(question.id())}">No, I've changed my mind.</a></li>
+			</p>
+		</li>
+	</ul>
+#{/if}
+#{else}
+	#{set title:'Error' /}
+	<h1>No such question</h1>
+#{/else}
