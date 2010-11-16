@@ -26,7 +26,7 @@
 			<a href="@{Secured.unlockQuestion(_question.id())}"> Unlock</a>
 		#{/if}
 		#{if _user.canEdit(_question)}
-			<a href="@{Secured.deleteQuestion(_question.id())}"> | Delete</a>
+			<a href="@{Application.confirmDeleteQuestion(_question.id())}"> | Delete</a>
 		#{/if}
 		</div>
 	#{/if}

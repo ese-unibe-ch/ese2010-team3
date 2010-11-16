@@ -81,6 +81,11 @@ public class Application extends Controller {
 		List<Comment> comments = answer.comments();
 		render(answer, comments, question);
 	}
+	
+	public static void confirmDeleteQuestion(int id) {
+		Question question = Database.get().questions().get(id);
+		render(question);
+	}
 
 	public static void deleteuser(User user) {
 		render();
