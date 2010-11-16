@@ -3,7 +3,7 @@
 	#{if !_extended} onclick="goto('@{Application.question(_question.id())}')" #{/if}
 	>
 	<h2>#{showProfile _question /}:</h2>
-	<p>${_question.content().nl2br()}</p>
+	<p>${_question.content().escapeHtml().nl2br()}</p>
 	#{date _question /}
 	#{tags question:_question, editable:_extended && _user?.canEdit(_question) /}
 	
