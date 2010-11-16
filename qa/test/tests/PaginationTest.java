@@ -26,6 +26,7 @@ public class PaginationTest extends UnitTest {
 
 	@Before
 	public void setup() {
+		Database.clear();
 		savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
