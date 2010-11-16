@@ -10,11 +10,7 @@ import models.Question;
 import models.User;
 import models.database.Database;
 import models.database.importers.Importer;
-
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-import org.pegdown.PegDownProcessor;
-
+import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
@@ -23,16 +19,11 @@ import play.mvc.With;
 
 @With(Secure.class)
 public class Secured extends Controller {
-	private static String quickHtmlConversion(String content) {
-		return Jsoup.clean(new PegDownProcessor().markdownToHtml(content),
-				Whitelist.basic());
-	}
-
 	public static void newQuestion(@Required String content, String tags) {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
-			content = quickHtmlConversion(content);
-			Question question = Database.get().questions().add(user, content);
+			Question question = Database.get().questions()
+					.add(user, Tools.markdownToHtml(content));
 			question.setTagString(tags);
 			user.startObserving(question);
 			question.setTagString(tags);
@@ -49,8 +40,7 @@ public class Secured extends Controller {
 		if (!Validation.hasErrors() && question != null) {
 			User thisUser = Session.get().currentUser();
 			if (!question.isLocked()) {
-				content = quickHtmlConversion(content);
-				question.answer(thisUser, content);
+				question.answer(thisUser, Tools.markdownToHtml(content));
 				flash.success("Thanks for posting an answer.");
 			}
 		} else {
@@ -64,8 +54,7 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		if (!Validation.hasErrors() && question != null && !question.isLocked()) {
 			User thisUser = Session.get().currentUser();
-			content = quickHtmlConversion(content);
-			question.comment(thisUser, content);
+			question.comment(thisUser, Tools.markdownToHtml(content));
 			flash
 					.success("May your comment be helpful in clarifying the question!");
 			Application.question(questionId);
@@ -77,8 +66,8 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()) {
-			content = quickHtmlConversion(content);
-			answer.comment(Session.get().currentUser(), content);
+			answer.comment(Session.get().currentUser(),
+					Tools.markdownToHtml(content));
 			flash
 					.success("May your comment be helpful in clarifying the answer!");
 			Application.question(questionId);
@@ -371,6 +360,10 @@ public class Secured extends Controller {
 		if (!Session.get().currentUser().isModerator()) {
 			Application.index(0);
 		}
+		if (xml == null) {
+			flash.error("Please select an XML database file before clicking <b>Import Database</b>");
+			Application.admin();
+		}
 
 		try {
 			Importer.importXML(xml);
@@ -378,6 +371,7 @@ public class Secured extends Controller {
 		} catch (Throwable e) {
 			flash.error("Couldn't load xml file!", e.getMessage());
 			e.printStackTrace();
+			Application.admin();
 		}
 		if (xml != null) {
 			xml.delete();
@@ -391,6 +385,7 @@ public class Secured extends Controller {
 			Application.index(0);
 		}
 		Database.clearKeepAdmins();
-		Application.index(0);
+		flash.success("Tabula rasa!");
+		Application.admin();
 	}
 }

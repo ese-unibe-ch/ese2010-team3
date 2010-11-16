@@ -2,8 +2,9 @@ package models.database.importers;
 
 import java.io.CharArrayReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -49,7 +50,8 @@ public class Importer {
 	 */
 	public static void importXML(File file) throws SAXException,
 			IOException, ParserConfigurationException {
-		importXML(new InputSource(new FileReader(file)));
+		importXML(new InputSource(new InputStreamReader(new FileInputStream(
+				file), "utf-8")));
 	}
 
 	/**

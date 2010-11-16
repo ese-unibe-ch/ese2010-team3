@@ -12,6 +12,10 @@ import java.util.List;
 import models.Question;
 import models.SearchEngine.StopWords;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+import org.pegdown.PegDownProcessor;
+
 public class Tools {
 
 	/**
@@ -141,5 +145,28 @@ public class Tools {
 	public static int determineMaximumIndex(List<Question> questions,
 			int entriesPerPage) {
 		return (questions.size() - 1) / entriesPerPage;
+	}
+
+	/**
+	 * Convert Markdown to HTML content (in an amazingly unoptimized way)
+	 * 
+	 * @param content
+	 *            some Markdown content
+	 * @return that content in plain and sanitized HTML (XSS safe!)
+	 */
+	public static String markdownToHtml(String content) {
+		return Jsoup.clean(new PegDownProcessor().markdownToHtml(content),
+				Whitelist.basic());
+	}
+
+	/**
+	 * Strip all HTML tags.
+	 * 
+	 * @param content
+	 *            the HTML content to strip the tags from
+	 * @return the string
+	 */
+	public static String htmlToText(String content) {
+		return Jsoup.clean(content, Whitelist.none());
 	}
 }

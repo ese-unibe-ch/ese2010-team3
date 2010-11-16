@@ -17,11 +17,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLParser extends DefaultHandler {
-	private Map<Integer, User> idUserBase;
-	private Map<Integer, Question> idQuestionBase;
+	private final Map<Integer, User> idUserBase;
+	private final Map<Integer, Question> idQuestionBase;
 
-	private List<ProtoAnswer> protoanswers;
-	private List<ProtoQuestion> protoquestions;
+	private final List<ProtoAnswer> protoanswers;
+	private final List<ProtoQuestion> protoquestions;
 
 	private final ElementParser parser;
 
@@ -114,6 +114,7 @@ public class XMLParser extends DefaultHandler {
 		return new ElementParser(syntax);
 	}
 
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) {
 		try {
@@ -128,10 +129,12 @@ public class XMLParser extends DefaultHandler {
 		}
 	}
 
+	@Override
 	public void characters(char[] str, int start, int length) {
 		this.parser.text(String.copyValueOf(str, start, length));
 	}
 
+	@Override
 	public void endElement(String uri, String localName, String qName) {
 		try {
 			this.parser.end();
@@ -235,7 +238,7 @@ public class XMLParser extends DefaultHandler {
 	}
 
 	private class ProtoQuestion {
-		private List<String> tags = new LinkedList();
+		private final List<String> tags = new LinkedList();
 		private int ownerid;
 		private Date creation;
 		private String body;
@@ -247,6 +250,7 @@ public class XMLParser extends DefaultHandler {
 		private Date creation;
 		private String body;
 		private boolean accepted;
+		@SuppressWarnings("unused")
 		private int id;
 	}
 }

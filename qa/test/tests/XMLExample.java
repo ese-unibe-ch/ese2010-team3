@@ -25,6 +25,7 @@ public class XMLExample extends FunctionalTest {
 	private static IDatabase old;
 	private static String loaded;
 	private static String incomplete;
+	@SuppressWarnings("unused")
 	private static String inconsistent;
 
 	@BeforeClass

@@ -12,6 +12,7 @@ import models.Entry;
 import models.Question;
 import models.Tag;
 import models.helpers.Filter;
+import models.helpers.Tools;
 
 public class SearchFilter implements Filter<Question, Double> {
 	private final Set<String> queryFulltext;
@@ -75,6 +76,8 @@ public class SearchFilter implements Filter<Question, Double> {
 	private Set<String> getWords(String string) {
 		if (string == null)
 			return null;
+		// this isn't ideally placed...
+		string = Tools.htmlToText(string);
 
 		Set<String> words = new HashSet<String>();
 		for (String word : string.split("\\W+")) {

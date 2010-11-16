@@ -3,8 +3,7 @@ package models;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import models.helpers.Tools;
 
 /**
  * An {@link Item} which has a content and can be voted up and down.
@@ -193,8 +192,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return a one-line summary of an <code>Entry</code>.
 	 * */
 	public String summary() {
-		return Jsoup.clean(this.content, Whitelist.none())
-				.replaceAll("\\s+", " ")
+		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
 				.replaceFirst("^(.{35}\\S{0,9} ?).{5,}", "$1...");
 	}
 
