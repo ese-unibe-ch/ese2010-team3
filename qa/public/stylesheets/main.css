@@ -331,6 +331,13 @@ div.message p.commands {
 	font-size: 10pt;
 }
 /*********************** 
+delete question
+************************/
+div.deleteQuestion {
+	color: #888;
+	font-size: 14pt;
+}
+/*********************** 
 tags and tag autocomplete box
 ************************/
 div.tags .tag {
