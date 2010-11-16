@@ -16,7 +16,7 @@
 				#{if notification.isNew()}*new*#{/if}
 				#{showProfile notification.getAbout() /} answered to
 				"${notification.getAbout().getQuestion().summary()}":
-				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content().escapeHtml().nl2br()}</a></p>
+				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content().raw()}</a></p>
 				#{date notification.getAbout() /}
 				<p class="commands"><a href="@{Secured.deleteNotification(notification.getID())}">delete notification</a></p>
 			</div><!-- end message -->

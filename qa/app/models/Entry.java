@@ -3,6 +3,9 @@ package models;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 /**
  * An {@link Item} which has a content and can be voted up and down.
  * 
@@ -190,8 +193,9 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return a one-line summary of an <code>Entry</code>.
 	 * */
 	public String summary() {
-		return this.content.replaceAll("\\s+", " ").replaceFirst(
-				"^(.{35}\\S{0,9} ?).{5,}", "$1...");
+		return Jsoup.clean(this.content, Whitelist.none())
+				.replaceAll("\\s+", " ")
+				.replaceFirst("^(.{35}\\S{0,9} ?).{5,}", "$1...");
 	}
 
 	/**
@@ -203,6 +207,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return this.votes.values();
 	}
 
+	@Override
 	public String toString() {
 		return "Entry(" + summary() + ")";
 	}
