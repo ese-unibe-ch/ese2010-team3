@@ -47,6 +47,43 @@ public class PaginationTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldDetermineMaxIndexZeroForThreeQuestions() {
+		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+				.all(), questionsPerPage);
+
+		assertEquals(0, maxIndex);
+	}
+
+	@Test
+	public void shouldDetermineMaxIndexZeroForZeroQuestions() {
+		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+				.all(), questionsPerPage);
+		jack.delete();
+		assertEquals(0, Database.get().questions().all().size());
+		assertEquals(0, maxIndex);
+	}
+
+	@Test
+	public void shouldDetermineMaxIndexTwoForThreePages() {
+		for (int i = 0; i < 42; i++) {
+			new Question(jack, "Could you repeat this please?");
+		}
+		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+				.all(), questionsPerPage);
+		assertEquals(2, maxIndex);
+	}
+
+	@Test
+	public void shouldDetermineMaxIndexThreeForFourPages() {
+		for (int i = 0; i < 43; i++) {
+			new Question(jack, "Could you repeat this please?");
+		}
+		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+				.all(), questionsPerPage);
+		assertEquals(3, maxIndex);
+	}
+
+	@Test
 	public void shouldBeOfSizeThree() {
 		int index = 0;
 		List<Question> questions = Tools.paginate(Database.get().questions()
