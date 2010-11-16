@@ -8,6 +8,15 @@
 			#{question question:question, user:user, extended:false /}
 		#{/list}
 	</ul>
+	<p class = "pagination">
+	#{if index != 0}
+		<a href="@{Application.search(term, index-1)}">Previous</a>
+	#{/if}
+	${index + 1}/${maxIndex + 1}
+	#{if index != maxIndex}
+		<a href="@{Application.search(term, index+1)}">Next</a>
+	#{/if}
+</p>
 #{/if}#{else}
 	<div class="message">
 		<p>No questions matching '${term}' found!</p>
