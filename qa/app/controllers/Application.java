@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -19,6 +21,8 @@ import play.mvc.Controller;
 
 public class Application extends Controller {
 
+	private static final int entriesPerPage = 15;
+
 	@Before
 	static void setConnectedUser() {
 		if (controllers.Secure.Security.isConnected()) {
@@ -28,9 +32,20 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void index() {
+	public static void index(int index) {
 		List<Question> questions = Database.get().questions().all();
-		render(questions);
+		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
+		Collections.sort(questions, new Comparator<Question>() {
+			public int compare(Question q1, Question q2) {
+				return (q2.timestamp()).compareTo(q1.timestamp());
+			}
+		});
+		questions = Tools.paginate(questions, entriesPerPage, index);
+		render(questions, index, maxIndex);
+	}
+
+	public static void index() {
+		Application.index(0);
 	}
 
 	public static void question(int id) {
@@ -40,8 +55,9 @@ public class Application extends Controller {
 		} else {
 			List<Question> similarQuestions = (new ArrayList(question
 					.getSimilarQuestions()));
-			if (similarQuestions.size() > 5)
+			if (similarQuestions.size() > 5) {
 				similarQuestions = similarQuestions.subList(0, 5);
+			}
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
@@ -87,7 +103,7 @@ public class Application extends Controller {
 			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
-			index();
+			index(0);
 		} else {
 			flash.keep("url");
 			if (!Tools.checkEmail(email)) {
@@ -119,8 +135,9 @@ public class Application extends Controller {
 
 	public static void editProfile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		if (!mayLoggedInUserEditProfileOf(showUser))
+		if (!mayLoggedInUserEditProfileOf(showUser)) {
 			showprofile(userName);
+		}
 		render(showUser);
 	}
 
@@ -140,9 +157,12 @@ public class Application extends Controller {
 		renderJSON(tags);
 	}
 
-	public static void search(String term) {
+	public static void search(String term, int index) {
 		List<Question> results = Database.get().questions().searchFor(term);
-		render(results, term);
+		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
+
+		results = Tools.paginate(results, entriesPerPage, index);
+		render(results, term, index, maxIndex);
 	}
 
 	public static void notifications(int content) {
@@ -157,9 +177,10 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
-			render(notifications, watchingQuestions, suggestedQuestions, content);
+			render(notifications, watchingQuestions, suggestedQuestions,
+					content);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -184,5 +205,21 @@ public class Application extends Controller {
 				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,
 				questionsPerWeek, questionsPerMonth, answersPerDay,
 				answersPerWeek, answersPerMonth);
+	}
+
+	public static void admin() {
+		if (!Session.get().currentUser().isModerator()) {
+			flash.error("You're not logged in as a Moderator");
+			Application.index();
+		}
+		render();
+	}
+
+	public static void clearDB() {
+		if (!Session.get().currentUser().isModerator()) {
+			flash.error("You're not logged in as a Moderator");
+			Application.index();
+		}
+		render();
 	}
 }

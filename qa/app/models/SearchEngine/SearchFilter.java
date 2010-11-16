@@ -3,9 +3,12 @@ package models.SearchEngine;
 import static models.helpers.SetOperations.difference;
 import static models.helpers.SetOperations.intersection;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import models.Answer;
+import models.Entry;
 import models.Question;
 import models.Tag;
 import models.helpers.Filter;
@@ -20,16 +23,28 @@ public class SearchFilter implements Filter<Question, Double> {
 	}
 
 	public Double visit(Question question) {
-		double rating = rateTags(question) + rateText(question);
-		// ignore questions that don't match at all, sort highest rating first
+		Set<String> mustHave = new HashSet<String>(
+				this.queryFulltext == null ? Collections.EMPTY_SET
+						: this.queryFulltext);
+		double tagRating = rateTags(question, mustHave);
+		double textRating = rateText(question, mustHave);
+		double answerRating = rateAnswers(question, mustHave);
+		double rating = tagRating + textRating + answerRating;
+		// words that aren't tags must appear in a question's content (AND
+		// search)
+		if (mustHave.size() != 0)
+			return null;
 		return rating > 0 ? -rating : null;
 	}
 
-	private double rateTags(Question question) {
+	private double rateTags(Question question, Set<String> mustHave) {
 		Set<Tag> tags = new HashSet<Tag>(question.getTags());
 		if (this.queryTags == null || this.queryTags.isEmpty()
 				|| tags.isEmpty())
 			return 0;
+		for (Tag tag : tags) {
+			mustHave.remove(tag.getName());
+		}
 
 		// rate highest questions that share most of the tags and don't have
 		// hardly any additional tags
@@ -37,24 +52,24 @@ public class SearchFilter implements Filter<Question, Double> {
 				/ this.queryTags.size() / tags.size();
 	}
 
-	private double rateText(Question question) {
-		Set<String> words = getWords(question.content());
+	private double rateText(Entry entry, Set<String> mustHave) {
+		Set<String> words = getWords(entry.content());
 		if (this.queryFulltext == null)
 			return 0;
-
-		// words that aren't tags must appear in a question's content (AND
-		// search)
-		Set<String> mustHave = new HashSet<String>(this.queryFulltext);
-		for (Tag tag : question.getTags()) {
-			mustHave.remove(tag.getName());
-		}
-		if (difference(mustHave, words).size() != 0)
-			return -1; // cancel out any value returned by rateTags [0;1]
-
 		if (this.queryFulltext.isEmpty() || words.isEmpty())
 			return 0;
+		mustHave.removeAll(words);
 		return 1.0 * intersection(words, this.queryFulltext).size()
 				/ words.size();
+	}
+
+	private double rateAnswers(Question question, Set<String> mustHave) {
+		double rating = 0;
+		for (Answer ans : question.answers()) {
+			rating += rateText(ans, mustHave);
+		}
+		int answerCount = question.countAnswers();
+		return rating / (answerCount == 0 ? 1 : answerCount);
 	}
 
 	private Set<String> getWords(String string) {
@@ -63,7 +78,7 @@ public class SearchFilter implements Filter<Question, Double> {
 
 		Set<String> words = new HashSet<String>();
 		for (String word : string.split("\\W+")) {
-			words.add(word);
+			words.add(word.toLowerCase());
 		}
 		words.remove(""); // remove splitting artifact
 		return difference(words, StopWords.get());

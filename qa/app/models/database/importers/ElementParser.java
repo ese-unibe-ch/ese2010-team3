@@ -1,6 +1,6 @@
 package models.database.importers;
 
-import org.xml.sax.Attributes;
+import java.util.Map;
 
 public class ElementParser {
 
@@ -12,8 +12,9 @@ public class ElementParser {
 		this.elt = new Element("base");
 	}
 
-	public void start(String tag, Attributes atts) throws SemanticError {
-		Element subelt = new Element(tag);
+	public void start(String tag, Map<String, String> attributes)
+			throws SemanticError {
+		Element subelt = new Element(tag, attributes);
 		this.elt.addAt(tag, subelt);
 		this.elt = subelt;
 		this.syntax = this.syntax.get(tag);
@@ -23,7 +24,7 @@ public class ElementParser {
 		start(tag, null);
 	}
 
-	public void end() {
+	public void end() throws SemanticError {
 		this.syntax.callback(this.elt);
 		this.elt = this.elt.getParent();
 		this.syntax = this.syntax.getParent();

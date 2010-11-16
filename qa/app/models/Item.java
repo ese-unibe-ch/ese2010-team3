@@ -12,7 +12,24 @@ import java.util.Date;
 public abstract class Item {
 
 	private User owner;
-	private final Date timestamp;
+
+	public User getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	private Date timestamp;
+
+	public Date getTimestamp() {
+		return this.timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 
 	/** This entry's ID. */
 	private final int id;
@@ -40,7 +57,9 @@ public abstract class Item {
 		this.owner = owner;
 		this.timestamp = SystemInformation.get().now();
 		this.id = autoIncrementID();
-		owner.registerItem(this);
+		if (owner != null) {
+			owner.registerItem(this);
+		}
 	}
 
 	/**
@@ -81,7 +100,9 @@ public abstract class Item {
 	 * Unregisters the <code>Item</code> to it's owner.
 	 */
 	protected void unregisterUser() {
-		this.owner.unregister(this);
+		if (this.owner != null) {
+			this.owner.unregister(this);
+		}
 		this.owner = null;
 	}
 }

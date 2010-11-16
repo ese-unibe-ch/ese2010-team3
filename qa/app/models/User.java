@@ -699,4 +699,12 @@ public class User implements IObserver {
 		return Database.get().users().get(name.toLowerCase());
 	}
 
+	public void setDateOfBirth(Date time) {
+		this.dateOfBirth = time;
+	}
+
+	public String toString() {
+		return "U[" + this.name + "]";
+	}
+
 }

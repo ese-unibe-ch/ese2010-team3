@@ -379,4 +379,9 @@ public class Question extends Entry implements IObservable {
 	public int countAnswers() {
 		return this.answers.size();
 	}
+
+	public void addTag(String text) {
+		this.tags.add(Database.get().tags().get(text));
+	}
+
 }

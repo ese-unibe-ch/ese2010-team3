@@ -9,63 +9,140 @@ import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import play.test.UnitTest;
 
 public class XMLReadingTest extends UnitTest {
-	private final String xmlTom = "<user><name>Tom</name><password>123</password></user>";
-	private final String xmlHanna = "<user><name>Hanna</name><password>$%+</password></user>";
 
-	private final String xmlQuestion = "<question><owner>Tom</owner><content>Why?</content></question>";
-	private final String xmlAnswer = "<question>" +
-			"<owner>Tom</owner><content>Why?</content>" +
-			"<answer><owner>Hanna</owner><content>Because</content></answer>" +
-			"</question>";
+	static final String xml = "<?xml version=\"1.0\"?>\n"
+			+
+			"<QA>"
+			+
+			"  <users>"
+			+
+			"    <user id=\"277826\">"
+			+
+			"      <displayname>sdaau</displayname>"
+			+
+			"      <age>-1</age>"
+			+
+			"      <ismoderator>false</ismoderator>"
+			+
+			"      <email>sdaau@gmail.com</email>"
+			+
+			"      <password>secret</password>"
+			+
+			"      <aboutme>My name is sdaau</aboutme>"
+			+
+			"      <location/>"
+			+
+			"      <website/>"
+			+
+			"    </user>"
+			+
+			"  </users>"
+			+
+			""
+			+
+			"  <questions>"
+			+
+			"    <question id=\"4119991\">"
+			+
+			"      <ownerid>277826</ownerid>"
+			+
+			"      <creationdate>1289168092</creationdate>"
+			+
+			"      <lastactivity>1289176685</lastactivity>"
+			+
+			"      <body>The content with &lt; HTML &gt; tags</body>"
+			+
+			"      <title>Bash: call script with customized keyboard shortcuts?</title>"
+			+
+			"      <lastedit>1289176685</lastedit>"
+			+
+			"      <acceptedanswer>-1</acceptedanswer>"
+			+
+			"      <tags>"
+			+
+			"        <tag id=\"0\">linux</tag>						"
+			+
+			"        <tag id=\"1\">bash</tag>"
+			+
+			"        <tag id=\"2\">keyboard-shortcuts</tag>"
+			+
+			"        <tag id=\"3\">readline</tag>"
+			+
+			"        <tag id=\"4\">customize</tag>"
+			+
+			"      </tags>"
+			+
+			"    </question>"
+			+
+			"  </questions>"
+			+
+			""
+			+
+			"  <answers>"
+			+
+			"    <answer id=\"4120453\">							"
+			+
+			"      <ownerid>277826</ownerid>"
+			+
+			"      <questionid>4119991</questionid>"
+			+
+			"      <creationdate>1289175652</creationdate>"
+			+
+			"      <lastactivity>1289175652</lastactivity>"
+			+
+			"      <body>The content with &lt; HTML &gt; tags</body>"
+			+
+			"      <title>Bash: call script with customized keyboard shortcuts?</title>"
+			+
+			"      <lastedit>-1</lastedit>" +
+			"      <accepted>false</accepted>" +
+			"    </answer>" +
+			"  </answers>" +
+			"" +
+			"</QA>";
 
-	private HotDatabase mock = new HotDatabase();
-	private IDatabase old;
+	private static HotDatabase mock = new HotDatabase();
+	private static IDatabase old;
 
-	@Before
-	public void setUp() throws SAXException, IOException,
+	@BeforeClass
+	public static void setUp() throws SAXException, IOException,
 			ParserConfigurationException {
 		old = Database.get();
 		Database.swapWith(mock);
-		Database.clear();
+
 	}
 
-	@After
-	public void tearDown() {
+	@AfterClass
+	public static void tearDown() {
 		Database.swapWith(old);
 	}
 
-	private String xml(String x) {
-		return "<data>" + x + "</data>";
+	@Before
+	public void clean() {
+		Database.clear();
 	}
 
 	@Test
 	public void shouldReadTom() throws SAXException, IOException,
 			ParserConfigurationException {
-		Importer.importXML(xml(xmlTom));
-		assertFalse(Database.get().users().needSignUp("Tom"));
-	}
-
-	@Test
-	public void shouldReadTomAndHanna() throws SAXException, IOException,
-			ParserConfigurationException {
-		Importer.importXML(xml(xmlTom + xmlHanna));
-		assertFalse(Database.get().users().needSignUp("Tom"));
-		assertFalse(Database.get().users().needSignUp("Hanna"));
+		Importer.importXML(this.xml);
+		assertFalse(Database.get().users().needSignUp("sdaau"));
 	}
 
 	@Test
 	public void shouldReadQuestion() throws SAXException, IOException,
 			ParserConfigurationException {
 		assertEquals(0, Database.get().questions().count());
-		Importer.importXML(xml(xmlTom + xmlQuestion));
+		Importer.importXML(this.xml);
 		assertEquals(1, Database.get().questions().count());
 	}
 
@@ -73,7 +150,7 @@ public class XMLReadingTest extends UnitTest {
 	public void shouldReadAnswerToo() throws SAXException, IOException,
 			ParserConfigurationException {
 		assertEquals(0, Database.get().questions().countAllAnswers());
-		Importer.importXML(xml(xmlTom + xmlHanna + xmlAnswer));
+		Importer.importXML(this.xml);
 		assertEquals(1, Database.get().questions().countAllAnswers());
 	}
 }

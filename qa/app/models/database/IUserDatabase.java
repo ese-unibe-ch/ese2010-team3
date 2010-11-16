@@ -64,4 +64,17 @@ public interface IUserDatabase {
 	 */
 
 	public void clear();
+
+	/**
+	 * Add a User directly.
+	 * 
+	 * @param user
+	 */
+
+	public void add(User user);
+
+	/**
+	 * Get moderating crowd.
+	 */
+	public Collection<User> allModerators();
 }

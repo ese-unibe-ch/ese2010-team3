@@ -11,7 +11,6 @@ import play.jobs.OnApplicationStart;
 @OnApplicationStart
 public class Bootstrap extends Job {
 
-	@Override
 	public void doJob() {
 
 		// User
@@ -29,6 +28,7 @@ public class Bootstrap extends Job {
 		jack.setModerator(true);
 
 		// Questions
+
 		Question question = Database.get().questions().add(jack,
 				"Why did the chicken cross the road?");
 		question.answer(bill, "To get to the other side.");

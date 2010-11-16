@@ -26,7 +26,8 @@
 			</div><!-- end search -->
 			<div class="user">
 				#{if user}
-						Hi ${user.getName()}! #{if user && user.isModerator()}(moderator)#{/if}
+						Hi ${user.getName()}! #{if user && user.isModerator()}
+						<a href="@{Application.admin}">(moderator)</a> #{/if}
 						<a href="@{Application.notifications(0)}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
 						<a href="@{Application.showprofile(user.getName())}">Profile</a>
 						<a href="@{Secure.logout}">Logout</a>

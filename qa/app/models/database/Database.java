@@ -1,5 +1,8 @@
 package models.database;
 
+import java.util.Collection;
+
+import models.User;
 import models.database.HotDatabase.HotDatabase;
 
 /**
@@ -38,5 +41,13 @@ public class Database {
 		get().users().clear();
 		get().tags().clear();
 		get().questions().clear();
+	}
+
+	public static void clearKeepAdmins() {
+		Collection<User> mods = Database.get().users().allModerators();
+		Database.clear();
+		for (User mod : mods) {
+			Database.get().users().add(mod);
+		}
 	}
 }

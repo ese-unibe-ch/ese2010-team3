@@ -7,7 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import models.Question;
 import models.SearchEngine.StopWords;
 
 public class Tools {
@@ -85,7 +87,8 @@ public class Tools {
 			String word = input.substring(0, input.indexOf(" ")).trim();
 			if (word.length() > 3) {
 				int occurrence = (input.length() - (input.replaceAll(word, ""))
-						.length()) / word.length();
+						.length())
+						/ word.length();
 				if (occurrence > 1 && !StopWords.get().contains(word)) {
 					if (keywords.size() < 5) {
 						keywords.put(word, occurrence);
@@ -104,5 +107,39 @@ public class Tools {
 		}
 		return keywords.keySet().toString().replaceAll("[,\\[\\]]", "")
 				.replaceAll("  ", " ").trim();
+	}
+
+	/**
+	 * Sorts a list of Questions and segments them into parts according to a
+	 * certain number of entries per part.
+	 * 
+	 * @param entries
+	 *            the list to be segmented
+	 * @param entriesPerPage
+	 *            the amount of entries on one page
+	 * @param pageNumber
+	 *            the number of the requested page
+	 * 
+	 * 
+	 * @return a list of the entries on the given page number.
+	 * 
+	 */
+	public static List<Question> paginate(List<Question> entries,
+			int entriesPerPage, int index) {
+		int limit = entries.size();
+		int upperBound = ((index + 1) * entriesPerPage);
+
+		if (upperBound <= limit) {
+			return entries.subList(index * entriesPerPage, upperBound);
+		}
+		if (index * entriesPerPage <= limit)
+			return entries.subList(index * entriesPerPage, limit);
+
+		return entries;
+	}
+
+	public static int determineMaximumIndex(List<Question> questions,
+			int entriesPerPage) {
+		return (questions.size() - 1) / entriesPerPage;
 	}
 }
