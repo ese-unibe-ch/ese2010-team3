@@ -4,7 +4,7 @@
 		#{list items:_entry.comments(), as:'comment'}
 			<li class="comments">
 				<p>#{showProfile comment /}:
-				${comment.content().escapeHtml().nl2br()}</p>
+				${comment.content().raw()}</p>
 				#{date comment /}
 				#{if _user && _user.canEdit(comment)}
 					#{if _entry instanceof models.Answer}
