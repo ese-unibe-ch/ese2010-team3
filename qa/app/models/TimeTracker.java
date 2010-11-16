@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -13,19 +14,22 @@ import java.util.GregorianCalendar;
  */
 public final class TimeTracker {
 
-	private GregorianCalendar startTime;
+	private GregorianCalendar startTime = new GregorianCalendar();
 	private static TimeTracker t;
 
-	public TimeTracker(GregorianCalendar now) {
-		this.startTime = now;
+	private TimeTracker() {
+		startTime.setTime(SystemInformation.get().now());
 	}
 
-	public static void setRealTimeTracker(GregorianCalendar now) {
-		t = new TimeTracker(now);
-	}
-
-	public static TimeTracker getRealTimeTracker() {
+	public static TimeTracker getTimeTracker() {
+		if (t == null) {
+			t = new TimeTracker();
+		}
 		return t;
+	}
+
+	public void injectMockedStartTime(Date mock) {
+		TimeTracker.getTimeTracker().startTime.setTime(mock);
 	}
 
 	/**
@@ -33,12 +37,12 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of days
 	 */
-	public int getDays(GregorianCalendar now) {
-		GregorianCalendar startClone, nowClone;
+	public int getDays() {
+		GregorianCalendar startClone = new GregorianCalendar();
+		GregorianCalendar nowClone = new GregorianCalendar();
 		int elapsed = 0;
-
+		nowClone.setTime(SystemInformation.get().now());
 		startClone = (GregorianCalendar) this.startTime.clone();
-		nowClone = (GregorianCalendar) now.clone();
 
 		startClone.clear(Calendar.MILLISECOND);
 		startClone.clear(Calendar.SECOND);
@@ -62,11 +66,13 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of weeks
 	 */
-	public int getWeeks(GregorianCalendar now) {
+	public int getWeeks() {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
+
 		startClone = (GregorianCalendar) this.startTime.clone();
-		nowClone = (GregorianCalendar) now.clone();
+		nowClone = new GregorianCalendar();
+		nowClone.setTime(SystemInformation.get().now());
 
 		startClone.clear(Calendar.MILLISECOND);
 		startClone.clear(Calendar.SECOND);
@@ -90,12 +96,13 @@ public final class TimeTracker {
 	 * 
 	 * @return int the number of months
 	 */
-	public int getMonths(GregorianCalendar now) {
+	public int getMonths() {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
 
 		startClone = (GregorianCalendar) this.startTime.clone();
-		nowClone = (GregorianCalendar) now.clone();
+		nowClone = new GregorianCalendar();
+		nowClone.setTime(SystemInformation.get().now());
 
 		startClone.clear(Calendar.MILLISECOND);
 		startClone.clear(Calendar.SECOND);

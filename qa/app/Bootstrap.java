@@ -1,4 +1,3 @@
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import models.Question;
@@ -47,8 +46,9 @@ public class Bootstrap extends Job {
 		question.setTagString("numb3rs");
 
 		// TimeTracker
-		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
-		TimeTracker.setRealTimeTracker(g);
+		GregorianCalendar mock = new GregorianCalendar();
+		mock.set(2010, 10, 1, 0, 0);
+		TimeTracker.getTimeTracker().injectMockedStartTime(mock.getTime());
 
 	}
 }
