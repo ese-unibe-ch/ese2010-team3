@@ -29,7 +29,7 @@ public class Secured extends Controller {
 			Application.question(question.id());
 		} else {
 			flash.error("Please don't ask empty questions.");
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class Secured extends Controller {
 				Application.question(id);
 			}
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class Secured extends Controller {
 				Application.question(id);
 			}
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class Secured extends Controller {
 			flash.success("Your up-vote has been registered");
 			Application.question(question);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class Secured extends Controller {
 			flash.success("Your down-vote has been registered.");
 			Application.question(question);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class Secured extends Controller {
 				.success("The question '%s' has been deleted.", question
 						.summary());
 		question.unregister();
-		Application.index();
+		Application.index(0);
 	}
 
 	public static void deleteAnswer(int questionId, int answerId) {
@@ -204,8 +204,11 @@ public class Secured extends Controller {
 	public static void saveProfile(String name, String email, String fullname,
 			String birthday, String website, String profession,
 			String employer, String biography) throws ParseException {
-
-		User user = Session.get().currentUser();
+		User user = Database.get().users().get(name);
+		if (!Application.mayLoggedInUserEditProfileOf(user)) {
+			flash.error("You're not allowed to edit %s's profile!", name);
+			Application.showprofile(user.getName());
+		}
 		if (email != null) {
 			user.setEmail(email);
 		}

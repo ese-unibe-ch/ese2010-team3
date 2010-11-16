@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -19,6 +21,8 @@ import play.mvc.Controller;
 
 public class Application extends Controller {
 
+	private static final int entriesPerPage = 15;
+
 	@Before
 	static void setConnectedUser() {
 		if (controllers.Secure.Security.isConnected()) {
@@ -28,9 +32,16 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void index() {
+	public static void index(int index) {
 		List<Question> questions = Database.get().questions().all();
-		render(questions);
+		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
+		Collections.sort(questions, new Comparator<Question>() {
+			public int compare(Question q1, Question q2) {
+				return (q2.timestamp()).compareTo(q1.timestamp());
+			}
+		});
+		questions = Tools.paginate(questions, entriesPerPage, index);
+		render(questions, index, maxIndex);
 	}
 
 	public static void question(int id) {
@@ -88,7 +99,7 @@ public class Application extends Controller {
 			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
-			index();
+			index(0);
 		} else {
 			flash.keep("url");
 			if (!Tools.checkEmail(email)) {
@@ -105,17 +116,24 @@ public class Application extends Controller {
 		}
 	}
 
+	public static boolean mayLoggedInUserEditProfileOf(User showUser) {
+		User user = Session.get().currentUser();
+		if (user == null)
+			return false;
+		return user == showUser && !showUser.isBlocked() || user.isModerator();
+	}
+
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		User user = Session.get().currentUser();
-		boolean canEdit = user != null
-				&& (user == showUser || user.isModerator());
+		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
 		render(showUser, canEdit);
 	}
 
 	public static void editProfile(String userName) {
-		User user = Database.get().users().get(userName);
-		render(user);
+		User showUser = Database.get().users().get(userName);
+		if (!mayLoggedInUserEditProfileOf(showUser))
+			showprofile(userName);
+		render(showUser);
 	}
 
 	public static void tags(String term, String content) {
@@ -134,9 +152,12 @@ public class Application extends Controller {
 		renderJSON(tags);
 	}
 
-	public static void search(String term) {
+	public static void search(String term, int index) {
 		List<Question> results = Database.get().questions().searchFor(term);
-		render(results, term);
+		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
+
+		results = Tools.paginate(results, entriesPerPage, index);
+		render(results, term, index, maxIndex);
 	}
 
 	public static void notifications(int content) {
@@ -154,7 +175,7 @@ public class Application extends Controller {
 			render(notifications, watchingQuestions, suggestedQuestions,
 					content);
 		} else {
-			Application.index();
+			Application.index(0);
 		}
 	}
 
