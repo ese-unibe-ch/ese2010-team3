@@ -162,13 +162,9 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			boolean deleteSelf = name.equals(Session.get().currentUser()
-					.getName());
 			user.delete();
 			flash.success("User %s has been deleted.", name);
-			if (deleteSelf) {
-				Secure.logout();
-			}
+			Secure.logout();
 			Application.index(0);
 		}
 		flash.error("You're not allowed to delete user %s!", name);
@@ -194,7 +190,7 @@ public class Secured extends Controller {
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.getName().equals(user.getName()) || currentUser.isModerator();
+		return currentUser == user;
 	}
 
 	private static boolean redirectToCallingPage() {

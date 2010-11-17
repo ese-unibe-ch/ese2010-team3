@@ -87,8 +87,8 @@ public class Application extends Controller {
 		render(question);
 	}
 
-	public static void deleteuser(String name) {
-		User showUser = Database.get().users().get(name);
+	public static void deleteuser() {
+		User showUser = Session.get().currentUser();
 		render(showUser);
 	}
 
