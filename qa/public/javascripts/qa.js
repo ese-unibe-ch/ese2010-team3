@@ -88,4 +88,14 @@ $(document).ready(function() {
 		$("#mini_login input[name=username]").focus();
 		return false;
 	});
+	
+	// automatically insert a preview after all Markdown textareas
+	$("textarea").each(function() { $('<div class="wmd-preview"></div>').insertAfter(this); });
 });
+
+// configure the WMD editor
+var wmd_options = {
+	autostart: true,
+	buttons: "bold italic | link blockquote code image | ol ul hr",
+	output: "Markdown"
+};
