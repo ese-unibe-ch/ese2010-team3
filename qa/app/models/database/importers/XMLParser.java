@@ -181,8 +181,8 @@ public class XMLParser extends DefaultHandler {
 			question.creation = new Date(new Integer(e.getText("creationdate")));
 			question.ownerid = e.getText("ownerid").equals("") ? -1
 					: new Integer(e.getText("ownerid"));
-			for (Element tagE : e.get("tags")) {
-				question.tags.add(tagE.getText());
+			for (Element tagE : e.get("tags").get(0).get("tag")) {
+				question.tags += " " + tagE.getText();
 			}
 			this.protoquestions.add(question);
 		} catch (Throwable t) {
@@ -220,6 +220,7 @@ public class XMLParser extends DefaultHandler {
 					protoquestion.body);
 			question.setTimestamp(protoquestion.creation);
 			this.idQuestionBase.put(protoquestion.id, question);
+			question.setTagString(protoquestion.tags);
 		}
 		for (ProtoAnswer ans : this.protoanswers) {
 			Question question = this.idQuestionBase.get(ans.questionid);
@@ -238,7 +239,7 @@ public class XMLParser extends DefaultHandler {
 	}
 
 	private class ProtoQuestion {
-		private final List<String> tags = new LinkedList();
+		private String tags = "";
 		private int ownerid;
 		private Date creation;
 		private String body;
