@@ -169,6 +169,7 @@ public class Secured extends Controller {
 			if (deleteSelf) {
 				Secure.logout();
 			}
+			Application.index(0);
 		}
 		flash.error("You're not allowed to delete user %s!", name);
 		if (!redirectToCallingPage()) {
@@ -193,7 +194,7 @@ public class Secured extends Controller {
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.getName().equals(user.getName());
+		return currentUser.getName().equals(user.getName()) || currentUser.isModerator();
 	}
 
 	private static boolean redirectToCallingPage() {

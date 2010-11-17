@@ -4,10 +4,8 @@
 #{if user != null && showUser}
 	#{if canEdit}
 		<div class="profilenavi">
-			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a>
-			#{if user == showUser}
-				<a href="@{Application.deleteuser}"> | Delete Account</a>
-			#{/if}
+			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
+			<a href="@{Application.deleteuser(showUser.getName())}">Delete Account</a>
 		</div><!-- end profilenavi -->
 	#{/if}
 	<div>
@@ -98,10 +96,8 @@
 	</div><!-- end showprofile -->
 	#{if canEdit}
 		<div class="profilenavi">
-			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a>
-			#{if user == showUser}
-				<a href="@{Application.deleteuser}"> | Delete Account</a>
-			#{/if}
+			<a href="@{Application.editProfile(showUser.getName())}">Edit Profile</a> |
+			<a href="@{Application.deleteuser(showUser.getName())}">Delete Account</a>
 		</div><!-- end profilenavi -->
 	#{/if}
 	#{if user.isModerator() && user != showUser}
