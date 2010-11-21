@@ -5,6 +5,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Comment;
+import models.Entry;
 import models.Notification;
 import models.Question;
 import models.User;
@@ -73,6 +74,36 @@ public class Secured extends Controller {
 			Application.question(questionId);
 		}
 	}
+	
+	public static void addLikerQuestionComment(int cid, int qid){
+		Comment comment=Database.get().questions().get(qid).getComment(cid);
+		comment.addLiker(Session.get().currentUser());
+		flash.success("You like the comment. We're glad to know.");
+		Application.question(qid);
+	}
+	
+	public static void addLikerAnswerComment(int cid, int qid, int aid){
+		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+		comment.addLiker(Session.get().currentUser());
+		flash.success("You like the comment. We're glad to know.");
+		Application.question(qid);
+	}
+	
+	public static void removeLikerQuestionComment(int cid, int qid){
+		Comment comment=Database.get().questions().get(qid).getComment(cid);
+		comment.removeLiker(Session.get().currentUser());
+		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		Application.question(qid);
+	}
+	
+	public static void removeLikerAnswerComment(int cid, int qid, int aid){
+		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+		comment.removeLiker(Session.get().currentUser());
+		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		Application.question(qid);
+	}
+	
+	
 
 	public static void voteQuestionUp(int id) {
 		Question question = Database.get().questions().get(id);
