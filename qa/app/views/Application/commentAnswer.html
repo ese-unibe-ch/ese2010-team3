@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{if answer}
 	#{set title:'ajopi - ' + answer.summary()  /}
-	<a href="@{Application.question(question.id())}">back</a>
+	<a href="@{Application.question(question.id())}#answer-${answer.id()}">back</a>
 	<ul class="answers">
 		#{answer answer:answer, user:user, extended:false /}
 	</ul>

@@ -131,7 +131,9 @@ public class Application extends Controller {
 
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		String biography = Tools.markdownToHtml(showUser.getBiography());
+		String biography = showUser.getBiography();
+		if (biography != null)
+			biography = Tools.markdownToHtml(biography);
 		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
 		render(showUser, biography, canEdit);
 	}
