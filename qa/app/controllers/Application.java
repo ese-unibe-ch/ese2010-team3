@@ -87,8 +87,9 @@ public class Application extends Controller {
 		render(question);
 	}
 
-	public static void deleteuser(User user) {
-		render();
+	public static void deleteuser() {
+		User showUser = Session.get().currentUser();
+		render(showUser);
 	}
 
 	public static void register() {
@@ -130,8 +131,11 @@ public class Application extends Controller {
 
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
+		String biography = showUser.getBiography();
+		if (biography != null)
+			biography = Tools.markdownToHtml(biography);
 		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
-		render(showUser, canEdit);
+		render(showUser, biography, canEdit);
 	}
 
 	public static void editProfile(String userName) {

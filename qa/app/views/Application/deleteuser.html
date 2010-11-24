@@ -1,21 +1,21 @@
 #{extends 'main.html' /}
 
-#{if user}
-	#{set title:'ajopi - delete ' + user.getName() + '?'  /}
+#{if showUser}
+	#{set title:'ajopi - delete ' + showUser.getName() + '?'  /}
 	<ul>
 		<li>
-			<h2>Do you really want to delete the Account ${user.name}?</h2>
+			<h2>Do you really want to delete the Account ${showUser.name}?</h2>
 			<p>
 			<ul class="optionLinks">
-				<li><a href="@{Secured.anonymizeUser(user.getName())}">Yes, but keep my questions and answers.</a></li>
-				<li><a href="@{Secured.deleteUser(user.getName())}">Yes, delete everything.</a></li>
-				<li><a href="@{Application.showprofile(user.getName())}">No, I've changed my mind.</a></li>
+				<li><a href="@{Secured.anonymizeUser(showUser.getName())}">Yes, but keep all questions and answers.</a></li>
+				<li><a href="@{Secured.deleteUser(showUser.getName())}">Yes, delete everything.</a></li>
+				<li><a href="@{Application.showprofile(showUser.getName())}">No, I've changed my mind.</a></li>
 			</p>
 		</li>
 	</ul>
 #{/if}
 #{else}
 	#{set title:'Error' /}
-	<h1>No such user ${name}</h1>
+	<h1>No such user</h1>
 #{/else}
 

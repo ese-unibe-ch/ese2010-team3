@@ -2,9 +2,9 @@
 	
 	<a href="
 		#{if _arg instanceof models.Answer}
-			@{Secured.voteAnswerDown(_arg.getQuestion().id(), _arg.id())}
+			@{Secured.voteAnswerDown(_arg.getQuestion().id(), _arg.id())}#answer-${_arg.id()}
 		#{/if}#{else}
-			@{Secured.voteQuestionDown(_arg.id())}
+			@{Secured.voteQuestionDown(_arg.id())}#question-${_arg.id()}
 		#{/else}
 	" title="vote down">-</a>
 	
@@ -12,9 +12,9 @@
 
 	<a href="
 		#{if _arg instanceof models.Answer}
-			@{Secured.voteAnswerUp(_arg.getQuestion().id(), _arg.id())}
+			@{Secured.voteAnswerUp(_arg.getQuestion().id(), _arg.id())}#answer-${_arg.id()}
 		#{/if}#{else}
-			@{Secured.voteQuestionUp(_arg.id())}
+			@{Secured.voteQuestionUp(_arg.id())}#question-${_arg.id()}
 		#{/else}
 	" title="vote up">+</a>
 

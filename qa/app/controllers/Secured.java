@@ -5,6 +5,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Comment;
+import models.Entry;
 import models.Notification;
 import models.Question;
 import models.User;
@@ -73,6 +74,36 @@ public class Secured extends Controller {
 			Application.question(questionId);
 		}
 	}
+	
+	public static void addLikerQuestionComment(int cid, int qid){
+		Comment comment=Database.get().questions().get(qid).getComment(cid);
+		comment.addLiker(Session.get().currentUser());
+		flash.success("You like the comment. We're glad to know.");
+		Application.question(qid);
+	}
+	
+	public static void addLikerAnswerComment(int cid, int qid, int aid){
+		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+		comment.addLiker(Session.get().currentUser());
+		flash.success("You like the comment. We're glad to know.");
+		Application.question(qid);
+	}
+	
+	public static void removeLikerQuestionComment(int cid, int qid){
+		Comment comment=Database.get().questions().get(qid).getComment(cid);
+		comment.removeLiker(Session.get().currentUser());
+		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		Application.question(qid);
+	}
+	
+	public static void removeLikerAnswerComment(int cid, int qid, int aid){
+		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+		comment.removeLiker(Session.get().currentUser());
+		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		Application.question(qid);
+	}
+	
+	
 
 	public static void voteQuestionUp(int id) {
 		Question question = Database.get().questions().get(id);
@@ -162,13 +193,10 @@ public class Secured extends Controller {
 	public static void deleteUser(String name) throws Throwable {
 		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			boolean deleteSelf = name.equals(Session.get().currentUser()
-					.getName());
 			user.delete();
 			flash.success("User %s has been deleted.", name);
-			if (deleteSelf) {
-				Secure.logout();
-			}
+			Secure.logout();
+			Application.index(0);
 		}
 		flash.error("You're not allowed to delete user %s!", name);
 		if (!redirectToCallingPage()) {
@@ -193,7 +221,7 @@ public class Secured extends Controller {
 	}
 
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser.getName().equals(user.getName());
+		return currentUser == user;
 	}
 
 	private static boolean redirectToCallingPage() {

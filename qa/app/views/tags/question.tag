@@ -2,7 +2,7 @@
 <li class="question #{if _user && _question.owner() == _user}own#{/if}"
 	#{if !_extended} onclick="goto('@{Application.question(_question.id())}')" #{/if}
 	>
-	<h2>#{showProfile _question /}:</h2>
+	<h2 id="question-${_question.id()}">#{showProfile _question /}:</h2>
 	<p>${_question.content().raw()}</p>
 	#{date _question /}
 	#{tags question:_question, editable:_extended && _user?.canEdit(_question) /}
@@ -11,7 +11,7 @@
 		<div class="commands">
 		#{if !_question.isLocked()}
 			#{if !_user.isBlocked()}
-				<a href ="@{Application.commentQuestion(_question.id())}">Add a new comment | </a>
+				<a href ="@{Application.commentQuestion(_question.id())}">Add a new comment</a> |
 			#{/if}
 			#{if _user.isObserving(_question)}
 				<a href="@{Secured.unwatchQuestion(_question.id())}">Stop watching</a>
@@ -19,14 +19,14 @@
 				<a href="@{Secured.watchQuestion(_question.id())}">Watch</a>
 			#{/else}
 			#{if _user.isModerator()}
-				<a href="@{Secured.lockQuestion(_question.id())}"> | Lock</a>
+				| <a href="@{Secured.lockQuestion(_question.id())}">Lock</a>
 			#{/if}
 		#{/if}
 		#{if _user.isModerator() && _question.isLocked()}
-			<a href="@{Secured.unlockQuestion(_question.id())}"> Unlock</a>
+			<a href="@{Secured.unlockQuestion(_question.id())}">Unlock</a>
 		#{/if}
 		#{if _user.canEdit(_question)}
-			<a href="@{Application.confirmDeleteQuestion(_question.id())}"> | Delete</a>
+			| <a href="@{Application.confirmDeleteQuestion(_question.id())}">Delete</a>
 		#{/if}
 		</div>
 	#{/if}
