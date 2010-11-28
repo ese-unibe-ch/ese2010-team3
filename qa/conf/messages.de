@@ -1,0 +1,6 @@
+# German language message file
+
+secure.emailerror=Huch, ungültige eMail-Adresse.
+secure.passwordrepeat=Passwort bestätigen:
+secure.passworderror=Huch, Passwörter stimmen nicht überein.
+secure.usernameerror=Huch, ein Benutzer mit diesem Namen existiert bereits.
