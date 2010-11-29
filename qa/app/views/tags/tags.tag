@@ -5,7 +5,7 @@
 		<a href="@{Application.search(tag.getName())}" class="tag">${tag.getName()}</a>
 	#{/list}
 	#{if _editable}
-		<input type="button" class="editTags" value="Edit Lables" tagsJSON="@{Application.tags}">
+		<input type="button" class="editTags" value="Edit Tags" tagsJSON="@{Application.tags}">
 	#{/if}
 	#{/form}
 </div>

@@ -21,7 +21,7 @@ import play.mvc.Controller;
 
 public class Application extends Controller {
 
-	private static final int entriesPerPage = 15;
+	private static final int entriesPerPage = 5;
 
 	@Before
 	static void setConnectedUser() {
@@ -97,20 +97,16 @@ public class Application extends Controller {
 	}
 
 	public static void signup(@Required String username, String password,
-			String passwordrepeat, String email) {
+			String passwordrepeat) {
 
-		if (Tools.checkEmail(email) && password.equals(passwordrepeat)
+		if (password.equals(passwordrepeat)
 				&& User.isAvailable(username)) {
 			User user = Database.get().users().register(username, password);
-			user.setEmail(email);
 			// Mark user as connected
 			session.put("username", username);
 			index(0);
 		} else {
 			flash.keep("url");
-			if (!Tools.checkEmail(email)) {
-				flash.error("secure.emailerror");
-			}
 			if (!User.isAvailable(username)) {
 				flash.error("secure.usernameerror");
 			}

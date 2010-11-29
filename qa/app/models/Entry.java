@@ -195,7 +195,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
 				.replaceFirst("^(.{35}\\S{0,9} ?).{5,}", "$1...");
 	}
-
+	
 	/**
 	 * Get all <code>Votes</code>.
 	 * 

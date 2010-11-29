@@ -136,7 +136,7 @@ div.content li {
 	list-style: none;
 	margin: 10px 0;
 	padding: 7px;
-	position: relative;
+	overflow:auto;
 }
 		
 div.content li[onclick] {
@@ -243,7 +243,6 @@ p.comments {
 	padding-left: 50px;
 	font-size: 0.9em;
 }
-
 /*********************** 
 show profile
 ************************/
