@@ -1,6 +1,6 @@
 #{extends 'main.html' /}
 #{if answer}
-	#{set title:'ajopi - ' + answer.summary()  /}
+	#{set title:'ajopi - ' + answer.summary().escape()  /}
 	<a href="@{Application.question(question.id())}#answer-${answer.id()}">back</a>
 	<ul class="answers">
 		#{answer answer:answer, user:user, extended:false /}

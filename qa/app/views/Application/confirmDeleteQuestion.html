@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 
 #{if question}
-	#{set title:'ajopi - delete question: ' + question.summary() /}
+	#{set title:'ajopi - delete question: ' + question.summary().escape() /}
 	<div class="deleteQuestion">
 		<p>Do you really want to delete the following question?</p>
 		<p>Please notice that every answer and comment referring to this question will also be deleted.</p>

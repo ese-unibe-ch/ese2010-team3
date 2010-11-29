@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 
 #{if question}
-	#{set title:'ajopi - ' + question.summary()  /}
+	#{set title:'ajopi - ' + question.summary().escape() /}
 	<ul>
 		#{question question:question, user:user, extended:true /}
 	</ul>
