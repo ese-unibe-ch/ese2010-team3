@@ -91,6 +91,16 @@ $(document).ready(function() {
 	
 	// automatically insert a preview after all Markdown textareas
 	$("textarea").each(function() { $('<div class="wmd-preview"></div>').insertAfter(this); });
+	
+	// make sure to move the focus to the "New question" textarea
+	// when the user clicks the "New question" link
+	if ($("#newQuestion").length == 1) {
+		if (location.hash == "#askquestion")
+			$("#newQuestion").focus();
+		$("[href=/#askquestion]").click(function() {
+			$("#newQuestion").focus();
+		});
+	}
 });
 
 // configure the WMD editor
