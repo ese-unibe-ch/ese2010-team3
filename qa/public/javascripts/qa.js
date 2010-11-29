@@ -99,6 +99,9 @@ $(document).ready(function() {
 			$("#newQuestion").focus();
 		$("[href=/#askquestion]").click(function() {
 			$("#newQuestion").focus();
+			// don't navigate away if we're not on the first index page
+			location.hash = "#askquestion";
+			return false;
 		});
 	}
 });
