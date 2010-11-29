@@ -137,6 +137,7 @@ div.content li {
 	margin: 10px 0;
 	padding: 7px;
 	overflow-x:auto;
+	position:relative;
 }
 		
 div.content li[onclick] {
