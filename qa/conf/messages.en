@@ -1,5 +1,52 @@
 # English language message file
 
+# General messages
+previous=Previous
+next=Next
+back=back
+signinorup=Please log in or sign up(if you're new to this site) in order to ask your own questions, give answers, comment and vote on questions and answers and be notified when somebody answers your questions.
+dateformat=DD.MM.YYYY or MM/DD/YYYY
+
+#User messages
+user.nonexistent=No such user
+user.delete=Do you really want to delete the Account?
+user.confirmanonymize=Yes, but keep all questions and answers.
+user.confirmdelete=Yes, delete everything.
+user.abortdelete=No, I've changed my mind.
+
+#Question messages
+question.ask=Ask question
+question.label=Label this question:
+question.labeleg=e.g. java, design, idea
+question.add=Add new question
+question.reallydelete=Do you really want to delete the following question?
+question.deletenotice=Please notice that every answer and comment referring to this question will also be deleted.
+question.confirmdelete=Yes, delete this question.
+question.abortdelete=No, I've changed my mind.
+
+#Answer messages
+
+
+#Comment messages
+comment.add=Add comment
+comment.addnew=Add new comment
+
+# Secure messages
+secure.title=
+secure.username=Username:
+secure.realname=Real name:
+secure.email=E-Mail:
+secure.birthday=Birthday:
+secure.website=Website:
+secure.profession=Profession:
+secure.employer=Employer:
+secure.biography=Biography:
+secure.password=Password:
+secure.remember=Remember me
+secure.signin=Sign in
+secure.saveprofile=Save profile
+secure.error=Oops, unknown username or password.
+secure.logout=You have been logged out.
 secure.emailerror=Oops, this is not a valid eMail address.
 secure.passwordrepeat=Confirm Password:
 secure.passworderror=Oops, you entered two different Passwords.
