@@ -101,7 +101,7 @@ public class Application extends Controller {
 
 		if (password.equals(passwordrepeat)
 				&& User.isAvailable(username)) {
-			User user = Database.get().users().register(username, password);
+			Database.get().users().register(username, password);
 			// Mark user as connected
 			session.put("username", username);
 			index(0);

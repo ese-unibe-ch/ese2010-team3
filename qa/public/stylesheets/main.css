@@ -136,8 +136,10 @@ div.content li {
 	list-style: none;
 	margin: 10px 0;
 	padding: 7px;
-	overflow-x:auto;
 	position:relative;
+}
+div.content pre {
+	overflow-x: auto;
 }
 		
 div.content li[onclick] {
@@ -206,6 +208,9 @@ div.message {
 	background: #333333;
 	padding: 5px;	
 	color: #aecbfb;
+}
+#askquestion:target {
+	background: #AF7817;
 }
 div.message p {
 	margin: 5px 0px;
