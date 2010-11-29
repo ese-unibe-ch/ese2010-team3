@@ -5,7 +5,6 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Comment;
-import models.Entry;
 import models.Notification;
 import models.Question;
 import models.User;
@@ -103,8 +102,6 @@ public class Secured extends Controller {
 		Application.question(qid);
 	}
 	
-	
-
 	public static void voteQuestionUp(int id) {
 		Question question = Database.get().questions().get(id);
 		if (question != null) {
@@ -131,6 +128,19 @@ public class Secured extends Controller {
 		}
 	}
 
+	public static void voteQuestionCancel(int id) {
+		Question question = Database.get().questions().get(id);
+		if (question != null) {
+			question.voteCancel(Session.get().currentUser());
+			flash.success("Your vote has been forgotten.");
+			if (!redirectToCallingPage()) {
+				Application.question(id);
+			}
+		} else {
+			Application.index(0);
+		}
+	}
+
 	public static void voteAnswerUp(int question, int id) {
 		Question q = Database.get().questions().get(question);
 		Answer answer = q.getAnswer(id);
@@ -149,6 +159,18 @@ public class Secured extends Controller {
 		if (answer != null) {
 			answer.voteDown(Session.get().currentUser());
 			flash.success("Your down-vote has been registered.");
+			Application.question(question);
+		} else {
+			Application.index(0);
+		}
+	}
+
+	public static void voteAnswerCancel(int question, int id) {
+		Question q = Database.get().questions().get(question);
+		Answer answer = q.getAnswer(id);
+		if (answer != null) {
+			answer.voteCancel(Session.get().currentUser());
+			flash.success("Your vote has been forgotten.");
 			Application.question(question);
 		} else {
 			Application.index(0);

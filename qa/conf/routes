@@ -14,6 +14,7 @@ GET     /question/{id}/comments/				Application.commentQuestion
 
 GET		/question/{id}/up						Secured.voteQuestionUp
 GET		/question/{id}/down						Secured.voteQuestionDown
+GET		/question/{id}/cancel					Secured.voteQuestionCancel
 
 GET		/question/{id}/watch					Secured.watchQuestion
 GET		/question/{id}/unwatch					Secured.unwatchQuestion
@@ -24,6 +25,7 @@ GET		/question/{id}/delete					Secured.deleteQuestion
 
 GET		/answer/{question}/{id}/up				Secured.voteAnswerUp
 GET		/answer/{question}/{id}/down			Secured.voteAnswerDown
+GET		/answer/{question}/{id}/cancel			Secured.voteAnswerCancel
 GET		/answer/{questionId}/{answerId}/comment	Application.commentAnswer
 GET		/answer/{questionId}/{answerId}/isbest	Secured.selectBestAnswer
 GET		/answer/{questionId}/{answerId}/delete	Secured.deleteAnswer

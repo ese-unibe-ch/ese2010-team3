@@ -1,21 +1,42 @@
+#{if false} Arguments: _entry, _user #{/if}
 <span class="vote">
 	
-	<a href="
-		#{if _arg instanceof models.Answer}
-			@{Secured.voteAnswerDown(_arg.getQuestion().id(), _arg.id())}#answer-${_arg.id()}
-		#{/if}#{else}
-			@{Secured.voteQuestionDown(_arg.id())}#question-${_arg.id()}
-		#{/else}
-	" title="vote down">-</a>
+	#{if _entry.hasDownVote(_user)}
+		<a href="
+			#{if _entry instanceof models.Answer}
+				@{Secured.voteAnswerCancel(_entry.getQuestion().id(), _entry.id())}#answer-${_entry.id()}
+			#{/if}#{else}
+				@{Secured.voteQuestionCancel(_entry.id())}#question-${_entry.id()}
+			#{/else}
+		" class="voted" title="remove your vote">-</a>
+	#{/if}#{else}
+		<a href="
+			#{if _entry instanceof models.Answer}
+				@{Secured.voteAnswerDown(_entry.getQuestion().id(), _entry.id())}#answer-${_entry.id()}
+			#{/if}#{else}
+				@{Secured.voteQuestionDown(_entry.id())}#question-${_entry.id()}
+			#{/else}
+		" title="vote down">-</a>
+	#{/else}
 	
-	${_arg.rating()}
+	${_entry.rating()}
 
+	#{if _entry.hasUpVote(_user)}
+		<a href="
+			#{if _entry instanceof models.Answer}
+				@{Secured.voteAnswerCancel(_entry.getQuestion().id(), _entry.id())}#answer-${_entry.id()}
+			#{/if}#{else}
+				@{Secured.voteQuestionCancel(_entry.id())}#question-${_entry.id()}
+			#{/else}
+		" class="voted" title="remove your vote">-</a>
+	#{/if}#{else}
 	<a href="
-		#{if _arg instanceof models.Answer}
-			@{Secured.voteAnswerUp(_arg.getQuestion().id(), _arg.id())}#answer-${_arg.id()}
+		#{if _entry instanceof models.Answer}
+			@{Secured.voteAnswerUp(_entry.getQuestion().id(), _entry.id())}#answer-${_entry.id()}
 		#{/if}#{else}
-			@{Secured.voteQuestionUp(_arg.id())}#question-${_arg.id()}
+			@{Secured.voteQuestionUp(_entry.id())}#question-${_entry.id()}
 		#{/else}
 	" title="vote up">+</a>
+	#{/else}
 
 </span>
