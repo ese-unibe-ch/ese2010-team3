@@ -21,7 +21,7 @@ import play.mvc.Controller;
 
 public class Application extends Controller {
 
-	private static final int entriesPerPage = 5;
+	private static final int entriesPerPage = 15;
 
 	@Before
 	static void setConnectedUser() {

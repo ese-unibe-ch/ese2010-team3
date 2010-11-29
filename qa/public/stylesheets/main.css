@@ -136,7 +136,7 @@ div.content li {
 	list-style: none;
 	margin: 10px 0;
 	padding: 7px;
-	overflow:auto;
+	overflow-x:auto;
 }
 		
 div.content li[onclick] {
