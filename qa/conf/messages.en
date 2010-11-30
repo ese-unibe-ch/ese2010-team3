@@ -15,9 +15,12 @@ moderator=moderator
 search=Search
 search.button=Search
 search.fail=There is no question found matching
-statistic=Statistic
+statistic=Statistics
 numberof=Number of
 reason=Reason
+english=English
+german=German
+french=French
 group3ftw=A project by Group 3.
 
 # User messages

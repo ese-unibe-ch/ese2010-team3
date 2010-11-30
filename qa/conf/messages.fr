@@ -18,6 +18,9 @@ search.fail=On n'a pas trouve un question d'association.
 statistic=Statistiques
 numberof=Nombre de
 reason=Raison
+english=Anglais
+german=Allemande
+french=Français
 group3ftw=Un project par le groupe 3.
 
 # User messages
