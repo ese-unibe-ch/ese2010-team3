@@ -246,7 +246,7 @@ public class Secured extends Controller {
 		return currentUser == user;
 	}
 
-	private static boolean redirectToCallingPage() {
+	public static boolean redirectToCallingPage() {
 		Http.Header referer = request.headers.get("referer");
 		if (referer == null)
 			return false;

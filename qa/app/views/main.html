@@ -64,9 +64,10 @@
 			#{doLayout /}
 			</div><!-- end content -->
 			<div class="footer">
-				<a>
-	 				<a href="@{Application.showStatisticalOverview}">Statistics</a>
-	 			</a>
+				<!-- TODO: make me dynamic -->
+				<a href="@{Application.selectLanguage("en")}">English</a>
+				<a href="@{Application.selectLanguage("de")}">German</a>
+	 			<a href="@{Application.showStatisticalOverview}">Statistics</a>
 				A project by Group 3.
 			</div><!-- end footer>
 		</div><!-- end main -->
