@@ -16,6 +16,7 @@ import models.database.Database;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+
 public class XMLParser extends DefaultHandler {
 	private final Map<Integer, User> idUserBase;
 	private final Map<Integer, Question> idQuestionBase;
@@ -179,7 +180,7 @@ public class XMLParser extends DefaultHandler {
 			question.title = e.getText("title");
 			question.body = e.getText("body");
 			question.id = new Integer(e.getArg("id"));
-			question.creation = new Date(new Integer(e.getText("creationdate")));
+			question.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			question.ownerid = e.getText("ownerid").equals("") ? -1
 					: new Integer(e.getText("ownerid"));
 			for (Element tagE : e.get("tags").get(0).get("tag")) {
@@ -202,7 +203,7 @@ public class XMLParser extends DefaultHandler {
 			answer.accepted = e.getText("accepted").equals("true");
 			answer.id = e.getArg("id") == null ? -1 : new Integer(e
 					.getArg("id"));
-			answer.creation = new Date(new Integer(e.getText("creationdate")));
+			answer.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			this.protoanswers.add(answer);
 		} catch (Throwable t) {
 			throw new SemanticError("Answer #" + e.getText("ownerid")
