@@ -38,7 +38,7 @@
 	#{/if}
 	
 	#{if _user && _question.owner() != _user && !_user.isBlocked()}
-		#{vote _question /}
+		#{vote entry:_question, user:_user /}
 	#{/if}
 </li>
 #{if _extended}

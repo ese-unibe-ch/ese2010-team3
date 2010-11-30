@@ -19,10 +19,10 @@ import java.util.Map;
  * 
  */
 public class Element {
-	private String name;
+	private final String name;
 	private Map<String, String> attrs;
-	private StringBuilder text;
-	private Map<String, List<Element>> subelements;
+	private final StringBuilder text;
+	private final Map<String, List<Element>> subelements;
 	private Element parent;
 
 	public Element(String name_, Map<String, String> attributes) {
@@ -95,17 +95,6 @@ public class Element {
 	 */
 	public void addText(String str) {
 		this.text.append(str);
-	}
-
-	/**
-	 * {@link #addText(String)}
-	 * 
-	 * @param str
-	 * @param start
-	 * @param finish
-	 */
-	public void addText(char[] str, int start, int finish) {
-		this.text.append(str, start, finish);
 	}
 
 	/**

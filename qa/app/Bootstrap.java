@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -5,12 +6,14 @@ import models.Question;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
+import models.database.importers.Importer;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 
 @OnApplicationStart
 public class Bootstrap extends Job {
 
+	@Override
 	public void doJob() {
 
 		// User
@@ -49,5 +52,12 @@ public class Bootstrap extends Job {
 		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
 		TimeTracker.setRealTimeTracker(g);
 
+		// try to import some more questions, answers, etc.
+		try {
+			Importer.importXML(new File("qa/conf/fixtures/QA.xml"));
+		} catch (Exception e) {
+			// handle all exceptions the same way (all failures aren't fatal)
+			e.printStackTrace();
+		}
 	}
 }

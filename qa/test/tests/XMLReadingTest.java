@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import models.Question;
 import models.database.Database;
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
@@ -59,7 +60,7 @@ public class XMLReadingTest extends UnitTest {
 			+
 			"      <lastactivity>1289176685</lastactivity>"
 			+
-			"      <body>The content with &lt; HTML &gt; tags</body>"
+			"      <body><![CDATA[The content with &lt; HTML &gt; tags]]></body>"
 			+
 			"      <title>Bash: call script with customized keyboard shortcuts?</title>"
 			+
@@ -99,7 +100,7 @@ public class XMLReadingTest extends UnitTest {
 			+
 			"      <lastactivity>1289175652</lastactivity>"
 			+
-			"      <body>The content with &lt; HTML &gt; tags</body>"
+			"      <body><![CDATA[The content with &lt; HTML &gt; tags]]></body>"
 			+
 			"      <title>Bash: call script with customized keyboard shortcuts?</title>"
 			+
@@ -152,5 +153,14 @@ public class XMLReadingTest extends UnitTest {
 		assertEquals(0, Database.get().questions().countAllAnswers());
 		Importer.importXML(this.xml);
 		assertEquals(1, Database.get().questions().countAllAnswers());
+	}
+
+	@Test
+	public void shouldNotContainCDATA() throws SAXException, IOException,
+			ParserConfigurationException {
+		Importer.importXML(this.xml);
+		Question question = Database.get().questions().all().get(0);
+		assertFalse(question.content().startsWith("<![CDATA["));
+		assertFalse(question.answers().get(0).content().contains("<![CDATA["));
 	}
 }

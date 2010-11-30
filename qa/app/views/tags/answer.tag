@@ -18,7 +18,7 @@
 		</div>
 	#{/if}
 	#{if _user && _answer.owner() != _user && !_user.isBlocked()}
-		#{vote _answer /}
+		#{vote entry:_answer, user:_user /}
 	#{/if}
 </li>
 #{if _extended}
