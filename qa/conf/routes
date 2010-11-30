@@ -57,6 +57,8 @@ GET		/notification/clearNew					Secured.clearNewNotifications
 GET		/search/{term}/{index}					Application.search
 GET		/search/{term}							Application.search
 
+GET		/setlang/{langId}						Application.selectLanguage
+
 GET		/admin									Application.admin
 
 # Map static resources from the /app/public folder to the /public path
