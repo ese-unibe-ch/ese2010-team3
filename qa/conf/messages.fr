@@ -1,0 +1,163 @@
+# English language message file
+
+# General messages
+hello=Bonjour
+or=ou
+previous=précédente
+next=prochaine
+back=retour
+recent=récents
+delete=supprimer
+signinorup=S'il vous plaît, connectez-vous ou inscrivez-vous (si vous êtes nouveau sur ce site) pour poser quelques questions, donner des réponds ou commentaire, vote et être notifié si quelqu'un répond à votre question.
+dateformat=JJ.MM.AAAA or MM/JJ/AAAA
+new=*nouveau*
+moderator=modérateur
+search=Recherche
+search.button=Recherche
+search.fail=On n'a pas trouve un question d'association.
+statistic=Statistiques
+numberof=Nombre de
+reason=Raison
+group3ftw=Un project par le groupe 3.
+
+# User messages
+user=Utilisateur
+user.login=Login
+user.log_in=Connectez-vous
+user.logout=Déconnexion
+user.signup=Signer
+user.profile=Profile
+user.nonexistent=Cet utilisateur n'esxiste pas.
+user.delete=Voulez-vous vraiment supprimer le profil?
+user.confirmanonymize=Oui, mais gardez tous mes questions et réponses.
+user.confirmdelete=Supprimer tout.
+user.abortdelete=Non, je préfère de rester.
+user.notification=Notification
+user.watchinglist=Liste de surveillance.
+user.mightknowanswer=Vous savez peut-être la réponse à ces questions.
+user.norecommention=Nous n'avons pas d'autres recommandations.
+user.editprofile=Modifier le profil
+user.deleteaccount=Supprimer le profil
+user.block=Bloc cet utilisateur
+user.isblocked=Cet utilisateur est bloqué.
+user.blockedbymoderator=Vous êtes bloqué d'un modérateur.
+user.blockedforreason=Bloqué parce que
+user.unblocknow=Débloquer maintenant
+user.unblock=Débloquer utilisateur
+user.nonexistent=Vous n'êtes pas connectez ou cet utilisateur n'existe pas.
+
+# Post messages
+posts.perday=par jour
+posts.perweek=par semain
+posts.permonth=par mois
+#   Question messages
+questions=Questions
+question.ask=Poser une question
+question.label=Des mots-clés pour cette question:
+question.labeleg=par exemple Java, design, idée
+question.new=Nouvelle question
+question.add=Poser une nouvelle question
+question.reallydelete=Voulez-vous vraiment supprimer la question suivant?
+question.deletenotice=S'il vous plaît, remarque que tout les réponses et tous les commentaires qui se référant à cette question sera supprimé.
+question.confirmdelete=Oui, supprime cette question.
+question.abortdelete=Non, ne supprime pas cette question.
+question.recommended=Questions recommandé
+question.recommendhint=Nous allons essayer de énumérer questions qui sont similaire aux questions que vous avez déjà répondu.
+question.related=Questions similaire
+question.locked=Cette question est fermée. Il n'est pas possible de répondre à cette question.
+question.newanswer=Nouvelle réponse à une de vôtre questions.
+question.nonexistent=Cette question n'existe pas.
+question.lock=Ferme
+question.unlock=Ouvre
+#   Answer messages
+answers=Réponse
+answer.add=Donner une réponse
+answer.addnew=Donner une nouvelle réponse
+answer.answeredto=réponse à
+answer.best=Meilleure réponse
+answers.best=Meilleure réponses
+answer.selectasbest=C'est la meilleure réponse
+answers.highrated=Réponses les mieux cotés 
+#   Comment messages
+comments=Commentaires
+comment.add=Donner un commentaire
+comment.addnew=Donner un nouveau commentaire
+comment.ilike=J'aime ça.
+comment.idislike=Je ne l'aime plus.
+comment.likecountone=utilisateur aime ça.
+comment.likecountmultiple=utilisateurs aiment ça
+
+# Notification messages
+notifications=Notifications
+notification.inbox=Boîte de réceptioins
+notification.delete=Supprimer notification
+notification.markasread=Marque tous notifications comme lu.
+notification.none=Il n'y a aucun notification - allez surveille quelques questions!
+watch.hint=Vous trouverez un "surveiller" lien sur la page de chaque question. En outre vous surveiller les question que vous avez posé.
+watch.none=Vous ne surveilez aucun question - alles surveille quelques.
+watch.start=Surveiller
+watch.stop=Arrêter de surveiller
+
+# Admin messages
+administration=Administration
+admin.database=Base de données
+admin.importxml=Importe une base de données
+admin.cleardb=Supprimer la base de données
+admin.deletedb=Voulez-vous vraiment supprimer toute la base de données? Il n'y a pas de retour!
+admin.confirmdeletedb=Oui, vraiment.
+admin.abortdeletedb=Non, je ne veux pas.
+
+# Secure messages
+secure.title=
+secure.username=nom d'utilisateur
+secure.realname=vrai nom
+secure.email=E-Mail
+secure.birthday=anniversaire
+secure.age=âge
+secure.website=Site Web
+secure.profession=Profession
+secure.employer=Employeur
+secure.biography=Biographie
+secure.password=Mot de pass
+secure.remember=Souvnir de moi
+secure.signin=Inscirvez-vous
+secure.saveprofile=Enregistrer le profil
+secure.error=Oh, utilisateur ou mot de pass est inconnu
+secure.logout=Vous avez été déconnecté.
+secure.emailerror=Oh, ce n'est pas un e-mail valid
+secure.passwordrepeat=Confirmer mot de pass
+secure.passworderror=Oh, vous avez entré deux mots de pass différents
+secure.usernameerror=Oh, ce nom d'utilisateur est déjà attribué
+secure.moderatorerror=Vous ne vous inscrivrez pas comme un moderateur.
+secure.newquestionflash=Bonne chance a trouver une réponse raisonnable!
+secure.emptyquestionerror=S'il vous plaît, ne posez pas des questions vide.
+secure.newanswerflash=Merci à donner une réponse!
+secure.emptyanswererror=S'il vous plaît, ne donnez pas des réponses vide.
+secure.newcommentquestionflash=On espère que vôtre commentaire est utile pour clarifier la question.
+secure.newcommentanswerflash=On espère que vôtre commentaire est utile pour clarifier la réponse.
+secure.likecommentflash=Vous aimez ce commentaire et nous sommes heureux de savoir.
+secure.dislikecommentflash=Vous n'aimez plus ce commentaire. On espère que vous trouverez on commentaire que vous aimez.
+secure.upvoteflash=Vôtre positive vote est enrigistré.
+secure.downvoteflash=Vôtre negative vote est enrigistré.
+secure.questiondeletedflash=La question a été supprimé.
+secure.answerdeletedflash=La réponse a été supprimé.
+secure.commentdeletedflash=Le commentaire a été supprimé.
+secure.userdeletedflash=L'utilisateur a été supprimé.
+secure.userdeleteerror=Vous n'étes pas permis de supprimer un utilisateur.
+secure.bestanswerflash=Nous sommes heureux que vous avez trouvez un réponse raisonnable.
+secure.editprofileerror=Vous n'étes pas permis de modifier ce profil.
+secure.editprofileflash=Merci de ajouter des mots-clés.
+secure.startwatchquestionflash=Vous surveillez cette question.
+secure.stopwatchquestionflash=Vous ne surveillez plus cette question.
+secure.notificationsmarkedasreadflash=Tous les notifications sont marque comme lu.
+secure.deletenotificationflash=Vous avez une notification moins de soucient.
+secure.blockreasonerror=Il n'y pas de raison.
+secure.blockuserflash=Utilisateur a été blocqué.
+secure.unlockuserflash=Utilisatuer a été débloqué.
+secure.lockquestionflash=Cette question a été fermée.
+secure.unlockquestionflash=Cette question a été ouvrée.
+secure.xmlselecterror=S'il vous plaît, seléctionnez un base de données en XML avant de cliquer 'Importer base de données'
+secure.xmlloadflash=base de données est importé avec succès.
+secure.xmlloaderror=Il n'était pas possible d'importer la base de données.
+secure.cleardberror=Ça ne vas pas comme ça!
+secure.cleardbflash=Tabula rasa!
