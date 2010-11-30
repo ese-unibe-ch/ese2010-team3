@@ -64,9 +64,10 @@
 			#{doLayout /}
 			</div><!-- end content -->
 			<div class="footer">
-				<a>
-	 				<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
-	 			</a>
+				<!-- TODO: make me dynamic -->
+				<a href="@{Application.selectLanguage("en")}">English</a>
+				<a href="@{Application.selectLanguage("de")}">German</a>
+	 			<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
 				&{'group3ftw'}
 			</div><!-- end footer>
 		</div><!-- end main -->

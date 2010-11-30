@@ -15,6 +15,7 @@ import models.User;
 import models.database.Database;
 import models.helpers.Tools;
 import play.data.validation.Required;
+import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
 
@@ -220,5 +221,17 @@ public class Application extends Controller {
 			Application.index(0);
 		}
 		render();
+	}
+
+	public static void selectLanguage(@Required String langId) {
+		if (langId != null) {
+			Lang.change(langId);
+			if (!Lang.get().equals(langId))
+				flash.error("Unknown language %s!", langId);
+		}
+		else
+			flash.error("Wanna silence me? Try again!");
+		if (!Secured.redirectToCallingPage())
+			Application.index(0);
 	}
 }
