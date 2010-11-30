@@ -5,54 +5,54 @@
 # Home page
 GET		/index/{index}							Application.index
 GET     /                                       Application.index
-POST	/										Secured.newQuestion
+POST	/										CQuestion.newQuestion
 
 GET		/question/{id}							Application.question
-POST	/question/{questionId}					Secured.newAnswer
+POST	/question/{questionId}					CAnswer.newAnswer
 
 GET     /question/{id}/comments/				Application.commentQuestion
 
-GET		/question/{id}/up						Secured.voteQuestionUp
-GET		/question/{id}/down						Secured.voteQuestionDown
-GET		/question/{id}/cancel					Secured.voteQuestionCancel
+GET		/question/{id}/up						CQuestion.voteQuestionUp
+GET		/question/{id}/down						CQuestion.voteQuestionDown
+GET		/question/{id}/cancel					CQuestion.voteQuestionCancel
 
-GET		/question/{id}/watch					Secured.watchQuestion
-GET		/question/{id}/unwatch					Secured.unwatchQuestion
+GET		/question/{id}/watch					CQuestion.watchQuestion
+GET		/question/{id}/unwatch					CQuestion.unwatchQuestion
 
-POST	/question/{id}/tag						Secured.updateTags
-GET		/question/{id}/lock						Secured.lockQuestion
-GET		/question/{id}/delete					Secured.deleteQuestion
+POST	/question/{id}/tag						CQuestion.updateTags
+GET		/question/{id}/lock						CQuestion.lockQuestion
+GET		/question/{id}/delete					CQuestion.deleteQuestion
 
-GET		/answer/{question}/{id}/up				Secured.voteAnswerUp
-GET		/answer/{question}/{id}/down			Secured.voteAnswerDown
-GET		/answer/{question}/{id}/cancel			Secured.voteAnswerCancel
+GET		/answer/{question}/{id}/up				CAnswer.voteAnswerUp
+GET		/answer/{question}/{id}/down			CAnswer.voteAnswerDown
+GET		/answer/{question}/{id}/cancel			CAnswer.voteAnswerCancel
 GET		/answer/{questionId}/{answerId}/comment	Application.commentAnswer
-GET		/answer/{questionId}/{answerId}/isbest	Secured.selectBestAnswer
-GET		/answer/{questionId}/{answerId}/delete	Secured.deleteAnswer
+GET		/answer/{questionId}/{answerId}/isbest	CAnswer.selectBestAnswer
+GET		/answer/{questionId}/{answerId}/delete	CAnswer.deleteAnswer
 
-POST	/comment/{questionId}					Secured.newCommentQuestion
-POST	/comment/{questionId}/{answerId}		Secured.newCommentAnswer
-GET		/comment/{questionId}/{commentId}/delete	Secured.deleteCommentQuestion
-GET		/comment/{questionId}/{answerId}/{commentId}/delete	Secured.deleteCommentAnswer
+POST	/comment/{questionId}					CQuestion.newCommentQuestion
+POST	/comment/{questionId}/{answerId}		CAnswer.newCommentAnswer
+GET		/comment/{questionId}/{commentId}/delete	CQuestion.deleteCommentQuestion
+GET		/comment/{questionId}/{answerId}/{commentId}/delete	CAnswer.deleteCommentAnswer
 
 GET    	/user/{name}/delete            			Application.deleteuser
-GET    	/user/{name}/truedelete         	 	Secured.deleteUser
-GET    	/user/{name}/trueanonymize        		Secured.anonymizeUser
+GET    	/user/{name}/truedelete         	 	CUser.deleteUser
+GET    	/user/{name}/trueanonymize        		CUser.anonymizeUser
 
 GET		/register								Application.register
 POST	/register								Application.signup
 
 GET		/user/{userName}/showprofile/			Application.showprofile
 GET		/user/{userName}/editprofile/			Application.editProfile
-POST	/user/savedProfile						Secured.saveProfile
+POST	/user/savedProfile						CUser.saveProfile
 
-GET		/user/{userName}/blockuser				Secured.blockUser
+GET		/user/{userName}/blockuser				CUser.blockUser
 
 GET		/user/notifications/{content}			Application.notifications
-GET		/notification/{id}/follow				Secured.followNotification
-GET		/notification/{id}/unwatch				Secured.unwatchQuestionFromList
-GET		/notification/{id}/delete				Secured.deleteNotification
-GET		/notification/clearNew					Secured.clearNewNotifications
+GET		/notification/{id}/follow				CUser.followNotification
+GET		/notification/{id}/unwatch				CUser.unwatchQuestionFromList
+GET		/notification/{id}/delete				CUser.deleteNotification
+GET		/notification/clearNew					CUser.clearNewNotifications
 
 GET		/search/{term}/{index}					Application.search
 GET		/search/{term}							Application.search

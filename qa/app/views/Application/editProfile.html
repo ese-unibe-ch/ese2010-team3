@@ -2,7 +2,7 @@
 #{set title:'ajopi - Profile' /}
 #{if showUser}
 	<div class="editprofile">
-		#{form @Secured.saveProfile(showUser.getName())}
+		#{form @CUser.saveProfile(showUser.getName())}
 			<table>
 				<tr>
 					#{field 'Username'}
@@ -51,6 +51,13 @@
 					<td><label for="biography">&{'Biography: '}</label></td>
 					<td><textarea class="editprofile" name="${field.name}">${showUser.biography}</textarea></td>
 					#{/field}
+				</tr>
+					<td><label for="oldPassword">&{'Old password: '}</label></td>
+					<td><input type="text" name="oldPassword" id="oldPassword" value="${showUser.oldPassword}" /></td>
+				</tr>
+				<tr>
+					<td><label for="newPassword">&{'New password: '}</label></td>
+					<td><input type="text" name="newPassword" id="newPassword" value="${showUser.newPassword}" /></td>
 				</tr>
 				<tr>
 					<td></td>

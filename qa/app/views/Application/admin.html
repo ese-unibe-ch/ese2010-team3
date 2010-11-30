@@ -3,7 +3,7 @@
 <h1>Administration</h1>
 <div class="message">
 	<h2>Database</h2>
-	<form action=@{Secured.loadXML()} method="POST" enctype="multipart/form-data">
+	<form action=@{CUser.loadXML()} method="POST" enctype="multipart/form-data">
 		<input type="file" id="xml" name="xml" />
 		<input type="submit" value="Import Database" />
 	</form>

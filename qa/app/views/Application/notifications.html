@@ -16,9 +16,9 @@
 				#{if notification.isNew()}*new*#{/if}
 				#{showProfile notification.getAbout() /} answered to
 				"${notification.getAbout().getQuestion().summary()}":
-				<p><a href="@{Secured.followNotification(notification.getID())}">${notification.getAbout().content().raw()}</a></p>
+				<p><a href="@{CUser.followNotification(notification.getID())}">${notification.getAbout().content().raw()}</a></p>
 				#{date notification.getAbout() /}
-				<p class="commands"><a href="@{Secured.deleteNotification(notification.getID())}">delete notification</a></p>
+				<p class="commands"><a href="@{CUser.deleteNotification(notification.getID())}">delete notification</a></p>
 			</div><!-- end message -->
 		#{/list}
 		#{else}
@@ -27,7 +27,7 @@
 			</div><!-- end message -->
 		#{/else}
 		#{if user.getNewNotifications().size() > 0}
-			<li><a href="@{Secured.clearNewNotifications}">Mark all notifications as read</a>
+			<li><a href="@{CUser.clearNewNotifications}">Mark all notifications as read</a>
 		#{/if}
 		<div class="message">
 			<p class="hint">You'll find a <a>watch</a> link on the page of every individual question.

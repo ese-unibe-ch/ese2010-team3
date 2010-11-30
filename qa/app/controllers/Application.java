@@ -136,7 +136,8 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * 
+	 * Lets the {@link User} sign up. Error-messages will be displayed, if the
+	 * information submitted by the {@link User} is wrong.
 	 * 
 	 * @param username
 	 *            the name the {@link User} has entered. This field is
@@ -196,20 +197,6 @@ public class Application extends Controller {
 		render(showUser, biography, canEdit);
 	}
 
-	/**
-	 * Leads to the edit-view of the {@link User}'s profile
-	 * 
-	 * @param userName
-	 *            the name of the {@link User} who owns the profile
-	 */
-	public static void editProfile(String userName) {
-		User showUser = Database.get().users().get(userName);
-		if (!userCanEditProfile(showUser)) {
-			showprofile(userName);
-		}
-		render(showUser);
-	}
-
 	// TODO Add javadoc
 	public static void tags(String term, String content) {
 		String tagString = "";
@@ -244,6 +231,7 @@ public class Application extends Controller {
 		render(results, term, index, maxIndex);
 	}
 
+	// TODO Javadoc
 	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
@@ -264,7 +252,8 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * Leads to the statistical overview.
+	 * Leads to the statistical overview. The statistical data is calculated via
+	 * the {@link TimeTracker}.
 	 */
 	public static void showStatisticalOverview() {
 		GregorianCalendar now = new GregorianCalendar();
@@ -290,7 +279,7 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * Leads to the admin page.
+	 * Leads to the admin page where a moderator can edit several options e.g. clear the database.
 	 */
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {

@@ -7,8 +7,8 @@
 			<h2>Do you really want to delete the Account ${showUser.name}?</h2>
 			<p>
 			<ul class="optionLinks">
-				<li><a href="@{Secured.anonymizeUser(showUser.getName())}">Yes, but keep all questions and answers.</a></li>
-				<li><a href="@{Secured.deleteUser(showUser.getName())}">Yes, delete everything.</a></li>
+				<li><a href="@{CUser.anonymizeUser(showUser.getName())}">Yes, but keep all questions and answers.</a></li>
+				<li><a href="CUser">Yes, delete everything.</a></li>
 				<li><a href="@{Application.showprofile(showUser.getName())}">No, I've changed my mind.</a></li>
 			</p>
 		</li>

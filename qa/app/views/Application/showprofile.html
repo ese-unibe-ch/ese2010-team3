@@ -108,7 +108,7 @@
 	<div class="message">
 		<table>
 			#{if !showUser.isBlocked()}
-			#{form @Secured.blockuser(showUser.getName())}
+			#{form @CUser.blockuser(showUser.getName())}
 			<td class="blocked">Block this User</td>
 			<tr>
 				#{field 'reason'}
@@ -122,7 +122,7 @@
 			#{/form}
 			#{/if}
 			#{if showUser.isBlocked()}
-			#{form @Secured.unblockuser(showUser.getName())}
+			#{form @CUser.unblockuser(showUser.getName())}
 			<td class="blocked">This User is blocked. Unblock now?</td>
 			<tr>
 				<td><input type="submit" id="blockUser" value="Unblock User" /></td>
