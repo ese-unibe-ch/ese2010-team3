@@ -1,4 +1,4 @@
-# English language message file
+# French language message file
 
 # General messages
 hello=Bonjour
