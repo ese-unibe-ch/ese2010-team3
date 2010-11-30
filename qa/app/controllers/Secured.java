@@ -23,8 +23,8 @@ public class Secured extends Controller {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
 			if (!user.isBlocked()) {
-				Question question = Database.get().questions()
-								.add(user, Tools.markdownToHtml(content));
+				Question question = Database.get().questions().add(user,
+						Tools.markdownToHtml(content));
 				question.setTagString(tags);
 				user.startObserving(question);
 				question.setTagString(tags);
@@ -55,9 +55,11 @@ public class Secured extends Controller {
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
 		User user = Session.get().currentUser();
-		if (!Validation.hasErrors() && question != null && !question.isLocked() && !user.isBlocked()) {
+		if (!Validation.hasErrors() && question != null && !question.isLocked()
+				&& !user.isBlocked()) {
 			question.comment(user, Tools.markdownToHtml(content));
-			flash.success("May your comment be helpful in clarifying the question!");
+			flash
+					.success("May your comment be helpful in clarifying the question!");
 			Application.question(questionId);
 		}
 	}
@@ -67,41 +69,47 @@ public class Secured extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		User user = Session.get().currentUser();
-		if (!Validation.hasErrors() && answer != null && !question.isLocked() && !user.isBlocked()) {
+		if (!Validation.hasErrors() && answer != null && !question.isLocked()
+				&& !user.isBlocked()) {
 			answer.comment(user, Tools.markdownToHtml(content));
-			flash.success("May your comment be helpful in clarifying the answer!");
+			flash
+					.success("May your comment be helpful in clarifying the answer!");
 			Application.question(questionId);
 		}
 	}
-	
-	public static void addLikerQuestionComment(int cid, int qid){
-		Comment comment=Database.get().questions().get(qid).getComment(cid);
+
+	public static void addLikerQuestionComment(int cid, int qid) {
+		Comment comment = Database.get().questions().get(qid).getComment(cid);
 		comment.addLiker(Session.get().currentUser());
 		flash.success("You like the comment. We're glad to know.");
 		Application.question(qid);
 	}
-	
-	public static void addLikerAnswerComment(int cid, int qid, int aid){
-		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+
+	public static void addLikerAnswerComment(int cid, int qid, int aid) {
+		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
+				.getComment(cid);
 		comment.addLiker(Session.get().currentUser());
 		flash.success("You like the comment. We're glad to know.");
 		Application.question(qid);
 	}
-	
-	public static void removeLikerQuestionComment(int cid, int qid){
-		Comment comment=Database.get().questions().get(qid).getComment(cid);
+
+	public static void removeLikerQuestionComment(int cid, int qid) {
+		Comment comment = Database.get().questions().get(qid).getComment(cid);
 		comment.removeLiker(Session.get().currentUser());
-		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		flash
+				.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
 		Application.question(qid);
 	}
-	
-	public static void removeLikerAnswerComment(int cid, int qid, int aid){
-		Comment comment=Database.get().questions().get(qid).getAnswer(aid).getComment(cid);
+
+	public static void removeLikerAnswerComment(int cid, int qid, int aid) {
+		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
+				.getComment(cid);
 		comment.removeLiker(Session.get().currentUser());
-		flash.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
+		flash
+				.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
 		Application.question(qid);
 	}
-	
+
 	public static void voteQuestionUp(int id) {
 		Question question = Database.get().questions().get(id);
 		if (question != null) {
@@ -258,7 +266,7 @@ public class Secured extends Controller {
 			String birthday, String website, String profession,
 			String employer, String biography) throws ParseException {
 		User user = Database.get().users().get(name);
-		if (!Application.mayLoggedInUserEditProfileOf(user)) {
+		if (!Application.userCanEditProfile(user)) {
 			flash.error("You're not allowed to edit %s's profile!", name);
 			Application.showprofile(user.getName());
 		}
@@ -411,7 +419,8 @@ public class Secured extends Controller {
 			Application.index(0);
 		}
 		if (xml == null) {
-			flash.error("Please select an XML database file before clicking <b>Import Database</b>");
+			flash
+					.error("Please select an XML database file before clicking <b>Import Database</b>");
 			Application.admin();
 		}
 
