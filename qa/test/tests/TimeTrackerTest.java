@@ -20,17 +20,20 @@ public class TimeTrackerTest extends UnitTest {
 
 	@Before
 	public void setUp() throws Exception {
+		Database.clear();
 		savedSysInfo = SystemInformation.get();
 		sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
 		t = TimeTracker.getTimeTracker();
+		t.injectMockedStartTime(sys.now());
+		SystemInformation.mockWith(sys);
 		sys.year(2010).month(12).day(1).hour(0).minute(0).second(0);
 
 	}
 
 	@Test
 	public void shouldCalculateNinetyTwoDays() {
+		sys.year(2010).month(12).day(1).hour(0).minute(0).second(0);
 		int days = t.getDays();
 		assertEquals(92, days);
 	}
