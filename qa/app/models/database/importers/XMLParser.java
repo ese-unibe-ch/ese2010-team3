@@ -16,6 +16,7 @@ import models.database.Database;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+
 public class XMLParser extends DefaultHandler {
 	private final Map<Integer, User> idUserBase;
 	private final Map<Integer, Question> idQuestionBase;
@@ -176,9 +177,10 @@ public class XMLParser extends DefaultHandler {
 	private void createQuestion(Element e) throws SemanticError {
 		ProtoQuestion question = new ProtoQuestion();
 		try {
+			question.title = e.getText("title");
 			question.body = e.getText("body");
 			question.id = new Integer(e.getArg("id"));
-			question.creation = new Date(new Integer(e.getText("creationdate")));
+			question.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			question.ownerid = e.getText("ownerid").equals("") ? -1
 					: new Integer(e.getText("ownerid"));
 			for (Element tagE : e.get("tags").get(0).get("tag")) {
@@ -196,11 +198,12 @@ public class XMLParser extends DefaultHandler {
 		try {
 			answer.ownerid = new Integer(e.getText("ownerid"));
 			answer.questionid = new Integer(e.getText("questionid"));
+			answer.title = e.getText("title");
 			answer.body = e.getText("body");
 			answer.accepted = e.getText("accepted").equals("true");
 			answer.id = e.getArg("id") == null ? -1 : new Integer(e
 					.getArg("id"));
-			answer.creation = new Date(new Integer(e.getText("creationdate")));
+			answer.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			this.protoanswers.add(answer);
 		} catch (Throwable t) {
 			throw new SemanticError("Answer #" + e.getText("ownerid")
@@ -216,8 +219,10 @@ public class XMLParser extends DefaultHandler {
 				throw new SemanticError("No valid user: "
 						+ protoquestion.ownerid);
 
-			Question question = Database.get().questions().add(owner,
-					protoquestion.body);
+			String content = protoquestion.body;
+			if (protoquestion.title != null)
+				content = "<h3>" + protoquestion.title + "</h3>\n" + content;
+			Question question = Database.get().questions().add(owner, content);
 			question.setTimestamp(protoquestion.creation);
 			this.idQuestionBase.put(protoquestion.id, question);
 			question.setTagString(protoquestion.tags);
@@ -230,7 +235,10 @@ public class XMLParser extends DefaultHandler {
 
 			User owner = this.idUserBase.get(ans.ownerid);
 
-			Answer answer = question.answer(owner, ans.body);
+			String content = ans.body;
+			if (ans.title != null)
+				content = "<h3>" + ans.title + "</h3>\n" + content;
+			Answer answer = question.answer(owner, content);
 			answer.setTimestamp(ans.creation);
 			if (ans.accepted) {
 				question.setBestAnswer(answer);
@@ -242,6 +250,7 @@ public class XMLParser extends DefaultHandler {
 		private String tags = "";
 		private int ownerid;
 		private Date creation;
+		private String title;
 		private String body;
 		private int id;
 	}
@@ -249,6 +258,7 @@ public class XMLParser extends DefaultHandler {
 	private class ProtoAnswer {
 		private int ownerid, questionid;
 		private Date creation;
+		private String title;
 		private String body;
 		private boolean accepted;
 		@SuppressWarnings("unused")

@@ -4,7 +4,7 @@
 		#{list items:_entry.comments(), as:'comment'}
 			<li class="comments">
 				<p id="comment-${comment.id()}">#{showProfile comment /}:
-				${comment.content().raw()}</p>
+				${comment.content()}</p>
 				#{date comment /}
 				<!-- by team2 -->
 				<p align="right">

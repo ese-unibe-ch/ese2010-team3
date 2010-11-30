@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 
 #{if showUser}
-	#{set title:'ajopi - delete ' + showUser.getName() + '?'  /}
+	#{set title:'ajopi - delete ' + showUser.getName().escape() + '?'  /}
 	<ul>
 		<li>
 			<h2>Do you really want to delete the Account ${showUser.name}?</h2>

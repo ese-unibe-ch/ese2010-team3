@@ -136,7 +136,10 @@ div.content li {
 	list-style: none;
 	margin: 10px 0;
 	padding: 7px;
-	position: relative;
+	position:relative;
+}
+div.content pre {
+	overflow-x: auto;
 }
 		
 div.content li[onclick] {
@@ -169,6 +172,10 @@ div.content span.vote {
 }
 div.content span.vote a {
 	font-size: 30pt;
+}
+div.content span.vote a.voted {
+	color: #FF0;
+	text-shadow: #FF0 0px 0px 10px;
 }
 
 div.content div.date {
@@ -205,6 +212,9 @@ div.message {
 	background: #333333;
 	padding: 5px;	
 	color: #aecbfb;
+}
+#askquestion:target {
+	background: #AF7817;
 }
 div.message p {
 	margin: 5px 0px;
@@ -243,7 +253,6 @@ p.comments {
 	padding-left: 50px;
 	font-size: 0.9em;
 }
-
 /*********************** 
 show profile
 ************************/

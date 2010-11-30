@@ -14,7 +14,7 @@ import models.helpers.Tools;
 public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
-	private HashMap<String, Vote> votes;
+	private HashMap<User, Vote> votes;
 
 	/**
 	 * Create an <code>Entry</code>.
@@ -27,7 +27,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	public Entry(User owner, String content) {
 		super(owner);
 		this.content = content;
-		this.votes = new HashMap<String, Vote>();
+		this.votes = new HashMap<User, Vote>();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 *            the {@link Vote} to unregister
 	 */
 	public void unregister(Vote vote) {
-		this.votes.remove(vote.owner().getName());
+		this.votes.remove(vote.owner());
 	}
 
 	/**
@@ -160,6 +160,56 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
+	 * Cancel a vote for an <code>Entry</code> (if there was one).
+	 * 
+	 * @param user
+	 *            the {@link User} who voted
+	 * @return the {@link Vote} that was removed (or <code>null</code>)
+	 */
+	public Vote voteCancel(User user) {
+		if (this.hasVote(user)) {
+			this.votes.get(user).unregister();
+		}
+		return this.votes.remove(user);
+	}
+
+	/**
+	 * Checks for an up-vote for a specific user
+	 * 
+	 * @param user
+	 *            the {@link User} to check for
+	 * @return true, if the given user has indeed voted for this
+	 *         <code>Entry</code>
+	 */
+	public boolean hasUpVote(User user) {
+		return this.hasVote(user) && this.votes.get(user).up();
+	}
+
+	/**
+	 * Checks for a down-vote for a specific user
+	 * 
+	 * @param user
+	 *            the {@link User} to check for
+	 * @return true, if the given user has indeed voted for this
+	 *         <code>Entry</code>
+	 */
+	public boolean hasDownVote(User user) {
+		return this.hasVote(user) && !this.votes.get(user).up();
+	}
+
+	/**
+	 * Checks for vote for a specific user
+	 * 
+	 * @param user
+	 *            the {@link User} to check for
+	 * @return true, if the given user has indeed voted for this
+	 *         <code>Entry</code>
+	 */
+	private boolean hasVote(User user) {
+		return this.votes.containsKey(user);
+	}
+
+	/**
 	 * Let an <code>User</code> vote for an <code>Entry</code>.
 	 * 
 	 * @param user
@@ -169,11 +219,12 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	private Vote vote(User user, boolean up) {
 		if (user == owner())
 			return null;
-		if (this.votes.containsKey(user.getName())) {
-			this.votes.get(user.getName()).unregister();
+		if (this.hasVote(user)) {
+			this.votes.get(user).unregister();
 		}
+
 		Vote vote = new Vote(user, this, up);
-		this.votes.put(user.getName(), vote);
+		this.votes.put(user, vote);
 		return vote;
 	}
 
@@ -195,7 +246,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
 				.replaceFirst("^(.{35}\\S{0,9} ?).{5,}", "$1...");
 	}
-
+	
 	/**
 	 * Get all <code>Votes</code>.
 	 * 

@@ -42,8 +42,10 @@ public class VoteTest extends UnitTest {
 		answer.voteUp(bill);
 		assertEquals(question.upVotes(), 1);
 		assertEquals(question.downVotes(), 0);
+		assertTrue(question.hasUpVote(bill));
 		assertEquals(answer.upVotes(), 1);
 		assertEquals(answer.downVotes(), 0);
+		assertTrue(answer.hasUpVote(bill));
 	}
 
 	@Test
@@ -52,8 +54,10 @@ public class VoteTest extends UnitTest {
 		answer.voteDown(bill);
 		assertEquals(question.upVotes(), 0);
 		assertEquals(question.downVotes(), 1);
+		assertTrue(question.hasDownVote(bill));
 		assertEquals(answer.upVotes(), 0);
 		assertEquals(answer.downVotes(), 1);
+		assertTrue(answer.hasDownVote(bill));
 	}
 
 	@Test
@@ -75,6 +79,14 @@ public class VoteTest extends UnitTest {
 		question.voteUp(bill);
 		assertEquals(question.upVotes(), 1);
 		assertEquals(question.downVotes(), 0);
+		assertTrue(question.hasUpVote(bill));
+		assertFalse(question.hasDownVote(bill));
+
+		question.voteCancel(bill);
+		assertEquals(question.upVotes(), 0);
+		assertEquals(question.downVotes(), 0);
+		assertFalse(question.hasUpVote(bill));
+		assertFalse(question.hasDownVote(bill));
 	}
 
 	@Test

@@ -3,7 +3,8 @@
 	#{if !_extended} onclick="goto('@{Application.question(_question.id())}')" #{/if}
 	>
 	<h2 id="question-${_question.id()}">#{showProfile _question /}:</h2>
-	<p>${_question.content().raw()}</p>
+	#{if !_extended}<p>${_question.summary().escape()}</p>#{/if}
+	#{else}<p>${_question.content()}</p>#{/else}
 	#{date _question /}
 	#{tags question:_question, editable:_extended && _user?.canEdit(_question) /}
 	
@@ -37,7 +38,7 @@
 	#{/if}
 	
 	#{if _user && _question.owner() != _user && !_user.isBlocked()}
-		#{vote _question /}
+		#{vote entry:_question, user:_user /}
 	#{/if}
 </li>
 #{if _extended}
