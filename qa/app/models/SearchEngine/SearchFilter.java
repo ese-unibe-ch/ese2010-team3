@@ -14,6 +14,7 @@ import models.Tag;
 import models.helpers.IFilter;
 import models.helpers.Tools;
 
+//TODO add javadoc
 public class SearchFilter implements IFilter<Question, Double> {
 	private final Set<String> queryFulltext;
 	private final Set<Tag> queryTags;

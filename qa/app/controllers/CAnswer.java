@@ -11,9 +11,19 @@ import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
 
+// TODO: Auto-generated Javadoc
+
 @With(Secure.class)
 public class CAnswer extends Controller {
 
+	/**
+	 * Add a new {@link Answer}.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question}.
+	 * @param content
+	 *            the content of the {@link Answer}.
+	 */
 	public static void newAnswer(int questionId, @Required String content) {
 		Question question = Database.get().questions().get(questionId);
 		if (!Validation.hasErrors() && question != null) {
@@ -28,6 +38,16 @@ public class CAnswer extends Controller {
 		Application.question(questionId);
 	}
 
+	/**
+	 * Add a new {@link Comment} to an {@link Answer}.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question}.
+	 * @param answerId
+	 *            the id of the {@link Answer}.
+	 * @param content
+	 *            the content of the {@link Comment}. This field is mandatory.
+	 */
 	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
 		Question question = Database.get().questions().get(questionId);
@@ -42,6 +62,16 @@ public class CAnswer extends Controller {
 		}
 	}
 
+	/**
+	 * Adds the liker of a {@link Comment} to an {@link Answer}.
+	 * 
+	 * @param cid
+	 *            the id of the {@link Comment}.
+	 * @param qid
+	 *            the id of the {@link Question}.
+	 * @param aid
+	 *            the id of the {@link Answer}.
+	 */
 	public static void addLikerAnswerComment(int cid, int qid, int aid) {
 		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
 				.getComment(cid);
@@ -50,6 +80,16 @@ public class CAnswer extends Controller {
 		Application.question(qid);
 	}
 
+	/**
+	 * Removes the liker of a {@link Comment} to an {@link Answer}.
+	 * 
+	 * @param cid
+	 *            the id of the {@link Comment}.
+	 * @param qid
+	 *            the id of the {@link Question}.
+	 * @param aid
+	 *            the id of the {@link Answer}.
+	 */
 	public static void removeLikerAnswerComment(int cid, int qid, int aid) {
 		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
 				.getComment(cid);
@@ -59,6 +99,15 @@ public class CAnswer extends Controller {
 		Application.question(qid);
 	}
 
+	/**
+	 * Vote {@link Answer} up.
+	 * 
+	 * @param question
+	 *            the id of the {@link Question} to which the {@link Answer}.
+	 *            belongs.
+	 * @param id
+	 *            the id of the {@link Answer}.
+	 */
 	public static void voteAnswerUp(int question, int id) {
 		Question q = Database.get().questions().get(question);
 		Answer answer = q.getAnswer(id);
@@ -71,6 +120,15 @@ public class CAnswer extends Controller {
 		}
 	}
 
+	/**
+	 * Vote an {@link Answer} down.
+	 * 
+	 * @param question
+	 *            the id of the {@link Question} to which the {@link Answer}.
+	 *            belongs.
+	 * @param id
+	 *            the id of the {@link Answer}.
+	 */
 	public static void voteAnswerDown(int question, int id) {
 		Question q = Database.get().questions().get(question);
 		Answer answer = q.getAnswer(id);
@@ -83,6 +141,15 @@ public class CAnswer extends Controller {
 		}
 	}
 
+	/**
+	 * Cancel the own vote to an {@link Answer}.
+	 * 
+	 * @param question
+	 *            the id of the {@link Question} to which the {@link Answer}.
+	 *            belongs.
+	 * @param id
+	 *            the id of the {@link Answer}.
+	 */
 	public static void voteAnswerCancel(int question, int id) {
 		Question q = Database.get().questions().get(question);
 		Answer answer = q.getAnswer(id);
@@ -95,6 +162,15 @@ public class CAnswer extends Controller {
 		}
 	}
 
+	/**
+	 * Delete an answer.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} to which the {@link Answer}
+	 *            belongs.
+	 * @param answerId
+	 *            the id of the {@link Answer}
+	 */
 	public static void deleteAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
@@ -103,6 +179,16 @@ public class CAnswer extends Controller {
 		Application.question(questionId);
 	}
 
+	/**
+	 * Delete the comment to an {@link Answer}.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question}.
+	 * @param answerId
+	 *            the id of the {@link Answer}.
+	 * @param commentId
+	 *            the id of the {@link Comment}.
+	 */
 	public static void deleteCommentAnswer(int questionId, int answerId,
 			int commentId) {
 		Question question = Database.get().questions().get(questionId);
@@ -113,6 +199,15 @@ public class CAnswer extends Controller {
 		Application.question(questionId);
 	}
 
+	/**
+	 * Select the best answer to a question. A success message will be
+	 * displayed.
+	 * 
+	 * @param questionId
+	 *            the question id
+	 * @param answerId
+	 *            the answer id
+	 */
 	public static void selectBestAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);

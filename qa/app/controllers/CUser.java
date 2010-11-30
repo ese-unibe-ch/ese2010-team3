@@ -5,7 +5,9 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Notification;
+import models.Question;
 import models.User;
+import models.Vote;
 import models.database.Database;
 import models.database.importers.Importer;
 import play.data.validation.Required;
@@ -13,8 +15,20 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
 
+/**
+ * The Class CUser.
+ */
 @With(Secure.class)
 public class CUser extends Controller {
+
+	/**
+	 * Deletes the {@link User} and all it's {@link Question}' {@link Answer}'s
+	 * {@link Vote}'s.
+	 * 
+	 * @param name
+	 *            the name of the {@link User} to be deleted.
+	 * @throws Throwable
+	 */
 	public static void deleteUser(String name) throws Throwable {
 		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
@@ -29,6 +43,14 @@ public class CUser extends Controller {
 		}
 	}
 
+	/**
+	 * Instead of deleting all {@link Entry}'s of a {@link User}. This method
+	 * anonymizes all of them replacing the username with 'anonymous'.
+	 * 
+	 * @param name
+	 *            the name of the {@link User} to be anonymized.
+	 * @throws Throwable
+	 */
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
@@ -37,10 +59,45 @@ public class CUser extends Controller {
 		deleteUser(name);
 	}
 
+	/**
+	 * Checks for permission to delete.
+	 * 
+	 * @param currentUser
+	 *            the currently logged in {@link User}.
+	 * @param user
+	 *            the owner of the profile.
+	 * @return true, if successful
+	 */
 	private static boolean hasPermissionToDelete(User currentUser, User user) {
 		return currentUser == user;
 	}
 
+	/**
+	 * Save profile the profile a {@link User}.
+	 * 
+	 * @param name
+	 *            the name of the {@link User}.
+	 * @param email
+	 *            the email of the {@link User}.
+	 * @param fullname
+	 *            the fullname of the {@link User}.
+	 * @param birthday
+	 *            the birthday of the {@link User}.
+	 * @param website
+	 *            the website of the {@link User}.
+	 * @param profession
+	 *            the profession of the{@link User}.
+	 * @param employer
+	 *            the employer of the{@link User}.
+	 * @param biography
+	 *            the biography of the {@link User}.
+	 * @param oldPassword
+	 *            the old password of the {@link User}.
+	 * @param newPassword
+	 *            the new password of the {@link User}.
+	 * @throws ParseException
+	 * 
+	 */
 	public static void saveProfile(String name, String email, String fullname,
 			String birthday, String website, String profession,
 			String employer, String biography, String oldPassword,
@@ -87,6 +144,12 @@ public class CUser extends Controller {
 		Application.showprofile(user.getName());
 	}
 
+	/**
+	 * Follow notification.
+	 * 
+	 * @param id
+	 *            the id of the notification.
+	 */
 	public static void followNotification(int id) {
 		User user = Session.get().currentUser();
 		Notification notification = user.getNotification(id);
@@ -101,6 +164,9 @@ public class CUser extends Controller {
 		}
 	}
 
+	/**
+	 * Clear new notifications. Notifications will no longer appear as new.
+	 */
 	public static void clearNewNotifications() {
 		User user = Session.get().currentUser();
 		for (Notification n : user.getNewNotifications()) {
@@ -110,6 +176,12 @@ public class CUser extends Controller {
 		Application.notifications(0);
 	}
 
+	/**
+	 * Delete a notification.
+	 * 
+	 * @param id
+	 *            the id of the notification to be deleted.
+	 */
 	public static void deleteNotification(int id) {
 		User user = Session.get().currentUser();
 		Notification n = user.getNotification(id);
@@ -120,6 +192,14 @@ public class CUser extends Controller {
 		Application.notifications(0);
 	}
 
+	/**
+	 * Block a {@link User}.
+	 * 
+	 * @param username
+	 *            the username of the {@link User} to be unblocked.
+	 * @param reason
+	 *            the reason the {@link User} is being blocked.
+	 */
 	public static void blockUser(String username, String reason) {
 		User user = Database.get().users().get(username);
 		User mod = Session.get().currentUser();
@@ -133,6 +213,12 @@ public class CUser extends Controller {
 		Application.showprofile(user.getName());
 	}
 
+	/**
+	 * Unblock a {@link User}.
+	 * 
+	 * @param username
+	 *            the username of the {@link User} to be unblocked.
+	 */
 	public static void unblockUser(String username) {
 		User user = Database.get().users().get(username);
 		User mod = Session.get().currentUser();
@@ -143,6 +229,12 @@ public class CUser extends Controller {
 		Application.showprofile(user.getName());
 	}
 
+	/**
+	 * Load an XML database file
+	 * 
+	 * @param xml
+	 *            the XML database file to be loaded. This field is mandatory.
+	 */
 	public static void loadXML(@Required File xml) {
 		if (!Session.get().currentUser().isModerator()) {
 			Application.index(0);
@@ -167,6 +259,9 @@ public class CUser extends Controller {
 		Application.index(0);
 	}
 
+	/**
+	 * Clear the entire database.
+	 */
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("You're a naughty boy");
@@ -177,6 +272,11 @@ public class CUser extends Controller {
 		Application.admin();
 	}
 
+	/**
+	 * Redirect to calling page.
+	 * 
+	 * @return true, if successful
+	 */
 	static boolean redirectToCallingPage() {
 		Http.Header referer = request.headers.get("referer");
 		if (referer == null)
