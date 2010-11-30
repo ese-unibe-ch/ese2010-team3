@@ -1,1 +1,1 @@
-${_arg.owner() != null ? _arg.owner().getName() : "anonymous"}
+${_arg.owner() != null ? _arg.owner().getName().escape() : "anonymous"}

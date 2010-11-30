@@ -88,4 +88,27 @@ $(document).ready(function() {
 		$("#mini_login input[name=username]").focus();
 		return false;
 	});
+	
+	// automatically insert a preview after all Markdown textareas
+	$("textarea").each(function() { $('<div class="wmd-preview"></div>').insertAfter(this); });
+	
+	// make sure to move the focus to the "New question" textarea
+	// when the user clicks the "New question" link
+	if ($("#newQuestion").length == 1) {
+		if (location.hash == "#askquestion")
+			$("#newQuestion").focus();
+		$("[href=/#askquestion]").click(function() {
+			$("#newQuestion").focus();
+			// don't navigate away if we're not on the first index page
+			location.hash = "#askquestion";
+			return false;
+		});
+	}
 });
+
+// configure the WMD editor
+var wmd_options = {
+	autostart: true,
+	buttons: "bold italic | link blockquote code image | ol ul hr",
+	output: "Markdown"
+};

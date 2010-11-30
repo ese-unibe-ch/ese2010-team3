@@ -107,4 +107,35 @@ public class CommentTest extends UnitTest {
 		Comment newComment = answer.comment(james, "Blubb");
 		assertEquals(newComment.getQuestion(), question);
 	}
+	
+	@Test
+	public void shouldAddUserToLikers() {
+		assertTrue(commentAnswer.getLikers().isEmpty());
+		commentAnswer.addLiker(james);
+		assertEquals(james,commentAnswer.getLikers().get(0));
+	}
+	
+	@Test
+	public void shouldRemoveUserFromLikers() {
+		commentAnswer.addLiker(james);
+		assertEquals(1, commentAnswer.getLikers().size());
+		commentAnswer.removeLiker(james);
+		assertTrue(commentAnswer.getLikers().isEmpty());
+	}
+	
+	@Test
+	public void shouldClearLikersList() {
+		commentAnswer.addLiker(james);
+		commentAnswer.addLiker(new User("anonym", "1234"));
+		assertTrue(commentAnswer.getLikers().size() > 0);
+		commentAnswer.clearAllLikers();
+		assertTrue(commentAnswer.getLikers().isEmpty());
+	}
+	
+	@Test
+	public void shouldCountLikersRight() {
+		assertEquals(0,commentAnswer.countLikers());
+		commentAnswer.addLiker(james);
+		assertEquals(1,commentAnswer.countLikers());
+	}
 }

@@ -1,5 +1,5 @@
 #{extends 'main.html' /}
-#{set title:'Search: '+term /}
+#{set title:'Search: ' + term.escape() /}
 <h1>Search: ${term}</h1>
 
 #{if results.size() > 0}

@@ -87,8 +87,9 @@ public class Application extends Controller {
 		render(question);
 	}
 
-	public static void deleteuser(User user) {
-		render();
+	public static void deleteuser() {
+		User showUser = Session.get().currentUser();
+		render(showUser);
 	}
 
 	public static void register() {
@@ -96,20 +97,16 @@ public class Application extends Controller {
 	}
 
 	public static void signup(@Required String username, String password,
-			String passwordrepeat, String email) {
+			String passwordrepeat) {
 
-		if (Tools.checkEmail(email) && password.equals(passwordrepeat)
+		if (password.equals(passwordrepeat)
 				&& User.isAvailable(username)) {
-			User user = Database.get().users().register(username, password);
-			user.setEmail(email);
+			Database.get().users().register(username, password);
 			// Mark user as connected
 			session.put("username", username);
 			index(0);
 		} else {
 			flash.keep("url");
-			if (!Tools.checkEmail(email)) {
-				flash.error("secure.emailerror");
-			}
 			if (!User.isAvailable(username)) {
 				flash.error("secure.usernameerror");
 			}
@@ -130,8 +127,11 @@ public class Application extends Controller {
 
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
+		String biography = showUser.getBiography();
+		if (biography != null)
+			biography = Tools.markdownToHtml(biography);
 		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
-		render(showUser, canEdit);
+		render(showUser, biography, canEdit);
 	}
 
 	public static void editProfile(String userName) {

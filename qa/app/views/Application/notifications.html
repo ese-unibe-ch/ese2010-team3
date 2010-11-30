@@ -1,6 +1,6 @@
 #{extends 'main.html' /}
 
-#{set title:'ajopi - Notifications for ' + user.getName() /}
+#{set title:'ajopi - Notifications for ' + user.getName().escape() /}
 <div>
 	<div class="notificationnavi">
 		<a href="@{Application.notifications(0)}">Notification</a> | 

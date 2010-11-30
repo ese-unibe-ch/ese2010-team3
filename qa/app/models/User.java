@@ -703,6 +703,7 @@ public class User implements IObserver {
 		this.dateOfBirth = time;
 	}
 
+	@Override
 	public String toString() {
 		return "U[" + this.name + "]";
 	}
