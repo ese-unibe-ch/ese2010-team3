@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import models.Question;
@@ -22,7 +21,8 @@ public class Bootstrap extends Job {
 		User john = Database.get().users().register("John", "john");
 		User bill = Database.get().users().register("Bill", "bill");
 		User kate = Database.get().users().register("Kate", "kate");
-		User xss = Database.get().users().register("<script>alert('XSS')</script>", "xss");
+		User xss = Database.get().users().register(
+				"<script>alert('XSS')</script>", "xss");
 
 		jack.setEmail("jack@jack.jk");
 		jack.setFullname("Jack Daniel");
@@ -51,8 +51,9 @@ public class Bootstrap extends Job {
 		question.setTagString("numb3rs");
 
 		// TimeTracker
-		GregorianCalendar g = new GregorianCalendar(2010, Calendar.OCTOBER, 25);
-		TimeTracker.setRealTimeTracker(g);
+		GregorianCalendar mock = new GregorianCalendar();
+		mock.set(2010, 10, 1, 0, 0);
+		TimeTracker.getTimeTracker().injectMockedStartTime(mock.getTime());
 
 		// try to import some more questions, answers, etc.
 		try {

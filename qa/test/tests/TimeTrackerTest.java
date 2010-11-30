@@ -1,91 +1,100 @@
 package tests;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
+import models.ISystemInformation;
+import models.SystemInformation;
 import models.TimeTracker;
+import models.database.Database;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import play.test.UnitTest;
+import tests.mocks.SystemInformationMock;
 
 public class TimeTrackerTest extends UnitTest {
 
-	private GregorianCalendar g;
-	private GregorianCalendar now;
+	private ISystemInformation savedSysInfo;
 	private TimeTracker t;
+	private SystemInformationMock sys;
 
 	@Before
 	public void setUp() throws Exception {
-		g = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
-		now = new GregorianCalendar(2010, Calendar.DECEMBER, 1);
-		t = new TimeTracker(g);
+		Database.clear();
+		savedSysInfo = SystemInformation.get();
+		sys = new SystemInformationMock();
+		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
+		t = TimeTracker.getTimeTracker();
+		t.injectMockedStartTime(sys.now());
+		SystemInformation.mockWith(sys);
+		sys.year(2010).month(12).day(1).hour(0).minute(0).second(0);
+
 	}
 
 	@Test
-	public void shouldCalculateNinetyOneDays() {
-		int days = t.getDays(now);
-		assertEquals(91, days);
+	public void shouldCalculateNinetyTwoDays() {
+		sys.year(2010).month(12).day(1).hour(0).minute(0).second(0);
+		int days = t.getDays();
+		assertEquals(92, days);
 	}
 
 	@Test
 	public void shouldCalculateOneDay() {
-		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 2);
-		int days = t.getDays(l);
+		sys.year(2010).month(9).day(2).hour(0).minute(0).second(0);
+		int days = t.getDays();
 		assertEquals(1, days);
 	}
 
 	@Test
 	public void shouldCalculateZeroDays() {
-		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
-		int days = t.getDays(l);
+		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
+		int days = t.getDays();
 		assertEquals(0, days);
 	}
 
 	@Test
 	public void shouldCalculateOneWeek() {
-		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 2);
-		int weeks = t.getWeeks(l);
+		sys.year(2010).month(9).day(2).hour(0).minute(0).second(0);
+		int weeks = t.getWeeks();
 		assertEquals(1, weeks);
 	}
 
 	@Test
 	public void shouldCalculateZeroWeeks() {
-		GregorianCalendar f = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
-		int weeks = t.getWeeks(f);
+		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
+		int weeks = t.getWeeks();
 		assertEquals(0, weeks);
 	}
 
 	@Test
-	public void shouldCalculateThirteenWeeks() {
-		int weeks = t.getWeeks(now);
-		assertEquals(13, weeks);
+	public void shouldCalculateFourteenWeeks() {
+		int weeks = t.getWeeks();
+		assertEquals(14, weeks);
 	}
 
 	@Test
 	public void shouldCalculateThreeMonths() {
-		int months = t.getMonths(now);
+		int months = t.getMonths();
 		assertEquals(3, months);
 	}
 
 	@Test
 	public void shouldCalculateOneMonth() {
-		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 3);
-		int months = t.getMonths(l);
+		sys.year(2010).month(10).day(1).hour(0).minute(0).second(0);
+		int months = t.getMonths();
 		assertEquals(1, months);
 	}
 
 	@Test
 	public void shouldCalculateZeroMonths() {
-		GregorianCalendar l = new GregorianCalendar(2010, Calendar.SEPTEMBER, 1);
-		int months = t.getMonths(l);
+		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
+		int months = t.getMonths();
 		assertEquals(0, months);
 	}
 
 	@After
 	public void tearDown() {
-
+		Database.clear();
+		SystemInformation.mockWith(savedSysInfo);
 	}
 }
