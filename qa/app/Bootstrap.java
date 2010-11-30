@@ -22,6 +22,7 @@ public class Bootstrap extends Job {
 		User john = Database.get().users().register("John", "john");
 		User bill = Database.get().users().register("Bill", "bill");
 		User kate = Database.get().users().register("Kate", "kate");
+		User xss = Database.get().users().register("<script>alert('XSS')</script>", "xss");
 
 		jack.setEmail("jack@jack.jk");
 		jack.setFullname("Jack Daniel");
@@ -44,6 +45,7 @@ public class Bootstrap extends Job {
 
 		// Comments
 		question.comment(jack, "What a strange question");
+		question.comment(xss, "Don't ask &mdash; it's dangerous!");
 
 		// Tags
 		question.setTagString("numb3rs");

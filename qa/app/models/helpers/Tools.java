@@ -12,6 +12,7 @@ import java.util.List;
 import models.Question;
 import models.SearchEngine.StopWords;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.pegdown.PegDownProcessor;
@@ -167,6 +168,7 @@ public class Tools {
 	 * @return the string
 	 */
 	public static String htmlToText(String content) {
-		return Jsoup.clean(content, Whitelist.none());
+		return StringEscapeUtils.unescapeHtml(Jsoup.clean(content,
+				Whitelist.none()));
 	}
 }
