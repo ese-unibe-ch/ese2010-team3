@@ -1,8 +1,0 @@
-# You can specialize this file for each language.
-# For example, for French create a messages.fr file
-#
-
-secure.emailerror=Oops, this is not a valid eMail address.
-secure.passwordrepeat=Confirm Password:
-secure.passworderror=Oops, you entered two different Passwords.
-secure.usernameerror=Oops, this username already exists.

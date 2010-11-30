@@ -3,13 +3,13 @@
 #{if question}
 	#{set title:'ajopi - delete question: ' + question.summary().escape() /}
 	<div class="deleteQuestion">
-		<p>Do you really want to delete the following question?</p>
-		<p>Please notice that every answer and comment referring to this question will also be deleted.</p>
+		<p>&{'question.reallydelete'}</p>
+		<p>&{'question.deletenotice'}</p>
 	</div>
 	<ul>#{question question:question, user:user, extended:false /}</ul>
 	<ul class="optionLinks">
-		<p><a href="@{Secured.deleteQuestion(question.id())}">Yes, delete this question.</a></p>
-		<p><a href="@{Application.question(question.id())}">No, I've changed my mind.</a></p>
+		<p><a href="@{Secured.deleteQuestion(question.id())}">&{'question.confirmdelete'}</a></p>
+		<p><a href="@{Application.question(question.id())}">&{'question.abortdelete'}</a></p>
 	</ul>
 #{/if}
 #{else}
