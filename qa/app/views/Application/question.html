@@ -6,7 +6,7 @@
 		#{question question:question, user:user, extended:true /}
 	</ul>
 	#{if answers.size() > 0}
-		<h1>Answers</h1>
+		<h1>&{'answers'}</h1>
 		<ul class="answers">
 			#{list items:answers, as:'answer'}
 				#{answer answer:answer, user:user, extended:true /}
@@ -14,7 +14,7 @@
 		</ul>
 	#{/if}
 	#{if similarQuestions && similarQuestions.size() != 0}
-		<h2>Related Questions</h2>
+		<h2>&{'question.related'}</h2>
 		<ul>
 		#{list items:similarQuestions, as:'relatedQ'}
 			<li class="relatedQ">
@@ -24,27 +24,27 @@
 		</ul>
 	#{/if}
 	#{if user && !user.isBlocked() && !question.isLocked()}
-		<h1>Add Answer</h1>
+		<h1>&{'answer.add'}</h1>
 		<div class="message">
 			#{form @Secured.newAnswer(question.id())}
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 				#{/field}
-				<input type="submit" value="Add new answer" />
+				<input type="submit" value="&{'answer.addnew'}" />
 			#{/form}
 		</div><!-- end message -->
 	#{/if}
 	#{if question.isLocked()}
 		<div class="message">
-			<p>This question is locked &mdash; no further answers can be posted.</p>
+			<p>&{'question.locked'}</p>
 		</div>
 	#{/if}
 	#{elseif !user}
 		<div class="message">
-			<p class="hint">Please <a href="@{Secure.login}">login</a> or <a href="@{Application.register}">sign up</a> (if you're new to this site) in order to ask your own questions, give answers, comment and vote on questions and answers and be notified when somebody answers your questions.
+			<p class="hint">&{'signinorup'}
 		</div><!-- end message -->
 	#{/elseif}
 #{/if}#{else}
 	#{set title:'Error' /}
-	<h1>Question does not exist.</h1>
+	<h1>&{'question.nonexistent'}</h1>
 #{/else}

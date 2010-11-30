@@ -1,51 +1,51 @@
 #{extends 'main.html' /}
 #{set title:'ajopi - statistics overview' /}
-<h1>Statistic</h1>
+<h1>&{'statistic'}</h1>
 <div class="message">
 	<table>
 		<tr>
-			 <td>Questions:</td>
+			 <td>&{'questions'}:</td>
 			 <td>${numberOfQuestions}</td>
 		</tr>
 		<tr>
-			<td>Answers:</td>
+			<td>&{'answers'}:</td>
 			<td>${numberOfAnswers}</td>
 		</tr>
 		<tr>
-			<td>Users:</td>
+			<td>&{'user'}:</td>
 			<td>${numberOfUsers}</td>
 	
 		</tr>
 		<tr>
-			<td>Best answers:</td>
+			<td>&{'answers.best'}:</td>
 			<td>${numberOfBestAnswers}</td>
 		</tr>
 		<tr>
-			<td>High rated answers:</td>
+			<td>&{'answers.highrated'}:</td>
 			<td>${numberOfHighRatedAnswers}</td>
 		</tr>
 		<tr>
-			<td>Questions per day:</td>
+			<td>&{'questions'} &{'posts.perday'}:</td>
 			<td>${questionsPerDay}</td>
 		</tr>
 		<tr>
-			<td>Questions per week:</td>
+			<td>&{'questions'} &{'posts.perweek'}:</td>
 			<td>${questionsPerWeek}</td>
 		</tr>
 		<tr>
-			<td>Questions per month:</td>
+			<td>&{'questions'} &{'posts.permonth'}:</td>
 			<td>${questionsPerMonth}</td>
 		</tr>
 		<tr>
-			<td>Answers per day:</td>
+			<td>&{'answers'} &{'posts.perday'}:</td>
 			<td>${answersPerDay}</td>
 		</tr>
 		<tr>
-			<td>Answers per week:</td>
+			<td>&{'answers'} &{'posts.perweek'}:</td>
 			<td>${answersPerWeek}</td>
 		</tr>
 		<tr>
-			<td>Answers per month:</td>
+			<td>&{'answers'} &{'posts.permonth'}:</td>
 			<td>${answersPerMonth}</td>
 		</tr>
 	</table>

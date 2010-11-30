@@ -9,35 +9,35 @@
 				<!-- by team2 -->
 				<p align="right">
 		 		#{if _user && comment.owner() != _user && !_user.isBlocked() && !comment.getLikers().contains(_user)}
-					<img alt="I like" src="/public/images/thumbUp.png" />
+					<img alt="&{'comment.ilike'}" src="/public/images/thumbUp.png" />
 					#{if _entry instanceof models.Answer}
-						<a href="@{Secured.addLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">I like</a>
+						<a href="@{Secured.addLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">&{'comment.ilike'}</a>
 					#{/if}#{else}
-						<a href="@{Secured.addLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">I like</a>
+						<a href="@{Secured.addLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">&{'comment.ilike'}</a>
 					#{/else }
 				#{/if}
 				#{if _user && comment.owner() != _user && !_user.isBlocked() && comment.getLikers().contains(_user)}
-					<img alt="I don't like" src="/public/images/thumbDown.png" />
+					<img alt="&{'comment.idislike'}" src="/public/images/thumbDown.png" />
 					#{if _entry instanceof models.Answer}
-						<a href="@{Secured.removeLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">I don't like</a>
+						<a href="@{Secured.removeLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">&{'comment.idislike'}</a>
 					#{/if}#{else}
-						<a href="@{Secured.removeLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">I don't like</a>
+						<a href="@{Secured.removeLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">&{'comment.idislike'}</a>
 					#{/else }
 				#{/if}
 				<!-- count of users who like this -->
 				#{if comment.countLikers()==1 }
-				1 user likes this
+				1 &{'comment.likecountone'}
 				#{/if}
 				#{if comment.countLikers()>1 }
-				${comment.countLikers()} users like this
+				${comment.countLikers()} &{'comment.likecountmultiple'}
 				#{/if}
 				</p>
 				<!-- EOT2 = end of team2 -->
 				#{if _user && _user.canEdit(comment)}
 					#{if _entry instanceof models.Answer}
-						<a href="@{Secured.deleteCommentAnswer(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">Delete</a>
+						<a href="@{Secured.deleteCommentAnswer(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">&{'delete'}</a>
 					#{/if}#{else}
-						<a href="@{Secured.deleteCommentQuestion(_entry.id(), comment.id())}">Delete</a>
+						<a href="@{Secured.deleteCommentQuestion(_entry.id(), comment.id())}">&{'delete'}</a>
 					#{/else}
 				#{/if}
 			</li>	

@@ -214,7 +214,7 @@ public class Application extends Controller {
 
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {
-			flash.error("You're not logged in as a Moderator");
+			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
 		render();
@@ -222,7 +222,7 @@ public class Application extends Controller {
 
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
-			flash.error("You're not logged in as a Moderator");
+			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
 		render();

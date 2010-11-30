@@ -22,21 +22,21 @@
 			<div class="search">
 				<form class="search" action="@{Application.search}" method="GET">
 					<input type="search" results="5" name="term" #{if term}value="${term}"#{/if} placeholder="Search questions" required />
-					<input type="submit" value="Search" />
+					<input type="submit" value="&{'search.button'}" />
 				</form> 
 			</div><!-- end search -->
 			<div class="user">
 				#{if user}
-						Hi ${user.getName()}! #{if user && user.isModerator()}
-						<a href="@{Application.admin}">(moderator)</a> #{/if}
-						<a href="@{Application.notifications(0)}">Notifications ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
-						<a href="@{Application.showprofile(user.getName())}">Profile</a>
-						<a href="@{Secure.logout}">Logout</a>
+						&{'hello'} ${user.getName()}! #{if user && user.isModerator()}
+						<a href="@{Application.admin}">(&{'moderator'})</a> #{/if}
+						<a href="@{Application.notifications(0)}">&{'notifications'} ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
+						<a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a>
+						<a href="@{Secure.logout}">&{'user.logout'}</a>
 					#{/if}
 					#{else}
-						<a href="@{Secure.login}">Login</a>
+						<a href="@{Secure.login}">&{'user.login'}</a>
 						or
-						<a href="@{Application.register}">Sign Up</a>
+						<a href="@{Application.register}">&{'user.signup'}</a>
 					#{/else}	
 			</div><!-- end user -->
 			</div><!-- end navigaion -->
@@ -52,21 +52,21 @@
 			#{/elseif}
 	 		#{elseif user && user.getVeryRecentNewNotification() != null}
 				<div class="notificationInfo">
-					New answer to one of your questions:
+					&{'question.newanswer'}:
 					<a href="@{Secured.followNotification(user.getVeryRecentNewNotification().getID())}#answer-${user.getVeryRecentNewNotification().getAbout().id()}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
 				</div>
 			#{/elseif}
 			#{elseif user && user.isBlocked()}
-				<div class="cheaterWarning">You have been blocked by a moderator. Reason: ${user.getStatusMessage()}</div>
+				<div class="cheaterWarning">&{'user.blockedbymoderator'} &{'reason'} ${user.getStatusMessage()}</div>
 			#{/elseif}
 			<div class="content">
 			#{doLayout /}
 			</div><!-- end content -->
 			<div class="footer">
 				<a>
-	 				<a href="@{Application.showStatisticalOverview}">Statistics</a>
+	 				<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
 	 			</a>
-				A project by Group 3.
+				&{'group3ftw'}
 			</div><!-- end footer>
 		</div><!-- end main -->
 	</body>

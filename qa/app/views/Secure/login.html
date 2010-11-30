@@ -1,7 +1,7 @@
 #{extends 'main.html' /} 
 #{set title:'ajopi - Login' /} 
 <div class="login">
-	<h1>Login</h1>
+	<h1>&{'user.login'}</h1>
 	<div class="message">	
 		#{form @authenticate()}
 			<table>	
@@ -16,7 +16,7 @@
 				<tr>
 				<tr>
 					<td></td>
-					<td><input type="submit" id="signin" value="Log in" /></td>
+					<td><input type="submit" id="signin" value="&{'user.log_in'}" /></td>
 				</tr>
 			</table>
 		#{/form}
