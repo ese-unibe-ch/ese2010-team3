@@ -1,0 +1,162 @@
+# English language message file
+
+# General messages
+hello=Hi
+previous=Previous
+next=Next
+back=back
+recent=Recent
+delete=Delete
+signinorup=Please log in or sign up(if you're new to this site) in order to ask your own questions, give answers, comment and vote on questions and answers and be notified when somebody answers your questions.
+dateformat=DD.MM.YYYY or MM/DD/YYYY
+new=*new*
+moderator=moderator
+search=Search
+search.button=Search
+search.fail=There is no question found matching
+statistic=Statistic
+numberof=Number of
+reason=Reason
+group3ftw=A project by Group 3.
+
+# User messages
+user=User
+user.login=Login
+user.log_in=Log in
+user.logout=Logout
+user.signup=Sign up
+user.profile=Profile
+user.nonexistent=No such user
+user.delete=Do you really want to delete the Account?
+user.confirmanonymize=Yes, but keep all questions and answers.
+user.confirmdelete=Yes, delete everything.
+user.abortdelete=No, I've changed my mind.
+user.notification=Notification
+user.watchinglist=Watchinglist
+user.mightknowanswer=By the way, you might know the answer to these questions:
+user.norecommention=We're not able to recommend any (more) questions for you to answer at the moment.
+user.editprofile=Edit profile
+user.deleteaccount=Delete Account
+user.block=Block user
+user.isblocked=This user is blocked
+user.blockedbymoderator=You have been blocked by a moderator.
+user.blockedforreason=Blocked because
+user.unblocknow=Unblock now
+user.unblock=Unblock user
+user.nonexistent=You're not logged in or there is no such user.
+
+# Post messages
+posts.perday=per day
+posts.perweek=per week
+posts.permonth=per month
+#   Question messages
+questions=Questions
+question.ask=Ask question
+question.label=Label this question:
+question.labeleg=e.g. java, design, idea
+question.new=New question
+question.add=Add new question
+question.reallydelete=Do you really want to delete the following question?
+question.deletenotice=Please notice that every answer and comment referring to this question will also be deleted.
+question.confirmdelete=Yes, delete this question.
+question.abortdelete=No, I've changed my mind.
+question.recommended=Recommended Questions
+question.recommendhint=We'll try to list questions here having similar tags or content to those you've already successfully answered.
+question.related=Related questions
+question.locked=This question is locked. No further answers can be posted.
+question.newanswer=New answer to one of your questions
+question.nonexistent=Question does not exist.
+question.lock=Lock
+question.unlock=Unlock
+#   Answer messages
+answers=Answers
+answer.add=Add answer
+answer.addnew=Add new answer
+answer.answeredto=answered to
+answer.best=Best answer
+answers.best=Best answers
+answer.selectasbest=Select as best
+answers.highrated=high rated answers
+#   Comment messages
+comments=Comments
+comment.add=Add comment
+comment.addnew=Add new comment
+comment.ilike=I like
+comment.idislike=I don't like
+comment.likecountone=user likes this
+comment.likecountmultiple=users like this
+
+# Notification messages
+notifications=Notifications
+notification.inbox=Notification inbox
+notification.delete=Delete notification
+notification.markasread=Mar all notifications as read
+notification.none=No notification available at all - go watch some questions!
+watch.hint=You'll find a "watch" link on the page of every individual question. You're also automatically set to watch your own questions.
+watch.none=You're not watching any questions - go watch some.
+watch.start=Watch
+watch.stop=Stop watching
+
+# Admin messages
+administration=Administration
+admin.database=Database
+admin.importxml=Import Database
+admin.cleardb=Clear the Database
+admin.deletedb=Do you really want to delete the entire Database? There is no way back.
+admin.confirmdeletedb=Yes, nuke it!
+admin.abortdeletedb=No, I've changed my mind.
+
+# Secure messages
+secure.title=
+secure.username=Username
+secure.realname=Real name
+secure.email=E-Mail
+secure.birthday=Birthday
+secure.age=Age
+secure.website=Website
+secure.profession=Profession
+secure.employer=Employer
+secure.biography=Biography
+secure.password=Password
+secure.remember=Remember me
+secure.signin=Sign in
+secure.saveprofile=Save profile
+secure.error=Oops, unknown username or password.
+secure.logout=You have been logged out.
+secure.emailerror=Oops, this is not a valid eMail address.
+secure.passwordrepeat=Confirm Password
+secure.passworderror=Oops, you entered two different Passwords.
+secure.usernameerror=Oops, this username already exists.
+secure.moderatorerror=You're not logged in as a Moderator.
+secure.newquestionflash=Good luck for getting a reasonable answer!
+secure.emptyquestionerror=Please don't ask empty questions.
+secure.newanswerflash=Thanks for posting an answer.
+secure.emptyanswererror=Please don't give empty answers.
+secure.newcommentquestionflash=May your comment be helpful in clarifying the question!
+secure.newcommentanswerflash=May your comment be helpful in clarifying the answer!
+secure.likecommentflash=You like the comment. We're glad to know.
+secure.dislikecommentflash=You don't like the comment any longer. Hopefully you'll find other comments you like!
+secure.upvoteflash=Your up-vote has been registered.
+secure.downvoteflash=Your down-vote has been registered.
+secure.questiondeletedflash=The question has been deleted.
+secure.answerdeletedflash=The answer has been deleted.
+secure.commentdeletedflash=The comment has been deleted.
+secure.userdeletedflash=The user has been deleted.
+secure.userdeleteerror=You're not allowed to delete user.
+secure.bestanswerflash=We're glad that you've been helped!
+secure.editprofileerror=You're not allowed to edit this profile.
+secure.editprofileflash=Thanks for keeping this question's labels up-to-date.
+secure.startwatchquestionflash=You're now watching this question.
+secure.stopwatchquestionflash=You're no longer watching this question.
+secure.notificationsmarkedasreadflash=All notifications have been marked as read.
+secure.deletenotificationflash=You've got one notification less to care about.
+secure.blockreasonerror=no reason given.
+secure.blockuserflash=User has been blocked.
+secure.unlockuserflash=User has been unblocked.
+secure.lockquestionflash=This question has been locked.
+secure.unlockquestionflash=This question has been unlocked.
+secure.xmlselecterror=Please select an XML database file before clicking 'Import Database'
+secure.xmlloadflash=XML file successfully loaded to the database.
+secure.xmlloaderror=Couldn't load xml file!
+secure.cleardberror=You're a naughty boy!
+secure.cleardbflash=Tabula rasa!

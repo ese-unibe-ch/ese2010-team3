@@ -7,20 +7,24 @@
 		#{form @signup()}
 			<table>	
 				<tr>
-					<td>&{'secure.username'}</td>
+					<td>&{'secure.username'}:</td>
 					<td><input type="text" name="username" id="username" value="${flash.username}" required autofocus /></td>
 				</tr>
 				<tr>
-					<td>&{'secure.password'}</td>
+					<td>&{'secure.password'}:</td>
 					<td><input type="password" name="password" id="password" required /></td>
 				</tr>
 				<tr>
-					<td>&{'secure.passwordrepeat'}</td>
+					<td>&{'secure.passwordrepeat'}:</td>
 					<td><input type="password" name="passwordrepeat" id="password" required /></td>
 				</tr>
 				<tr>
+					<td>&{'secure.email'}:</td>
+					<td><input type="email" name="email" id="email" required /></td>
+				</tr>
+				<tr>
 					<td></td>
-					<td><input type="submit" id="register" value="Sign Up" /><td>
+					<td><input type="submit" id="register" value="&{'user.signup'}" /><td>
 				</tr>
 			</table>
 		#{/form}
