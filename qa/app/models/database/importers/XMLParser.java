@@ -16,7 +16,6 @@ import models.database.Database;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class XMLParser extends DefaultHandler {
 	private final Map<Integer, User> idUserBase;
