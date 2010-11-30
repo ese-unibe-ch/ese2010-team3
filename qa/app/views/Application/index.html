@@ -8,16 +8,16 @@
 #{if maxIndex > 0}
 	<p class ="pagination">
 		#{if index != 0}
-			<a href="@{Application.index(index-1)}">Previous</a>
+			<a href="@{Application.index(index-1)}">&{'previous'}</a>
 		#{/if}
 		${index + 1}/${maxIndex + 1}
 		#{if index != maxIndex}
-			<a href="@{Application.index(index+1)}">Next</a>
+			<a href="@{Application.index(index+1)}">&{'next'}</a>
 		#{/if}
 	</p>
 #{/if}
 #{if user && !user.isBlocked()}
-	<h1>Ask Question</h1>
+	<h1>&{'question.ask'}</h1>
 	<div id="askquestion" class="message">
 		#{form @Secured.newQuestion()}
 			#{field 'content'}
@@ -25,16 +25,16 @@
 			#{/field}
 			#{field 'tags'}
 				<p>
-					<label for="tags">Tag this question:</label>
-					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}" placeholder="e.g. java, design, idea" />
+					<label for="tags">&{'question.label'}</label>
+					<input type="text" id="${field.name}" name="${field.name}" class="${field.errorClass}" tagsJSON="@{Application.tags}" placeholder="&{'question.labeleg'}" />
 				</p>
 			#{/field}
-			<input type="submit" value="Add new question" />
+			<input type="submit" value="&{'question.add'}" />
 		#{/form}
 	</div><!-- end askquestion -->
 #{/if}
 #{if !user}
 	<div class="message">
-		<p class="hint">Please <a href="@{Secure.login}">login</a> or <a href="@{Application.register}">sign up</a> (if you're new to this site) in order to ask your own questions, give answers, comment and vote on questions and answers and be notified when somebody answers your questions.
+		<p class="hint">&{'signinorup'}
 	</div><!-- end message -->
 #{/if}

@@ -1,0 +1,53 @@
+# German language message file
+
+# General messages
+previous=Vorherige
+next=Nächste
+back=zurück
+signinorup=Bitte logge ein oder registriere dich (falls du die Seite zum ersten mal besuchst) damit du Fragen stellen und beantworten kannst oder falls du Einträge anderer Benutzer kommentieren oder bewerten willst.
+dateformat=TT.MM.JJJJ oder MM/TT/JJJJ
+
+#User messages
+user.nonexistent=Kein solcher Benutzer
+user.delete=Willst du dieses Benutzerkonto wirklich löschen?
+user.confirmanonymize=Ja, aber behalte all meine Fragen und Antworten.
+user.confirmdelete=Ja, alles löschen.
+user.abortdelete=Nein, Konto doch nicht löschen.
+
+#Question messages
+question.ask=Frage stellen
+question.label=Schlagwörter dieser Frage:
+question.labeleg=z.B. Java, Design, Idee
+question.add=Neue Frage erstellen
+question.reallydelete=Willst du folgende Frage wirklich löschen?
+question.deletenotice=Denke daran, dass alle Antworten und Kommentare, die sich auf diese Frage beziehen, ebenfalls gelöscht werden.
+question.confirmdelete=Ja, Frage löschen.
+question.abortdelete=Nein, Frage doch nicht löschen.
+
+#Answer messages
+
+
+#Comment messages
+comment.add=Kommentar schreiben
+comment.addnew=Kommentar abschicken
+
+# Secure messages
+secure.title=
+secure.username=Benutzername:
+secure.realname=Echter Name:
+secure.email=E-Mail:
+secure.birthday=Geburtstag:
+secure.website=Webseite:
+secure.profession=Beruf:
+secure.employer=Arbeitgeber:
+secure.biography=Biographie:
+secure.password=Passwort:
+secure.remember=Merken
+secure.signin=Einloggen
+secure.saveprofile=Profil speichern
+secure.error=Huch, unbekannter Benutzername oder falsches Passwort.
+secure.logout=Du bist nun ausgeloggt.
+secure.emailerror=Huch, ungültige eMail-Adresse.
+secure.passwordrepeat=Passwort bestätigen:
+secure.passworderror=Huch, Passwörter stimmen nicht überein.
+secure.usernameerror=Huch, ein Benutzer mit diesem Namen existiert bereits.
