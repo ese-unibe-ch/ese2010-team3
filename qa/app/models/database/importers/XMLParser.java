@@ -201,7 +201,7 @@ public class XMLParser extends DefaultHandler {
 			answer.accepted = e.getText("accepted").equals("true");
 			answer.id = e.getArg("id") == null ? -1 : new Integer(e
 					.getArg("id"));
-			answer.creation = new Date(new Integer(e.getText("creationdate")));
+			answer.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			this.protoanswers.add(answer);
 		} catch (Throwable t) {
 			throw new SemanticError("Answer #" + e.getText("ownerid")
