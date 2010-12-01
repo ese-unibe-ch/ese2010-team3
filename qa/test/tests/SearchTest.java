@@ -29,6 +29,7 @@ public class SearchTest extends UnitTest {
 		taggedNegative   = new Question(jack,"This is not about anything important.");
 		taggedPositive.setTagString("relevant");
 		taggedNegative.setTagString("plop");
+		fulltextPositive.answer(jill, "My answer");
 	}
 
 	@Test
@@ -78,5 +79,24 @@ public class SearchTest extends UnitTest {
 		assertTrue(relevantImportant.contains(taggedPositive));
 		assertTrue(Database.get().questions().searchFor("relevant dummy")
 				.isEmpty());
+	}
+
+	@Test
+	public void shouldFindUsername() {
+		List<Question> jills = Database.get().questions().searchFor("jill");
+		assertEquals(jills.size(), 2);
+		assertTrue(jills.contains(fulltextPositive));
+		assertTrue(jills.contains(fulltextNegative));
+
+		List<Question> jackImportant = Database.get().questions()
+				.searchFor("jack important");
+		assertEquals(jackImportant.size(), 2);
+		assertTrue(jackImportant.contains(taggedPositive));
+		assertTrue(jackImportant.contains(taggedNegative));
+
+		List<Question> jackTagged = Database.get().questions()
+				.searchFor("jack plop");
+		assertEquals(jackTagged.size(), 1);
+		assertTrue(jackTagged.contains(taggedNegative));
 	}
 }
