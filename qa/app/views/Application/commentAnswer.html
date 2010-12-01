@@ -1,19 +1,19 @@
 #{extends 'main.html' /}
 #{if answer}
 	#{set title:'ajopi - ' + answer.summary().escape()  /}
-	<a href="@{Application.question(question.id())}#answer-${answer.id()}">back</a>
+	<a href="@{Application.question(question.id())}#answer-${answer.id()}">&{'back'}</a>
 	<ul class="answers">
 		#{answer answer:answer, user:user, extended:false /}
 	</ul>
 	#{comments entry:answer, user:user /}
 	#{if user}
-		<h1>Add Comment</h1>
+		<h1>&{'comment.add'}</h1>
 		<div class="message">
 			#{form @Secured.newCommentAnswer(question.id(), answer.id())}
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 				#{/field}
-				<input type="submit" value="Add new comment" />
+				<input type="submit" value="&{'comment.addnew'}" />
 			#{/form}
 		</div><!-- end message -->
 	#{/if}

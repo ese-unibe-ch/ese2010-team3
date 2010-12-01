@@ -3,7 +3,6 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.Answer;
@@ -16,6 +15,7 @@ import models.User;
 import models.database.Database;
 import models.helpers.Tools;
 import play.data.validation.Required;
+import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
 
@@ -186,8 +186,7 @@ public class Application extends Controller {
 	}
 
 	public static void showStatisticalOverview() {
-		GregorianCalendar now = new GregorianCalendar();
-		TimeTracker t = TimeTracker.getRealTimeTracker();
+		TimeTracker t = TimeTracker.getTimeTracker();
 		int numberOfUsers = Database.get().users().count();
 		int numberOfQuestions = Database.get().questions().count();
 		int numberOfAnswers = Database.get().questions().countAllAnswers();
@@ -195,12 +194,12 @@ public class Application extends Controller {
 				.countHighRatedAnswers();
 		int numberOfBestAnswers = Database.get().questions()
 				.countBestRatedAnswers();
-		float questionsPerDay = (float) numberOfQuestions / t.getDays(now);
-		float questionsPerWeek = (float) numberOfQuestions / t.getWeeks(now);
-		float questionsPerMonth = (float) numberOfQuestions / t.getMonths(now);
-		float answersPerDay = (float) numberOfAnswers / t.getDays(now);
-		float answersPerWeek = (float) numberOfAnswers / t.getWeeks(now);
-		float answersPerMonth = (float) numberOfAnswers / t.getMonths(now);
+		float questionsPerDay = (float) numberOfQuestions / t.getDays();
+		float questionsPerWeek = (float) numberOfQuestions / t.getWeeks();
+		float questionsPerMonth = (float) numberOfQuestions / t.getMonths();
+		float answersPerDay = (float) numberOfAnswers / t.getDays();
+		float answersPerWeek = (float) numberOfAnswers / t.getWeeks();
+		float answersPerMonth = (float) numberOfAnswers / t.getMonths();
 
 		render(numberOfQuestions, numberOfAnswers, numberOfUsers,
 				numberOfHighRatedAnswers, numberOfBestAnswers, questionsPerDay,
@@ -210,7 +209,7 @@ public class Application extends Controller {
 
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {
-			flash.error("You're not logged in as a Moderator");
+			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
 		render();
@@ -218,9 +217,21 @@ public class Application extends Controller {
 
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
-			flash.error("You're not logged in as a Moderator");
+			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
 		render();
+	}
+
+	public static void selectLanguage(@Required String langId) {
+		if (langId != null) {
+			Lang.change(langId);
+			if (!Lang.get().equals(langId))
+				flash.error("Unknown language %s!", langId);
+		}
+		else
+			flash.error("Wanna silence me? Try again!");
+		if (!Secured.redirectToCallingPage())
+			Application.index(0);
 	}
 }

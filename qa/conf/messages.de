@@ -1,0 +1,165 @@
+﻿# German language message file
+
+# General messages
+hello=Hallo
+or=oder
+previous=Vorherige
+next=Nächste
+back=zurück
+recent=Letzte
+delete=Löschen
+signinorup=Bitte logge ein oder registriere dich (falls du die Seite zum ersten mal besuchst) damit du Fragen stellen und beantworten kannst oder falls du Einträge anderer Benutzer kommentieren oder bewerten willst.
+dateformat=TT.MM.JJJJ oder MM/TT/JJJJ
+moderator=moderator
+new=*neu*
+search=Suche
+search.button=Suchen
+search.fail=Keine Frage gefunden mit
+statistic=Statistik
+numberof=Anzahl
+reason=Grund
+english=Englisch
+german=Deutsch
+group3ftw=Ein Projekt von Gruppe 3.
+
+# User messages
+user=Benutzer
+user.login=Einloggen
+user.log_in=Einloggen
+user.logout=Ausloggen
+user.signup=Registrieren
+user.profile=Profil
+user.nonexistent=Kein solcher Benutzer
+user.delete=Willst du dieses Benutzerkonto wirklich löschen?
+user.confirmanonymize=Ja, aber behalte all meine Fragen und Antworten.
+user.confirmdelete=Ja, alles löschen.
+user.abortdelete=Nein, Konto doch nicht löschen.
+user.notification=Benachrichtigungen
+user.watchinglist=Beobachterliste
+user.mightknowanswer=Vielleicht kannst du auch folgende Fragen beantworten:
+user.norecommention=Derzeit können wir keine (weiteren) Fragen zum beantworten vorschlagen.
+user.editprofile=Profil bearbeiten
+user.deleteaccount=Konto löschen
+user.block=Benutzer sperren
+user.isblocked=Benutzer ist gesperrt
+user.blockedbymoderator=Dein Konto wurde von einem Moderator gesperrt.
+user.blockedforreason=Gesperrt weil
+user.unblocknow=Jetzt entsperren
+user.unblock=Entsperren
+user.nonexistent=Du bist nicht eingeloggt oder es existiert kein solcher Benutzer.
+
+# Post messages
+posts.perday=pro Tag
+posts.perweek=pro Woche
+posts.permonth=pro Monat
+#   Question messages
+questions=Fragen
+question.ask=Frage stellen
+question.label=Schlagwörter dieser Frage:
+question.labeleg=z.B. Java, Design, Idee
+question.new=Neue Frage
+question.add=Neue Frage erstellen
+question.reallydelete=Willst du folgende Frage wirklich löschen?
+question.deletenotice=Denke daran, dass alle Antworten und Kommentare, die sich auf diese Frage beziehen, ebenfalls gelöscht werden.
+question.confirmdelete=Ja, Frage löschen.
+question.abortdelete=Nein, Frage doch nicht löschen.
+question.recommended=Empfolene Fragen
+question.recommendhint=Wir versuchen hier Fragen mit ähnlichen Schlagwörtern oder ähnlichem Inhalt aufzulisten, wie die, die du bereits erfolgreich beantwortet hast.
+question.related=Ähnliche Fragen
+question.locked=Frage ist gesperrt. Keine weiteren Antworten möglich.
+question.newanswer=Neue Antwort auf eine deiner Fragen
+question.nonexistent=Frage existiert nicht.
+question.lock=Sperren
+question.unlock=Entsperren
+#   Answer messages
+answers=Antworten
+answer.add=Antwort hinzufügen
+answer.addnew=Neue Antwort hinzufügen
+answer.answeredto=hat geantwortet auf
+answer.best=Beste Antwort
+answers.best=Beste Antworten
+answer.selectasbest=Als beste Antwort markieren
+answers.highrated=gut bewertete Antworten
+#   Comment messages
+comments=Kommentare
+comment.add=Kommentar schreiben
+comment.addnew=Kommentar abschicken
+comment.ilike=Gefällt mir
+comment.idislike=Gefällt mir nicht
+comment.likecountone=Benutzer gefällt das
+comment.likecountmultiple=Benutzern gefällt das
+
+# Notification messages
+notifications=Benachrichtigungen
+notification.inbox=Benachrichtigungen
+notification.delete=Benachrichtigung löschen
+notification.markasread=Alle Benachrichtigungen als gelesen markieren
+notification.none=Derzeit keine Benachrichtigungen vorhanden - beobachte doch ein paar Fragen!
+watch.hint=Du findest bei jeder Frage einen link "beobachten". Ausserdem werden deine eigenen Fragen direkt noch dem Erstellen beobachtet.
+watch.none=Du beobachtest zurzeit keine Fragen.
+watch.start=Beobachten
+watch.stop=Nicht mehr beobachten
+
+# Admin messages
+administration=Administration
+admin.database=Datenbank
+admin.importxml=Datenbank importieren
+admin.cleardb=Datenbank leeren
+admin.deletedb=Willst du wirklich die gesamte Datenbank löschen? Die Daten werden unwiderruflich gelöschen.
+admin.confirmdeletedb=Ja, lösche alles!
+admin.abortdeletedb=Nein, lieber doch nicht.
+
+# Secure messages
+secure.title=
+secure.username=Benutzername
+secure.realname=Echter Name
+secure.email=E-Mail
+secure.birthday=Geburtstag
+secure.age=Alter
+secure.website=Webseite
+secure.profession=Beruf
+secure.employer=Arbeitgeber
+secure.biography=Biographie
+secure.password=Passwort
+secure.remember=Merken
+secure.signin=Einloggen
+secure.saveprofile=Profil speichern
+secure.error=Huch, unbekannter Benutzername oder falsches Passwort.
+secure.logout=Du bist nun ausgeloggt.
+secure.emailerror=Huch, ungültige eMail-Adresse.
+secure.passwordrepeat=Passwort bestätigen
+secure.passworderror=Huch, Passwörter stimmen nicht überein.
+secure.usernameerror=Huch, ein Benutzer mit diesem Namen existiert bereits.
+secure.moderatorerror=Du bist nicht als Moderator eingeloggt.
+secure.newquestionflash=Wir hoffen deine Frage wird bald beantwortet!
+secure.emptyquestionerror=Bitte keine leeren Fragen stellen.
+secure.newanswerflash=Danke für deine Antwort.
+secure.emptyanswererror=Bitte keine leeren Antworten schreiben.
+secure.newcommentquestionflash=Möge dein Kommentar hilfreich zur Auflösung der Frage sein!
+secure.newcommentanswerflash=Möge die Antwort durch deinen Kommentar klarer sein!
+secure.likecommentflash=Dir gefällt dieser Kommentar.
+secure.dislikecommentflash=Dir gefällt dieser Kommentar nicht mehr. Hoffentlich findest du bald neue tolle Kommentare!
+secure.upvoteflash=Deine positive Stimme wurde gezählt.
+secure.downvoteflash=Deine negative Stimme wurde gezählt.
+secure.questiondeletedflash=Die Frage wurde gelöscht.
+secure.answerdeletedflash=Die Antwort wurde gelöscht.
+secure.commentdeletedflash=Der Kommentar wurde gelöscht.
+secure.userdeletedflash=Der Benutzer wurde gelöscht.
+secure.userdeleteerror=Du darfst keine Benutzer löschen.
+secure.bestanswerflash=Wir freuen uns, dass dir geholfen wurde!
+secure.editprofileerror=Du darfst dieses Profil nicht bearbeiten:
+secure.editprofileflash=Danke, dass du die Schlagwörter auf dem neusten Stand hälst.
+secure.startwatchquestionflash=Du beobachtest jetzt diese Frage.
+secure.stopwatchquestionflash=Du beobachtest diese Frage nicht mehr.
+secure.notificationsmarkedasreadflash=Alle Benachrichtigungen wurden als gelesen markiert.
+secure.deletenotificationflash=Du musst dich jetzt um eine Benachrichtigung weniger kümmern.
+secure.blockreasonerror=kein Grund angegeben.
+secure.blockuserflash=Benutzer wurde gesperrt.
+secure.unlockuserflash=Benutzer wurde entsperrt.
+secure.lockquestionflash=Die Frage wurde gesperrt.
+secure.unlockquestionflash=Die Frage wurde entsperrt.
+secure.xmlselecterror=Wähle bitte eine XML Datenbankdatei aus bevor du auf 'Datenbank importieren' klickst.
+secure.xmlloadflash=XML Datei erfolgreich in die Datenbank geladen.
+secure.xmlloaderror=Konnte XML Datei nicht laden!
+secure.cleardberror=So nicht, Freundchen!
+secure.cleardbflash=Hau weg die Scheisse!

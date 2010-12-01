@@ -1,13 +1,13 @@
 #{extends 'main.html' /}
 #{set title:'ajopi Admin Interface' /}
-<h1>Administration</h1>
+<h1>&{'administration'}</h1>
 <div class="message">
-	<h2>Database</h2>
+	<h2>&{'admin.database'}</h2>
 	<form action=@{Secured.loadXML()} method="POST" enctype="multipart/form-data">
 		<input type="file" id="xml" name="xml" />
-		<input type="submit" value="Import Database" />
+		<input type="submit" value="&{'admin.importxml'}" />
 	</form>
 	<ul class="optionLinks">
-		<li><a href="@{Application.clearDB}">Clear the Database</a></li>
+		<li><a href="@{Application.clearDB}">&{'admin.cleardb'}</a></li>
 	</ul>
 </div>
