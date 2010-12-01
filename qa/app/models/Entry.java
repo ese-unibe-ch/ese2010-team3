@@ -236,7 +236,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
-	 * Produces a one-line summary of an Entry: the first 35 to 45 characters,
+	 * Produces a one-line summary of an Entry: the first 75 to 85 characters,
 	 * if possible cut off at a word boundary, and an ellipsis, if the content
 	 * is longer.
 	 * 
@@ -244,7 +244,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * */
 	public String summary() {
 		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
-				.replaceFirst("^(.{35}\\S{0,9} ?).{5,}", "$1...");
+				.replaceFirst("^(.{75}\\S{0,9} ?).{5,}", "$1...");
 	}
 	
 	/**
