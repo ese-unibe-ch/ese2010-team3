@@ -22,7 +22,7 @@ public class Mapper {
 	 *            the map whose keys are to be sorted
 	 * @return the sorted list of keys
 	 */
-	private static <T> List<T> sortByValue(Map<T, Comparable> map) {
+	public static <T> List<T> sortByValue(Map<T, ? extends Comparable> map) {
 		List<Map.Entry> list = new ArrayList(map.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry>() {
 			public int compare(Map.Entry e1, Map.Entry e2) {

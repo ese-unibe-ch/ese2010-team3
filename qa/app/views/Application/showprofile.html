@@ -51,6 +51,19 @@
 				<td class="right">${biography?.raw()}</td>
 			</tr>
 			<tr>
+				<td class="left">&{'user.expertise'}:</td>
+				<td class="right">
+					<div class="tags">
+						#{list items:showUser.getExpertise(), as:'tag'}
+							<a href="@{Application.search(tag.getName())}" class="tag">${tag.getName().escape()}</a>
+						#{/list}
+						#{else}
+							&{'user.isnovice', showUser.getName().escape()}
+						#{/else}
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<td class="left"><label for="recentquestions">&{'recent'} &{'questions'}:</label>
 				<td class="right">
 					<ul class="showprofile">
