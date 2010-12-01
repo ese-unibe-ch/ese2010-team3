@@ -10,10 +10,10 @@
 				<a href ="@{Application.commentAnswer(_answer.getQuestion().id(), _answer.id())}">&{'comment.add'}</a>
 			#{/if}
 			#{if _user.canEdit(_answer) && !_answer.getQuestion().isLocked()}
-				| <a href="@{Secured.deleteAnswer(_answer.getQuestion().id(), _answer.id())}">&{'delete'}</a>
+				| <a href="@{CAnswer.deleteAnswer(_answer.getQuestion().id(), _answer.id())}">Delete</a>
 			#{/if}
 			#{if _user.canEdit(_answer.getQuestion()) && !_answer.getQuestion().isLocked() && _answer.getQuestion().isBestAnswerSettable() && _answer.getQuestion().getBestAnswer() != _answer}
-				| <a href="@{Secured.selectBestAnswer(_answer.getQuestion().id(), _answer.id())}#answer-${_answer.id()}">&{'answer.selectasbest'}</a>
+				| <a href="@{CAnswer.selectBestAnswer(_answer.getQuestion().id(), _answer.id())}#answer-${_answer.id()}">Select as Best</a>
 			#{/if}
 		</div>
 	#{/if}

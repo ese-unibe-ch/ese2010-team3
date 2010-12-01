@@ -17,7 +17,7 @@ package models.helpers;
  * @param <V>
  *            the filter/sort value type
  */
-public interface Filter<T, V> {
+public interface IFilter<T, V> {
 
 	/**
 	 * Visit an object, returning either a sort key or a (non-)null value for

@@ -15,16 +15,16 @@
 				<a href ="@{Application.commentQuestion(_question.id())}">&{'comment.add'}</a> |
 			#{/if}
 			#{if _user.isObserving(_question)}
-				<a href="@{Secured.unwatchQuestion(_question.id())}">&{'watch.stop'}</a>
+				<a href="@{CQuestion.unwatchQuestion(_question.id())}">Stop watching</a>
 			#{/if}#{else}
-				<a href="@{Secured.watchQuestion(_question.id())}">&{'watch.start'}</a>
+				<a href="@{CQuestion.watchQuestion(_question.id())}">Watch</a>
 			#{/else}
 			#{if _user.isModerator()}
-				| <a href="@{Secured.lockQuestion(_question.id())}">&{'question.lock'}</a>
+				| <a href="@{CQuestion.lockQuestion(_question.id())}">Lock</a>
 			#{/if}
 		#{/if}
 		#{if _user.isModerator() && _question.isLocked()}
-			<a href="@{Secured.unlockQuestion(_question.id())}">&{'question.unlock'}</a>
+			<a href="@{CQuestion.unlockQuestion(_question.id())}">Unlock</a>
 		#{/if}
 		#{if _user.canEdit(_question)}
 			| <a href="@{Application.confirmDeleteQuestion(_question.id())}">&{'delete'}</a>
@@ -33,7 +33,7 @@
 	#{/if}
 	#{if _custom?.equals("watchlist")}
 		<div class="commands">
-			<a href="@{Secured.unwatchQuestionFromList(_question.id())}">&{'watch.stop'}</a>
+			<a href="@{CQuestion.unwatchQuestionFromList(_question.id())}">Stop watching</a>
 		</div>
 	#{/if}
 	

@@ -8,8 +8,8 @@
 	</div>
 	<ul>#{question question:question, user:user, extended:false /}</ul>
 	<ul class="optionLinks">
-		<p><a href="@{Secured.deleteQuestion(question.id())}">&{'question.confirmdelete'}</a></p>
-		<p><a href="@{Application.question(question.id())}">&{'question.abortdelete'}</a></p>
+		<p><a href="@{CQuestion.deleteQuestion(question.id())}">Yes, delete this question.</a></p>
+		<p><a href="@{Application.question(question.id())}">No, I've changed my mind.</a></p>
 	</ul>
 #{/if}
 #{else}

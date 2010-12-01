@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import models.database.Database;
-import models.helpers.Filter;
+import models.helpers.IFilter;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 import models.helpers.Mapper;
@@ -28,7 +28,7 @@ import models.helpers.Tools;
 public class User implements IObserver {
 
 	private final String name;
-	private final String password;
+	private String password;
 	private String email;
 	private final HashSet<Item> items;
 	private String fullname;
@@ -304,6 +304,10 @@ public class User implements IObserver {
 		return this.password;
 	}
 
+	public void setSHA1Password(String password) {
+		this.password = Tools.encrypt(password);
+	}
+
 	/**
 	 * Get the reason for why the user is blocked.
 	 * 
@@ -401,21 +405,12 @@ public class User implements IObserver {
 
 	/**
 	 * Get a List of the last three <code>Question</code>s of this
-	 * <code>User</code>. Registers a new <code>User</code> to the
-	 * database.
+	 * <code>User</code>. Registers a new <code>User</code> to the database.
 	 * 
 	 * @param username
 	 * @param password
 	 *            of the <code>User</code>
 	 * @return user
-	 */
-
-	/**
-	 * Get a List of the last three <code>Question</code>s of this
-	 * <code>User</code>. >>>>>>> suggest-Questions
-	 * 
-	 * @return List<Question> The last three <code>Question</code>s of this
-	 *         <code>User</code>
 	 */
 	public List<Question> getRecentQuestions() {
 		return getRecentItemsByType(Question.class);
@@ -555,7 +550,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All best rated answers
 	 */
 	public List<Answer> bestAnswers() {
-		return Mapper.filter(getAnswers(), new Filter<Answer, Boolean>() {
+		return Mapper.filter(getAnswers(), new IFilter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isBestAnswer();
 			}
@@ -568,7 +563,7 @@ public class User implements IObserver {
 	 * @return List<Answer> All high rated answers
 	 */
 	public List<Answer> highRatedAnswers() {
-		return Mapper.filter(getAnswers(), new Filter<Answer, Boolean>() {
+		return Mapper.filter(getAnswers(), new IFilter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isHighRated();
 			}
@@ -624,7 +619,7 @@ public class User implements IObserver {
 	 */
 	public List<Notification> getNewNotifications() {
 		return Mapper.filter(getAllNotifications(),
-				new Filter<Notification, Boolean>() {
+				new IFilter<Notification, Boolean>() {
 					public Boolean visit(Notification n) {
 						return n.isNew();
 					}

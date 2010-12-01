@@ -26,7 +26,7 @@
 	#{if user && !user.isBlocked() && !question.isLocked()}
 		<h1>&{'answer.add'}</h1>
 		<div class="message">
-			#{form @Secured.newAnswer(question.id())}
+			#{form @CAnswer.newAnswer(question.id())}
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 				#{/field}

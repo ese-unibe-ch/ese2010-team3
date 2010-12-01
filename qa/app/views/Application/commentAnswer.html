@@ -9,7 +9,7 @@
 	#{if user}
 		<h1>&{'comment.add'}</h1>
 		<div class="message">
-			#{form @Secured.newCommentAnswer(question.id(), answer.id())}
+			#{form @CAnswer.newCommentAnswer(question.id(), answer.id())}
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>
 				#{/field}

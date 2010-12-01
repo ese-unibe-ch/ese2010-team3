@@ -46,7 +46,7 @@ public class Mapper {
 	 * @return the sorted list
 	 */
 	public static <T> List<T> sort(Iterable<T> iterable,
-			Filter<T, ? extends Comparable> filter) {
+			IFilter<T, ? extends Comparable> filter) {
 		Map<T, Comparable> map = new HashMap();
 		for (T object : iterable) {
 			Comparable value = filter.visit(object);
@@ -67,7 +67,7 @@ public class Mapper {
 	 * @return the filtered list
 	 */
 	public static <T> List<T> filter(Iterable<T> iterable,
-			Filter<T, Boolean> filter) {
+			IFilter<T, Boolean> filter) {
 		List<T> result = new ArrayList();
 		for (T object : iterable) {
 			if (filter.visit(object)) {

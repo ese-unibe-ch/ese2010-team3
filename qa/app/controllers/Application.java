@@ -26,12 +26,18 @@ public class Application extends Controller {
 	@Before
 	static void setConnectedUser() {
 		if (controllers.Secure.Security.isConnected()) {
-			User user = Database.get().users()
-					.get(controllers.Secure.Security.connected());
+			User user = Database.get().users().get(
+					controllers.Secure.Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
 
+	/**
+	 * Leads to the index page at a given page of {@link Question}'s.
+	 * 
+	 * @param index
+	 *            the number of the page of {@link Question}'s.
+	 */
 	public static void index(int index) {
 		List<Question> questions = Database.get().questions().all();
 		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
@@ -44,6 +50,12 @@ public class Application extends Controller {
 		render(questions, index, maxIndex);
 	}
 
+	/**
+	 * Leads to the detailed view of a {@link Question}.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}.
+	 */
 	public static void question(int id) {
 		Question question = Database.get().questions().get(id);
 		if (question == null) {
@@ -59,6 +71,13 @@ public class Application extends Controller {
 		}
 	}
 
+	/**
+	 * Renders the detailed view of a {@link Question} and it's {@link Answer} 
+	 * 's.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}.
+	 */
 	public static void answerQuestion(int id) {
 		Question question = Database.get().questions().get(id);
 		List<Question> questions = Database.get().questions().all();
@@ -67,6 +86,13 @@ public class Application extends Controller {
 		render(questions, question, answers, count);
 	}
 
+	/**
+	 * Leads to the detailed view of the {@link Question} and the field to
+	 * submit a comment.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}.
+	 */
 	public static void commentQuestion(int id) {
 		Question question = Database.get().questions().get(id);
 		List<Question> questions = Database.get().questions().all();
@@ -75,13 +101,26 @@ public class Application extends Controller {
 		render(questions, question, comments, count);
 	}
 
+	/**
+	 * Leads to the detailed view of the {@link Answer} and the field to submit
+	 * a comment.
+	 * 
+	 * @param id
+	 *            the id of the {@link Answer}
+	 */
 	public static void commentAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		List<Comment> comments = answer.comments();
 		render(answer, comments, question);
 	}
-	
+
+	/**
+	 * Prompts the user to confirm the deletion of the {@link Question}.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}.
+	 */
 	public static void confirmDeleteQuestion(int id) {
 		Question question = Database.get().questions().get(id);
 		render(question);
@@ -96,11 +135,22 @@ public class Application extends Controller {
 		render();
 	}
 
+	/**
+	 * Lets the {@link User} sign up. Error-messages will be displayed, if the
+	 * information submitted by the {@link User} is wrong.
+	 * 
+	 * @param username
+	 *            the name the {@link User} has entered. This field is
+	 *            mandatory.
+	 * @param password
+	 *            the password the {@link User} chooses.
+	 * @param passwordrepeat
+	 *            the repeated password.
+	 */
 	public static void signup(@Required String username, String password,
 			String passwordrepeat) {
 
-		if (password.equals(passwordrepeat)
-				&& User.isAvailable(username)) {
+		if (password.equals(passwordrepeat) && User.isAvailable(username)) {
 			Database.get().users().register(username, password);
 			// Mark user as connected
 			session.put("username", username);
@@ -118,30 +168,36 @@ public class Application extends Controller {
 		}
 	}
 
-	public static boolean mayLoggedInUserEditProfileOf(User showUser) {
+	/**
+	 * Checks whether a {@link User} can edit a profile.
+	 * 
+	 * @param showUser
+	 *            the {@link User} who is the owner of the profile.
+	 * @return
+	 */
+	public static boolean userCanEditProfile(User showUser) {
 		User user = Session.get().currentUser();
 		if (user == null)
 			return false;
 		return user == showUser && !showUser.isBlocked() || user.isModerator();
 	}
 
+	/**
+	 * Leads to the view of a {@link User}'s profile.
+	 * 
+	 * @param userName
+	 *            the name of the {@link User} who is the owner of the profile.
+	 */
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
 		String biography = showUser.getBiography();
 		if (biography != null)
 			biography = Tools.markdownToHtml(biography);
-		boolean canEdit = mayLoggedInUserEditProfileOf(showUser);
+		boolean canEdit = userCanEditProfile(showUser);
 		render(showUser, biography, canEdit);
 	}
 
-	public static void editProfile(String userName) {
-		User showUser = Database.get().users().get(userName);
-		if (!mayLoggedInUserEditProfileOf(showUser)) {
-			showprofile(userName);
-		}
-		render(showUser);
-	}
-
+	// TODO Add javadoc
 	public static void tags(String term, String content) {
 		String tagString = "";
 		for (Tag tag : Database.get().tags().all()) {
@@ -158,6 +214,15 @@ public class Application extends Controller {
 		renderJSON(tags);
 	}
 
+	/**
+	 * Performs a search for the entered term. The view is displayed at the
+	 * given index.
+	 * 
+	 * @param term
+	 *            the term to be searched for.
+	 * @param index
+	 *            the page-number which will be displayed.
+	 */
 	public static void search(String term, int index) {
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
@@ -166,6 +231,7 @@ public class Application extends Controller {
 		render(results, term, index, maxIndex);
 	}
 
+	// TODO Javadoc
 	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
@@ -185,6 +251,10 @@ public class Application extends Controller {
 		}
 	}
 
+	/**
+	 * Leads to the statistical overview. The statistical data is calculated via
+	 * the {@link TimeTracker}.
+	 */
 	public static void showStatisticalOverview() {
 		TimeTracker t = TimeTracker.getTimeTracker();
 		int numberOfUsers = Database.get().users().count();
@@ -207,6 +277,10 @@ public class Application extends Controller {
 				answersPerWeek, answersPerMonth);
 	}
 
+	/**
+	 * Leads to the admin page where a moderator can edit several options e.g.
+	 * clear the database.
+	 */
 	public static void admin() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("secure.moderatorerror");
@@ -215,6 +289,9 @@ public class Application extends Controller {
 		render();
 	}
 
+	/**
+	 * Leads the the clearDB page.
+	 */
 	public static void clearDB() {
 		if (!Session.get().currentUser().isModerator()) {
 			flash.error("secure.moderatorerror");
@@ -228,10 +305,9 @@ public class Application extends Controller {
 			Lang.change(langId);
 			if (!Lang.get().equals(langId))
 				flash.error("Unknown language %s!", langId);
-		}
-		else
+		} else
 			flash.error("Wanna silence me? Try again!");
-		if (!Secured.redirectToCallingPage())
+		if (!CUser.redirectToCallingPage())
 			Application.index(0);
 	}
 }

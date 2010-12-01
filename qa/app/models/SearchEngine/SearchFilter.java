@@ -11,10 +11,11 @@ import models.Answer;
 import models.Entry;
 import models.Question;
 import models.Tag;
-import models.helpers.Filter;
+import models.helpers.IFilter;
 import models.helpers.Tools;
 
-public class SearchFilter implements Filter<Question, Double> {
+//TODO add javadoc
+public class SearchFilter implements IFilter<Question, Double> {
 	private final Set<String> queryFulltext;
 	private final Set<Tag> queryTags;
 
