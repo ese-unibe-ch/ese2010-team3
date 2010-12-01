@@ -55,7 +55,10 @@ public class SearchFilter implements IFilter<Question, Double> {
 	}
 
 	private double rateText(Entry entry, Set<String> mustHave) {
-		Set<String> words = getWords(entry.content());
+		String content = entry.content();
+		if (entry.owner() != null)
+			content += " " + entry.owner().getName();
+		Set<String> words = getWords(content);
 		if (this.queryFulltext == null)
 			return 0;
 		if (this.queryFulltext.isEmpty() || words.isEmpty())
