@@ -47,7 +47,12 @@ public class QuestionTest extends UnitTest {
 		Question longerQuestion = new Question(user,
 				"Why did   the chicken\ncross the road\tagain and again?");
 		assertEquals(longerQuestion.summary(),
-				"Why did the chicken cross the road again ...");
+				"Why did the chicken cross the road again and again?");
+		String longQuestion = "bla ";
+		while (longQuestion.length() < 1024)
+			longQuestion += longQuestion;
+		longerQuestion = new Question(user, longQuestion);
+		assertTrue(longerQuestion.summary().endsWith("bla ..."));
 	}
 
 	@Test

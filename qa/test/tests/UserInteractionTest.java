@@ -12,7 +12,8 @@ import org.junit.Test;
 
 import play.test.FunctionalTest;
 import tests.mocks.SessionMock;
-import controllers.Secured;
+import controllers.CAnswer;
+import controllers.CQuestion;
 import controllers.Session;
 
 @Ignore
@@ -38,7 +39,7 @@ public class UserInteractionTest extends FunctionalTest {
 		// if (q.owner().equals(jack))
 		// question = q;
 		// }
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
 		assertNotNull(question);
 		assertEquals(question.owner(), jack);
@@ -47,9 +48,9 @@ public class UserInteractionTest extends FunctionalTest {
 
 	@Test
 	public void shouldPostAnswer() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newAnswer(question.id(), "nevermind");
+		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		assertNotNull(answer);
 		assertEquals(answer.owner(), jack);
@@ -58,9 +59,10 @@ public class UserInteractionTest extends FunctionalTest {
 
 	@Test
 	public void shouldPostComment() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newCommentQuestion(question.id(), "Could I specify?");
+		controllers.CQuestion.newCommentQuestion(question.id(),
+				"Could I specify?");
 		Comment comment = question.comments().get(0);
 		assertNotNull(comment);
 		assertEquals(comment.owner(), jack);
@@ -69,11 +71,12 @@ public class UserInteractionTest extends FunctionalTest {
 
 	@Test
 	public void shouldPostAnswerComment() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newAnswer(question.id(), "nevermind");
+		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
-		Secured.newCommentAnswer(question.id(), answer.id(), "Good Point");
+		controllers.CAnswer.newCommentAnswer(question.id(), answer.id(),
+				"Good Point");
 		Comment comment = answer.getComment(0);
 		assertNotNull(comment);
 		assertEquals(comment.owner(), jack);
@@ -82,69 +85,69 @@ public class UserInteractionTest extends FunctionalTest {
 
 	@Test
 	public void shouldVoteQuestion() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
 		User jill = new User("Jill", "");
 		session.loginAs(jill);
-		Secured.voteQuestionDown(question.id());
+		CQuestion.voteQuestionDown(question.id());
 		assertEquals(-1, question.rating());
-		Secured.voteQuestionUp(question.id());
+		CQuestion.voteQuestionUp(question.id());
 		assertEquals(1, question.rating());
 	}
 
 	@Test
 	public void shouldVoteAnswer() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newAnswer(question.id(), "nevermind");
+		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		User jill = new User("Jill", "");
 		session.loginAs(jill);
-		Secured.voteAnswerDown(question.id(), answer.id());
+		CAnswer.voteAnswerDown(question.id(), answer.id());
 		assertEquals(-1, answer.rating());
-		Secured.voteAnswerUp(question.id(), answer.id());
+		controllers.CAnswer.voteAnswerUp(question.id(), answer.id());
 		assertEquals(1, answer.rating());
 	}
 
 	@Test
 	public void shouldDeleteQuestion() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.deleteQuestion(question.id());
+		CQuestion.deleteQuestion(question.id());
 		assertFalse(Database.get().questions().all().contains(question));
 	}
 
 	@Test
 	public void shouldDeleteAnswer() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newAnswer(question.id(), "nevermind");
+		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
-		Secured.deleteQuestion(answer.id());
+		CQuestion.deleteQuestion(answer.id());
 		assertFalse(question.answers().contains(question));
 	}
 
 	@Test
 	public void shouldDeleteQuestionComment() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newCommentQuestion(question.id(), "Could I specify?");
+		controllers.CQuestion.newCommentQuestion(question.id(),
+				"Could I specify?");
 		Comment comment = question.comments().get(0);
-		Secured.deleteCommentQuestion(comment.id(), question.id());
+		CQuestion.deleteCommentQuestion(comment.id(), question.id());
 		assertFalse(question.comments().contains(question));
 	}
 
 	@Test
 	public void shouldDeleteAnswerComment() {
-		Secured.newQuestion("why?", "stupid");
+		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		Secured.newAnswer(question.id(), "nevermind");
+		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.getAnswer(0);
-		Secured
-				.newCommentAnswer(answer.id(), question.id(),
-						"Could I specify?");
+		controllers.CAnswer.newCommentAnswer(answer.id(), question.id(),
+				"Could I specify?");
 		Comment comment = answer.getComment(0);
-		Secured.deleteCommentAnswer(comment.id(), question.id(), answer.id());
+		CAnswer.deleteCommentAnswer(comment.id(), question.id(), answer.id());
 		assertFalse(answer.comments().contains(question));
 	}
 }

@@ -19,7 +19,7 @@
 #{if user && !user.isBlocked()}
 	<h1>&{'question.ask'}</h1>
 	<div id="askquestion" class="message">
-		#{form @Secured.newQuestion()}
+		#{form @CQuestion.newQuestion()}
 			#{field 'content'}
 				<textarea name="${field.name}" id="newQuestion" class="${field.errorClass}"></textarea>
 			#{/field}

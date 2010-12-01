@@ -54,7 +54,7 @@
 	 		#{elseif user && user.getVeryRecentNewNotification() != null}
 				<div class="notificationInfo">
 					&{'question.newanswer'}:
-					<a href="@{Secured.followNotification(user.getVeryRecentNewNotification().getID())}#answer-${user.getVeryRecentNewNotification().getAbout().id()}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
+					<a href="@{CUser.followNotification(user.getVeryRecentNewNotification().getID())}#answer-${user.getVeryRecentNewNotification().getAbout().id()}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
 				</div>
 			#{/elseif}
 			#{elseif user && user.isBlocked()}
