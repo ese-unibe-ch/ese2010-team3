@@ -674,26 +674,6 @@ public class User implements IObserver {
 		return items;
 	}
 
-	/**
-	 * Checks at Sign Up if the entered username is available. This way we can
-	 * avoid having two User called "SoMeThinG" and "SoMetHinG" which might be
-	 * hard to distinguish
-	 * 
-	 * @param username
-	 * @return true if the username is available.
-	 */
-	public static boolean isAvailable(String username) {
-		for (User user : Database.get().users().all()) {
-			if (user.getName().toLowerCase().equals(username.toLowerCase()))
-				return false;
-		}
-		return true;
-	}
-
-	public static User get(String name) {
-		return Database.get().users().get(name.toLowerCase());
-	}
-
 	public void setDateOfBirth(Date time) {
 		this.dateOfBirth = time;
 	}

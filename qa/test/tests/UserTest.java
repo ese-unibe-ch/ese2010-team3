@@ -33,11 +33,11 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkUsernameAvailable() {
-		assertTrue(User.isAvailable("JaneSmith"));
+		assertTrue(Database.get().users().isAvailable("JaneSmith"));
 		Database.get().users().register("JaneSmith", "janesmith");
-		assertFalse(User.isAvailable("JaneSmith"));
-		assertFalse(User.isAvailable("janesmith"));
-		assertFalse(User.isAvailable("jAnEsMiTh"));
+		assertFalse(Database.get().users().isAvailable("JaneSmith"));
+		assertFalse(Database.get().users().isAvailable("janesmith"));
+		assertFalse(Database.get().users().isAvailable("jAnEsMiTh"));
 	}
 
 	@Test

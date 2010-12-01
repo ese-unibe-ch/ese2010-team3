@@ -136,7 +136,7 @@ public class XMLReadingTest extends UnitTest {
 	public void shouldReadTom() throws SAXException, IOException,
 			ParserConfigurationException {
 		Importer.importXML(this.xml);
-		assertFalse(Database.get().users().needSignUp("sdaau"));
+		assertFalse(Database.get().users().isAvailable("sdaau"));
 	}
 
 	@Test

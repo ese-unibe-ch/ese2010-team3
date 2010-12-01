@@ -149,15 +149,16 @@ public class Application extends Controller {
 	 */
 	public static void signup(@Required String username, String password,
 			String passwordrepeat) {
-
-		if (password.equals(passwordrepeat) && User.isAvailable(username)) {
+		boolean isUsernameAvailable = Database.get().users()
+				.isAvailable(username);
+		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			Database.get().users().register(username, password);
 			// Mark user as connected
 			session.put("username", username);
 			index(0);
 		} else {
 			flash.keep("url");
-			if (!User.isAvailable(username)) {
+			if (!isUsernameAvailable) {
 				flash.error("secure.usernameerror");
 			}
 			if (!password.equals(passwordrepeat)) {
@@ -197,7 +198,18 @@ public class Application extends Controller {
 		render(showUser, biography, canEdit);
 	}
 
-	// TODO Add javadoc
+	/**
+	 * Renders a JSON list combining all the currently used tags starting with a
+	 * given term and the most often used words in a given (question's) content.
+	 * This list can be used for implementing client-side tag autocompletion.
+	 * 
+	 * @param term
+	 *            the part of the tag a user has already entered and that is
+	 *            supposed to be auto-completed
+	 * @param content
+	 *            the content of e.g. a question to search through for often
+	 *            occurring words that might also be useful as tags
+	 */
 	public static void tags(String term, String content) {
 		String tagString = "";
 		for (Tag tag : Database.get().tags().all()) {
