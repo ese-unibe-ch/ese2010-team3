@@ -174,3 +174,5 @@ since.hours=%d heure(s) avant
 since.days=%d jour(s) avant
 since.months=%d mois avant
 since.years=%d an(s) avant
+
+search.placeholder="Chercher question"
