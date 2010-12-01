@@ -16,7 +16,10 @@ import play.mvc.Http;
 import play.mvc.With;
 
 /**
- * The Class CUser.
+ * The controller for all routes that concern the {@link User}
+ * 
+ * @author Group3
+ * 
  */
 @With(Secure.class)
 public class CUser extends Controller {

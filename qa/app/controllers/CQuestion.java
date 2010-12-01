@@ -11,7 +11,10 @@ import play.mvc.Controller;
 import play.mvc.With;
 
 /**
- * The Class CQuestion.
+ * The controller for all routes that concern the {@link Question}'s.
+ * 
+ * @author Group3
+ * 
  */
 @With(Secure.class)
 public class CQuestion extends Controller {
@@ -68,7 +71,8 @@ public class CQuestion extends Controller {
 	 * @param questionId
 	 *            the id of the {@link Question}.
 	 * @param content
-	 *            the content of the {@link Comment}. This field is mandatory.
+	 *            the content of the {@link Comment}. This field is required to
+	 *            be filled out.
 	 */
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {

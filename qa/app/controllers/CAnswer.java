@@ -11,8 +11,12 @@ import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
 
-// TODO: Auto-generated Javadoc
-
+/**
+ * The controller for all routes concerning the {@link Answer}'s.
+ * 
+ * @author Group3
+ * 
+ */
 @With(Secure.class)
 public class CAnswer extends Controller {
 
@@ -46,7 +50,8 @@ public class CAnswer extends Controller {
 	 * @param answerId
 	 *            the id of the {@link Answer}.
 	 * @param content
-	 *            the content of the {@link Comment}. This field is mandatory.
+	 *            the content of the {@link Comment}. This field is required to
+	 *            be filled out.
 	 */
 	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
@@ -65,38 +70,40 @@ public class CAnswer extends Controller {
 	/**
 	 * Adds the liker of a {@link Comment} to an {@link Answer}.
 	 * 
-	 * @param cid
+	 * @param commentId
 	 *            the id of the {@link Comment}.
-	 * @param qid
+	 * @param questionId
 	 *            the id of the {@link Question}.
-	 * @param aid
+	 * @param answerId
 	 *            the id of the {@link Answer}.
 	 */
-	public static void addLikerAnswerComment(int cid, int qid, int aid) {
-		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
-				.getComment(cid);
+	public static void addLikerAnswerComment(int commentId, int questionId,
+			int answerId) {
+		Comment comment = Database.get().questions().get(questionId).getAnswer(
+				answerId).getComment(commentId);
 		comment.addLiker(Session.get().currentUser());
 		flash.success("You like the comment. We're glad to know.");
-		Application.question(qid);
+		Application.question(questionId);
 	}
 
 	/**
 	 * Removes the liker of a {@link Comment} to an {@link Answer}.
 	 * 
-	 * @param cid
+	 * @param commentId
 	 *            the id of the {@link Comment}.
-	 * @param qid
+	 * @param questionId
 	 *            the id of the {@link Question}.
-	 * @param aid
+	 * @param answerId
 	 *            the id of the {@link Answer}.
 	 */
-	public static void removeLikerAnswerComment(int cid, int qid, int aid) {
-		Comment comment = Database.get().questions().get(qid).getAnswer(aid)
-				.getComment(cid);
+	public static void removeLikerAnswerComment(int commentId, int questionId,
+			int answerId) {
+		Comment comment = Database.get().questions().get(questionId).getAnswer(
+				answerId).getComment(commentId);
 		comment.removeLiker(Session.get().currentUser());
 		flash
 				.success("You don't like the comment any longer. Hopefully you'll find other comments you like!");
-		Application.question(qid);
+		Application.question(questionId);
 	}
 
 	/**
@@ -200,8 +207,7 @@ public class CAnswer extends Controller {
 	}
 
 	/**
-	 * Select the best answer to a question. A success message will be
-	 * displayed.
+	 * Select the best answer to a question.
 	 * 
 	 * @param questionId
 	 *            the question id
