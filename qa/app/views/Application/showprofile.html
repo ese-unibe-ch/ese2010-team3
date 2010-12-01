@@ -4,7 +4,7 @@
 #{if user != null && showUser}
 	#{if canEdit}
 		<div class="profilenavi">
-			<a href="@{CUser.editProfile(showUser.getName())}">&{'user.editprofile'}</a>
+			<a href="@{Application.editProfile(showUser.getName())}">&{'user.editprofile'}</a>
 			#{if showUser == user}
 				| <a href="@{Application.deleteuser}">&{'user.deleteaccount'}</a>
 			#{/if}
@@ -98,7 +98,7 @@
 	</div><!-- end showprofile -->
 	#{if canEdit}
 		<div class="profilenavi">
-			<a href="@{CUser.editProfile(showUser.getName())}">&{'user.editprofile'}</a>
+			<a href="@{Application.editProfile(showUser.getName())}">&{'user.editprofile'}</a>
 			#{if showUser == user}
 				| <a href="@{Application.deleteuser}">&{'user.deleteaccount'}</a>
 			#{/if}

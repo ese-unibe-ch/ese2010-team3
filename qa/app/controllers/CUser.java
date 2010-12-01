@@ -285,18 +285,4 @@ public class CUser extends Controller {
 		redirect(referer.value());
 		return true;
 	}
-
-	/**
-	 * Leads to the edit-view of the {@link User}'s profile
-	 * 
-	 * @param userName
-	 *            the name of the {@link User} who owns the profile
-	 */
-	public static void editProfile(String userName) {
-		User showUser = Database.get().users().get(userName);
-		if (!Application.userCanEditProfile(showUser)) {
-			Application.showprofile(userName);
-		}
-		render(showUser);
-	}
 }
