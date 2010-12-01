@@ -300,6 +300,12 @@ public class Application extends Controller {
 		render();
 	}
 
+	/**
+	 * Changes the language of the user interface.
+	 * 
+	 * @param langId
+	 *            an ISO-631-like language code (e.g. en, de, fr)
+	 */
 	public static void selectLanguage(@Required String langId) {
 		if (langId != null) {
 			Lang.change(langId);
