@@ -1,0 +1,166 @@
+# English language message file
+
+# General messages
+hello=|-|1
+or=0r
+previous=Pr3\\/10µ$
+next=|\\|3x7
+back=b4(|{
+recent=R3(3|\\|7
+delete=Ð3£373
+signinorup=P£34$3 £09 1|\\| 0r $19|\\| µp(1ƒ ¥0µ'r3 |\\|3\\/\\/ 70 7|-|1$ $173) 1|\\| 0rÐ3r 70 4$|{ ¥0µr 0\\/\\/|\\| qµ3$710|\\|$, 91\\/3 4|\\|$\\/\\/3r$, (0|\\/||\\/|3|\\|7 4|\\|Ð \\/073 0|\\| qµ3$710|\\|$ 4|\\|Ð 4|\\|$\\/\\/3r$ 4|\\|Ð b3 |\\|071ƒ13Ð \\/\\/|-|3|\\| $0|\\/|3b0Ð¥ 4|\\|$\\/\\/3r$ ¥0µr qµ3$710|\\|$.
+dateformat=ÐÐ.|\\/||\\/|.¥¥¥¥ 0r |\\/||\\/|/ÐÐ/¥¥¥¥
+new=*|\\|3\\/\\/*
+moderator=|\\/|0Ð3r470r
+search=$34r(|-|
+search.button=$34r(|-|
+search.fail=7|-|3r3 1$ |\\|0 qµ3$710|\\| ƒ0µ|\\|Ð |\\/|47(|-|1|\\|9
+statistic=$7471$71(
+numberof=|\\|µ|\\/|b3r 0ƒ
+reason=R34$0|\\|
+english=English
+german=93rm4n
+french=ƒr3n(h
+group3ftw=4 pr0j3(7 b¥ 9r0µp *3*.
+
+# User messages
+user=µ$3r
+user.login=£091|\\|
+user.log_in=£09 1|\\|
+user.logout=£090µ7
+user.signup=$19|\\| µp
+user.profile=Pr0ƒ1£3
+user.nonexistent=|\\|0 $µ(|-| µ$3r
+user.delete=Ð0 ¥0µ r34££¥ \\/\\/4|\\|7 70 Ð3£373 7|-|3 4((0µ|\\|7?
+user.confirmanonymize=¥3$, bµ7 |{33p 4££ qµ3$710|\\|$ 4|\\|Ð 4|\\|$\\/\\/3r$.
+user.confirmdelete=¥3$, Ð3£373 3\\/3r¥7|-|1|\\|9.
+user.abortdelete=|\\|0, 1'\\/3 (|-|4|\\|93Ð |\\/|¥ |\\/|1|\\|Ð.
+user.notification=|\\|071ƒ1(4710|\\|
+user.watchinglist=\\/\\/47(|-|1|\\|9£1$7
+user.mightknowanswer=B¥ 7|-|3 \\/\\/4¥, ¥0µ |\\/|19|-|7 |{|\\|0\\/\\/ 7|-|3 4|\\|$\\/\\/3r 70 7|-|3$3 qµ3$710|\\|$:
+user.norecommention=\\/\\/3'r3 |\\|07 4b£3 70 r3(0|\\/||\\/|3|\\|Ð 4|\\|¥ (|\\/|0r3) qµ3$710|\\|$ ƒ0r ¥0µ 70 4|\\|$\\/\\/3r 47 7|-|3 |\\/|0|\\/|3|\\|7.
+user.editprofile=3Ð17 pr0ƒ1£3
+user.deleteaccount=Ð3£373 4((0µ|\\|7
+user.block=B£0(|{ µ$3r
+user.isblocked=7|-|1$ µ$3r 1$ b£0(|{3Ð
+user.blockedbymoderator=¥0µ |-|4\\/3 b33|\\| b£0(|{3Ð b¥ 4 |\\/|0Ð3r470r.
+user.blockedforreason=B£0(|{3Ð b3(4µ$3
+user.unblocknow=µ|\\|b£0(|{ |\\|0\\/\\/
+user.unblock=µ|\\|b£0(|{ µ$3r
+user.nonexistent=¥0µ'r3 |\\|07 £0993Ð 1|\\| 0r 7|-|3r3 1$ |\\|0 $µ(|-| µ$3r.
+
+# Post messages
+posts.perday=p3r Ð4¥
+posts.perweek=p3r \\/\\/33|{
+posts.permonth=p3r |\\/|0|\\|7|-|
+#   Question messages
+questions=Qµ3$710|\\|$
+question.ask=4$|{ qµ3$710|\\|
+question.label=£4b3£ 7|-|1$ qµ3$710|\\|:
+question.labeleg=3.9. j4\\/4, Ð3$19|\\|, 1Ð34
+question.new=|\\|3\\/\\/ qµ3$710|\\|
+question.add=4ÐÐ |\\|3\\/\\/ qµ3$710|\\|
+question.reallydelete=Ð0 ¥0µ r34££¥ \\/\\/4|\\|7 70 Ð3£373 7|-|3 ƒ0££0\\/\\/1|\\|9 qµ3$710|\\|?
+question.deletenotice=P£34$3 |\\|071(3 7|-|47 3\\/3r¥ 4|\\|$\\/\\/3r 4|\\|Ð (0|\\/||\\/|3|\\|7 r3ƒ3rr1|\\|9 70 7|-|1$ qµ3$710|\\| \\/\\/1££ 4£$0 b3 Ð3£373Ð.
+question.confirmdelete=¥3$, Ð3£373 7|-|1$ qµ3$710|\\|.
+question.abortdelete=|\\|0, 1'\\/3 (|-|4|\\|93Ð |\\/|¥ |\\/|1|\\|Ð.
+question.recommended=R3(0|\\/||\\/|3|\\|Ð3Ð Qµ3$710|\\|$
+question.recommendhint=\\/\\/3'££ 7r¥ 70 £1$7 qµ3$710|\\|$ |-|3r3 |-|4\\/1|\\|9 $1|\\/|1£4r 749$ 0r (0|\\|73|\\|7 70 7|-|0$3 ¥0µ'\\/3 4£r34Ð¥ $µ((3$$ƒµ££¥ 4|\\|$\\/\\/3r3Ð.
+question.related=R3£473Ð qµ3$710|\\|$
+question.locked=7|-|1$ qµ3$710|\\| 1$ £0(|{3Ð. |\\|0 ƒµr7|-|3r 4|\\|$\\/\\/3r$ (4|\\| b3 p0$73Ð.
+question.newanswer=|\\|3\\/\\/ 4|\\|$\\/\\/3r 70 0|\\|3 0ƒ ¥0µr qµ3$710|\\|$
+question.nonexistent=Qµ3$710|\\| Ð03$ |\\|07 3x1$7.
+question.lock=£0(|{
+question.unlock=µ|\\|£0(|{
+#   Answer messages
+answers=4|\\|$\\/\\/3r$
+answer.add=4ÐÐ 4|\\|$\\/\\/3r
+answer.addnew=4ÐÐ |\\|3\\/\\/ 4|\\|$\\/\\/3r
+answer.answeredto=4|\\|$\\/\\/3r3Ð 70
+answer.best=B3$7 4|\\|$\\/\\/3r
+answers.best=B3$7 4|\\|$\\/\\/3r$
+answer.selectasbest=$3£3(7 4$ b3$7
+answers.highrated=|-|19|-| r473Ð 4|\\|$\\/\\/3r$
+#   Comment messages
+comments=(0|\\/||\\/|3|\\|7$
+comment.add=4ÐÐ (0|\\/||\\/|3|\\|7
+comment.addnew=4ÐÐ |\\|3\\/\\/ (0|\\/||\\/|3|\\|7
+comment.ilike=1 £1|{3
+comment.idislike=1 Ð0|\\|'7 £1|{3
+comment.likecountone=µ$3r £1|{3$ 7|-|1$
+comment.likecountmultiple=µ$3r$ £1|{3 7|-|1$
+
+# Notification messages
+notifications=|\\|071ƒ1(4710|\\|$
+notification.inbox=|\\|071ƒ1(4710|\\| 1|\\|b0x
+notification.delete=Ð3£373 |\\|071ƒ1(4710|\\|
+notification.markasread=|\\/|4r|{ 4££ |\\|071ƒ1(4710|\\|$ 4$ r34Ð
+notification.none=|\\|0 |\\|071ƒ1(4710|\\| 4\\/41£4b£3 47 4££ - 90 \\/\\/47(|-| $0|\\/|3 qµ3$710|\\|$!
+watch.hint=¥0µ'££ ƒ1|\\|Ð 4 "\\/\\/47(|-|" £1|\\||{ 0|\\| 7|-|3 p493 0ƒ 3\\/3r¥ 1|\\|Ð1\\/1Ðµ4£ qµ3$710|\\|. ¥0µ'r3 4£$0 4µ70|\\/|471(4££¥ $37 70 \\/\\/47(|-| ¥0µr 0\\/\\/|\\| qµ3$710|\\|$.
+watch.none=¥0µ'r3 |\\|07 \\/\\/47(|-|1|\\|9 4|\\|¥ qµ3$710|\\|$ - 90 \\/\\/47(|-| $0|\\/|3.
+watch.start=\\/\\/47(|-|
+watch.stop=$70p \\/\\/47(|-|1|\\|9
+
+# Admin messages
+administration=4Ð|\\/|1|\\|1$7r4710|\\|
+admin.database=Ð474b4$3
+admin.importxml=1|\\/|p0r7 Ð474b4$3
+admin.cleardb=(£34r 7|-|3 Ð474b4$3
+admin.deletedb=Ð0 ¥0µ r34££¥ \\/\\/4|\\|7 70 Ð3£373 7|-|3 3|\\|71r3 Ð474b4$3? 7|-|3r3 1$ |\\|0 \\/\\/4¥ b4(|{.
+admin.confirmdeletedb=¥3$, |\\|µ|{3 17!
+admin.abortdeletedb=|\\|0, 1'\\/3 (|-|4|\\|93Ð |\\/|¥ |\\/|1|\\|Ð.
+
+# Secure messages
+secure.title=
+secure.username=µ$3r|\\|4|\\/|3
+secure.realname=R34£ |\\|4|\\/|3
+secure.email=3-|\\/|41£
+secure.birthday=B1r7|-|Ð4¥
+secure.age=493
+secure.website=\\/\\/3b$173
+secure.profession=Pr0ƒ3$$10|\\|
+secure.employer=3|\\/|p£0¥3r
+secure.biography=B109r4p|-|¥
+secure.password=P4$$\\/\\/0rÐ
+secure.remember=R3|\\/|3|\\/|b3r |\\/|3
+secure.signin=$19|\\| 1|\\|
+secure.saveprofile=$4\\/3 pr0ƒ1£3
+secure.error=$|-|17, µ|\\||{|\\|0\\/\\/|\\| µ$3r|\\|4|\\/|3 0r p4$$\\/\\/0rÐ.
+secure.logout=¥0µ |-|4\\/3 b33|\\| £0993Ð 0µ7.
+secure.emailerror=$|-|17, 7|-|1$ 1$ |\\|07 4 \\/4£1Ð 3|\\/|41£ 4ÐÐr3$$.
+secure.passwordrepeat=(0|\\|ƒ1r|\\/| P4$$\\/\\/0rÐ
+secure.passworderror=$|-|17, ¥0µ 3|\\|73r3Ð 7\\/\\/0 Ð1ƒƒ3r3|\\|7 P4$$\\/\\/0rÐ$.
+secure.usernameerror=$|-|17, 7|-|1$ µ$3r|\\|4|\\/|3 4£r34Ð¥ 3x1$7$.
+secure.moderatorerror=¥0µ'r3 |\\|07 £0993Ð 1|\\| 4$ 4 |\\/|0Ð3r470r.
+secure.newquestionflash=900Ð £µ(|{ ƒ0r 93771|\\|9 4 r34$0|\\|4b£3 4|\\|$\\/\\/3r!
+secure.emptyquestionerror=P£34$3 Ð0|\\|'7 4$|{ 3|\\/|p7¥ qµ3$710|\\|$.
+secure.newanswerflash=7|-|4|\\||{$ ƒ0r p0$71|\\|9 4|\\| 4|\\|$\\/\\/3r.
+secure.emptyanswererror=P£34$3 Ð0|\\|'7 91\\/3 3|\\/|p7¥ 4|\\|$\\/\\/3r$.
+secure.newcommentquestionflash=|\\/|4¥ ¥0µr (0|\\/||\\/|3|\\|7 b3 |-|3£pƒµ£ 1|\\| (£4r1ƒ¥1|\\|9 7|-|3 qµ3$710|\\|!
+secure.newcommentanswerflash=|\\/|4¥ ¥0µr (0|\\/||\\/|3|\\|7 b3 |-|3£pƒµ£ 1|\\| (£4r1ƒ¥1|\\|9 7|-|3 4|\\|$\\/\\/3r!
+secure.likecommentflash=¥0µ £1|{3 7|-|3 (0|\\/||\\/|3|\\|7. \\/\\/3'r3 9£4Ð 70 |{|\\|0\\/\\/.
+secure.dislikecommentflash=¥0µ Ð0|\\|'7 £1|{3 7|-|3 (0|\\/||\\/|3|\\|7 4|\\|¥ £0|\\|93r. |-|0p3ƒµ££¥ ¥0µ'££ ƒ1|\\|Ð 07|-|3r (0|\\/||\\/|3|\\|7$ ¥0µ £1|{3!
+secure.upvoteflash=¥0µr µp-\\/073 |-|4$ b33|\\| r391$73r3Ð.
+secure.downvoteflash=¥0µr Ð0\\/\\/|\\|-\\/073 |-|4$ b33|\\| r391$73r3Ð.
+secure.questiondeletedflash=7|-|3 qµ3$710|\\| |-|4$ b33|\\| Ð3£373Ð.
+secure.answerdeletedflash=7|-|3 4|\\|$\\/\\/3r |-|4$ b33|\\| Ð3£373Ð.
+secure.commentdeletedflash=7|-|3 (0|\\/||\\/|3|\\|7 |-|4$ b33|\\| Ð3£373Ð.
+secure.userdeletedflash=7|-|3 µ$3r |-|4$ b33|\\| Ð3£373Ð.
+secure.userdeleteerror=¥0µ'r3 |\\|07 4££0\\/\\/3Ð 70 Ð3£373 µ$3r.
+secure.bestanswerflash=\\/\\/3'r3 9£4Ð 7|-|47 ¥0µ'\\/3 b33|\\| |-|3£p3Ð!
+secure.editprofileerror=¥0µ'r3 |\\|07 4££0\\/\\/3Ð 70 3Ð17 7|-|1$ pr0ƒ1£3.
+secure.editprofileflash=7|-|4|\\||{$ ƒ0r |{33p1|\\|9 7|-|1$ qµ3$710|\\|'$ £4b3£$ µp-70-Ð473.
+secure.startwatchquestionflash=¥0µ'r3 |\\|0\\/\\/ \\/\\/47(|-|1|\\|9 7|-|1$ qµ3$710|\\|.
+secure.stopwatchquestionflash=¥0µ'r3 |\\|0 £0|\\|93r \\/\\/47(|-|1|\\|9 7|-|1$ qµ3$710|\\|.
+secure.notificationsmarkedasreadflash=4££ |\\|071ƒ1(4710|\\|$ |-|4\\/3 b33|\\| |\\/|4r|{3Ð 4$ r34Ð.
+secure.deletenotificationflash=¥0µ'\\/3 907 0|\\|3 |\\|071ƒ1(4710|\\| £3$$ 70 (4r3 4b0µ7.
+secure.blockreasonerror=|\\|0 r34$0|\\| 91\\/3|\\|.
+secure.blockuserflash=µ$3r |-|4$ b33|\\| b£0(|{3Ð.
+secure.unlockuserflash=µ$3r |-|4$ b33|\\| µ|\\|b£0(|{3Ð.
+secure.lockquestionflash=7|-|1$ qµ3$710|\\| |-|4$ b33|\\| £0(|{3Ð.
+secure.unlockquestionflash=7|-|1$ qµ3$710|\\| |-|4$ b33|\\| µ|\\|£0(|{3Ð.
+secure.xmlselecterror=P£34$3 $3£3(7 4|\\| X|\\/|£ Ð474b4$3 ƒ1£3 b3ƒ0r3 (£1(|{1|\\|9 '1|\\/|p0r7 Ð474b4$3'
+secure.xmlloadflash=X|\\/|£ ƒ1£3 $µ((3$$ƒµ££¥ £04Ð3Ð 70 7|-|3 Ð474b4$3.
+secure.xmlloaderror=(0µ£Ð|\\|'7 £04Ð x|\\/|£ ƒ1£3!
+secure.cleardberror=¥0µ'r3 4 ƒ|{|\\| |\\|4µ9|-|7¥ b0¥!
+secure.cleardbflash=74bµ£4 r4$4!
