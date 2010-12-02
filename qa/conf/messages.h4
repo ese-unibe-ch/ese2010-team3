@@ -176,3 +176,11 @@ since.months=%d |\\/|0|\\|7|-|[$] 460
 since.years=%d ¥34r[$] 460
 
 search.placeholder="$34r(|-| Cu3$710|\\|"
+
+# Mails
+
+mail.welcome.title=***confirm your ajopi account***
+mail.welcome.hi=***Hi*
+mail.welcome.introduction=***Please confirm your ajopi account by clicking this link:***
+mail.welcome.introduction2=***Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.***
+mail.welcome.team=***Best regards your ajopi team***

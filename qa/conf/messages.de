@@ -176,3 +176,11 @@ since.months=vor %d Monat(en)
 since.years=vor %d Jahr(en)
 
 search.placeholder="Frage suchen"
+
+# Mails
+
+mail.welcome.title=Bestätige dein ajopi-Account
+mail.welcome.hi=Hallo
+mail.welcome.introduction= Bitte bestätige dein ajopi-Account indem du auf folgenden Link klickst:
+mail.welcome.introduction2=Wenn du dein Account bestätigt hast, hast du vollen Zugirff auf ajopi. Benachrichtigungen werden in Zukunft an diese Adresse versandt.
+mail.welcome.team=freundliche Grüsse dein ajopi Team

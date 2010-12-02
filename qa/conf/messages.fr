@@ -176,3 +176,11 @@ since.months=%d mois avant
 since.years=%d an(s) avant
 
 search.placeholder="Chercher question"
+
+# Mails
+
+mail.welcome.title=***confirm your ajopi account***
+mail.welcome.hi=***Hi*
+mail.welcome.introduction=***Please confirm your ajopi account by clicking this link:***
+mail.welcome.introduction2=***Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.***
+mail.welcome.team=***Best regards your ajopi team***
