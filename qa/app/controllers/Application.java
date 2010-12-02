@@ -149,15 +149,12 @@ public class Application extends Controller {
 	 *            the repeated password.
 	 */
 	public static void signup(@Required String username, String password,
-			String passwordrepeat, String email) {
+			String passwordrepeat, @Required String email) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			Database.get().users().register(username, password);
-			String key = Tools.randomStringGenerator(35);
-			Database.get().users().get(username).setEmail(email);
-			Database.get().users().get(username).setConfirmKey(key);
-			Mails.welcome(Database.get().users().get(username), key);
+			Database.get().users().register(username, password, email);
+			Mails.welcome(Database.get().users().get(username));
 			index(0);
 		} else {
 			flash.keep("url");
@@ -329,7 +326,7 @@ public class Application extends Controller {
 		} else
 			flash.error("Wanna silence me? Try again!");
 		if (!CUser.redirectToCallingPage())
-			Application.index(0);
+			index(0);
 	}
 
 	/**
@@ -358,11 +355,15 @@ public class Application extends Controller {
 		.isAvailable(username);
 		if (!existsUser && key.equals(user.getConfirmKey())) {
 			user.confirm();
-			flash.success("You have successfully confirmed your ajopi account!");
-			index(0);
+			flash.success("user.confirm.success");
+			try {
+				Secure.login();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
 		}
 		else {
-			flash.error("The ajopi account of %s is not confirmed or does not consists!", username);
+			flash.error("user.confirm.error");
 			index(0);
 		}
 	}

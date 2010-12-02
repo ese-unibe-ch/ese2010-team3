@@ -16,8 +16,8 @@ public class HotUserDatabase implements IUserDatabase {
 		return this.get(username) == null;
 	}
 
-	public User register(String username, String password) {
-		User user = new User(username, password);
+	public User register(String username, String password, String email) {
+		User user = new User(username, password, email);
 		users.put(username.toLowerCase(), user);
 		return user;
 	}

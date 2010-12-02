@@ -48,6 +48,8 @@ user.blockedforreason=Blocked because
 user.unblocknow=Unblock now
 user.unblock=Unblock user
 user.nonexistent=You're not logged in or there is no such user.
+user.confirm.success=You have successfully confirmed your ajopi account!
+user.confirm.error=The ajopi account is not confirmed or does not consists!
 
 # Post messages
 posts.perday=per day
@@ -181,6 +183,7 @@ search.placeholder="Search question"
 # Mails
 
 mail.welcome.title=confirm your ajopi account
+mail.welcome.subject="Welcome"
 mail.welcome.hi=Hi
 mail.welcome.introduction=Please confirm your ajopi account by clicking this link:
 mail.welcome.introduction2=Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.

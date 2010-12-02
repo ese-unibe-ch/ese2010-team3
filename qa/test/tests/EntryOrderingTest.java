@@ -25,7 +25,7 @@ public class EntryOrderingTest extends UnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		jack = new User("jack", "b");
+		jack = new User("jack", "b", "jack@jack.com");
 		createEntries();
 		voting();
 	}
@@ -42,13 +42,13 @@ public class EntryOrderingTest extends UnitTest {
 
 	private void voteUpNTimes(Entry entry, int n) {
 		for (Integer i = 0; i < n; i++) {
-			entry.voteUp(new User(i.toString(), i.toString()));
+			entry.voteUp(new User(i.toString(), i.toString(),"up@up.com"));
 		}
 	}
 
 	private void voteDownNTimes(Entry entry, int n) {
 		for (Integer i = 0; i < n; i++) {
-			entry.voteDown(new User(i.toString(), i.toString()));
+			entry.voteDown(new User(i.toString(), i.toString(),"down@down.com"));
 		}
 	}
 

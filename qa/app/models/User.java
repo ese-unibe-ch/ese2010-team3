@@ -52,9 +52,11 @@ public class User implements IObserver {
 	 * @param name
 	 *            the name of the <code>User</code>
 	 */
-	public User(String name, String password) {
+	public User(String name, String password, String email) {
 		this.name = name;
 		this.password = Tools.encrypt(password);
+		this.email = email;
+		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
 	}
 

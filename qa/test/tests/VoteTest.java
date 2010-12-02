@@ -20,12 +20,12 @@ public class VoteTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		question = new Question(new User("Jack", "jack"),
+		question = new Question(new User("Jack", "jack", "jack@jack.com"),
 				"Why did the chicken cross the road?");
-		answer = question.answer(new User("James", "james"),
+		answer = question.answer(new User("James", "james", "james@james.com"),
 				"To get to the other side.");
-		bill = new User("Bill", "bill");
-		secondAnswer = question.answer(new User("Paul", "paul"), "Because.");
+		bill = new User("Bill", "bill", "bill@bill.com");
+		secondAnswer = question.answer(new User("Paul", "paul", "paul@paul.com"), "Because.");
 	}
 
 	@Test
@@ -63,10 +63,10 @@ public class VoteTest extends UnitTest {
 	@Test
 	public void shouldCount() {
 		for (int i = 0; i < 11; i++) {
-			answer.voteUp(new User("up" + i, "pw"));
+			answer.voteUp(new User("up" + i, "pw", "up@up.com"));
 		}
 		for (int i = 0; i < 42; i++) {
-			answer.voteDown(new User("down" + i, "pw"));
+			answer.voteDown(new User("down" + i, "pw", "down@down.com"));
 		}
 		assertEquals(answer.upVotes(), 11);
 		assertEquals(answer.downVotes(), 42);

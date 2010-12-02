@@ -26,7 +26,7 @@ public class TagTest extends UnitTest {
 	public void setUp() {
 		Database.clear();
 		tagDB = Database.get().tags();
-		douglas = new User("Douglas", "douglas");
+		douglas = new User("Douglas", "douglas", "duglas@duglas.com");
 		question1 = new Question(douglas, "Why did the chicken cross the road?");
 		question2 = new Question(douglas, "Is this question meaningless?");
 		tagName = "tag";
@@ -121,10 +121,10 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldNotListQuestionWithZeroTags() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
+		User A = new User("A", "a", "a@a.com");
+		User B = new User("B", "b", "b@b.com");
+		User C = new User("C", "c", "c@c.com");
+		User D = new User("D", "d", "d@d.com");
 		Question questionK = new Question(A, "K?");
 		Question questionL = new Question(B, "L?");
 		Question questionM = new Question(C, "M?");
@@ -152,10 +152,10 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldListCorrectOrderOfSimilarQuestions() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
+		User A = new User("A", "a", "a@a.com");
+		User B = new User("B", "b", "b@b.com");
+		User C = new User("C", "c", "c@c.com");
+		User D = new User("D", "d", "d@d.com");
 		Question questionA = new Question(A, "A?");
 		Question questionB = new Question(B, "B?");
 		Question questionC = new Question(C, "C?");

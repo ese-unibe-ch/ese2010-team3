@@ -7,7 +7,6 @@ import models.SystemInformation;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
-import net.sf.oval.constraint.AssertFalse;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,8 +24,8 @@ public class ConfirmationTest extends UnitTest {
 	@Before
 	public void setUp() {
 		savedSysInfo = SystemInformation.get();
-		norbert = new User("Norbert", "norbert");
-		andrew = new User("Andrew", "andrew");
+		norbert = new User("Norbert", "norbert", "norbert@no.com");
+		andrew = new User("Andrew", "andrew", "anderw@an.com");
 	}
 	
 	@After

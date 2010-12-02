@@ -48,6 +48,8 @@ user.blockedforreason=B£0(|{3Ð b3(4µ$3
 user.unblocknow=µ|\\|b£0(|{ |\\|0\\/\\/
 user.unblock=µ|\\|b£0(|{ µ$3r
 user.nonexistent=¥0µ'r3 |\\|07 £0993Ð 1|\\| 0r 7|-|3r3 1$ |\\|0 $µ(|-| µ$3r.
+user.confirm.success=***You have successfully confirmed your ajopi account!***
+user.confirm.error=***The ajopi account is not confirmed or does not consists!***
 
 # Post messages
 posts.perday=p3r Ð4¥
