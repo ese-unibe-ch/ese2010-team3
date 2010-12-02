@@ -48,6 +48,8 @@ user.blockedforreason=Gesperrt weil
 user.unblocknow=Jetzt entsperren
 user.unblock=Entsperren
 user.nonexistent=Du bist nicht eingeloggt oder es existiert kein solcher Benutzer.
+user.expertise=Experte
+user.isnovice=%s ist noch ein Grünschnabel.
 
 # Post messages
 posts.perday=pro Tag

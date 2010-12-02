@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import models.database.Database;
 import models.helpers.IFilter;
@@ -683,4 +684,46 @@ public class User implements IObserver {
 		return "U[" + this.name + "]";
 	}
 
+	/**
+	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
+	 * user from being an expert.
+	 */
+	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
+	/**
+	 * What percentage of most proficient users are considered experts on a
+	 * topic.
+	 */
+	private final int EXPERTISE_PERCENTILE = 20;
+
+	/**
+	 * Determines all the topics this user is an expert in. Each tag is
+	 * considered a topic and a user is considered an expert if he's got a
+	 * minimum of two positive votes (or one accepted best answer) to one of the
+	 * questions with the tag and if his vote count is in the first quintile
+	 * (i.e. at most 20 % of all the answerers for a given topic can be
+	 * experts).
+	 * 
+	 * @return the list of tags for which this user is an expert
+	 */
+	public List<Tag> getExpertise() {
+		Map<Tag, Map<User, Integer>> stats = Database.get().questions()
+				.collectExpertiseStatistics();
+
+		List<Tag> expertise = new ArrayList();
+		for (Tag tag : stats.keySet()) {
+			// ignore tags this user knows nothing about
+			if (!stats.get(tag).containsKey(this))
+				continue;
+			// ignore tags this user knows hardly anything about
+			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD)
+				continue;
+
+			List<User> experts = Mapper.sortByValue(stats.get(tag));
+			if (experts.indexOf(this) + 1 >= (100 - EXPERTISE_PERCENTILE)
+					* 0.01 * experts.size())
+				expertise.add(tag);
+		}
+
+		return expertise;
+	}
 }

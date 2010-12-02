@@ -1,6 +1,8 @@
 package tests;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import models.Question;
 import models.User;
@@ -53,6 +55,14 @@ public class SearchTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldFindByTagOnly() {
+		assertFalse(Database.get().questions().searchFor("tag:relevant")
+				.contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("tag:relevant")
+				.contains(taggedPositive));
+	}
+
+	@Test
 	public void shouldntFindByTagNegative() {
 		assertFalse(Database.get().questions().searchFor("relevant")
 				.contains(taggedNegative));
@@ -97,7 +107,7 @@ public class SearchTest extends UnitTest {
 		assertTrue(jackImportant.contains(taggedNegative));
 
 		List<Question> jackTagged = Database.get().questions()
-				.searchFor("jack plop");
+				.searchFor("jack tag:plop");
 		assertEquals(jackTagged.size(), 1);
 		assertTrue(jackTagged.contains(taggedNegative));
 	}
@@ -106,8 +116,9 @@ public class SearchTest extends UnitTest {
 	public void shouldNotSearchInTags() {
 		List<Question> questions = Database.get().questions().all();
 		assertNotSame(questions.size(), 0);
-		List<Question> tagLess = Mapper.sort(questions, new SearchFilter(
-				"relevant",
+		Set<String> terms = new HashSet();
+		terms.add("relevant");
+		List<Question> tagLess = Mapper.sort(questions, new SearchFilter(terms,
 				null));
 		assertEquals(tagLess.size(), 1);
 		assertTrue(tagLess.contains(fulltextPositive));
@@ -116,6 +127,8 @@ public class SearchTest extends UnitTest {
 	@Test
 	public void shouldHandleNullQuestion() {
 		Question question = new Question(null, "");
-		assertNull(new SearchFilter("relevant", null).visit(question));
+		Set<String> terms = new HashSet();
+		terms.add("relevant");
+		assertNull(new SearchFilter(terms, null).visit(question));
 	}
 }

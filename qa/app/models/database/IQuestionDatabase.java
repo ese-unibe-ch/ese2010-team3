@@ -1,8 +1,10 @@
 package models.database;
 
 import java.util.List;
+import java.util.Map;
 
 import models.Question;
+import models.Tag;
 import models.User;
 
 /**
@@ -107,8 +109,16 @@ public interface IQuestionDatabase {
 	 *            reference question
 	 * @return a list of similar questions sorted desc by relevance.
 	 */
-
 	public List<Question> findSimilar(Question q);
+
+	/**
+	 * Collects for all tags the vote counts for all the users that have
+	 * answered a question labeled with that tag.
+	 * 
+	 * @return a statistics map allowing to either determine the experts for a
+	 *         given tag or the tags this user is an expert for
+	 */
+	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics();
 
 	/**
 	 * Empties the Database.

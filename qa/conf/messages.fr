@@ -48,6 +48,8 @@ user.blockedforreason=Bloqué parce que
 user.unblocknow=Débloquer maintenant
 user.unblock=Débloquer utilisateur
 user.nonexistent=Vous n'êtes pas connectez ou cet utilisateur n'existe pas.
+user.expertise=Expertise
+# user.isnovice=%s is still a novice.
 
 # Post messages
 posts.perday=par jour

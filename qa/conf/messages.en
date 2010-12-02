@@ -48,6 +48,8 @@ user.blockedforreason=Blocked because
 user.unblocknow=Unblock now
 user.unblock=Unblock user
 user.nonexistent=You're not logged in or there is no such user.
+user.expertise=Expertise
+user.isnovice=%s is still a novice.
 
 # Post messages
 posts.perday=per day

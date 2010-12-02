@@ -51,6 +51,15 @@
 				<td class="right">${biography?.raw()}</td>
 			</tr>
 			<tr>
+				<td class="left">&{'user.expertise'}:</td>
+				<td class="right">
+					#{tags tags:showUser.getExpertise() /}
+					#{if showUser.getExpertise().isEmpty()}
+						&{'user.isnovice', showUser.getName().escape()}
+					#{/if}
+				</td>
+			</tr>
+			<tr>
 				<td class="left"><label for="recentquestions">&{'recent'} &{'questions'}:</label>
 				<td class="right">
 					<ul class="showprofile">
