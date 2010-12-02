@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import models.Question;
 import models.SearchEngine.StopWords;
@@ -168,7 +169,27 @@ public class Tools {
 	 * @return the string
 	 */
 	public static String htmlToText(String content) {
-		return StringEscapeUtils.unescapeHtml(Jsoup.clean(content,
-				Whitelist.none()));
+		return StringEscapeUtils.unescapeHtml(Jsoup.clean(content, Whitelist
+				.none()));
+	}
+
+	/**
+	 * Generate a String with random chars
+	 * 
+	 * @param length
+	 *            of the String
+	 * @return the string
+	 */
+	public static String randomStringGenerator(int length) {
+		char[] letters = new char[26];
+		char[] buffer = new char[length];
+		Random random = new Random();
+		for (int i = 0; i < 26; i++)
+			letters[i] = (char) ('a' + i);
+
+		for (int i = 0; i < length; i++)
+			buffer[i] = letters[random.nextInt(letters.length)];
+
+		return new String(buffer);
 	}
 }

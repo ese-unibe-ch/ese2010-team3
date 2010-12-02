@@ -14,6 +14,7 @@ import models.TimeTracker;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
+import notifiers.Mails;
 import play.data.validation.Required;
 import play.i18n.Lang;
 import play.mvc.Before;
@@ -148,13 +149,15 @@ public class Application extends Controller {
 	 *            the repeated password.
 	 */
 	public static void signup(@Required String username, String password,
-			String passwordrepeat) {
+			String passwordrepeat, String email) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			Database.get().users().register(username, password);
-			// Mark user as connected
-			session.put("username", username);
+			String key = Tools.randomStringGenerator(35);
+			Database.get().users().get(username).setEmail(email);
+			Database.get().users().get(username).setConfirmKey(key);
+			Mails.welcome(Database.get().users().get(username), key);
 			index(0);
 		} else {
 			flash.keep("url");
@@ -341,5 +344,26 @@ public class Application extends Controller {
 			showprofile(userName);
 		}
 		render(showUser);
+	}
+	
+	/**
+	 * Confirm a {@link User}'s profile if they clicked on the right link
+	 * 
+	 * @param username of the {@link User}
+	 * @param key for the Confirmation
+	 */
+	public static void confirmUser(String username, String key) {
+		User user = Database.get().users().get(username);
+		boolean existsUser = Database.get().users()
+		.isAvailable(username);
+		if (!existsUser && key.equals(user.getConfirmKey())) {
+			user.confirm();
+			flash.success("You have successfully confirmed your ajopi account!");
+			index(0);
+		}
+		else {
+			flash.error("The ajopi account of %s is not confirmed or does not consists!", username);
+			index(0);
+		}
 	}
 }
