@@ -41,15 +41,6 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	public abstract void unregister(Comment comment);
 
 	/**
-	 * Unregisters the <code>Entry</code> if it gets deleted.
-	 */
-	@Override
-	public void unregister() {
-		unregisterVotes();
-		unregisterUser();
-	}
-
-	/**
 	 * Delete all {@link Vote}s if the <code>Entry</code> gets deleted.
 	 */
 	protected void unregisterVotes() {
@@ -118,7 +109,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (diff == 0)
 			// compare by ID instead of - potentially identical - timestamp
 			// for a guaranteed stable sorting (makes testing easier)
-			return getID() - e.getID();
+			return id() - e.id();
 		return diff;
 	}
 

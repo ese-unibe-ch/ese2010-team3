@@ -16,9 +16,9 @@
 				#{if notification.isNew()}&{'new'}#{/if}
 				#{showProfile notification.getAbout() /} &{'answer.answeredto'}
 				"${notification.getAbout().getQuestion().summary()}":
-				<p><a href="@{CUser.followNotification(notification.getID())}">${notification.getAbout().content().raw()}</a></p>
+				<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().content().raw()}</a></p>
 				#{date notification.getAbout() /}
-				<p class="commands"><a href="@{CUser.deleteNotification(notification.getID())}">delete notification</a></p>
+				<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
 			</div><!-- end message -->
 		#{/list}
 		#{else}

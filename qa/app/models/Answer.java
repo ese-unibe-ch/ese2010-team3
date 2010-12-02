@@ -3,9 +3,8 @@ package models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
-import models.helpers.IDTable;
 
 /**
  * A {@link Entry} containing an answer to a {@link Question}
@@ -17,8 +16,7 @@ import models.helpers.IDTable;
 public class Answer extends Entry {
 
 	private final Question question;
-	private IDTable<Comment> comments;
-	private final int id;
+	private HashMap<Integer, Comment> comments;
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.
@@ -31,11 +29,10 @@ public class Answer extends Entry {
 	 * @param content
 	 *            the answer
 	 */
-	public Answer(int id, User owner, Question question, String content) {
+	public Answer(User owner, Question question, String content) {
 		super(owner, content);
 		this.question = question;
-		this.comments = new IDTable<Comment>();
-		this.id = id;
+		this.comments = new HashMap<Integer, Comment>();
 
 		// make users aware of this new answer
 		question.notifyObservers(this);
@@ -51,9 +48,8 @@ public class Answer extends Entry {
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(this.comments.nextID(), user, this,
-				content);
-		this.comments.add(comment);
+		Comment comment = new Comment(user, this, content);
+		this.comments.put(comment.id(), comment);
 		return comment;
 	}
 
@@ -62,10 +58,10 @@ public class Answer extends Entry {
 	 */
 	@Override
 	public void unregister() {
-		for (Comment comment : this.comments) {
+		for (Comment comment : this.comments.values()) {
 			comment.unregister();
 		}
-		this.comments = new IDTable<Comment>();
+		this.comments = new HashMap<Integer, Comment>();
 
 		this.question.unregister(this);
 		unregisterVotes();
@@ -105,7 +101,7 @@ public class Answer extends Entry {
 	 * @return true if the {@link Comment} belongs to the <code>Answer</code>
 	 */
 	public boolean hasComment(Comment comment) {
-		return this.comments.contains(comment);
+		return this.comments.containsValue(comment);
 	}
 
 	/**
@@ -128,15 +124,6 @@ public class Answer extends Entry {
 	 */
 	public Comment getComment(int id) {
 		return this.comments.get(id);
-	}
-
-	/**
-	 * Id.
-	 * 
-	 * @return the id of the <code>Comment</code>
-	 */
-	public int id() {
-		return this.id;
 	}
 
 	/**

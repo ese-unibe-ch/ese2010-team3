@@ -100,12 +100,12 @@ public class NotificationTest extends UnitTest {
 		assertEquals(norbert.getNotifications().size(), 10);
 
 		Notification first = Collections.max(norbert.getNotifications());
-		assertEquals(norbert.getNotification(first.getID()), first);
+		assertEquals(norbert.getNotification(first.id()), first);
 		assertEquals(norbert.getNotifications().get(9), first);
 
 		for (int i = 0; i < 9; i++) {
-			assertTrue(norbert.getNotifications().get(i).getID() > norbert
-					.getNotifications().get(i + 1).getID());
+			assertTrue(norbert.getNotifications().get(i).id() > norbert
+					.getNotifications().get(i + 1).id());
 		}
 
 		Notification last = Collections.min(norbert.getNotifications());

@@ -147,7 +147,8 @@ public class UserInteractionTest extends FunctionalTest {
 		controllers.CAnswer.newCommentAnswer(answer.id(), question.id(),
 				"Could I specify?");
 		Comment comment = answer.getComment(0);
-		CAnswer.deleteCommentAnswer(comment.id(), question.id(), answer.id());
+		CAnswer.deleteCommentAnswer(comment.id(), question.id(),
+				answer.id());
 		assertFalse(answer.comments().contains(question));
 	}
 }

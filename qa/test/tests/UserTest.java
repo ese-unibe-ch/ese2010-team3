@@ -396,11 +396,9 @@ public class UserTest extends UnitTest {
 		k.setTagString("demo");
 		l.setTagString("demo");
 		k.answer(james, "Because");
-		k.answer(john, "No idea");
-		james.getQuestions().get(0).setBestAnswer(k.getAnswer(1));
+		k.setBestAnswer(k.answer(john, "No idea"));
 		l.answer(kate, "Therefore");
 		assertEquals(0, kate.getSuggestedQuestions().size());
-
 	}
 
 }

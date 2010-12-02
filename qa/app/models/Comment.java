@@ -14,19 +14,15 @@ import java.util.HashSet;
 
 public class Comment extends Entry {
 
-	/** The id. */
-	private final int id;
-
 	/** The entry. */
 	private Entry entry;
 	
 	/** A set of Users who like this Comment */
 	private final HashSet<User> likers;
 
-	public Comment(int id, User owner, Entry entry, String content) {
+	public Comment(User owner, Entry entry, String content) {
 		super(owner, content);
 		this.entry = entry;
-		this.id = id;
 		likers = new HashSet();
 	}
 
@@ -40,15 +36,6 @@ public class Comment extends Entry {
 		this.entry.unregister(this);
 		unregisterUser();
 		this.entry = null;
-	}
-
-	/**
-	 * Id.
-	 * 
-	 * @return the id of the <code>Comment</code>
-	 */
-	public int id() {
-		return this.id;
 	}
 
 	/*

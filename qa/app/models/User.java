@@ -642,7 +642,7 @@ public class User implements IObserver {
 	 * Gets a notification by its id value.
 	 * 
 	 * NOTE: slightly hacky since we don't track notifications in a separate
-	 * IDTable but in this.items like everything else - this should get fixed
+	 * HashMap but in this.items like everything else - this should get fixed
 	 * once we migrate to using a real DB.
 	 * 
 	 * @param id
@@ -651,7 +651,7 @@ public class User implements IObserver {
 	 */
 	public Notification getNotification(int id) {
 		for (Notification n : getNotifications())
-			if (n.getID() == id)
+			if (n.id() == id)
 				return n;
 		return null;
 	}

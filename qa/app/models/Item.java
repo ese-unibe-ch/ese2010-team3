@@ -11,27 +11,13 @@ import java.util.Date;
  */
 public abstract class Item {
 
+	/** This item's owner (or <code>null</code>). */
 	private User owner;
 
-	public User getOwner() {
-		return this.owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
+	/** The date this item was created. */
 	private Date timestamp;
 
-	public Date getTimestamp() {
-		return this.timestamp;
-	}
-
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	/** This entry's ID. */
+	/** This item's ID. */
 	private final int id;
 
 	/** An auto-incrementing counter for producing unique values as IDs. */
@@ -63,7 +49,7 @@ public abstract class Item {
 	}
 
 	/**
-	 * Get the owner of an <code>Item</code>.
+	 * Get the owner of an <code>Item</code> (legacy-style).
 	 * 
 	 * @return the owner
 	 */
@@ -72,7 +58,7 @@ public abstract class Item {
 	}
 
 	/**
-	 * Get the time the <code>Item</code> was created.
+	 * Get the time the <code>Item</code> was created (legacy-style).
 	 * 
 	 * @return the creation date as a UNIX timestamp
 	 */
@@ -81,11 +67,21 @@ public abstract class Item {
 	}
 
 	/**
-	 * Gets this notification's ID value.
+	 * Sets the timestamp of this <code>Item</code> (for importers only).
 	 * 
-	 * @return this notification's ID
+	 * @param timestamp
+	 *            the new timestamp
 	 */
-	public int getID() {
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * Gets this notification's ID value (legacy-style).
+	 * 
+	 * @return this item's ID
+	 */
+	public int id() {
 		return this.id;
 	}
 

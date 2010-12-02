@@ -66,6 +66,6 @@ public class Notification extends Item implements Comparable<Notification> {
 	 */
 	public int compareTo(Notification n) {
 		// sort notifications most-recent one first
-		return n.getID() - getID();
+		return n.id() - id();
 	}
 }

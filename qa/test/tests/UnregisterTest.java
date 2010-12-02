@@ -137,4 +137,14 @@ public class UnregisterTest extends UnitTest {
 		assertNull(questionComment.owner());
 		assertFalse(answer.hasComment(answerComment));
 	}
+
+	@Test
+	public void shouldAllowRepeatedUnregistration() {
+		answer.unregister();
+		answer.unregister();
+
+		jack.anonymize(true, true);
+		question.unregister();
+		question.unregister();
+	}
 }

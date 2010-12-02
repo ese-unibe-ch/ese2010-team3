@@ -2,6 +2,7 @@ package models.database.HotDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,19 +14,19 @@ import models.User;
 import models.SearchEngine.SearchFilter;
 import models.database.Database;
 import models.database.IQuestionDatabase;
-import models.helpers.IDTable;
 import models.helpers.Mapper;
 
 public class HotQuestionDatabase implements IQuestionDatabase {
 
-	private final IDTable<Question> questions = new IDTable();
+	private final HashMap<Integer, Question> questions = new HashMap<Integer, Question>();
 
 	public List<Question> searchFor(String term) {
 		Set<Tag> tags = new HashSet<Tag>();
 		for (String s : term.split("\\W+")) {
 			tags.add(Database.get().tags().get(s));
 		}
-		return Mapper.sort(this.questions, new SearchFilter(term, tags));
+		return Mapper.sort(this.questions.values(),
+				new SearchFilter(term, tags));
 	}
 
 	/**
@@ -58,7 +59,8 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	}
 
 	public int register(Question q) {
-		return this.questions.add(q);
+		this.questions.put(q.id(), q);
+		return q.id();
 	}
 
 	public int count() {
@@ -67,7 +69,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countBestRatedAnswers() {
 		int count = 0;
-		for (Question q : this.questions)
+		for (Question q : this.questions.values())
 			if (q.hasBestAnswer()) {
 				count++;
 			}
@@ -76,7 +78,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countAllAnswers() {
 		int count = 0;
-		for (Question q : this.questions) {
+		for (Question q : this.questions.values()) {
 			count += q.countAnswers();
 		}
 		return count;
@@ -84,7 +86,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	public int countHighRatedAnswers() {
 		int count = 0;
-		for (Question q : this.questions) {
+		for (Question q : this.questions.values()) {
 			for (Answer a : q.answers()) {
 				if (a.isHighRated()) {
 					count += 1;
@@ -95,8 +97,8 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	}
 
 	public List<Question> findSimilar(Question q) {
-		List<Question> result = Mapper.sort(this.questions, new SearchFilter(
-				null, new HashSet<Tag>(q.getTags())));
+		List<Question> result = Mapper.sort(this.questions.values(),
+				new SearchFilter(null, new HashSet<Tag>(q.getTags())));
 		result.remove(q); // don't find the question itself!
 		return result;
 	}
