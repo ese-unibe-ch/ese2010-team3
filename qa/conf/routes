@@ -61,6 +61,8 @@ GET		/setlang/{langId}						Application.selectLanguage
 
 GET		/admin									Application.admin
 
+GET     /captcha                                Application.captcha
+
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 

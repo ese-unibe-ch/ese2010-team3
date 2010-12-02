@@ -18,6 +18,8 @@ import play.data.validation.Required;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.libs.*;
+import play.cache.*;
 
 public class Application extends Controller {
 
@@ -132,7 +134,8 @@ public class Application extends Controller {
 	}
 
 	public static void register() {
-		render();
+	    String randomID = Codec.UUID();
+	    render(randomID);
 	}
 
 	/**
@@ -148,9 +151,14 @@ public class Application extends Controller {
 	 *            the repeated password.
 	 */
 	public static void signup(@Required String username, String password,
-			String passwordrepeat) {
+			String passwordrepeat, @Required String code, String randomID) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
+		validation.equals(code, Cache.get(randomID));
+		    if(validation.hasErrors()) {
+		    	flash.error("captcha.invalid");
+		        render("Application/register.html", randomID);
+		    }
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			Database.get().users().register(username, password);
 			// Mark user as connected
@@ -341,5 +349,17 @@ public class Application extends Controller {
 			showprofile(userName);
 		}
 		render(showUser);
+	}
+	
+	/**
+	 * Generates a random captcha-image.
+	 * 
+	 * @param id
+	 */
+	public static void captcha(String id) {
+	    Images.Captcha captcha = Images.captcha();
+	    String code = captcha.getText("#ff8400");
+	    Cache.set(id, code, "3mn");
+	    renderBinary(captcha);
 	}
 }

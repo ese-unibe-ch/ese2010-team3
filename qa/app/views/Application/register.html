@@ -23,6 +23,15 @@
 					<td><input type="email" name="email" id="email" required /></td>
 				</tr>
 				<tr>
+    				<td>&{'captcha.show'}:</td>
+    				<td><img src="@{Application.captcha(randomID)}" /></td>
+    			</tr>
+    			<tr>
+    				<td>&{'captcha.retype'}:</td>
+    				<input type="hidden" name="randomID" value="${randomID}" />
+    				<td><input type="text" name="code" id="code" size="18" value="" /></td>
+				</tr>
+				<tr>
 					<td></td>
 					<td><input type="submit" id="register" value="&{'user.signup'}" /><td>
 				</tr>
