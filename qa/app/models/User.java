@@ -685,6 +685,17 @@ public class User implements IObserver {
 	}
 
 	/**
+	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
+	 * user from being an expert.
+	 */
+	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
+	/**
+	 * What percentage of most proficient users are considered experts on a
+	 * topic.
+	 */
+	private final int EXPERTISE_PERCENTILE = 20;
+
+	/**
 	 * Determines all the topics this user is an expert in. Each tag is
 	 * considered a topic and a user is considered an expert if he's got a
 	 * minimum of two positive votes (or one accepted best answer) to one of the
@@ -695,56 +706,21 @@ public class User implements IObserver {
 	 * @return the list of tags for which this user is an expert
 	 */
 	public List<Tag> getExpertise() {
-		// collect for all tags the vote counts for all the users that have
-		// answered a question labeled with that tag
-		Map<Tag, Map<User, Integer>> stats = new HashMap();
-		// only check each question (and later answer) once
-		for (Question question : Database.get().questions().all()) {
-			List<Tag> tags = question.getTags();
-			// skip untagged questions
-			if (tags.isEmpty())
-				continue;
-			for (Answer answer : question.answers()) {
-				User user = answer.owner();
-				// don't consider answers by anonymous users
-				if (user == null)
-					continue;
-				for (Tag tag : tags) {
-					// get the statistics for a given tag (initialize them at
-					// the first pass)
-					Map<User, Integer> tagStats = stats.get(tag);
-					if (tagStats == null) {
-						tagStats = new HashMap();
-						stats.put(tag, tagStats);
-					}
-					// update the vote count for this answer's owner
-					Integer count = tagStats.get(user);
-					if (count == null)
-						count = 0;
-					// a best answer count as 5 additional up-votes
-					if (answer.isBestAnswer())
-						count += 5;
-					tagStats.put(user, count + answer.rating());
-				}
-			}
-		}
+		Map<Tag, Map<User, Integer>> stats = Database.get().questions()
+				.collectExpertiseStatistics();
 
-		// collect all the tags for which this user has answered a question,
-		// received at least 2 up-votes (resp. given one best answer) and for
-		// which his/her vote-count lies within the first 20 % of most
-		// proficient users
 		List<Tag> expertise = new ArrayList();
 		for (Tag tag : stats.keySet()) {
 			// ignore tags this user knows nothing about
 			if (!stats.get(tag).containsKey(this))
 				continue;
 			// ignore tags this user knows hardly anything about
-			if (stats.get(tag).get(this) < 2)
+			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD)
 				continue;
 
 			List<User> experts = Mapper.sortByValue(stats.get(tag));
-			Collections.reverse(experts);
-			if (experts.indexOf(this) < 0.2 * experts.size())
+			if (experts.indexOf(this) + 1 >= (100 - EXPERTISE_PERCENTILE)
+					* 0.01 * experts.size())
 				expertise.add(tag);
 		}
 

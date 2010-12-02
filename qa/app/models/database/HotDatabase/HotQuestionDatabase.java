@@ -1,9 +1,12 @@
 package models.database.HotDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import models.Answer;
@@ -20,12 +23,35 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 
 	private final IDTable<Question> questions = new IDTable();
 
+	/**
+	 * Searches through all questions, answers and usernames for the given
+	 * search terms.
+	 * 
+	 * @param term
+	 *            the list of strings that must appear somewhere in a question
+	 *            or its answers. Only letters and numbers are retained. In
+	 *            order to search for questions having a specific tag, use the
+	 *            "tag:<em>tagname</em>" syntax.
+	 * @return a list of all the questions that match <em>all</em> the search
+	 *         criteria.
+	 * 
+	 */
 	public List<Question> searchFor(String term) {
+		Set<String> terms = new HashSet();
 		Set<Tag> tags = new HashSet<Tag>();
-		for (String s : term.split("\\W+")) {
-			tags.add(Database.get().tags().get(s));
+		for (String s : term.toLowerCase().split("\\s+")) {
+			if (s.startsWith("tag:") && s.length() > 4) {
+				// search for tag only
+				terms.add(s);
+				tags.add(Database.get().tags().get(s.substring(4)));
+			} else {
+				// search for this term anywhere, so ignore all non-alphanumeric
+				// characters
+				terms.addAll(Arrays.asList(s.split("\\W+")));
+				tags.add(Database.get().tags().get(s));
+			}
 		}
-		return Mapper.sort(this.questions, new SearchFilter(term, tags));
+		return Mapper.sort(this.questions, new SearchFilter(terms, tags));
 	}
 
 	/**
@@ -99,6 +125,56 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 				null, new HashSet<Tag>(q.getTags())));
 		result.remove(q); // don't find the question itself!
 		return result;
+	}
+
+	/**
+	 * Having given a best answer gives the equivalent of an additional
+	 * BEST_ANSWER_BONUS votes.
+	 */
+	private final int BEST_ANSWER_BONUS = 5;
+
+	/**
+	 * Collects for all tags the vote counts for all the users that have
+	 * answered a question labeled with that tag.
+	 * 
+	 * @return a statistics map allowing to either determine the experts for a
+	 *         given tag or the tags this user is an expert for
+	 */
+	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics() {
+		Map<Tag, Map<User, Integer>> stats = new HashMap();
+		// only check each question (and answer) once
+		for (Question question : Database.get().questions().all()) {
+			List<Tag> tags = question.getTags();
+			// skip untagged questions
+			if (tags.isEmpty())
+				continue;
+			for (Answer answer : question.answers()) {
+				User user = answer.owner();
+				// don't consider answers by the question's author and by
+				// anonymous users
+				if (user == question.owner() || user == null)
+					continue;
+				for (Tag tag : tags) {
+					// get the statistics for a given tag (initialize them at
+					// the first pass)
+					Map<User, Integer> tagStats = stats.get(tag);
+					if (tagStats == null) {
+						tagStats = new HashMap();
+						stats.put(tag, tagStats);
+					}
+					// update the vote count for this answer's owner
+					Integer count = tagStats.get(user);
+					if (count == null)
+						count = 0;
+					// a best answer count as 5 additional up-votes
+					if (answer.isBestAnswer())
+						count += BEST_ANSWER_BONUS;
+					tagStats.put(user, count + answer.rating());
+				}
+			}
+		}
+
+		return stats;
 	}
 
 	public void clear() {

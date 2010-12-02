@@ -130,4 +130,16 @@ public class ExpertiseTest extends UnitTest {
 		for (int i = 0; i < 20; i++)
 			assertEquals(users.get(i).getExpertise().contains(tag), 10 == i);
 	}
+
+	@Test
+	public void shouldNotBeExpertForOwnQuestions() {
+		User james = question.owner();
+		question.setTagString("own-answer");
+		Answer answer = question.answer(james, "Answer");
+		question.setBestAnswer(answer);
+
+		Tag tag = Database.get().tags().get("own-answer");
+		assertEquals(james.getExpertise().size(), 0);
+		assertFalse(question.owner().getExpertise().contains(tag));
+	}
 }

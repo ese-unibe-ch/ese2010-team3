@@ -51,6 +51,14 @@ public class SearchTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldFindByTagOnly() {
+		assertFalse(Database.get().questions().searchFor("tag:relevant")
+				.contains(fulltextPositive));
+		assertTrue(Database.get().questions().searchFor("tag:relevant")
+				.contains(taggedPositive));
+	}
+
+	@Test
 	public void shouldntFindByTagNegative() {
 		assertFalse(Database.get().questions().searchFor("relevant")
 				.contains(taggedNegative));
@@ -95,7 +103,7 @@ public class SearchTest extends UnitTest {
 		assertTrue(jackImportant.contains(taggedNegative));
 
 		List<Question> jackTagged = Database.get().questions()
-				.searchFor("jack plop");
+				.searchFor("jack tag:plop");
 		assertEquals(jackTagged.size(), 1);
 		assertTrue(jackTagged.contains(taggedNegative));
 	}

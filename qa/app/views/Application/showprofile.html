@@ -53,14 +53,10 @@
 			<tr>
 				<td class="left">&{'user.expertise'}:</td>
 				<td class="right">
-					<div class="tags">
-						#{list items:showUser.getExpertise(), as:'tag'}
-							<a href="@{Application.search(tag.getName())}" class="tag">${tag.getName().escape()}</a>
-						#{/list}
-						#{else}
-							&{'user.isnovice', showUser.getName().escape()}
-						#{/else}
-					</div>
+					#{tags tags:showUser.getExpertise() /}
+					#{if showUser.getExpertise().isEmpty()}
+						&{'user.isnovice', showUser.getName().escape()}
+					#{/if}
 				</td>
 			</tr>
 			<tr>
