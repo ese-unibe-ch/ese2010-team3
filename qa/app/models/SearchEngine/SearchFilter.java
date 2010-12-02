@@ -107,10 +107,10 @@ public class SearchFilter implements IFilter<Question, Double> {
 		String content = entry.content();
 		if (entry.owner() != null)
 			content += " " + entry.owner().getName();
-		Set<String> words = getWords(content);
 		if (this.queryFulltext == null)
 			return 0;
-		if (this.queryFulltext.isEmpty() || words.isEmpty())
+		Set<String> words = getWords(content);
+		if (words.isEmpty())
 			return 0;
 		mustHave.removeAll(words);
 		return 1.0 * intersection(words, this.queryFulltext).size()
@@ -148,7 +148,8 @@ public class SearchFilter implements IFilter<Question, Double> {
 	 */
 	private Set<String> getWords(String string) {
 		if (string == null)
-			return null;
+			return new HashSet();
+
 		// this isn't ideally placed...
 		string = Tools.htmlToText(string);
 

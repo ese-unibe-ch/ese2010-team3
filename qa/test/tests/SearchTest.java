@@ -4,7 +4,9 @@ import java.util.List;
 
 import models.Question;
 import models.User;
+import models.SearchEngine.SearchFilter;
 import models.database.Database;
+import models.helpers.Mapper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -98,5 +100,22 @@ public class SearchTest extends UnitTest {
 				.searchFor("jack plop");
 		assertEquals(jackTagged.size(), 1);
 		assertTrue(jackTagged.contains(taggedNegative));
+	}
+
+	@Test
+	public void shouldNotSearchInTags() {
+		List<Question> questions = Database.get().questions().all();
+		assertNotSame(questions.size(), 0);
+		List<Question> tagLess = Mapper.sort(questions, new SearchFilter(
+				"relevant",
+				null));
+		assertEquals(tagLess.size(), 1);
+		assertTrue(tagLess.contains(fulltextPositive));
+	}
+
+	@Test
+	public void shouldHandleNullQuestion() {
+		Question question = new Question(null, "");
+		assertNull(new SearchFilter("relevant", null).visit(question));
 	}
 }

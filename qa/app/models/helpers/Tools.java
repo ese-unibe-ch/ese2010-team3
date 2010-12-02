@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,7 +141,7 @@ public class Tools {
 		if (index * entriesPerPage <= limit)
 			return entries.subList(index * entriesPerPage, limit);
 
-		return entries;
+		return new ArrayList<Question>();
 	}
 
 	public static int determineMaximumIndex(List<Question> questions,

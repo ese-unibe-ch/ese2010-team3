@@ -93,6 +93,7 @@ public class CommentTest extends UnitTest {
 		List<Comment> comments = answer.comments();
 		assertTrue(comments.contains(commentAnswer));
 		assertTrue(comments.contains(newComment));
+		assertEquals(comments.get(0), answer.getComment(comments.get(0).id()));
 		assertEquals(2, comments.size());
 	}
 
@@ -137,5 +138,16 @@ public class CommentTest extends UnitTest {
 		assertEquals(0,commentAnswer.countLikers());
 		commentAnswer.addLiker(james);
 		assertEquals(1,commentAnswer.countLikers());
+	}
+
+	@Test
+	public void shouldMakeCoberturaHappy() {
+		boolean hasSeenException = false;
+		try {
+			commentAnswer.unregister(commentAnswer);
+		} catch (IllegalArgumentException ex) {
+			hasSeenException = true;
+		}
+		assertTrue(hasSeenException);
 	}
 }

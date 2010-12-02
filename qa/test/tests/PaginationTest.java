@@ -175,4 +175,11 @@ public class PaginationTest extends UnitTest {
 				questionsPerPage, index);
 		assertEquals(1, questions.size());
 	}
+
+	@Test
+	public void shouldYieldEmptyPagesAfterEnd() {
+		List<Question> questions = Tools.paginate(Database.get().questions()
+				.all(), questionsPerPage, 1);
+		assertEquals(0, questions.size());
+	}
 }

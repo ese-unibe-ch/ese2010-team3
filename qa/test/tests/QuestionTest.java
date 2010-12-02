@@ -63,6 +63,10 @@ public class QuestionTest extends UnitTest {
 	@Test
 	public void getOnlyImportantWords() {
 		assertEquals(Tools.extractImportantWords(""), "");
+		assertEquals(Tools.extractImportantWords("a b"), "");
+		assertEquals(Tools.extractImportantWords("a bc"), "");
+		assertEquals(Tools.extractImportantWords("ab"), "");
+		assertEquals(Tools.extractImportantWords("a "), "");
 		assertEquals(Tools.extractImportantWords("abcde"), "");
 		assertEquals(Tools.extractImportantWords("abcd abcd abcd abcd d"),
 				"abcd");

@@ -120,4 +120,8 @@ public class AnswerTest extends UnitTest {
 		assertTrue(answer.isBestAnswer());
 	}
 
+	@Test
+	public void shouldCompareToQuestion() {
+		assertEquals(answer.compareTo(question), 1);
+	}
 }

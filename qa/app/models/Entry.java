@@ -26,6 +26,8 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public Entry(User owner, String content) {
 		super(owner);
+		if (content == null)
+			content = "";
 		this.content = content;
 		this.votes = new HashMap<User, Vote>();
 	}
