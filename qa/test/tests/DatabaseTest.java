@@ -33,9 +33,9 @@ public class DatabaseTest extends UnitTest {
 		IUserDatabase userDB = Database.get().users();
 		userDB.clear();
 
-		User admin = userDB.register("admin", "admin");
+		User admin = userDB.register("admin", "admin", "admin@example.com");
 		admin.setModerator(true);
-		User user = userDB.register("user", "user");
+		User user = userDB.register("user", "user", "user@example.com");
 		assertEquals(2, userDB.all().size());
 		assertEquals(2, userDB.count());
 		assertEquals(1, userDB.allModerators().size());
