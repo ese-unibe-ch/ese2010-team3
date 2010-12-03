@@ -193,7 +193,8 @@ public class XMLParser extends DefaultHandler {
 	protected void createAnswer(Element e) {
 		ProtoAnswer answer = new ProtoAnswer();
 		try {
-			answer.ownerid = new Integer(e.getText("ownerid"));
+			answer.ownerid = e.getText("ownerid").equals("") ? -1
+					: new Integer(e.getText("ownerid"));
 			answer.questionid = new Integer(e.getText("questionid"));
 			answer.title = e.getText("title");
 			answer.body = e.getText("body");
@@ -217,8 +218,7 @@ public class XMLParser extends DefaultHandler {
 						+ protoquestion.ownerid);
 
 			String content = protoquestion.body;
-			if (protoquestion.title != null)
-				content = "<h3>" + protoquestion.title + "</h3>\n" + content;
+			content = "<h3>" + protoquestion.title + "</h3>\n" + content;
 			Question question = Database.get().questions().add(owner, content);
 			question.setTimestamp(protoquestion.creation);
 			this.idQuestionBase.put(protoquestion.id, question);
@@ -233,8 +233,7 @@ public class XMLParser extends DefaultHandler {
 			User owner = this.idUserBase.get(ans.ownerid);
 
 			String content = ans.body;
-			if (ans.title != null)
-				content = "<h3>" + ans.title + "</h3>\n" + content;
+			content = "<h3>" + ans.title + "</h3>\n" + content;
 			Answer answer = question.answer(owner, content);
 			answer.setTimestamp(ans.creation);
 			if (ans.accepted) {

@@ -152,7 +152,7 @@ public class NotificationTest extends UnitTest {
 		question.answer(andrew, "soon to be gone");
 		assertEquals(norbert.getNotifications().size(), 1);
 		assertNotNull(norbert.getVeryRecentNewNotification());
-		andrew.anonymize(true, true);
+		andrew.anonymize(true);
 		andrew.delete();
 		assertEquals(norbert.getNotifications().size(), 1);
 		assertNotNull(norbert.getVeryRecentNewNotification());
@@ -160,23 +160,37 @@ public class NotificationTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldUnregisterNotifications() {
+		norbert.observe(question, question.answer(andrew, "???"));
+		Notification notification = norbert.getNotifications().get(0);
+		assertNotNull(notification.owner());
+		norbert.anonymize(true);
+		norbert.delete();
+		assertNull(notification.owner());
+	}
+
+	@Test
 	public void shouldOnlyNotifyAboutAnswersForNow() {
-		norbert.observe(new IObservable() {
+		IObservable unobservable = new IObservable() {
 			public void addObserver(IObserver o) {
 			}
-
 			public void removeObserver(IObserver o) {
 			}
-
 			public boolean hasObserver(IObserver o) {
 				return false;
 			}
-
 			public void notifyObservers(Object arg) {
 			}
-		}, null);
+		};
+		norbert.observe(unobservable, null);
 		norbert.observe(question, null);
 		assertEquals(norbert.getNotifications().size(), 0);
+
+		// keep Cobertura happy
+		unobservable.addObserver(norbert);
+		unobservable.removeObserver(norbert);
+		assertFalse(unobservable.hasObserver(norbert));
+		unobservable.notifyObservers(norbert);
 	}
 
 	@Test

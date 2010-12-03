@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Question;
+import models.SystemInformation;
 import models.Tag;
 import models.User;
 import models.database.Database;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import play.test.UnitTest;
+import tests.mocks.SystemInformationMock;
 
 public class UserTest extends UnitTest {
 
@@ -65,11 +67,6 @@ public class UserTest extends UnitTest {
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
 		user.setSHA1Password("bill2");
 		assertFalse(user.checkPW("bill"));
-
-		// Source: wikipedia.org/wiki/Examples_of_SHA_digests
-		assertEquals(Tools.encrypt(""),
-				"da39a3ee5e6b4b0d3255bfef95601890afd80709");
-		assertFalse(Tools.encrypt("password").equals(Tools.encrypt("Password")));
 	}
 
 	@Test
@@ -124,6 +121,7 @@ public class UserTest extends UnitTest {
 		User user2 = new User("Cheater", "cheater");
 		assertFalse(user.isBlocked());
 		assertFalse(user2.isBlocked());
+		assertFalse(user2.isMaybeCheater());
 		assertEquals(user.getStatusMessage(), "");
 		assertEquals(user2.getStatusMessage(), "");
 		for (int i = 0; i < 5; i++) {
@@ -139,6 +137,22 @@ public class UserTest extends UnitTest {
 		assertEquals(user.getStatusMessage(), "");
 	}
 	
+	@Test
+	public void shouldAllowVotingOften() {
+		User voter = new User("Voter", "voter");
+		User user1 = new User("User1", "user1");
+		User user2 = new User("User2", "user2");
+
+		for (int i = 0; i < 5; i++) {
+			new Question(user1, "Q1-" + i).voteUp(voter);
+			new Question(user2, "Q2-" + i).voteUp(voter);
+		}
+
+		assertFalse(voter.isMaybeCheater());
+		new Question(user1, "Q1-last").voteUp(voter);
+		assertTrue(voter.isMaybeCheater());
+	}
+
 	@Test
 	public void shouldNotBeAbleToEditForeignPosts() {
 		User user1 = new User("Jack", "jack");
@@ -234,6 +248,10 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveRecentEntries() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+
 		User user = new User("Jack", "jack");
 		assertEquals(0, user.getRecentQuestions().size());
 		assertEquals(0, user.getRecentAnswers().size());
@@ -245,8 +263,10 @@ public class UserTest extends UnitTest {
 		assertEquals(1, user.getRecentAnswers().size());
 		assertEquals(1, user.getRecentComments().size());
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++) {
+			sys.second(i);
 			question.answer(user, "Answer " + i);
+		}
 		assertEquals(3, user.getRecentAnswers().size());
 		assertFalse(user.getRecentAnswers().contains(answer));
 	}
@@ -301,6 +321,9 @@ public class UserTest extends UnitTest {
 		assertEquals(1, user5.getSuggestedQuestions().size());
 		assertEquals(m, user5.getSuggestedQuestions().get(0));
 
+		n.answer(user5, "and then some");
+		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(m, user5.getSuggestedQuestions().get(0));
 	}
 
 	@Test
@@ -323,6 +346,57 @@ public class UserTest extends UnitTest {
 
 		assertEquals(3, user5.getSuggestedQuestions().size());
 		assertEquals(m, user5.getSuggestedQuestions().get(0));
+	}
+
+	@Test
+	public void shouldSuggestSixQuestionsMax() {
+		User user3 = new User("User3", "user3");
+		User user5 = new User("User5", "user5");
+		for (int i = 0; i < 10; i++) {
+			Question q = new Question(user3, "Hard question " + i);
+			q.setTagString("demo");
+		}
+
+		Question q = new Question(user3, "Simple question");
+		q.setTagString("demo");
+		q.answer(user5, "Simple!");
+
+		assertEquals(6, user5.getSuggestedQuestions().size());
+	}
+
+	@Test
+	public void shouldNotSuggestSameQuestionTwice() {
+		User user5 = new User("User5", "user5");
+		Question q = new Question(null, "suggest me!");
+		q.setTagString("demo");
+		Question r = new Question(null, "answer me!");
+		r.setTagString("demo");
+		r.answer(user5, "ok");
+		Question s = new Question(null, "answer me, too!");
+		s.setTagString("demo");
+		s.answer(user5, "ok");
+
+		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(q, user5.getSuggestedQuestions().get(0));
+	}
+
+	@Test
+	public void shouldNotSuggestOldQuestions() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+
+		User user5 = new User("User5", "user5");
+		Question q = new Question(null, "suggest me!");
+		q.setTagString("demo");
+
+		Question r = new Question(null, "answer me!");
+		r.setTagString("demo");
+		r.answer(user5, "ok");
+
+		assertEquals(1, user5.getSuggestedQuestions().size());
+		sys.year(2001);
+		assertEquals(0, user5.getSuggestedQuestions().size());
 	}
 
 	@Test
@@ -431,6 +505,26 @@ public class UserTest extends UnitTest {
 		k.setBestAnswer(k.answer(john, "No idea"));
 		l.answer(kate, "Therefore");
 		assertEquals(0, kate.getSuggestedQuestions().size());
+	}
+
+	@Test
+	public void shouldNotSuggestQuestionsWithManyAnswers() {
+		User user3 = new User("User3", "user3");
+		User user5 = new User("User5", "user5");
+
+		Question p = new Question(user3, "Hard question");
+		p.setTagString("demo");
+		Question q = new Question(user3, "Simple question");
+		q.setTagString("demo");
+
+		q.answer(user5, "Simple!");
+		assertEquals(1, user5.getSuggestedQuestions().size());
+
+		for (int i = 0; i < 9; i++)
+			p.answer(null, "anonymous genious!");
+		assertEquals(1, user5.getSuggestedQuestions().size());
+		p.answer(null, "yet another anonymous genious!");
+		assertEquals(0, user5.getSuggestedQuestions().size());
 	}
 
 	@Test

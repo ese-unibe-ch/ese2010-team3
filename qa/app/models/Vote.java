@@ -10,8 +10,8 @@ package models;
  */
 public class Vote extends Item {
 
-	private boolean up;
-	private Entry entry;
+	private final boolean up;
+	private final Entry entry;
 
 	/**
 	 * Create a <code>Vote</code>.
@@ -33,6 +33,7 @@ public class Vote extends Item {
 	 * Unregister the <code>Vote</code> to both it's owners, the {@link User}
 	 * and the {@link Entry}.
 	 */
+	@Override
 	public void unregister() {
 		this.entry.unregister(this);
 		unregisterUser();
@@ -47,4 +48,12 @@ public class Vote extends Item {
 		return this.up;
 	}
 
+	/**
+	 * Returns the entry this vote is for.
+	 * 
+	 * @return a question or answer that's been voted for
+	 */
+	public Entry getEntry() {
+		return this.entry;
+	}
 }

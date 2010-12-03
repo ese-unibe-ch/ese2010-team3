@@ -145,7 +145,7 @@ public class TagTest extends UnitTest {
 		Question questionN = new Question(D, "N?");
 		Question questionO = new Question(D, "O?");
 
-		questionK.setTagString("J K Z");
+		questionK.setTagString(" J K Z");
 		questionL.setTagString(" ");
 		questionM.setTagString(" ");
 		questionN.setTagString("");
@@ -194,6 +194,14 @@ public class TagTest extends UnitTest {
 		assertEquals(similar.size(), 5);
 		assertTrue(SetOperations.arrayEquals(possibility1, similar.toArray())
 				|| SetOperations.arrayEquals(possibility2, similar.toArray()));
+	}
+
+	@Test
+	public void shouldIgnoreDuplicates() {
+		question1.setTagString("double double double");
+		assertEquals(countTags("double"), 1);
+		assertEquals(question1.getTags().size(), 1);
+		assertEquals(question1.getTags().get(0), tagDB.get("double"));
 	}
 
 	private int countTags(String name) {

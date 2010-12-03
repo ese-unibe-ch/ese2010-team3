@@ -167,14 +167,17 @@ public class User implements IObserver {
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
 	public boolean isMaybeCheater() {
+		int voteCount = 0;
 		HashMap<User, Integer> votesForUser = new HashMap<User, Integer>();
 		for (Item item : this.items) {
 			if (item instanceof Vote && ((Vote) item).up()) {
-				Integer count = votesForUser.get(item.owner());
+				Vote vote = (Vote) item;
+				Integer count = votesForUser.get(vote.getEntry().owner());
 				if (count == null) {
 					count = 0;
 				}
-				votesForUser.put(item.owner(), count + 1);
+				votesForUser.put(vote.getEntry().owner(), count + 1);
+				voteCount++;
 			}
 		}
 
@@ -182,23 +185,22 @@ public class User implements IObserver {
 			return false;
 
 		Integer maxCount = Collections.max(votesForUser.values());
-		return (maxCount > 3 && 1.0 * maxCount / votesForUser.size() > 0.5);
+		return maxCount > 3 && maxCount > 0.5 * voteCount;
 	}
 
 	/**
 	 * Anonymizes all questions, answers and comments by this user.
 	 * 
-	 * @param doAnswers
-	 *            - whether to anonymize this user's answers as well
-	 * @param doComments
-	 *            - whether to anonymize this user's comments as well
+	 * @param keepOnlyQuestions
+	 *            whether to anonymize this user's answers and comments as well
+	 *            or whether to just keep his/her questions
 	 */
-	public void anonymize(boolean doAnswers, boolean doComments) {
+	public void anonymize(boolean keepOnlyQuestions) {
 		// operate on a clone to prevent a ConcurrentModificationException
 		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
-			if (item instanceof Question || doAnswers && item instanceof Answer
-					|| doComments && item instanceof Comment) {
+			if (item instanceof Question || keepOnlyQuestions
+					&& item instanceof Entry) {
 				((Entry) item).anonymize();
 				this.items.remove(item);
 			}
@@ -498,7 +500,7 @@ public class User implements IObserver {
 			for (Question similarQ : q.getSimilarQuestions()) {
 				if (!suggestedQuestions.contains(similarQ)
 						&& !sortedAnsweredQuestions.contains(similarQ)
-						&& !similarQ.owner().equals(this)
+						&& similarQ.owner() != this
 						&& !similarQ.isOldQuestion()
 						&& similarQ.countAnswers() < 10
 						&& !similarQ.hasBestAnswer()) {
@@ -545,11 +547,7 @@ public class User implements IObserver {
 		List recentItems = getItemsByType(type);
 		Collections.sort(recentItems, new Comparator<Item>() {
 			public int compare(Item i1, Item i2) {
-				// sort by timestamp or by id (to ensure a stable sort)
-				int diff = i2.timestamp().compareTo(i1.timestamp());
-				if (diff != 0)
-					return diff;
-				return i2.id() - i1.id();
+				return i2.timestamp().compareTo(i1.timestamp());
 			}
 		});
 		if (recentItems.size() > 3)
@@ -635,13 +633,12 @@ public class User implements IObserver {
 		 */
 		List<Notification> notifications = getItemsByType(Notification.class);
 		for (Notification n : notifications) {
-			if (n.getAbout() instanceof Answer) {
-				Answer answer = (Answer) n.getAbout();
-				if (answer.getQuestion() != null) {
-					result.add(n);
-				} else {
-					n.unregister();
-				}
+			// currently, we only notify about answers
+			Answer answer = (Answer) n.getAbout();
+			if (answer.getQuestion() != null) {
+				result.add(n);
+			} else {
+				n.unregister();
 			}
 		}
 		return result;

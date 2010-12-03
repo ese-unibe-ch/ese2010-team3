@@ -23,18 +23,33 @@ import org.pegdown.PegDownProcessor;
 public class Tools {
 
 	/**
-	 * Encrypt the password with SHA-1.
+	 * Digest a password with the SHA-1 hash algorithm.
 	 * 
 	 * @param password
-	 * @return the encrypted password
+	 * @return the fingerprint of the password
 	 */
 	public static String encrypt(String password) {
+		return digest(password, "SHA-1");
+	}
+
+	/**
+	 * Calculates a digital fingerprint for a given string with a given hash
+	 * algorithm such as MD5 or SHA-1.
+	 * 
+	 * @param string
+	 *            the string to calculate the fingerprint for
+	 * @param hashAlgorithm
+	 *            the hash algorithm to be used (e.g. MD5 or SHA-1)
+	 * @return a hex digest of at most 32 chars for MD5 or 40 chars for SHA-1
+	 *         (or <code>null</code> if the desired algorithm isn't available)
+	 */
+	public static String digest(String string, String hashAlgorithm) {
 		try {
-			MessageDigest m = MessageDigest.getInstance("SHA-1");
-			return new BigInteger(1, m.digest(password.getBytes()))
+			MessageDigest m = MessageDigest.getInstance(hashAlgorithm);
+			return new BigInteger(1, m.digest(string.getBytes()))
 					.toString(16);
 		} catch (NoSuchAlgorithmException e) {
-			return password;
+			return null;
 		}
 	}
 

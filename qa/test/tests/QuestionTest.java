@@ -82,6 +82,7 @@ public class QuestionTest extends UnitTest {
 				"asdf hello mnbv qwer text");
 	}
 
+	@Test
 	public void shouldBeOldQuestion() {
 		User user2 = new User("User2", "user2");
 		SystemInformationMock sys = new SystemInformationMock();

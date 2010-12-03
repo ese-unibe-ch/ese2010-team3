@@ -353,14 +353,12 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Determines whether the question is old (Older than 120 days).
 	 * 
-	 * 
-	 * 
 	 * @return boolean
 	 */
 	public boolean isOldQuestion() {
-		long diff = SystemInformation.get().now().getTime()
-				- timestamp().getTime();
-		return ((diff / (1000 * 60 * 60 * 24) > 120));
+		double dayDiff = (double) (SystemInformation.get().now().getTime() - timestamp()
+				.getTime()) / (1000 * 60 * 60 * 24);
+		return dayDiff > 120;
 	}
 
 	public int countAnswers() {

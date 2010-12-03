@@ -113,8 +113,8 @@ public class ExpertiseTest extends UnitTest {
 					&& i < 13);
 
 		assertEquals(john.getExpertise().size(), 0);
-		users.get(10).anonymize(true, true);
-		users.get(11).anonymize(true, true);
+		users.get(10).anonymize(true);
+		users.get(11).anonymize(true);
 		assertEquals(john.getExpertise().size(), 1);
 	}
 

@@ -106,8 +106,8 @@ public class UnregisterTest extends UnitTest {
 
 	@Test
 	public void testUserQuestionAnonymization() {
-		jack.anonymize(false, false);
-		john.anonymize(false, false);
+		jack.anonymize(false);
+		john.anonymize(false);
 
 		assertNull(question.owner());
 		assertEquals(question.upVotes(), 1);
@@ -117,9 +117,9 @@ public class UnregisterTest extends UnitTest {
 
 	@Test
 	public void testUserAnonymization() {
-		jack.anonymize(true, false);
+		jack.anonymize(true);
 		jack.delete();
-		john.anonymize(true, false);
+		john.anonymize(true);
 		john.delete();
 
 		assertNull(question.owner());
@@ -129,9 +129,9 @@ public class UnregisterTest extends UnitTest {
 
 		assertNotNull(questionComment.owner());
 		assertNotNull(answerComment.owner());
-		michael.anonymize(true, true);
+		michael.anonymize(true);
 		michael.delete();
-		sahra.anonymize(true, false);
+		sahra.anonymize(false);
 		sahra.delete();
 		assertTrue(question.hasComment(questionComment));
 		assertNull(questionComment.owner());
@@ -143,7 +143,7 @@ public class UnregisterTest extends UnitTest {
 		answer.unregister();
 		answer.unregister();
 
-		jack.anonymize(true, true);
+		jack.anonymize(true);
 		question.unregister();
 		question.unregister();
 	}

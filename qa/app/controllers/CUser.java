@@ -57,7 +57,7 @@ public class CUser extends Controller {
 	public static void anonymizeUser(String name) throws Throwable {
 		User user = Database.get().users().get(name);
 		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			user.anonymize(true, false);
+			user.anonymize(true);
 		}
 		deleteUser(name);
 	}

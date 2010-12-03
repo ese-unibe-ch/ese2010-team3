@@ -183,6 +183,50 @@ public class XMLReadingTest extends UnitTest {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);
+
+		hasThrown = false;
+		try {
+			Importer.importXML("<QA><questions><question/></questions></QA>");
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
+		try {
+			Importer.importXML(xml.replace("title>", "ignored>"));
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
+		try {
+			Importer.importXML(xml.replace("<ownerid>277826</ownerid>",
+					"<ownerid>13</ownerid>"));
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
+		try {
+			Importer.importXML(xml.replace("<questionid>4119991</questionid>",
+					"<questionid>37</questionid>"));
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+	}
+
+	@Test
+	public void shouldTolerateSomeMissingValues() throws SAXException,
+			IOException, ParserConfigurationException {
+		Importer.importXML(xml.replace("<ownerid>277826</ownerid>",
+				"<ownerid/>").replace("<answer id=\"4120453\">", "<answer>"));
+		Question question = Database.get().questions().all().get(0);
+		assertNull(question.owner());
+		assertNull(question.answers().get(0).owner());
 	}
 
 	@Test

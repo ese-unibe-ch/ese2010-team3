@@ -80,6 +80,19 @@ public class ToolsTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldDigestPasswords() {
+		// Source: http://en.wikipedia.org/wiki/Examples_of_SHA_digests
+		assertEquals(Tools.encrypt(""),
+				"da39a3ee5e6b4b0d3255bfef95601890afd80709");
+		assertNotSame(Tools.encrypt("password"), Tools.encrypt("Password"));
+
+		// Source: http://en.wikipedia.org/wiki/MD5#MD5_hashes
+		assertEquals(Tools.digest("", "MD5"),
+				"d41d8cd98f00b204e9800998ecf8427e");
+		assertNull(Tools.digest("a", "Cobertura-Dummy-Algo"));
+	}
+
+	@Test
 	public void shouldMakeCoberturaHappy() {
 		new Mapper();
 		new Tools();
