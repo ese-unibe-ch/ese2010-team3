@@ -18,7 +18,8 @@ public class Session implements ISession {
 	}
 
 	public User currentUser() {
-		return Database.get().users().get(
-				controllers.Secure.Security.connected());
+		if (!Secure.Security.isConnected())
+			return null;
+		return Database.get().users().get(Secure.Security.connected());
 	}
 }

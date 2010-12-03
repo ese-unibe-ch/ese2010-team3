@@ -26,9 +26,8 @@ public class Application extends Controller {
 
 	@Before
 	static void setConnectedUser() {
-		if (controllers.Secure.Security.isConnected()) {
-			User user = Database.get().users().get(
-					controllers.Secure.Security.connected());
+		if (Secure.Security.isConnected()) {
+			User user = Database.get().users().get(Secure.Security.connected());
 			renderArgs.put("user", user);
 		}
 	}
@@ -294,7 +293,8 @@ public class Application extends Controller {
 	 * clear the database.
 	 */
 	public static void admin() {
-		if (!Session.get().currentUser().isModerator()) {
+		User user = Session.get().currentUser();
+		if (user == null || !user.isModerator()) {
 			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
@@ -305,7 +305,8 @@ public class Application extends Controller {
 	 * Leads the the clearDB page.
 	 */
 	public static void clearDB() {
-		if (!Session.get().currentUser().isModerator()) {
+		User user = Session.get().currentUser();
+		if (user == null || !user.isModerator()) {
 			flash.error("secure.moderatorerror");
 			Application.index(0);
 		}
@@ -335,7 +336,7 @@ public class Application extends Controller {
 	 * @param userName
 	 *            the name of the {@link User} who owns the profile
 	 */
-	public static void editProfile(String userName) {
+	public static void editProfile(@Required String userName) {
 		User showUser = Database.get().users().get(userName);
 		if (!userCanEditProfile(showUser)) {
 			showprofile(userName);
@@ -349,10 +350,9 @@ public class Application extends Controller {
 	 * @param username of the {@link User}
 	 * @param key for the Confirmation
 	 */
-	public static void confirmUser(String username, String key) {
+	public static void confirmUser(@Required String username, String key) {
 		User user = Database.get().users().get(username);
-		boolean existsUser = Database.get().users()
-		.isAvailable(username);
+		boolean existsUser = Database.get().users().isAvailable(username);
 		if (!existsUser && key.equals(user.getConfirmKey())) {
 			user.confirm();
 			flash.success("user.confirm.success");
