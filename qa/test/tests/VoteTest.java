@@ -69,7 +69,7 @@ public class VoteTest extends UnitTest {
 			answer.voteUp(new User("up" + i, "pw"));
 		}
 		for (int i = 0; i < 42; i++) {
-			answer.voteDown(new User("down" + i, "pw"));
+			answer.voteDown(new User("down" + i, "down"));
 		}
 		assertEquals(answer.upVotes(), 11);
 		assertEquals(answer.downVotes(), 42);

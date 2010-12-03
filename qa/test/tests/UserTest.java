@@ -35,7 +35,7 @@ public class UserTest extends UnitTest {
 	@Test
 	public void checkUsernameAvailable() {
 		assertTrue(Database.get().users().isAvailable("JaneSmith"));
-		Database.get().users().register("JaneSmith", "janesmith");
+		Database.get().users().register("JaneSmith", "janesmith", "jane@smith.com");
 		assertFalse(Database.get().users().isAvailable("JaneSmith"));
 		assertFalse(Database.get().users().isAvailable("janesmith"));
 		assertFalse(Database.get().users().isAvailable("jAnEsMiTh"));
@@ -256,26 +256,26 @@ public class UserTest extends UnitTest {
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 
-		User a = new User("a", "a");
-		User b = new User("b", "b");
-		User c = new User("c", "c");
-		User d = new User("d", "d");
-		User e = new User("e", "e");
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		User E = new User("E", "e");
 
-		q.answers().get(0).voteUp(a);
-		q.answers().get(0).voteUp(b);
-		q.answers().get(0).voteUp(c);
-		q.answers().get(0).voteUp(d);
-		q.answers().get(0).voteUp(e);
+		q.answers().get(0).voteUp(A);
+		q.answers().get(0).voteUp(B);
+		q.answers().get(0).voteUp(C);
+		q.answers().get(0).voteUp(D);
+		q.answers().get(0).voteUp(E);
 
 		assertEquals(1, user.highRatedAnswers().size());
 		assertTrue(Database.get().questions().countHighRatedAnswers() > 0);
 
-		a.delete();
-		b.delete();
-		c.delete();
-		d.delete();
-		e.delete();
+		A.delete();
+		B.delete();
+		C.delete();
+		D.delete();
+		E.delete();
 
 		assertEquals(0, user.highRatedAnswers().size());
 	}
