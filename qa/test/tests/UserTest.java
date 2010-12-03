@@ -21,13 +21,13 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldCreateUser() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		assertTrue(user != null);
 	}
 
 	@Test
 	public void shouldBeCalledJack() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		assertEquals(user.getName(), "Jack");
 	}
 
@@ -51,14 +51,14 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkMailAssertion() {
-		User user = new User("Bill", "bill", "bill@bill.com");
+		User user = new User("Bill", "bill");
 		user.setEmail("bill@aol.com");
 		assertEquals(user.getEmail(), "bill@aol.com");
 	}
 
 	@Test
 	public void checkPassw() {
-		User user = new User("Bill", "bill", "bill@bill.com");
+		User user = new User("Bill", "bill");
 		assertTrue(user.checkPW("bill"));
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
 		assertEquals(Tools.encrypt(""),
@@ -71,7 +71,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		user.setDateOfBirth("14.9.1987");
 		user.setBiography("I lived");
 		user.setEmail("test@test.tt");
@@ -91,7 +91,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForSpammer() {
-		User user = new User("Spammer", "spammer", "spammer@spam.com");
+		User user = new User("Spammer", "spammer");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		assertTrue(user.howManyItemsPerHour() == 0);
@@ -114,8 +114,8 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForCheater() {
-		User user = new User("TheSupported", "supported", "support@help.com");
-		User user2 = new User("Cheater", "cheater", "cheat@cheater.com");
+		User user = new User("TheSupported", "supported");
+		User user2 = new User("Cheater", "cheater");
 		assertFalse(user.isBlocked());
 		assertFalse(user2.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
@@ -135,9 +135,9 @@ public class UserTest extends UnitTest {
 	
 	@Test
 	public void shouldNotBeAbleToEditForeignPosts() {
-		User user1 = new User("Jack", "jack", "jack@jack.com");
-		User user2 = new User("John", "john", "john@john.com");
-		User user3 = new User("Geronimo", "geronimo", "geronimo@geronimo.go");
+		User user1 = new User("Jack", "jack");
+		User user2 = new User("John", "john");
+		User user3 = new User("Geronimo", "geronimo");
 		user1.setModerator(true);
 		Question q = new Question(user2, "Can you edit this post?");
 		/* moderator should be able to edit the question */
@@ -151,7 +151,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneQuestion() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		assertEquals(1, user.getQuestions().size());
 		q.unregister();
@@ -159,7 +159,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoQuestion() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.unregister();
 		assertEquals(0, user.getQuestions().size());
@@ -167,7 +167,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneAnswer() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		assertEquals(1, user.getAnswers().size());
@@ -175,7 +175,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoAnswer() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.answers().get(0).unregister();
@@ -184,7 +184,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneBestAnswer() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -193,7 +193,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoBestAnswer() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -203,7 +203,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testModerator() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		assertFalse(user.isModerator());
 		user.setModerator(true);
 		assertTrue(user.isModerator());
@@ -211,7 +211,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testBlock() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		user.block("offending comments");
@@ -225,15 +225,15 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneHighRatedAnswer() {
-		User user = new User("Jack", "jack", "jack@jack.com");
+		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 
-		User A = new User("A", "a", "a@a.com");
-		User B = new User("B", "b", "b@b.com");
-		User C = new User("C", "c", "c@c.com");
-		User D = new User("D", "d", "d@d.com");
-		User E = new User("E", "e", "e@e.com");
+		User A = new User("A", "a");
+		User B = new User("B", "b");
+		User C = new User("C", "c");
+		User D = new User("D", "d");
+		User E = new User("E", "e");
 
 		q.answers().get(0).voteUp(A);
 		q.answers().get(0).voteUp(B);
@@ -254,9 +254,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldSuggestQuestion() {
-		User user3 = new User("User3", "user3", "user3@user.com");
-		User user4 = new User("User4", "user4", "user4@user.com");
-		User user5 = new User("User5", "user5", "user5@user.com");
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 
@@ -273,9 +273,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldSuggestThreeQuestions() {
-		User user3 = new User("User3", "user3", "user3@user.com");
-		User user4 = new User("User4", "user4", "user4@user.com");
-		User user5 = new User("User5", "user5", "user5@user.com");
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -295,9 +295,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldSuggestQuestionsFromBestAnswersFirst() {
-		User user3 = new User("User3", "user3", "user3@user.com");
-		User user4 = new User("User4", "user4", "user4@user.com");
-		User user5 = new User("User5", "user5", "user5@user.com");
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -320,9 +320,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldSuggestQuestionsSortedByRatingOfAnswers() {
-		User user3 = new User("User3", "user3", "user3@user.com");
-		User user4 = new User("User4", "user4", "user4@user.com");
-		User user5 = new User("User5", "user5", "user5@user.com");
+		User user3 = new User("User3", "user3");
+		User user4 = new User("User4", "user4");
+		User user5 = new User("User5", "user5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -352,9 +352,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldNotSuggestQuestionsFromBadAnswers() {
-		User user6 = new User("User6", "user6", "user6@user.com");
-		User user7 = new User("User7", "user7", "user7@user.com");
-		User user8 = new User("User8", "user8", "user8@user.com");
+		User user6 = new User("User6", "user6");
+		User user7 = new User("User7", "user7");
+		User user8 = new User("User8", "user8");
 		Question m = new Question(user6, "Why?");
 		Question n = new Question(user7, "Where?");
 		Question o = new Question(user6, "Who?");
@@ -374,8 +374,8 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldNotSuggestOwnQuestions() {
-		User user = new User("Jack", "jack", "jack@jack.com");
-		User user2 = new User("John", "john", "john@john.com");
+		User user = new User("Jack", "jack");
+		User user2 = new User("John", "john");
 		Question q = new Question(user, "Why?");
 		Question f = new Question(user2, "Where?");
 		q.setTagString("demo");
@@ -387,9 +387,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldNotSuggestQuestionsWithBestAnswer() {
-		User james = new User("James", "james", "james@james.com");
-		User john = new User("John", "john", "john@john.com");
-		User kate = new User("Kate", "kate", "kate@kate.com");
+		User james = new User("James", "james");
+		User john = new User("John", "john");
+		User kate = new User("Kate", "kate");
 		Question k = new Question(james, "Why?");
 		Question l = new Question(john, "Where?");
 

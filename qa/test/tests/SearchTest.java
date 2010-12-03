@@ -21,8 +21,8 @@ public class SearchTest extends UnitTest {
 	@Before
 	public void setUp() throws Exception {
 		Database.clear();
-		User jack = new User("Jack","", "jack@jack.com");
-		User jill = new User("Jill","", "jill@jill.com");
+		User jack = new User("Jack","");
+		User jill = new User("Jill","");
 		fulltextPositive = new Question(jack,"This is relevant.");
 		fulltextNegative = new Question(jill,"This is not.");
 		taggedPositive   = new Question(jack,"This is about an important thing.");

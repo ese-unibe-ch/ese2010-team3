@@ -24,7 +24,7 @@ public class UserInteractionTest extends FunctionalTest {
 
 	@Before
 	public void setUp() throws Exception {
-		jack = new User("Jack", "", "jack@jack.com");
+		jack = new User("Jack", "");
 		session = new SessionMock();
 		session.loginAs(jack);
 		Session.mockWith(session);
@@ -87,7 +87,7 @@ public class UserInteractionTest extends FunctionalTest {
 	public void shouldVoteQuestion() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
 		Question question = Database.get().questions().searchFor("why").get(0);
-		User jill = new User("Jill", "", "jill@jill.com");
+		User jill = new User("Jill", "");
 		session.loginAs(jill);
 		CQuestion.voteQuestionDown(question.id());
 		assertEquals(-1, question.rating());
@@ -101,7 +101,7 @@ public class UserInteractionTest extends FunctionalTest {
 		Question question = Database.get().questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
-		User jill = new User("Jill", "", "jill@jill.com");
+		User jill = new User("Jill", "");
 		session.loginAs(jill);
 		CAnswer.voteAnswerDown(question.id(), answer.id());
 		assertEquals(-1, answer.rating());

@@ -21,7 +21,7 @@ public class QuestionTest extends UnitTest {
 	@Before
 	public void setUp() {
 		savedSysInfo = SystemInformation.get();
-		this.user = new User("Jack", "jack", "jack@jack.com");
+		this.user = new User("Jack", "jack");
 		this.question = new Question(user,
 				"Why did the chicken cross the road?");
 	}
@@ -79,7 +79,7 @@ public class QuestionTest extends UnitTest {
 	}
 
 	public void shouldBeOldQuestion() {
-		User user2 = new User("User2", "user2", "user2@user.com");
+		User user2 = new User("User2", "user2");
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
@@ -91,7 +91,7 @@ public class QuestionTest extends UnitTest {
 
 	@Test
 	public void shouldNotBeOldQuestion() {
-		User user2 = new User("User2", "user2", "user2@user.com");
+		User user2 = new User("User2", "user2");
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);

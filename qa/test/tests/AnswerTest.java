@@ -29,18 +29,18 @@ public class AnswerTest extends UnitTest {
 		savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
-		james = new User("James", "jack", "jack@jack.com");
+		james = new User("James", "jack");
 
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 		questionDate = sys.now();
 		sys.changeTo(questionDate);
-		question = new Question(new User("Jack", "jack", "jack@j.com"),
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 		sys.minute(5);
 		answerDate = sys.now();
 		sys.changeTo(answerDate);
 
-		question = new Question(new User("Jack", "jack", "jack@jack.com"),
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 
 		answer = question.answer(james, "To get to the other side.");
@@ -90,11 +90,11 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldBeHighRated() {
-		User a = new User("a", "a", "a@a.com");
-		User b = new User("b", "b", "b@b.com");
-		User c = new User("c", "c", "c@c.com");
-		User d = new User("d", "d", "d@d.com");
-		User e = new User("e", "e", "e@e.com");
+		User a = new User("a", "a");
+		User b = new User("b", "b");
+		User c = new User("c", "c");
+		User d = new User("d", "d");
+		User e = new User("e", "e");
 
 		answer.voteUp(a);
 		answer.voteUp(b);

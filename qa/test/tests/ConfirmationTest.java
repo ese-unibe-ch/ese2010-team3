@@ -24,8 +24,8 @@ public class ConfirmationTest extends UnitTest {
 	@Before
 	public void setUp() {
 		savedSysInfo = SystemInformation.get();
-		norbert = new User("Norbert", "norbert", "norbert@no.com");
-		andrew = new User("Andrew", "andrew", "anderw@an.com");
+		norbert = new User("Norbert", "norbert");
+		andrew = new User("Andrew", "andrew");
 	}
 	
 	@After

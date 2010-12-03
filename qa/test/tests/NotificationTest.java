@@ -26,9 +26,9 @@ public class NotificationTest extends UnitTest {
 	@Before
 	public void setUp() {
 		savedSysInfo = SystemInformation.get();
-		norbert = new User("Norbert", "norbert", "norbert@no.com");
+		norbert = new User("Norbert", "norbert");
 		question = new Question(norbert, "Need I be watched?");
-		andrew = new User("Andrew", "andrew", "anderw@an.com");
+		andrew = new User("Andrew", "andrew");
 	}
 
 	@After

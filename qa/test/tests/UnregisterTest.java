@@ -28,12 +28,12 @@ public class UnregisterTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		jack = new User("Jack", "jack", "jack@jack.com");
-		john = new User("John", "john", "john@john.com");
-		bill = new User("Bill", "bill", "bill@bill.com");
-		kate = new User("Kate", "kate", "kate@kate.com");
-		sahra = new User("Sahra", "sahra", "sahra@sahra.com");
-		michael = new User("Michael", "michael", "michel@michael.com");
+		jack = new User("Jack", "jack");
+		john = new User("John", "john");
+		bill = new User("Bill", "bill");
+		kate = new User("Kate", "kate");
+		sahra = new User("Sahra", "sahra");
+		michael = new User("Michael", "michael");
 		question = new Question(jack, "Why did the chicken cross the road?");
 		answer = question.answer(john, "To get to the other side.");
 		questionVote = question.voteUp(kate);

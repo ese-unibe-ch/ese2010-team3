@@ -30,8 +30,8 @@ public class CommentTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		james = new User("James", "james", "james@james.com");
-		question = new Question(new User("Jack", "jack", "jack@jack.com"),
+		james = new User("James", "james");
+		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 		answer = question.answer(james, "To get to the other side.");
 		generateComments();
@@ -39,7 +39,7 @@ public class CommentTest extends UnitTest {
 
 	private void generateComments() {
 		commentQuestion = question.comment(james, "Strange Question!");
-		commentAnswer = answer.comment(new User("Jill", "jill", "jill@jill.com"), "Good point!");
+		commentAnswer = answer.comment(new User("Jill", "jill"), "Good point!");
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class CommentTest extends UnitTest {
 	@Test
 	public void shouldClearLikersList() {
 		commentAnswer.addLiker(james);
-		commentAnswer.addLiker(new User("anonym", "1234", "an@an.com"));
+		commentAnswer.addLiker(new User("anonym", "1234"));
 		assertTrue(commentAnswer.getLikers().size() > 0);
 		commentAnswer.clearAllLikers();
 		assertTrue(commentAnswer.getLikers().isEmpty());

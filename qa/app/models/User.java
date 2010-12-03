@@ -60,6 +60,20 @@ public class User implements IObserver {
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
 	}
+	
+	/**
+	 * Only for tests: 
+	 * Creates a <code>User</code> with a given name.
+	 * 
+	 * @param name
+	 *            the name of the <code>User</code>
+	 */
+	public User(String name, String password) {
+		this.name = name;
+		this.password = Tools.encrypt(password);
+		this.confirmKey = Tools.randomStringGenerator(35);
+		this.items = new HashSet<Item>();
+	}
 
 	public boolean canEdit(Entry entry) {
 		return (entry.owner() == this && !isBlocked()) || isModerator();

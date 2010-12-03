@@ -44,9 +44,9 @@ public class ExpertiseTest extends UnitTest {
 
 		users = new ArrayList();
 		for (int i = 0; i < 20; i++)
-			users.add(new User("user " + i, "", "user@user.com"));
-		john = new User("John", "john", "john@john.com");
-		question = new Question(new User("James", "james", "james@james.com"),
+			users.add(new User("user " + i, ""));
+		john = new User("John", "john");
+		question = new Question(new User("James", "james"),
 				"Question");
 	}
 
