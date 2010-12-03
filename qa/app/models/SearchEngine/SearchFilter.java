@@ -171,9 +171,6 @@ public class SearchFilter implements IFilter<Question, Double> {
 	 * @return a set of words for easier rating through intersections
 	 */
 	private Set<String> getWords(String string) {
-		if (string == null)
-			return new HashSet();
-
 		// this isn't ideally placed...
 		string = Tools.htmlToText(string);
 

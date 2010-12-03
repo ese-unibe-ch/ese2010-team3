@@ -25,20 +25,15 @@ public class Element {
 	private final Map<String, List<Element>> subelements;
 	private Element parent;
 
-	public Element(String name_, Map<String, String> attributes) {
-		this(name_);
+	public Element(String name, Map<String, String> attributes) {
+		this(name);
 		this.attrs = attributes;
 	}
 
-	public Element(String name_) {
-		this.name = name_;
+	public Element(String name) {
+		this.name = name;
 		this.subelements = new HashMap<String, List<Element>>();
 		this.text = new StringBuilder();
-	}
-
-	public Element(String name_, Element parent_) {
-		this(name_);
-		this.parent = parent_;
 	}
 
 	@Override
@@ -113,16 +108,6 @@ public class Element {
 
 	public Element getParent() {
 		return this.parent;
-	}
-
-	/**
-	 * Checks if there are subelements of the type <code>tag</code>
-	 * 
-	 * @param tag
-	 * @return true iff one can navigate to that tag.
-	 */
-	public boolean has(String tag) {
-		return this.subelements.containsKey(tag);
 	}
 
 	public String getArg(String string) {

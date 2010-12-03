@@ -18,9 +18,9 @@ import java.util.Map;
  * 
  */
 public class Syntax {
-	private String name;
-	private Syntax parent;
-	private Map<String, Syntax> subsyntax;
+	private final String name;
+	private final Syntax parent;
+	private final Map<String, Syntax> subsyntax;
 	private Action callback;
 
 	private Syntax(String name, Syntax parent) {
@@ -51,6 +51,7 @@ public class Syntax {
 		return this.subsyntax.get(tag);
 	}
 
+	@Override
 	public String toString() {
 		return "S[" + this.name + "](" + this.subsyntax.toString() + ")";
 	}

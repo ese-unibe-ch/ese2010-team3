@@ -2,6 +2,7 @@ package tests;
 
 import java.text.ParseException;
 
+import models.Answer;
 import models.Question;
 import models.User;
 import models.database.Database;
@@ -61,17 +62,20 @@ public class UserTest extends UnitTest {
 		User user = new User("Bill", "bill");
 		assertTrue(user.checkPW("bill"));
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
+		user.setSHA1Password("bill2");
+		assertFalse(user.checkPW("bill"));
+
+		// Source: wikipedia.org/wiki/Examples_of_SHA_digests
 		assertEquals(Tools.encrypt(""),
-				"da39a3ee5e6b4b0d3255bfef95601890afd80709"); // Source:
-
-		// wikipedia.org/wiki/Examples_of_SHA_digests
+				"da39a3ee5e6b4b0d3255bfef95601890afd80709");
 		assertFalse(Tools.encrypt("password").equals(Tools.encrypt("Password")));
-
 	}
 
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
 		User user = new User("Jack", "jack");
+		assertEquals(user.getAge(), 0);
+
 		user.setDateOfBirth("14.9.1987");
 		user.setBiography("I lived");
 		user.setEmail("test@test.tt");
@@ -81,12 +85,13 @@ public class UserTest extends UnitTest {
 		user.setWebsite("http://www.test.ch");
 
 		assertEquals(user.getAge(), 23);
-		assertTrue(user.getBiography().equalsIgnoreCase("I lived"));
-		assertTrue(user.getEmail().equals("test@test.tt"));
-		assertTrue(user.getEmployer().equals("TestInc"));
-		assertTrue(user.getFullname().equals("Test Tester"));
-		assertTrue(user.getProfession().equals("tester"));
-		assertTrue(user.getWebsite().equals("http://www.test.ch"));
+		assertEquals(user.getDateOfBirth(), "14.09.1987");
+		assertEquals(user.getBiography(), "I lived");
+		assertEquals(user.getEmail(), "test@test.tt");
+		assertEquals(user.getEmployer(), "TestInc");
+		assertEquals(user.getFullname(), "Test Tester");
+		assertEquals(user.getProfession(), "tester");
+		assertEquals(user.getWebsite(), "http://www.test.ch");
 	}
 
 	@Test
@@ -144,6 +149,9 @@ public class UserTest extends UnitTest {
 		assertTrue(user1.canEdit(q));
 		/* owner should be able to edit the question */
 		assertTrue(user2.canEdit(q));
+		/* blocked owner should not be able to edit the question */
+		user2.block("for testing");
+		assertFalse(user2.canEdit(q));
 		/* user that is neither a moderator nor the owner of
 		   the question should NOT be able to edit the question */
 		assertFalse(user3.canEdit(q));
@@ -224,6 +232,25 @@ public class UserTest extends UnitTest {
 	}
 
 	@Test
+	public void shouldHaveRecentEntries() {
+		User user = new User("Jack", "jack");
+		assertEquals(0, user.getRecentQuestions().size());
+		assertEquals(0, user.getRecentAnswers().size());
+		assertEquals(0, user.getRecentComments().size());
+		Question question = new Question(user, "Question");
+		Answer answer = question.answer(user, "Answer");
+		question.comment(user, "Comment");
+		assertEquals(1, user.getRecentQuestions().size());
+		assertEquals(1, user.getRecentAnswers().size());
+		assertEquals(1, user.getRecentComments().size());
+
+		for (int i = 0; i < 4; i++)
+			question.answer(user, "Answer " + i);
+		assertEquals(3, user.getRecentAnswers().size());
+		assertFalse(user.getRecentAnswers().contains(answer));
+	}
+
+	@Test
 	public void shouldHaveOneHighRatedAnswer() {
 		User user = new User("Jack", "jack");
 		Question q = new Question(user, "Why?");
@@ -242,6 +269,7 @@ public class UserTest extends UnitTest {
 		q.answers().get(0).voteUp(e);
 
 		assertEquals(1, user.highRatedAnswers().size());
+		assertTrue(Database.get().questions().countHighRatedAnswers() > 0);
 
 		a.delete();
 		b.delete();

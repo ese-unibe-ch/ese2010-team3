@@ -7,6 +7,7 @@ import models.ISystemInformation;
 import models.Question;
 import models.SystemInformation;
 import models.User;
+import models.database.Database;
 
 import org.junit.After;
 import org.junit.Before;
@@ -115,9 +116,10 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldBeBestAnswer() {
+		assertTrue(question.isBestAnswerSettable());
 		question.setBestAnswer(answer);
-
 		assertTrue(answer.isBestAnswer());
+		assertTrue(Database.get().questions().countBestRatedAnswers() > 0);
 	}
 
 	@Test

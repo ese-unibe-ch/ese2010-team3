@@ -126,9 +126,19 @@ public class SearchTest extends UnitTest {
 
 	@Test
 	public void shouldHandleNullQuestion() {
-		Question question = new Question(null, "");
+		Question question = new Question(null, null);
 		Set<String> terms = new HashSet();
 		terms.add("relevant");
 		assertNull(new SearchFilter(terms, null).visit(question));
+	}
+
+	@Test
+	public void shouldHandleInvalidSyntax() {
+		Question question = new Question(null, "about tag 'relevant'");
+		Set<String> terms = new HashSet();
+		terms.add("tag:");
+		List<Question> found = Database.get().questions().searchFor("tag:");
+		assertEquals(1, found.size());
+		assertTrue(found.contains(question));
 	}
 }

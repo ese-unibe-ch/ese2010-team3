@@ -75,22 +75,8 @@ public class Tag implements Comparable<Tag> {
 		return this.name.compareTo(other.name);
 	}
 
-	/*
-	 * Static interface to access tags from controller
-	 */
-
 	@Override
 	public String toString() {
 		return "Tag(" + this.name + ")";
-	}
-
-	public boolean equals(Object o) {
-		if (o instanceof Tag) {
-			Tag t = (Tag) o;
-			return t.getName().equalsIgnoreCase(this.name);
-		}
-		if (o instanceof String)
-			return ((String) o).equalsIgnoreCase(this.name);
-		return false;
 	}
 }

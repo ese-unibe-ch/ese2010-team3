@@ -163,4 +163,16 @@ public class XMLReadingTest extends UnitTest {
 		assertFalse(question.content().startsWith("<![CDATA["));
 		assertFalse(question.answers().get(0).content().contains("<![CDATA["));
 	}
+
+	@Test
+	public void shouldCheckSemantics() throws SAXException, IOException,
+			ParserConfigurationException {
+		Importer.importXML("<invalid />");
+		Importer.importXML("<QA><answers><answer><ownerid>666</ownerid><questionid>999</questionid></answer></answers></QA>");
+	}
+
+	@Test
+	public void shouldMakeCoberturaHappy() {
+		new Importer();
+	}
 }

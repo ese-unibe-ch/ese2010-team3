@@ -43,9 +43,12 @@ public class VoteTest extends UnitTest {
 		assertEquals(question.upVotes(), 1);
 		assertEquals(question.downVotes(), 0);
 		assertTrue(question.hasUpVote(bill));
+		assertEquals(question.getVotes().size(), 1);
+
 		assertEquals(answer.upVotes(), 1);
 		assertEquals(answer.downVotes(), 0);
 		assertTrue(answer.hasUpVote(bill));
+		assertFalse(answer.hasUpVote(answer.owner()));
 	}
 
 	@Test
@@ -130,5 +133,18 @@ public class VoteTest extends UnitTest {
 		this.question.setBestAnswer(this.secondAnswer);
 		assertEquals(this.answer.compareTo(this.secondAnswer), 1);
 		assertSame(this.question.answers().get(0), this.secondAnswer);
+	}
+
+	@Test
+	public void shouldNotLetVoteForOneself() {
+		assertNull(this.question.voteUp(this.question.owner()));
+		assertEquals(this.question.rating(), 0);
+	}
+
+	@Test
+	public void shouldCancelIdempotently() {
+		this.answer.voteUp(bill);
+		this.answer.voteCancel(bill);
+		this.answer.voteCancel(bill);
 	}
 }

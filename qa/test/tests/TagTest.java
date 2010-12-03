@@ -39,24 +39,29 @@ public class TagTest extends UnitTest {
 		assertEquals(tag.getName(), tagName);
 
 		assertNull(tagDB.get("space "));
+		boolean hasThrown = false;
 		try {
 			new Tag(null);
-			assertTrue(false);
 		} catch (IllegalArgumentException ex) {
-			assertTrue(true);
+			hasThrown = true;
 		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
 		try {
 			new Tag("UpperCase");
-			assertTrue(false);
 		} catch (IllegalArgumentException ex) {
-			assertTrue(true);
+			hasThrown = true;
 		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
 		try {
 			new Tag("012345678901234567890123456789012");
-			assertTrue(false);
 		} catch (IllegalArgumentException ex) {
-			assertTrue(true);
+			hasThrown = true;
 		}
+		assertTrue(hasThrown);
 	}
 
 	@Test
@@ -103,6 +108,15 @@ public class TagTest extends UnitTest {
 		assertTrue(tag1.getQuestions().isEmpty());
 
 		assertEquals(countTags(tagName), 0);
+	}
+
+	@Test
+	public void shouldSetTagString() {
+		question1.setTagString("012345678901234567890123456789012");
+		assertEquals(question1.getTags().get(0).getName(),
+				"01234567890123456789012345678901");
+		question1.setTagString("012345678901234567890123456789012");
+		assertEquals(question1.getTags().size(), 1);
 	}
 
 	@Test
@@ -177,6 +191,7 @@ public class TagTest extends UnitTest {
 				questionE };
 		List<Question> similar = Database.get().questions().findSimilar(
 				questionA);
+		assertEquals(similar.size(), 5);
 		assertTrue(SetOperations.arrayEquals(possibility1, similar.toArray())
 				|| SetOperations.arrayEquals(possibility2, similar.toArray()));
 	}

@@ -505,7 +505,11 @@ public class User implements IObserver {
 		List recentItems = getItemsByType(type);
 		Collections.sort(recentItems, new Comparator<Item>() {
 			public int compare(Item i1, Item i2) {
-				return i1.timestamp().compareTo(i2.timestamp());
+				// sort by timestamp or by id (to ensure a stable sort)
+				int diff = i2.timestamp().compareTo(i1.timestamp());
+				if (diff != 0)
+					return diff;
+				return i2.id() - i1.id();
 			}
 		});
 		if (recentItems.size() > 3)
@@ -718,9 +722,10 @@ public class User implements IObserver {
 			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD)
 				continue;
 
-			List<User> experts = Mapper.sortByValue(stats.get(tag));
-			if (experts.indexOf(this) + 1 >= (100 - EXPERTISE_PERCENTILE)
-					* 0.01 * experts.size())
+			Map<User, Integer> tagStats = stats.get(tag);
+			List<User> experts = Mapper.sortByValue(tagStats);
+			int threshold = (100 - EXPERTISE_PERCENTILE) * experts.size() / 100;
+			if (tagStats.get(this) >= tagStats.get(experts.get(threshold)))
 				expertise.add(tag);
 		}
 

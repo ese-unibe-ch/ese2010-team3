@@ -24,7 +24,6 @@ public class Question extends Entry implements IObservable {
 
 	private HashMap<Integer, Answer> answers;
 	private HashMap<Integer, Comment> comments;
-	private final int id;
 	private boolean isLocked = false;
 
 	private Answer bestAnswer;
@@ -56,7 +55,7 @@ public class Question extends Entry implements IObservable {
 		this.answers = new HashMap<Integer, Answer>();
 		this.comments = new HashMap<Integer, Comment>();
 		this.observers = new HashSet<IObserver>();
-		this.id = Database.get().questions().register(this);
+		Database.get().questions().register(this);
 	}
 
 	/**
@@ -76,9 +75,7 @@ public class Question extends Entry implements IObservable {
 			comment.unregister();
 		}
 		this.observers.clear();
-		if (this.id != -1) {
-			Database.get().questions().remove(this.id);
-		}
+		Database.get().questions().remove(this.id());
 		unregisterVotes();
 		unregisterUser();
 		setTagString("");
@@ -368,10 +365,6 @@ public class Question extends Entry implements IObservable {
 
 	public int countAnswers() {
 		return this.answers.size();
-	}
-
-	public void addTag(String text) {
-		this.tags.add(Database.get().tags().get(text));
 	}
 
 }

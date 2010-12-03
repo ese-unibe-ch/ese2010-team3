@@ -34,17 +34,12 @@ public class CommentTest extends UnitTest {
 		question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 		answer = question.answer(james, "To get to the other side.");
-		generateComments();
-	}
-
-	private void generateComments() {
 		commentQuestion = question.comment(james, "Strange Question!");
 		commentAnswer = answer.comment(new User("Jill", "jill"), "Good point!");
 	}
 
 	@Test
 	public void shouldCreateComments() {
-		generateComments();
 		Comment comment = answer.comment(james, "O RLY?");
 		assertNotNull(comment);
 		assertNotNull(commentAnswer);
@@ -54,21 +49,20 @@ public class CommentTest extends UnitTest {
 	/* testing getters is useless. */
 	@Test
 	public void shouldHaveCorrectContent() {
-		generateComments();
 		assertTrue(commentQuestion.content().equals("Strange Question!"));
 		assertTrue(commentAnswer.content().equals("Good point!"));
 	}
 
 	@Test
 	public void shouldHaveOwner() {
-		generateComments();
 		assertTrue(commentQuestion.owner().equals(james));
+		assertTrue(james.getComments().contains(commentQuestion));
 	}
 
 	@Test
 	public void shouldRegisterItself() {
-		generateComments();
 		assertTrue(question.hasComment(commentQuestion));
+		assertEquals(question.getComment(commentQuestion.id()), commentQuestion);
 		assertTrue(answer.hasComment(commentAnswer));
 	}
 

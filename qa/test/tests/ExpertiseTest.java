@@ -110,6 +110,11 @@ public class ExpertiseTest extends UnitTest {
 		for (int i = 0; i < 20; i++)
 			assertEquals(users.get(i).getExpertise().contains(tag), 10 <= i
 					&& i < 13);
+
+		assertEquals(john.getExpertise().size(), 0);
+		users.get(10).anonymize(true, true);
+		users.get(11).anonymize(true, true);
+		assertEquals(john.getExpertise().size(), 1);
 	}
 
 	@Test
@@ -140,6 +145,28 @@ public class ExpertiseTest extends UnitTest {
 
 		Tag tag = Database.get().tags().get("own-answer");
 		assertEquals(james.getExpertise().size(), 0);
+		assertFalse(question.owner().getExpertise().contains(tag));
+	}
+
+	@Test
+	public void shouldNotBeExpertWithoutTags() {
+		Answer answer = question.answer(john, "Answer");
+		for (int i = 0; i < 10; i++)
+			answer.voteUp(users.get(i));
+		assertEquals(john.getExpertise().size(), 0);
+	}
+
+	@Test
+	public void shouldCumulateVotes() {
+		question.setTagString("sole-expert");
+		for (int i = 0; i < 10; i++)
+			question.answer(john, "Answer " + i);
+		for (int i = 0; i < 3; i++)
+			john.getAnswers().get(3 + i).voteUp(question.owner());
+
+		Tag tag = Database.get().tags().get("sole-expert");
+		assertEquals(john.getExpertise().size(), 1);
+		assertTrue(john.getExpertise().contains(tag));
 		assertFalse(question.owner().getExpertise().contains(tag));
 	}
 }

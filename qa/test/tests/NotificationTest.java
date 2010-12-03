@@ -8,6 +8,8 @@ import models.Notification;
 import models.Question;
 import models.SystemInformation;
 import models.User;
+import models.helpers.IObservable;
+import models.helpers.IObserver;
 
 import org.junit.After;
 import org.junit.Before;
@@ -115,6 +117,8 @@ public class NotificationTest extends UnitTest {
 		last.unsetNew();
 		assertEquals(norbert.getVeryRecentNewNotification(), norbert
 				.getNotifications().get(1));
+
+		assertNull(norbert.getNotification(-1));
 	}
 
 	@Test
@@ -153,5 +157,36 @@ public class NotificationTest extends UnitTest {
 		assertEquals(norbert.getNotifications().size(), 1);
 		assertNotNull(norbert.getVeryRecentNewNotification());
 		assertNull(norbert.getVeryRecentNewNotification().getAbout().owner());
+	}
+
+	@Test
+	public void shouldOnlyNotifyAboutAnswersForNow() {
+		norbert.observe(new IObservable() {
+			public void addObserver(IObserver o) {
+			}
+
+			public void removeObserver(IObserver o) {
+			}
+
+			public boolean hasObserver(IObserver o) {
+				return false;
+			}
+
+			public void notifyObservers(Object arg) {
+			}
+		}, null);
+		norbert.observe(question, null);
+		assertEquals(norbert.getNotifications().size(), 0);
+	}
+
+	@Test
+	public void shouldRequireObserver() {
+		boolean hasThrown = false;
+		try {
+			question.addObserver(null);
+		} catch (IllegalArgumentException ex) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
 	}
 }

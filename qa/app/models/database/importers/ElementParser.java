@@ -7,8 +7,8 @@ public class ElementParser {
 	private Syntax syntax;
 	private Element elt;
 
-	public ElementParser(Syntax syntax_) {
-		this.syntax = syntax_;
+	public ElementParser(Syntax syntax) {
+		this.syntax = syntax;
 		this.elt = new Element("base");
 	}
 
