@@ -73,13 +73,13 @@ public class QuestionTest extends UnitTest {
 		// "some" is a StopWord and should not be suggested
 		assertEquals(Tools.extractImportantWords("some some some some s"), "");
 		String txt = "asdf asdf asdf asdf qwer qwer qwer qwer yxcv yxcv yxcv";
-		assertEquals(Tools.extractImportantWords(txt), "yxcv qwer asdf");
+		assertEquals(Tools.extractImportantWords(txt), "asdf qwer yxcv");
 		txt += " hello hello hello hello";
-		assertEquals(Tools.extractImportantWords(txt), "hello yxcv qwer asdf");
-		txt += "mnbv text mnbv text mnbv text mnbv text ";
+		assertEquals(Tools.extractImportantWords(txt), "asdf hello qwer yxcv");
+		txt += "mnbv text mnbv text mnbv text mnbv text asdf hello mnbv";
 		// remove "yxcv" because there are more important words
 		assertEquals(Tools.extractImportantWords(txt),
-				"mnbv hello text qwer asdf");
+				"asdf hello mnbv qwer text");
 	}
 
 	public void shouldBeOldQuestion() {

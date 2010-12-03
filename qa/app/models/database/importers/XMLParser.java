@@ -39,25 +39,25 @@ public class XMLParser extends DefaultHandler {
 		this.protoquestions = new LinkedList();
 
 		this.makeConnections = new Action() {
-			public void call(Element e) throws SemanticError {
+			public void call(Element e) {
 				makeConnections();
 			}
 		};
 
 		this.createAnswer = new Action() {
-			public void call(Element e) throws SemanticError {
+			public void call(Element e) {
 				createAnswer(e);
 			}
 		};
 
 		this.createUser = new Action() {
-			public void call(Element e) throws SemanticError {
+			public void call(Element e) {
 				createUser(e);
 			}
 		};
 
 		this.createQuestion = new Action() {
-			public void call(Element e) throws SemanticError {
+			public void call(Element e) {
 				createQuestion(e);
 			}
 		};
@@ -118,16 +118,12 @@ public class XMLParser extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) {
-		try {
-			Map<String, String> attributes = new HashMap();
-			for (int i = 0; i < atts.getLength(); i++) {
-				String attrname = atts.getLocalName(i);
-				attributes.put(attrname, atts.getValue(i));
-			}
-			this.parser.start(qName, attributes);
-		} catch (SemanticError e) {
-			e.printStackTrace();
+		Map<String, String> attributes = new HashMap();
+		for (int i = 0; i < atts.getLength(); i++) {
+			String attrname = atts.getLocalName(i);
+			attributes.put(attrname, atts.getValue(i));
 		}
+		this.parser.start(qName, attributes);
 	}
 
 	@Override
@@ -137,20 +133,15 @@ public class XMLParser extends DefaultHandler {
 
 	@Override
 	public void endElement(String uri, String localName, String qName) {
-		try {
-			this.parser.end();
-		} catch (SemanticError e) {
-			e.printStackTrace();
-		}
+		this.parser.end();
 	}
 
 	/**
-	 * Create an User from the given element or throws a SemanticError if the
-	 * element does not define an User.
+	 * Create an User from the given element.
 	 * 
 	 * @param e
 	 */
-	private void createUser(Element e) throws SemanticError {
+	private void createUser(Element e) {
 		String name = e.getText("displayname");
 		String password = e.getText("password");
 		String email = e.getText("email");
@@ -174,7 +165,7 @@ public class XMLParser extends DefaultHandler {
 	 * 
 	 * @param e
 	 */
-	private void createQuestion(Element e) throws SemanticError {
+	private void createQuestion(Element e) {
 		ProtoQuestion question = new ProtoQuestion();
 		try {
 			question.title = e.getText("title");
@@ -193,7 +184,13 @@ public class XMLParser extends DefaultHandler {
 		}
 	}
 
-	protected void createAnswer(Element e) throws SemanticError {
+	/**
+	 * Create a answer or throw a SemanticError, if it does not define a valid
+	 * question.
+	 * 
+	 * @param e
+	 */
+	protected void createAnswer(Element e) {
 		ProtoAnswer answer = new ProtoAnswer();
 		try {
 			answer.ownerid = new Integer(e.getText("ownerid"));
@@ -211,7 +208,7 @@ public class XMLParser extends DefaultHandler {
 		}
 	}
 
-	protected void makeConnections() throws SemanticError {
+	protected void makeConnections() {
 		for (ProtoQuestion protoquestion : this.protoquestions) {
 			User owner = this.idUserBase.get(protoquestion.ownerid);
 

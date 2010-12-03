@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Question;
+import models.Tag;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
@@ -256,6 +257,9 @@ public class UserTest extends UnitTest {
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 
+		assertEquals(0, user.highRatedAnswers().size());
+		assertTrue(Database.get().questions().countHighRatedAnswers() == 0);
+
 		User A = new User("A", "a");
 		User B = new User("B", "b");
 		User C = new User("C", "c");
@@ -429,4 +433,16 @@ public class UserTest extends UnitTest {
 		assertEquals(0, kate.getSuggestedQuestions().size());
 	}
 
+	@Test
+	public void shouldHaveDebugFriendly_toString() {
+		User james = new User("James", "james");
+		Question question = new Question(james, "Why?");
+		Answer answer = question.answer(james, "No idea");
+		question.setTagString("TAG");
+		Tag tag = question.getTags().get(0);
+		assertEquals(james.toString(), "U[James]");
+		assertEquals(question.toString(), "Question(Why?)");
+		assertEquals(answer.toString(), "Answer(No idea)");
+		assertEquals(tag.toString(), "Tag(tag)");
+	}
 }

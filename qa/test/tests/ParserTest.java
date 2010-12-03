@@ -3,7 +3,6 @@ package tests;
 import models.database.importers.Action;
 import models.database.importers.Element;
 import models.database.importers.ElementParser;
-import models.database.importers.SemanticError;
 import models.database.importers.Syntax;
 
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldReadEasyExample() throws SemanticError {
+	public void shouldReadEasyExample() {
 		parser.start("user");
 		parser.start("name");
 		parser.text("Anton");
@@ -53,7 +52,7 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldReadTwoUsers() throws SemanticError {
+	public void shouldReadTwoUsers() {
 		parser.start("user");
 		parser.start("name");
 		parser.text("Anton");
@@ -71,11 +70,26 @@ public class ParserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldCallback() throws SemanticError {
+	public void shouldCallback() {
 		parser.start("question");
 		assertFalse(isUpdated);
 		parser.end();
 		assertTrue(isUpdated);
 	}
 
+	@Test
+	public void shouldHaveDebugFriendly_toString() {
+		parser.start("user");
+		parser.start("name");
+		parser.text("Arnold");
+		parser.end();
+		parser.end();
+		Element anton = parser.getElement();
+
+		assertEquals(
+				parser.toString(),
+				"PS[users]({question=S[question]({content=S[content]({}), answer=S[answer]({content=S[content]({}), owner=S[owner]({})}), owner=S[owner]({})}), user=S[user]({name=S[name]({}), password=S[password]({})})})");
+		assertEquals(anton.toString(),
+				"E[root](\"\",{user=[E[user](\"\",{name=[E[name](\"Arnold\",{})]})]})");
+	}
 }

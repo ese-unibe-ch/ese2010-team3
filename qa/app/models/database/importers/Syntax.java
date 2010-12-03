@@ -23,28 +23,26 @@ public class Syntax {
 	private final Map<String, Syntax> subsyntax;
 	private Action callback;
 
+	public Syntax(String name) {
+		this(name, null);
+	}
+
 	private Syntax(String name, Syntax parent) {
 		this.name = name;
 		this.parent = parent;
 		this.subsyntax = new HashMap<String, Syntax>();
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
 	/**
 	 * Tries to accept the tag. That means, it checks, whether such a tag is
-	 * allowed and
-	 * throws a <code>SemanticError()</code> if it's not. The fluent interface
-	 * works with return values: <br/>
+	 * allowed and throws a <code>SemanticError()</code> if it's not. The fluent
+	 * interface works with return values: <br/>
 	 * <code>syntax.get("user").get("name")</code>
 	 * 
 	 * @param tag
 	 * @return
-	 * @throws SemanticError
 	 */
-	public Syntax get(String tag) throws SemanticError {
+	public Syntax get(String tag) {
 		Syntax syntax = this.subsyntax.get(tag);
 		if (syntax == null)
 			throw new SemanticError();
@@ -54,10 +52,6 @@ public class Syntax {
 	@Override
 	public String toString() {
 		return "S[" + this.name + "](" + this.subsyntax.toString() + ")";
-	}
-
-	public Syntax(String name) {
-		this(name, null);
 	}
 
 	/**
@@ -139,9 +133,8 @@ public class Syntax {
 	 * Element as input.
 	 * 
 	 * @param elt
-	 * @throws SemanticError
 	 */
-	public void callback(Element elt) throws SemanticError {
+	public void callback(Element elt) {
 		if (hasCallback()) {
 			this.callback.call(elt);
 		}

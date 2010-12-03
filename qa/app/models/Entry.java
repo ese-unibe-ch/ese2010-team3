@@ -251,7 +251,8 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	@Override
 	public String toString() {
-		return "Entry(" + summary() + ")";
+		String className = this.getClass().getName();
+		className = className.substring(className.lastIndexOf(".") + 1);
+		return className + "(" + summary() + ")";
 	}
-
 }

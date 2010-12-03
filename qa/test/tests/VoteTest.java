@@ -61,6 +61,7 @@ public class VoteTest extends UnitTest {
 		assertEquals(answer.upVotes(), 0);
 		assertEquals(answer.downVotes(), 1);
 		assertTrue(answer.hasDownVote(bill));
+		assertFalse(answer.hasUpVote(bill));
 	}
 
 	@Test

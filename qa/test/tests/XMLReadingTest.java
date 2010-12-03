@@ -9,6 +9,7 @@ import models.database.Database;
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
+import models.database.importers.SemanticError;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -167,8 +168,21 @@ public class XMLReadingTest extends UnitTest {
 	@Test
 	public void shouldCheckSemantics() throws SAXException, IOException,
 			ParserConfigurationException {
-		Importer.importXML("<invalid />");
-		Importer.importXML("<QA><answers><answer><ownerid>666</ownerid><questionid>999</questionid></answer></answers></QA>");
+		boolean hasThrown = false;
+		try {
+			Importer.importXML("<invalid />");
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+
+		hasThrown = false;
+		try {
+			Importer.importXML("<QA><answers><answer><ownerid>666</ownerid><questionid>999</questionid></answer></answers></QA>");
+		} catch (SemanticError err) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
 	}
 
 	@Test

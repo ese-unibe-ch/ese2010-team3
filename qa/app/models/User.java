@@ -69,10 +69,7 @@ public class User implements IObserver {
 	 *            the name of the <code>User</code>
 	 */
 	public User(String name, String password) {
-		this.name = name;
-		this.password = Tools.encrypt(password);
-		this.confirmKey = Tools.randomStringGenerator(35);
-		this.items = new HashSet<Item>();
+		this(name, password, null);
 	}
 
 	public boolean canEdit(Entry entry) {
