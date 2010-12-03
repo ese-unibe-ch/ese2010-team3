@@ -20,7 +20,7 @@ public class PaginationTest extends UnitTest {
 
 	private Question question1;
 	private Question question3;
-	User jack = new User("Jack", "jack");
+	User jack = new User("Jack", "jack", "jack@jck.ch");
 	private int questionsPerPage;
 	private ISystemInformation savedSysInfo;
 

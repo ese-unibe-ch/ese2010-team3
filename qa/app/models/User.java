@@ -38,10 +38,14 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
+	
+	private String confirmKey;
 
 	private String statustext = "";
 	private boolean isBlocked = false;
 	private boolean isModerator = false;
+	private boolean isConfirmed = false;
+	
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -49,9 +53,11 @@ public class User implements IObserver {
 	 * @param name
 	 *            the name of the <code>User</code>
 	 */
-	public User(String name, String password) {
+	public User(String name, String password, String email) {
 		this.name = name;
 		this.password = Tools.encrypt(password);
+		this.email = email;
+		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
 	}
 
@@ -308,6 +314,14 @@ public class User implements IObserver {
 	public void setSHA1Password(String password) {
 		this.password = Tools.encrypt(password);
 	}
+	
+	public String getConfirmKey() {
+		return this.confirmKey;
+	}
+	
+	public void setConfirmKey(String key) {
+		this.confirmKey = key;
+	}
 
 	/**
 	 * Get the reason for why the user is blocked.
@@ -353,6 +367,14 @@ public class User implements IObserver {
 	public boolean isModerator() {
 		return this.isModerator;
 	}
+	
+	/**
+	 * Get the status of the user if he is confirmed or not.
+	 * @return true, if the user is confirmed
+	 */
+	public boolean isConfirmed() {
+		return this.isConfirmed;
+	}
 
 	/**
 	 * Set the status of the user whether he is a moderator or not.
@@ -362,6 +384,13 @@ public class User implements IObserver {
 	 */
 	public void setModerator(Boolean mod) {
 		this.isModerator = mod;
+	}
+	
+	/**
+	 * Set the status of the user on confirmed
+	 */
+	public void confirm() {
+		this.isConfirmed = true;
 	}
 
 	/**

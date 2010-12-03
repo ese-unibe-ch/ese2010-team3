@@ -50,6 +50,8 @@ user.unblock=Débloquer utilisateur
 user.nonexistent=Vous n'êtes pas connectez ou cet utilisateur n'existe pas.
 user.expertise=Expertise
 # user.isnovice=%s is still a novice.
+user.confirm.success=***You have successfully confirmed your ajopi account!***
+user.confirm.error=***The ajopi account is not confirmed or does not consists!***
 
 # Post messages
 posts.perday=par jour
@@ -178,3 +180,11 @@ since.months=%d mois avant
 since.years=%d an(s) avant
 
 search.placeholder="Chercher question"
+
+# Mails
+
+mail.welcome.title=***confirm your ajopi account***
+mail.welcome.hi=***Hi*
+mail.welcome.introduction=***Please confirm your ajopi account by clicking this link:***
+mail.welcome.introduction2=***Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.***
+mail.welcome.team=***Best regards your ajopi team***

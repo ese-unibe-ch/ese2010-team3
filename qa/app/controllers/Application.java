@@ -14,6 +14,7 @@ import models.TimeTracker;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
+import notifiers.Mails;
 import play.data.validation.Required;
 import play.i18n.Lang;
 import play.mvc.Before;
@@ -148,13 +149,12 @@ public class Application extends Controller {
 	 *            the repeated password.
 	 */
 	public static void signup(@Required String username, String password,
-			String passwordrepeat) {
+			String passwordrepeat, @Required String email) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			Database.get().users().register(username, password);
-			// Mark user as connected
-			session.put("username", username);
+			Database.get().users().register(username, password, email);
+			Mails.welcome(Database.get().users().get(username));
 			index(0);
 		} else {
 			flash.keep("url");
@@ -326,7 +326,7 @@ public class Application extends Controller {
 		} else
 			flash.error("Wanna silence me? Try again!");
 		if (!CUser.redirectToCallingPage())
-			Application.index(0);
+			index(0);
 	}
 
 	/**
@@ -341,5 +341,30 @@ public class Application extends Controller {
 			showprofile(userName);
 		}
 		render(showUser);
+	}
+	
+	/**
+	 * Confirm a {@link User}'s profile if they clicked on the right link
+	 * 
+	 * @param username of the {@link User}
+	 * @param key for the Confirmation
+	 */
+	public static void confirmUser(String username, String key) {
+		User user = Database.get().users().get(username);
+		boolean existsUser = Database.get().users()
+		.isAvailable(username);
+		if (!existsUser && key.equals(user.getConfirmKey())) {
+			user.confirm();
+			flash.success("user.confirm.success");
+			try {
+				Secure.login();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			flash.error("user.confirm.error");
+			index(0);
+		}
 	}
 }

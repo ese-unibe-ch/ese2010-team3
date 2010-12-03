@@ -153,8 +153,8 @@ public class XMLParser extends DefaultHandler {
 	private void createUser(Element e) throws SemanticError {
 		String name = e.getText("displayname");
 		String password = e.getText("password");
-		User user = Database.get().users().register(name, password);
-		user.setEmail(e.getText("email"));
+		String email = e.getText("email");
+		User user = Database.get().users().register(name, password,email);
 		Integer age = new Integer(e.getText("age"));
 		if (age != -1) {
 			Calendar pseudobirthday = GregorianCalendar.getInstance();
