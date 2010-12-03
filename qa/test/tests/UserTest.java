@@ -71,6 +71,10 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2010).month(12).day(3);
+
 		User user = new User("Jack", "jack");
 		assertEquals(user.getAge(), 0);
 
