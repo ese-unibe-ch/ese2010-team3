@@ -9,6 +9,7 @@ import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
+import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
 
 /**
@@ -33,8 +34,12 @@ public class CAnswer extends Controller {
 		if (!Validation.hasErrors() && question != null) {
 			User user = Session.get().currentUser();
 			if (!question.isLocked() && !user.isBlocked()) {
-				question.answer(user, Tools.markdownToHtml(content));
+				Answer answer = question.answer(user,
+						Tools.markdownToHtml(content));
 				flash.success("secure.newanswerflash");
+				ActionDefinition action = reverse();
+				Application.question(questionId);
+				redirect(action.addRef("answer-" + answer.id()).toString());
 			}
 		} else {
 			flash.error("secure.emptyanswererror");
@@ -60,9 +65,11 @@ public class CAnswer extends Controller {
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()
 				&& !user.isBlocked()) {
-			answer.comment(user, Tools.markdownToHtml(content));
+			Comment comment = answer.comment(user, Tools.markdownToHtml(content));
 			flash.success("secure.newcommentanswerflash");
+			ActionDefinition action = reverse();
 			Application.question(questionId);
+			redirect(action.addRef("comment-" + comment.id()).toString());
 		}
 	}
 

@@ -8,6 +8,7 @@ import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
+import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
 
 /**
@@ -79,9 +80,12 @@ public class CQuestion extends Controller {
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && question != null && !question.isLocked()
 				&& !user.isBlocked()) {
-			question.comment(user, Tools.markdownToHtml(content));
+			Comment comment = question.comment(user,
+					Tools.markdownToHtml(content));
 			flash.success("secure.newcommentquestionflash");
+			ActionDefinition action = reverse();
 			Application.question(questionId);
+			redirect(action.addRef("comment-" + comment.id()).toString());
 		}
 	}
 
