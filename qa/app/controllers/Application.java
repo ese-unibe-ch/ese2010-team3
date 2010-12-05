@@ -9,6 +9,7 @@ import models.Answer;
 import models.Comment;
 import models.Notification;
 import models.Question;
+import models.SystemInformation;
 import models.Tag;
 import models.TimeTracker;
 import models.User;
@@ -43,7 +44,7 @@ public class Application extends Controller {
 		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
 		Collections.sort(questions, new Comparator<Question>() {
 			public int compare(Question q1, Question q2) {
-				return (q2.timestamp()).compareTo(q1.timestamp());
+				return q2.timestamp().compareTo(q1.timestamp());
 			}
 		});
 		questions = Tools.paginate(questions, entriesPerPage, index);
@@ -61,8 +62,8 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			List<Question> similarQuestions = (new ArrayList(question
-					.getSimilarQuestions()));
+			List<Question> similarQuestions = new ArrayList(question
+					.getSimilarQuestions());
 			if (similarQuestions.size() > 5) {
 				similarQuestions = similarQuestions.subList(0, 5);
 			}
@@ -191,8 +192,9 @@ public class Application extends Controller {
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
 		String biography = showUser.getBiography();
-		if (biography != null)
+		if (biography != null) {
 			biography = Tools.markdownToHtml(biography);
+		}
 		boolean canEdit = userCanEditProfile(showUser);
 		render(showUser, biography, canEdit);
 	}
@@ -237,8 +239,9 @@ public class Application extends Controller {
 	public static void search(String term, int index) {
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
-
 		results = Tools.paginate(results, entriesPerPage, index);
+		Session.get().currentUser().setLastSearchTime(
+				SystemInformation.get().now().getTime());
 		render(results, term, index, maxIndex);
 	}
 
@@ -322,12 +325,15 @@ public class Application extends Controller {
 	public static void selectLanguage(@Required String langId) {
 		if (langId != null) {
 			Lang.change(langId);
-			if (!Lang.get().equals(langId))
+			if (!Lang.get().equals(langId)) {
 				flash.error("Unknown language %s!", langId);
-		} else
+			}
+		} else {
 			flash.error("Wanna silence me? Try again!");
-		if (!CUser.redirectToCallingPage())
+		}
+		if (!CUser.redirectToCallingPage()) {
 			index(0);
+		}
 	}
 
 	/**

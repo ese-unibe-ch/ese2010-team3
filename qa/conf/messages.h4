@@ -48,13 +48,11 @@ user.blockedforreason=B£0(|{3Ð b3(4µ$3
 user.unblocknow=µ|\\|b£0(|{ |\\|0\\/\\/
 user.unblock=µ|\\|b£0(|{ µ$3r
 user.nonexistent=¥0µ'r3 |\\|07 £0993Ð 1|\\| 0r 7|-|3r3 1$ |\\|0 $µ(|-| µ$3r.
-
-# user.expertise=Expertise
-# user.isnovice=%s is still a novice.
-
-user.confirm.success=***You have successfully confirmed your ajopi account!***
-user.confirm.error=***The ajopi account is not confirmed or does not consists!***
-
+user.expertise=3xp3r71$3
+user.isnovice=%s 1$ $71££ 4 |\|0\/1(3.
+user.confirm.success=¥0µ |-|4\/3 $µ((3$$ƒµ££¥ (0|\|ƒ1r|\/|3Ð ¥0µr 4j0p1 4((0µ|\|7!
+user.confirm.error=7|-|3 4j0p1 4((0µ|\|7 1$ |\|07 (0|\|ƒ1r|\/|3Ð 0r Ð03$ |\|07 (0|\|$1$7$!
+user.cannotsearch=\/\/417 %Ð $3(0|\|Ð$ 70 $34r(|-| 4941|\|.
 
 # Post messages
 posts.perday=p3r Ð4¥
@@ -186,8 +184,8 @@ search.placeholder="$34r(|-| Cu3$710|\\|"
 
 # Mails
 
-mail.welcome.title=***confirm your ajopi account***
-mail.welcome.hi=***Hi*
-mail.welcome.introduction=***Please confirm your ajopi account by clicking this link:***
-mail.welcome.introduction2=***Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.***
-mail.welcome.team=***Best regards your ajopi team***
+mail.welcome.title=(0|\|ƒ1r|\/| ¥0µr 4j0p1 4((0µ|\|7
+mail.welcome.hi=|-|1
+mail.welcome.introduction=P£34$3 (0|\|ƒ1r|\/| ¥0µr 4j0p1 4((0µ|\|7 b¥ (£1(|{1|\|9 7|-|1$ £1|\||{:
+mail.welcome.introduction2=0|\|(3 ¥0µ (0|\|ƒ1r|\/|, ¥0µ \/\/1££ |-|4\/3 ƒµ££ 4((3$$ 70 4j0p1 4|\|Ð 4££ ƒµ7µr3 |\|071ƒ1(4710|\|$ \/\/1££ b3 $3|\|7 70 7|-|1$ 3|\/|41£ 4ÐÐr3$$.
+mail.welcome.team=B3$7 r394rÐ$ ¥0µr 4j0p1 734|\/|

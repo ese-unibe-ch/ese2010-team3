@@ -51,7 +51,8 @@ user.nonexistent=You're not logged in or there is no such user.
 user.expertise=Expertise
 user.isnovice=%s is still a novice.
 user.confirm.success=You have successfully confirmed your ajopi account!
-user.confirm.error=The ajopi account is not confirmed or does not consists!
+user.confirm.error=The ajopi account is not confirmed or does not consist!
+user.cannotsearch=Wait %d seconds to search again.
 
 # Post messages
 posts.perday=per day

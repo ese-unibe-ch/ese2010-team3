@@ -45,6 +45,7 @@ public class User implements IObserver {
 	private boolean isBlocked = false;
 	private boolean isModerator = false;
 	private boolean isConfirmed = false;
+	private long lastSearch;
 	
 
 	/**
@@ -59,6 +60,7 @@ public class User implements IObserver {
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
+		this.lastSearch = SystemInformation.get().now().getTime();
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public class User implements IObserver {
 	}
 
 	public boolean canEdit(Entry entry) {
-		return (entry.owner() == this && !isBlocked()) || isModerator();
+		return entry.owner() == this && !isBlocked() || isModerator();
 	}
 
 	/**
@@ -153,7 +155,7 @@ public class User implements IObserver {
 		Date now = SystemInformation.get().now();
 		int i = 0;
 		for (Item item : this.items) {
-			if ((now.getTime() - item.timestamp().getTime()) <= 60 * 60 * 1000) {
+			if (now.getTime() - item.timestamp().getTime() <= 60 * 60 * 1000) {
 				i++;
 			}
 		}
@@ -228,7 +230,7 @@ public class User implements IObserver {
 	 * 
 	 */
 	public boolean isCheating() {
-		return (isSpammer() || isMaybeCheater());
+		return isSpammer() || isMaybeCheater();
 	}
 
 	/**
@@ -255,7 +257,7 @@ public class User implements IObserver {
 			long age = now.getTime() - this.dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
 		} else
-			return (0);
+			return 0;
 	}
 
 	/* Getter and Setter for profile data */
@@ -753,19 +755,35 @@ public class User implements IObserver {
 		List<Tag> expertise = new ArrayList();
 		for (Tag tag : stats.keySet()) {
 			// ignore tags this user knows nothing about
-			if (!stats.get(tag).containsKey(this))
+			if (!stats.get(tag).containsKey(this)) {
 				continue;
+			}
 			// ignore tags this user knows hardly anything about
-			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD)
+			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD) {
 				continue;
+			}
 
 			Map<User, Integer> tagStats = stats.get(tag);
 			List<User> experts = Mapper.sortByValue(tagStats);
 			int threshold = (100 - EXPERTISE_PERCENTILE) * experts.size() / 100;
-			if (tagStats.get(this) >= tagStats.get(experts.get(threshold)))
+			if (tagStats.get(this) >= tagStats.get(experts.get(threshold))) {
 				expertise.add(tag);
+			}
 		}
 
 		return expertise;
 	}
+
+	public void setLastSearchTime(long time) {
+		this.lastSearch = time;
+	}
+
+	public boolean canSearch() {
+		return SystemInformation.get().now().getTime() - this.lastSearch > 1000 * 15;
+	}
+
+	public long timeToSearch() {
+		return 15 - (SystemInformation.get().now().getTime() - this.lastSearch) / 1000;
+	}
+
 }

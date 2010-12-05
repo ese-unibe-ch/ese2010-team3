@@ -49,9 +49,10 @@ user.unblocknow=Débloquer maintenant
 user.unblock=Débloquer utilisateur
 user.nonexistent=Vous n'êtes pas connectez ou cet utilisateur n'existe pas.
 user.expertise=Expertise
-# user.isnovice=%s is still a novice.
-user.confirm.success=***You have successfully confirmed your ajopi account!***
-user.confirm.error=***The ajopi account is not confirmed or does not consists!***
+user.isnovice=%s est encore un novice.
+user.confirm.success=Vous avez confirmé votre compte ajopi avec succès!
+user.confirm.error=Le compte ajopi n'est pas confirmée ou ne consiste pas!
+user.cannotsearch=Attendez 15 secondes pour faire une nouvelle recherche.
 
 # Post messages
 posts.perday=par jour
@@ -183,8 +184,8 @@ search.placeholder="Chercher question"
 
 # Mails
 
-mail.welcome.title=***confirm your ajopi account***
-mail.welcome.hi=***Hi*
-mail.welcome.introduction=***Please confirm your ajopi account by clicking this link:***
-mail.welcome.introduction2=***Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.***
-mail.welcome.team=***Best regards your ajopi team***
+mail.welcome.title=confirmer votre compte ajopi
+mail.welcome.hi=Hi
+mail.welcome.introduction=S'il vous plaît confirmer votre compte ajopi en cliquant sur ce lien:
+mail.welcome.introduction2=Dès que vous confirmez, vous aurez un accès complet à toutes les notifications ajopi et futurs seront envoyés à cette adresse e-mail.
+mail.welcome.team=Cordialement votre équipe ajopi
