@@ -18,9 +18,10 @@ search.fail=There is no question found matching
 statistic=Statistics
 numberof=Number of
 reason=Reason
-english=English
+english=
 german=German
 french=French
+haxor=h4x0r
 group3ftw=A project by Group 3.
 
 # User messages
@@ -52,7 +53,8 @@ user.expertise=Expertise
 user.isnovice=%s is still a novice.
 user.confirm.success=You have successfully confirmed your ajopi account!
 user.confirm.error=The ajopi account is not confirmed or does not consist!
-user.cannotsearch=Wait %d seconds to search again.
+user.cannotsearch=Wait %d seconds to search.
+user.cannotpost=Wait %d seconds to post.
 
 # Post messages
 posts.perday=per day

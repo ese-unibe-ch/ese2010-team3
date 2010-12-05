@@ -34,19 +34,27 @@
 				</div><!-- end search -->
 			#{/if}
 			<div class="user">
-				#{if user}
-						<a href="@{Application.index}#askquestion">&{'question.new'}</a> |
-						&{'hello'} ${user.getName()}! #{if user && user.isModerator()}
-						<a href="@{Application.admin}">(&{'moderator'})</a> #{/if}
-						<a href="@{Application.notifications(0)}">&{'notifications'} ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
-						<a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a>
-						<a href="@{Secure.logout}">&{'user.logout'}</a>
-					#{/if}
-					#{else}
-						<a href="@{Secure.login}">&{'user.login'}</a>
-						&{'or'}
-						<a href="@{Application.register}">&{'user.signup'}</a>
-					#{/else}	
+			#{if user}
+				#{if user.canPost()}
+					<a href="@{Application.index}#askquestion">&{'question.new'}</a>
+				#{/if}
+				#{else}
+					&{'user.cannotpost', user.timeToPost()}
+					<!-- Somebody make this change as well after 30 seconds with a cool jquery script -->
+				#{/else}|
+				&{'hello'} ${user.getName()}!
+				#{if user.isModerator()}
+					<a href="@{Application.admin}">(&{'moderator'})</a>
+				#{/if}
+				<a href="@{Application.notifications(0)}">&{'notifications'} ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
+				<a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a>
+				<a href="@{Secure.logout}">&{'user.logout'}</a>
+			#{/if}
+			#{else}
+				<a href="@{Secure.login}">&{'user.login'}</a>
+				&{'or'}
+				<a href="@{Application.register}">&{'user.signup'}</a>
+			#{/else}	
 			</div><!-- end user -->
 			</div><!-- end navigaion -->
 			#{if flash.error}
@@ -72,11 +80,10 @@
 			#{doLayout /}
 			</div><!-- end content -->
 			<div class="footer">
-				<!-- TODO: make me dynamic -->
 				<a href="@{Application.selectLanguage("en")}">&{'english'}</a> | 
 				<a href="@{Application.selectLanguage("de")}">&{'german'}</a> | 
 	 			<a href="@{Application.selectLanguage("fr")}">&{'french'}</a> | 
-				<a href="@{Application.selectLanguage("h4")}">h4x0r</a> || 
+				<a href="@{Application.selectLanguage("h4")}">&{'haxor'}</a> || 
 				<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
 				&{'group3ftw'}
 			</div><!-- end footer>

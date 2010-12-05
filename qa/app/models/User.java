@@ -45,7 +45,8 @@ public class User implements IObserver {
 	private boolean isBlocked = false;
 	private boolean isModerator = false;
 	private boolean isConfirmed = false;
-	private long lastSearch;
+	private long lastSearch = 0;
+	private long lastPost = 0;
 	
 
 	/**
@@ -60,7 +61,6 @@ public class User implements IObserver {
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
-		this.lastSearch = SystemInformation.get().now().getTime();
 	}
 	
 	/**
@@ -244,6 +244,7 @@ public class User implements IObserver {
 		} else if (isMaybeCheater()) {
 			block("User voted up somebody");
 		}
+		this.setLastPostTime(SystemInformation.get().now().getTime());
 	}
 
 	/**
@@ -782,8 +783,20 @@ public class User implements IObserver {
 		return SystemInformation.get().now().getTime() - this.lastSearch > 1000 * 15;
 	}
 
-	public long timeToSearch() {
-		return 15 - (SystemInformation.get().now().getTime() - this.lastSearch) / 1000;
+	public int timeToSearch() {
+		return (int) (15 - (SystemInformation.get().now().getTime() - this.lastSearch) / 1000);
+	}
+
+	public void setLastPostTime(long time) {
+		this.lastPost = time;
+	}
+
+	public boolean canPost() {
+		return SystemInformation.get().now().getTime() - this.lastPost > 1000 * 30;
+	}
+
+	public int timeToPost() {
+		return (int) (30 - (SystemInformation.get().now().getTime() - this.lastPost) / 1000);
 	}
 
 }

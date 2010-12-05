@@ -20,7 +20,8 @@ numberof=Nombre de
 reason=Raison
 english=Anglais
 german=Allemande
-french=Français
+french=
+haxor=h4x0r
 group3ftw=Un project par le groupe 3.
 
 # User messages
@@ -52,7 +53,8 @@ user.expertise=Expertise
 user.isnovice=%s est encore un novice.
 user.confirm.success=Vous avez confirmé votre compte ajopi avec succès!
 user.confirm.error=Le compte ajopi n'est pas confirmée ou ne consiste pas!
-user.cannotsearch=Attendez 15 secondes pour faire une nouvelle recherche.
+user.cannotsearch=Faisez une recherche en %d secondes.
+user.cannotpost=Faisez une contribution en %d secondes.
 
 # Post messages
 posts.perday=par jour

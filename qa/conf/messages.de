@@ -19,8 +19,9 @@ statistic=Statistik
 numberof=Anzahl
 reason=Grund
 english=Englisch
-german=Deutsch
+german=
 french=Französisch
+haxor=h4x0r
 group3ftw=Ein Projekt von Gruppe 3.
 
 # User messages
@@ -52,7 +53,8 @@ user.expertise=Experte
 user.isnovice=%s ist noch ein Grünschnabel.
 user.confirm.success=Sie haben Ihr Konto erfolgreich bestätigt.
 user.confirm.error=Das Konto wurde noch nicht bestätigt.
-user.cannotsearch=Warten Sie %d Sekunden für eine neue Suche.
+user.cannotsearch=Die Suche ist in %d Sekunden frei.
+user.cannotpost=Sie können in %d Sekunden etwas schreiben.
 
 # Post messages
 posts.perday=pro Tag

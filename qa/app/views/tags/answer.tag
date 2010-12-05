@@ -6,7 +6,7 @@
 	
 	#{if _extended && _user}
 		<div class="commands">
-			#{if !_user.isBlocked() && !_answer.getQuestion().isLocked()}
+			#{if !_user.isBlocked() && !_answer.getQuestion().isLocked() && _user.canPost()}
 				<a href ="@{Application.commentAnswer(_answer.getQuestion().id(), _answer.id())}">&{'comment.add'}</a>
 			#{/if}
 			#{if _user.canEdit(_answer) && !_answer.getQuestion().isLocked()}

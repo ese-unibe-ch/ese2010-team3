@@ -24,6 +24,7 @@
 		</ul>
 	#{/if}
 	#{if user && !user.isBlocked() && !question.isLocked()}
+	#{if user.canPost()}
 		<h1>&{'answer.add'}</h1>
 		<div class="message">
 			#{form @CAnswer.newAnswer(question.id())}
@@ -33,6 +34,11 @@
 				<input type="submit" value="&{'answer.addnew'}" />
 			#{/form}
 		</div><!-- end message -->
+	#{/if}
+	#{else}
+		&{'user.cannotpost', user.timeToPost()}
+		<!-- Same script goes here -->
+	#{/else}
 	#{/if}
 	#{if question.isLocked()}
 		<div class="message">

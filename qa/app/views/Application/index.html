@@ -17,6 +17,7 @@
 	</p>
 #{/if}
 #{if user && !user.isBlocked()}
+#{if user.canPost()}
 	<h1>&{'question.ask'}</h1>
 	<div id="askquestion" class="message">
 		#{form @CQuestion.newQuestion()}
@@ -33,6 +34,12 @@
 		#{/form}
 	</div><!-- end askquestion -->
 #{/if}
+#{else}
+	&{'user.cannotpost', user.timeToPost()}
+	<!-- Same script goes here -->
+#{/else}
+#{/if}
+
 #{if !user}
 	<div class="message">
 		<p class="hint">&{'signinorup'}
