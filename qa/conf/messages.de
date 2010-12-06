@@ -23,6 +23,9 @@ german=
 french=Französisch
 haxor=h4x0r
 group3ftw=Ein Projekt von Gruppe 3.
+captcha.show=Captcha
+captcha.retype=Captcha eingeben
+captcha.invalid=Captcha falsch, bitte erneut versuchen.
 
 # User messages
 user=Benutzer
