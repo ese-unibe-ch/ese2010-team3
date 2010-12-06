@@ -775,26 +775,64 @@ public class User implements IObserver {
 		return expertise;
 	}
 
+	/**
+	 * Set the time of the Users last search to a specific one.
+	 * 
+	 * @param Time
+	 *            in milliseconds after 1970.
+	 */
 	public void setLastSearchTime(long time) {
 		this.lastSearch = time;
 	}
 
+	/**
+	 * Checks if the user can use the search. There must be at least 15 seconds
+	 * between his last search and now.
+	 * 
+	 * @return true if the user can search
+	 */
 	public boolean canSearch() {
 		return SystemInformation.get().now().getTime() - this.lastSearch > 1000 * 15;
 	}
 
+	/**
+	 * Calculates the remaining time until he can make a new search. Counting down
+	 * from 15.
+	 * 
+	 * @return an Integer that equals the remaining seconds.
+	 */
 	public int timeToSearch() {
 		return (int) (15 - (SystemInformation.get().now().getTime() - this.lastSearch) / 1000);
 	}
 
+	/**
+	 * Set the time of the Users last Post to a specific one.
+	 * 
+	 * @param Time
+	 *            in milliseconds after 1970.
+	 */
 	public void setLastPostTime(long time) {
 		this.lastPost = time;
 	}
 
+	/**
+	 * Checks if the user can ask, answer or comment a post. There must be at
+	 * least 30 seconds between his last post to make a new one and he must not
+	 * be blocked.
+	 * 
+	 * @return true if the user can post
+	 */
 	public boolean canPost() {
-		return SystemInformation.get().now().getTime() - this.lastPost > 1000 * 30;
+		return !this.isBlocked()
+				&& SystemInformation.get().now().getTime() - this.lastPost > 1000 * 30;
 	}
 
+	/**
+	 * Calculates the remaining time until he can make a new post. Counting down
+	 * from 30.
+	 * 
+	 * @return an Integer that equals the remaining seconds.
+	 */
 	public int timeToPost() {
 		return (int) (30 - (SystemInformation.get().now().getTime() - this.lastPost) / 1000);
 	}

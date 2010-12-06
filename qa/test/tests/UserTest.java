@@ -524,8 +524,9 @@ public class UserTest extends UnitTest {
 		q.answer(user5, "Simple!");
 		assertEquals(1, user5.getSuggestedQuestions().size());
 
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			p.answer(null, "anonymous genious!");
+		}
 		assertEquals(1, user5.getSuggestedQuestions().size());
 		p.answer(null, "yet another anonymous genious!");
 		assertEquals(0, user5.getSuggestedQuestions().size());
@@ -542,5 +543,30 @@ public class UserTest extends UnitTest {
 		assertEquals(question.toString(), "Question(Why?)");
 		assertEquals(answer.toString(), "Answer(No idea)");
 		assertEquals(tag.toString(), "Tag(tag)");
+	}
+
+	@Test
+	public void testPostAndSearchDelay() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James", "james");
+		assertTrue(james.canPost());
+		assertTrue(james.canSearch());
+
+		james.setLastPostTime(sys.now().getTime());
+		assertFalse(james.canPost());
+		sys.second(30);
+		assertFalse(james.canPost());
+		sys.second(31);
+		assertTrue(james.canPost());
+
+		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		james.setLastSearchTime(sys.now().getTime());
+		assertFalse(james.canSearch());
+		sys.second(15);
+		assertFalse(james.canSearch());
+		sys.second(16);
+		assertTrue(james.canSearch());
 	}
 }

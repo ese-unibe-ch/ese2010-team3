@@ -16,12 +16,13 @@ import models.User;
 import models.database.Database;
 import models.helpers.Tools;
 import notifiers.Mails;
+import play.cache.Cache;
 import play.data.validation.Required;
 import play.i18n.Lang;
+import play.libs.Codec;
+import play.libs.Images;
 import play.mvc.Before;
 import play.mvc.Controller;
-import play.libs.*;
-import play.cache.*;
 
 public class Application extends Controller {
 
@@ -237,7 +238,7 @@ public class Application extends Controller {
 
 	/**
 	 * Performs a search for the entered term. The view is displayed at the
-	 * given index.
+	 * given index. Sets the users lastSearchTime to the time now.
 	 * 
 	 * @param term
 	 *            the term to be searched for.
@@ -248,8 +249,10 @@ public class Application extends Controller {
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
-		Session.get().currentUser().setLastSearchTime(
-				SystemInformation.get().now().getTime());
+		User user = Session.get().currentUser();
+		if (user != null) {
+			user.setLastSearchTime(SystemInformation.get().now().getTime());
+		}
 		render(results, term, index, maxIndex);
 	}
 
