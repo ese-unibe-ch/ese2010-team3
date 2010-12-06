@@ -22,6 +22,9 @@ english=Anglais
 german=Allemande
 french=Français
 group3ftw=Un project par le groupe 3.
+captcha.show=Captcha
+captcha.retype=Entrez captcha
+captcha.invalid=Captcha n'est pas correct, s'il vous plaît essayer à nouveau.
 
 # User messages
 user=Utilisateur
