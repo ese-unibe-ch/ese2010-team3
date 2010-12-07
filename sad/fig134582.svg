@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="448" height="533" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="226" y="264" width="2" height="152" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="172" y="414" width="56" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="169" y="261" width="57" height="153" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="198" y="268">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="198" y="281">IUserDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="169" y1="287" x2="226" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="169" y1="292" x2="226" y2="292" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="299">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="311">register()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="323">needSignUp()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="335">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="347">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="359">count()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="371">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="383">add()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="395">allModerators()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="407">searchFor()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="127" y="264" width="2" height="188" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="35" y="450" width="94" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="32" y="261" width="95" height="189" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="80" y="268">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="80" y="281">IQuestionDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="32" y1="287" x2="127" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="32" y1="292" x2="127" y2="292" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="299">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="311">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="323">searchFor()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="335">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="347">register()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="359">add()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="371">count()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="383">countBestRatedAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="395">countHighRatedAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="407">countAllAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="419">findSimilar()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="431">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="443">searchForAnswer()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="236" y="53" width="2" height="66" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="168" y="117" width="70" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="165" y="50" width="71" height="67" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="201" y="57">Database</text>
+	<line stroke="black" stroke-opacity="1" x1="165" y1="63" x2="236" y2="63" />
+	<line stroke="black" stroke-opacity="1" x1="165" y1="68" x2="236" y2="68" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="75">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="87">swapWith()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="99">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="111">clearKeepAdmins()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="155" x2="308" y2="146" />
+	<line stroke="black" stroke-opacity="1" x1="310" y1="155" x2="301" y2="156" />
+	<line stroke="black" stroke-opacity="1" x1="239" y1="108" x2="310" y2="155" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="75" y1="492" x2="75" y2="458" />
+	<line stroke="black" stroke-opacity="1" x1="76" y1="453" x2="69" y2="458" />
+	<line stroke="black" stroke-opacity="1" x1="76" y1="453" x2="81" y2="459" />
+	<line stroke="black" stroke-opacity="1" x1="69" y1="458" x2="81" y2="459" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="201" y1="493" x2="200" y2="422" />
+	<line stroke="black" stroke-opacity="1" x1="200" y1="417" x2="194" y2="423" />
+	<line stroke="black" stroke-opacity="1" x1="200" y1="417" x2="206" y2="422" />
+	<line stroke="black" stroke-opacity="1" x1="194" y1="423" x2="206" y2="422" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="312" y="263" width="2" height="92" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="260" y="353" width="54" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="257" y="260" width="55" height="93" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="285" y="267">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="285" y="280">ITagDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="257" y1="286" x2="312" y2="286" />
+	<line stroke="black" stroke-opacity="1" x1="257" y1="291" x2="312" y2="291" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="298">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="310">getOrAdd()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="322">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="334">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="346">clear()</text>
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="283" y1="486" x2="283" y2="361" />
+	<line stroke="black" stroke-opacity="1" x1="284" y1="356" x2="277" y2="361" />
+	<line stroke="black" stroke-opacity="1" x1="284" y1="356" x2="289" y2="362" />
+	<line stroke="black" stroke-opacity="1" x1="277" y1="361" x2="289" y2="362" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="308" y="479">tags</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="272" y="153">instance</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="108" y="479">questions</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="225" y="477">users</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="364" y="142" width="2" height="68" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="314" y="208" width="52" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="311" y="139" width="53" height="69" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="338" y="146">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="338" y="159">IDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="311" y1="165" x2="364" y2="165" />
+	<line stroke="black" stroke-opacity="1" x1="311" y1="170" x2="364" y2="170" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="177">questions()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="189">users()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="201">tags()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="175" x2="284" y2="175" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,175 304,181 298,175 304,169" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="175" x2="79" y2="175" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,175 304,181 298,175 304,169" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="174" x2="198" y2="174" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,174 304,180 298,174 304,168" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="394" y1="308" x2="354" y2="216" />
+	<line stroke="black" stroke-opacity="1" x1="352" y1="211" x2="348" y2="218" />
+	<line stroke="black" stroke-opacity="1" x1="352" y1="211" x2="359" y2="214" />
+	<line stroke="black" stroke-opacity="1" x1="348" y1="218" x2="359" y2="214" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="198" y1="174" x2="198" y2="260" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="284" y1="175" x2="285" y2="259" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="79" y1="175" x2="79" y2="260" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="433" y="312" width="2" height="54" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="383" y="364" width="52" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="380" y="309" width="53" height="55" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="407" y="316">HotDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="380" y1="322" x2="433" y2="322" />
+	<line stroke="black" stroke-opacity="1" x1="380" y1="327" x2="433" y2="327" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="334">questions()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="346">users()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="358">tags()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="98" y1="492" x2="106" y2="494" />
+	<line stroke="black" stroke-opacity="1" x1="98" y1="492" x2="100" y2="483" />
+	<line stroke="black" stroke-opacity="1" x1="379" y1="350" x2="98" y2="492" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="239" y1="84" x2="419" y2="84" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="215" y1="493" x2="223" y2="493" />
+	<line stroke="black" stroke-opacity="1" x1="215" y1="493" x2="215" y2="484" />
+	<line stroke="black" stroke-opacity="1" x1="379" y1="360" x2="215" y2="493" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="294" y1="486" x2="302" y2="484" />
+	<line stroke="black" stroke-opacity="1" x1="294" y1="486" x2="292" y2="477" />
+	<line stroke="black" stroke-opacity="1" x1="384" y1="367" x2="294" y2="486" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="408" y1="308" x2="414" y2="302" />
+	<line stroke="black" stroke-opacity="1" x1="408" y1="308" x2="402" y2="301" />
+	<line stroke="black" stroke-opacity="1" x1="419" y1="84" x2="408" y2="308" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="315" y="490" width="2" height="30" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="251" y="518" width="66" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="248" y="487" width="67" height="31" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="282" y="494">HotTagDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="248" y1="500" x2="315" y2="500" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="250" y="507">tagRegex</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="117" y="496" width="2" height="22" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="33" y="516" width="86" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="30" y="493" width="87" height="23" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="74" y="500">HotQuestionDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="30" y1="506" x2="117" y2="506" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="235" y="497" width="2" height="22" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="169" y="517" width="68" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="166" y="494" width="69" height="23" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="201" y="501">HotUserDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="166" y1="507" x2="235" y2="507" />
+</g>
+</svg>

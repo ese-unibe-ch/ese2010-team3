@@ -1,0 +1,24 @@
+!! Developement View
+!!! Playframework
+The playframework sets the basis for the application and provides
+ - a webserver
+ - routing
+ - parsing for the views
+!!!! Messages
+The translations to all supported languages.
+!!!! Routes
+Links the requests to methods of the controllers.
+!!! Model
+Package that is independend from Play and provides the modelling of the
+!!!! Helpers
+Package that provides functionality that doesn't quite fit into the
+responsibilities of the other classes.
+!!!! Database
+An interface for data management and maybe in the future persistancy.
+!!!! SearchEngine
+Filters the data and shows only the most useful by some standards.
+problem domain.
+!!! Controller
+Translates user actions into changes in the model.
+!!! Views
+Shows the current state of the model.
