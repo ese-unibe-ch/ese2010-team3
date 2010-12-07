@@ -177,6 +177,8 @@ secure.xmlloadflash=XML Datei erfolgreich in die Datenbank geladen.
 secure.xmlloaderror=Konnte XML Datei nicht laden!
 secure.cleardberror=So nicht, Freundchen!
 secure.cleardbflash=Hau weg die Scheisse!
+secure.mail.error=Mail konnte nicht versendet werden.
+secure.mail.success=Du hast dich erfolgreich registriet. Bitte überpfüfe deine Mails und bestätige dein Konto.
 
 since.seconds=vor %d Sekunden
 since.minutes=vor %d Minute(n)

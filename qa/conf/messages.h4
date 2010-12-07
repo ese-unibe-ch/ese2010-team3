@@ -177,6 +177,8 @@ secure.xmlloadflash=X|\\/|£ ƒ1£3 $µ((3$$ƒµ££¥ £04Ð3Ð 70 7|-|3 Ð474b
 secure.xmlloaderror=(0µ£Ð|\\|'7 £04Ð x|\\/|£ ƒ1£3!
 secure.cleardberror=¥0µ'r3 4 ƒ|{|\\| |\\|4µ9|-|7¥ b0¥!
 secure.cleardbflash=74bµ£4 r4$4!
+secure.mail.error=***Mail could not be sent!***
+secure.mail.success=***Success! Go to your Mailbox and confirm your account.***
 
 since.seconds=%d $3(0|\\|Ð$ 460
 since.minutes=%d |\\/\1|\\|µt3[$] 460
