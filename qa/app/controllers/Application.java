@@ -16,6 +16,7 @@ import models.database.Database;
 import models.helpers.Tools;
 import notifiers.Mails;
 import play.data.validation.Required;
+import play.exceptions.MailException;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -161,8 +162,15 @@ public class Application extends Controller {
 		    }
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			Database.get().users().register(username, password, email);
-			Mails.welcome(Database.get().users().get(username));
-			index(0);
+			try {
+				Mails.welcome(Database.get().users().get(username));
+				flash.success("secure.mail.success");
+				index(0);
+			} catch (MailException e) {
+				Database.get().users().get(username).delete();
+				flash.error("secure.mail.error");
+				index(0);
+			}
 		} else {
 			flash.keep("url");
 			if (!isUsernameAvailable) {
