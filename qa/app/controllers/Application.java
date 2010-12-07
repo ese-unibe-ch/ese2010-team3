@@ -18,7 +18,6 @@ import models.helpers.Tools;
 import notifiers.Mails;
 import play.cache.Cache;
 import play.data.validation.Required;
-import play.exceptions.MailException;
 import play.i18n.Lang;
 import play.libs.Codec;
 import play.libs.Images;
@@ -164,11 +163,11 @@ public class Application extends Controller {
 		    }
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			User user = Database.get().users().register(username, password, email);
-			try {
-				Mails.welcome(Database.get().users().get(username));
+			boolean success = Mails.welcome(user);
+			if (success) {
 				flash.success("secure.mail.success");
 				index(0);
-			} catch (MailException e) {
+			} else {
 				user.delete();
 				flash.error("secure.mail.error");
 				register();
