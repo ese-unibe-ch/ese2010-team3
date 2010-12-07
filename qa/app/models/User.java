@@ -792,12 +792,12 @@ public class User implements IObserver {
 	 * @return true if the user can search
 	 */
 	public boolean canSearch() {
-		return SystemInformation.get().now().getTime() - this.lastSearch > 1000 * 15;
+		return this.timeToSearch() < 0;
 	}
 
 	/**
-	 * Calculates the remaining time until he can make a new search. Counting down
-	 * from 15.
+	 * Calculates the remaining time until the user can make a new search.
+	 * Counting down from 15.
 	 * 
 	 * @return an Integer that equals the remaining seconds.
 	 */
@@ -823,8 +823,7 @@ public class User implements IObserver {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return !this.isBlocked()
-				&& SystemInformation.get().now().getTime() - this.lastPost > 1000 * 30;
+		return !this.isBlocked() && this.timeToPost() < 0;
 	}
 
 	/**

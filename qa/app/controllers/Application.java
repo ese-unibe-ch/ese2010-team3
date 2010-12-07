@@ -238,7 +238,8 @@ public class Application extends Controller {
 
 	/**
 	 * Performs a search for the entered term. The view is displayed at the
-	 * given index. Sets the users lastSearchTime to the time now.
+	 * given index. Sets the users lastSearchTime to the time now, thereby we
+	 * can allow or restrict a further search of this user.
 	 * 
 	 * @param term
 	 *            the term to be searched for.
