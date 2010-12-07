@@ -561,6 +561,12 @@ public class UserTest extends UnitTest {
 		sys.second(31);
 		assertTrue(james.canPost());
 
+		assertTrue(james.canPost());
+		james.block("You are blocked for making a good Test coverage");
+		assertFalse(james.canPost());
+		james.unblock();
+		assertTrue(james.canPost());
+
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		james.setLastSearchTime(sys.now().getTime());
 		assertFalse(james.canSearch());
