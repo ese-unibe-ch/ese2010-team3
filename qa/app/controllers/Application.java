@@ -238,8 +238,9 @@ public class Application extends Controller {
 
 	/**
 	 * Performs a search for the entered term. The view is displayed at the
-	 * given index. Sets the users lastSearchTime to the time now, thereby we
-	 * can allow or restrict a further search of this user.
+	 * given index. Prevents a user from searching something different too soon
+	 * or anonymous users from searching at all - with the exception of the
+	 * search for a single tag which remains unrestricted.
 	 * 
 	 * @param term
 	 *            the term to be searched for.
@@ -248,7 +249,8 @@ public class Application extends Controller {
 	 */
 	public static void search(String term, int index) {
 		User user = Session.get().currentUser();
-		if (term.matches("^tag:\\S+$")) {
+		boolean isPureTagSearch = term.matches("^tag:\\S+$");
+		if (isPureTagSearch) {
 			// we currently allow the search for a single tag for all
 			// users all the time
 		} else if (user == null) {
@@ -256,7 +258,7 @@ public class Application extends Controller {
 			if (!CUser.redirectToCallingPage()) {
 				index(0);
 			}
-		} else if (!user.canSearch()) {
+		} else if (!user.canSearchFor(term)) {
 			flash.error("search.hastowait");
 			if (!CUser.redirectToCallingPage()) {
 				index(0);
@@ -266,8 +268,8 @@ public class Application extends Controller {
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
-		if (user != null) {
-			user.setLastSearchTime(SystemInformation.get().now().getTime());
+		if (user != null && !isPureTagSearch) {
+			user.setLastSearch(term, SystemInformation.get().now());
 		}
 		render(results, term, index, maxIndex);
 	}
