@@ -162,9 +162,16 @@ public class Application extends Controller {
 		    	render("Application/register.html", randomID);
 		    }
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			Database.get().users().register(username, password, email);
-			Mails.welcome(Database.get().users().get(username));
-			index(0);
+			User user = Database.get().users().register(username, password, email);
+			boolean success = Mails.welcome(user);
+			if (success) {
+				flash.success("secure.mail.success");
+				index(0);
+			} else {
+				user.delete();
+				flash.error("secure.mail.error");
+				register();
+			}
 		} else {
 			flash.keep("url");
 			if (!isUsernameAvailable) {

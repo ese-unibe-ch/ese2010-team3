@@ -179,6 +179,8 @@ secure.xmlloadflash=base de données est importé avec succès.
 secure.xmlloaderror=Il n'était pas possible d'importer la base de données.
 secure.cleardberror=Ça ne vas pas comme ça!
 secure.cleardbflash=Tabula rasa!
+secure.mail.error=Mail n'a pas pu être envoyé!
+secure.mail.success=Réussi! Accédez à votre boîte e-mail et confirmer votre compte.
 
 since.seconds=%d secondes avant
 since.minutes=%d minute(s) avant
