@@ -58,7 +58,7 @@ user.expertise=Expertise
 user.isnovice=%s est encore un novice.
 user.confirm.success=Vous avez confirmé votre compte ajopi avec succès!
 user.confirm.error=Le compte ajopi n'est pas confirmée ou ne consiste pas!
-user.cannotsearch=Faisez une recherche en %d secondes.
+user.cannotsearch=Patientez-vous %d secondes, SVP.
 user.cannotpost=Faisez une contribution en %d secondes.
 
 # Post messages

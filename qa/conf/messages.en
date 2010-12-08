@@ -58,8 +58,8 @@ user.expertise=Expertise
 user.isnovice=%s is still a novice.
 user.confirm.success=You have successfully confirmed your ajopi account!
 user.confirm.error=The ajopi account is not confirmed or does not consist!
-user.cannotsearch=Wait %d seconds to search.
-user.cannotpost=Wait %d seconds to post.
+user.cannotsearch=Please wait %d seconds.
+user.cannotpost=Please wait %d seconds until you may post again.
 
 # Post messages
 posts.perday=per day

@@ -17,9 +17,13 @@
 	</p>
 #{/if}
 #{if user && !user.isBlocked()}
-#{if user.canPost()}
 	<h1>&{'question.ask'}</h1>
-	<div id="askquestion" class="message">
+	<div id="askquestion" class="message"
+		#{if user.timeToPost() > 0}
+			timeout="${user.timeToPost()}"
+			timeoutMsg="&{'user.cannotpost', 999}"
+		#{/if}
+	>
 		#{form @CQuestion.newQuestion()}
 			#{field 'content'}
 				<textarea name="${field.name}" id="newQuestion" class="${field.errorClass}"></textarea>
@@ -33,11 +37,6 @@
 			<input type="submit" value="&{'question.add'}" />
 		#{/form}
 	</div><!-- end askquestion -->
-#{/if}
-#{else}
-	&{'user.cannotpost', user.timeToPost()}
-	<!-- Same script goes here -->
-#{/else}
 #{/if}
 
 #{if !user}
