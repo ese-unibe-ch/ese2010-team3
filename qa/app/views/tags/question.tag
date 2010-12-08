@@ -12,7 +12,7 @@
 		<div class="commands">
 		#{if !_question.isLocked()}
 			#{if _user.canPost()}
-				<a href ="@{Application.commentQuestion(_question.id())}">&{'comment.add'}</a> |
+				<a id="comments" href ="@{Application.commentQuestion(_question.id())}">&{'comment.add'}</a> |
 			#{/if}
 			#{if _user.isObserving(_question)}
 				<a href="@{CQuestion.unwatchQuestion(_question.id())}">Stop watching</a>
