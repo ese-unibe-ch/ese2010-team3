@@ -255,14 +255,14 @@ public class Application extends Controller {
 			// users all the time
 		} else if (user == null) {
 			flash.error("search.notloggedin");
-			if (!CUser.redirectToCallingPage()) {
-				index(0);
-			}
+			// don't redirect to the calling page, as that might be a search
+			// page which would lead to an infinite loop of failing
+			index(0);
 		} else if (!user.canSearchFor(term)) {
 			flash.error("search.hastowait");
-			if (!CUser.redirectToCallingPage()) {
-				index(0);
-			}
+			// don't redirect to the calling page, as that might be a search
+			// page which would lead to an infinite loop of failing
+			index(0);
 		}
 
 		List<Question> results = Database.get().questions().searchFor(term);

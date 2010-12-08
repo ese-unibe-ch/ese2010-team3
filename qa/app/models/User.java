@@ -802,7 +802,7 @@ public class User implements IObserver {
 	 * @return true if the user can search
 	 */
 	public boolean canSearchFor(String term) {
-		return !term.equals(this.lastSearchTerm) || this.timeToSearch() <= 0;
+		return term.equals(this.lastSearchTerm) || this.timeToSearch() <= 0;
 	}
 
 	/**
