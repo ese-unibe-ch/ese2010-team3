@@ -602,4 +602,21 @@ public class UserTest extends UnitTest {
 		assertEquals(james.timeToPost(), -1);
 		assertTrue(james.canPost());
 	}
+
+	@Test
+	public void testTestMode() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James", "james");
+		sys.setTestMode(false);
+		assertTrue(james.canSearch());
+		assertTrue(james.canPost());
+		assertFalse(james.isCheating());
+		sys.setTestMode(true);
+		assertFalse(james.canSearch());
+		assertFalse(james.canPost());
+		assertTrue(james.isCheating());
+
+	}
 }

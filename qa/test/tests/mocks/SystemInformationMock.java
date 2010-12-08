@@ -12,7 +12,8 @@ import java.util.Date;
 import models.ISystemInformation;
 
 public class SystemInformationMock implements ISystemInformation {
-	private Calendar date;
+	private final Calendar date;
+	private boolean testMode = false;
 
 	public SystemInformationMock() {
 		date = Calendar.getInstance();
@@ -55,6 +56,17 @@ public class SystemInformationMock implements ISystemInformation {
 
 	public Date now() {
 		return date.getTime();
+	}
+
+	public void performanceTest(boolean SpamOrNot) {
+	}
+
+	public boolean isPerformanceTest() {
+		return this.testMode;
+	}
+
+	public void setTestMode(boolean testMode) {
+		this.testMode = testMode;
 	}
 
 }

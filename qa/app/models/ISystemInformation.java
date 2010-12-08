@@ -11,4 +11,8 @@ public interface ISystemInformation {
 	 */
 	public Date now();
 
+	public boolean isPerformanceTest();
+
+	public void setTestMode(boolean testMode);
+
 }

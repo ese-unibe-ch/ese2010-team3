@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.GregorianCalendar;
 
 import models.Question;
+import models.SystemInformation;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
@@ -15,6 +16,14 @@ public class Bootstrap extends Job {
 	@Override
 	public void doJob() {
 
+		/**
+		 * Be Careful!
+		 * 
+		 * The cheating detection, preventions and consequences are NOT
+		 * activated if this option is set true
+		 */
+		SystemInformation.get().setTestMode(false);
+
 		// User
 		User jack = Database.get().users().register("Jack", "jack", "jack@example.com");
 		User john = Database.get().users().register("John", "john", "john@example.com");
@@ -23,8 +32,9 @@ public class Bootstrap extends Job {
 		User xss = Database.get().users().register(
 				"<script>alert('XSS')</script>", "xss", "");
 
-		for (User user : Database.get().users().all())
+		for (User user : Database.get().users().all()) {
 			user.confirm();
+		}
 
 		jack.setFullname("Jack Daniel");
 		jack.setWebsite("http://www.example.org/#jackd");
