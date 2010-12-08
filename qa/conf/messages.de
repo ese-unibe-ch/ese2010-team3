@@ -15,6 +15,8 @@ new=*neu*
 search=Suche
 search.button=Suchen
 search.fail=Keine Frage gefunden mit
+search.notloggedin=Bitte log Dich ein, um diese nützliche Funktion zu verwenden.
+search.hastowait=Bitte gedulde Dich einige Sekunden, die Suche wird von anderen Benutzern verwendet.
 statistic=Statistik
 numberof=Anzahl
 reason=Grund
@@ -56,8 +58,8 @@ user.expertise=Experte
 user.isnovice=%s ist noch ein Grünschnabel.
 user.confirm.success=Sie haben Ihr Konto erfolgreich bestätigt.
 user.confirm.error=Das Konto wurde noch nicht bestätigt.
-user.cannotsearch=Die Suche ist in %d Sekunden frei.
-user.cannotpost=Sie können in %d Sekunden etwas schreiben.
+user.cannotsearch=Bitte %d Sekunden warten.
+user.cannotpost=Sie können in %d Sekunden wieder etwas schreiben.
 
 # Post messages
 posts.perday=pro Tag

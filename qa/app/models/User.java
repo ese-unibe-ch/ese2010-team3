@@ -46,8 +46,8 @@ public class User implements IObserver {
 	private boolean isModerator = false;
 	private boolean isConfirmed = false;
 	private long lastSearch = 0;
+	private String lastSearchTerm = "";
 	private long lastPost = 0;
-	
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -238,6 +238,9 @@ public class User implements IObserver {
 	 * Blocks the User if he is a cheater or unblocks him if he is not cheating.
 	 * The Cheater gets the appropriate status message.
 	 * 
+	 * This method is supposed to be called after each new post of this user, as
+	 * we will remember here the time of the user's last post for future
+	 * spamming prevention.
 	 */
 	public void updateCheaterStatus() {
 		if (isSpammer()) {
@@ -245,7 +248,7 @@ public class User implements IObserver {
 		} else if (isMaybeCheater()) {
 			block("User voted up somebody");
 		}
-		this.setLastPostTime(SystemInformation.get().now().getTime());
+		this.setLastPostTime(SystemInformation.get().now());
 	}
 
 	/**
@@ -777,24 +780,32 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Set the time of the Users last search to a specific one.
+	 * Remembers the term a user last searched for and the time of the search so
+	 * that we can specifically permit the user to continue a specific search
+	 * (e.g. display the next batch of search results) while still preventing
+	 * the user from starting a new search too soon after the last one.
 	 * 
-	 * @param Time
-	 *            in milliseconds after 1970.
+	 * @param term
+	 *            the term a user has last searched for
+	 * @param time
+	 *            the date/time of the last search
 	 */
-	public void setLastSearchTime(long time) {
-		this.lastSearch = time;
+	public void setLastSearch(String term, Date time) {
+		this.lastSearchTerm = term;
+		this.lastSearch = time.getTime();
 	}
 
 	/**
-	 * Checks if the user can use the search. There must be at least 15 seconds
-	 * between his last search and now.
+	 * Checks if the user can use the search for a specific term. There must be
+	 * at least 15 seconds between his last search and now, if it's a different
+	 * search.
 	 * 
 	 * @return true if the user can search
 	 */
-	public boolean canSearch() {
+	public boolean canSearchFor(String term) {
 		return SystemInformation.get().isPerformanceTest()
-				|| this.timeToSearch() < 0;
+				|| !term.equals(this.lastSearchTerm)
+				&& this.timeToSearch() <= 0;
 	}
 
 	/**
@@ -813,8 +824,8 @@ public class User implements IObserver {
 	 * @param Time
 	 *            in milliseconds after 1970.
 	 */
-	public void setLastPostTime(long time) {
-		this.lastPost = time;
+	public void setLastPostTime(Date time) {
+		this.lastPost = time.getTime();
 	}
 
 	/**
@@ -825,8 +836,7 @@ public class User implements IObserver {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return SystemInformation.get().isPerformanceTest() || !this.isBlocked()
-				&& this.timeToPost() < 0;
+		return SystemInformation.get().isPerformanceTest() || !this.isBlocked() && this.timeToPost() <= 0;
 	}
 
 	/**

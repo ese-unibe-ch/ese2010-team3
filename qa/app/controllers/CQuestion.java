@@ -32,7 +32,7 @@ public class CQuestion extends Controller {
 	public static void newQuestion(@Required String content, String tags) {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
-			if (!user.isBlocked()) {
+			if (user.canPost()) {
 				Question question = Database.get().questions().add(user,
 						Tools.markdownToHtml(content));
 				question.setTagString(tags);
@@ -79,7 +79,7 @@ public class CQuestion extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && question != null && !question.isLocked()
-				&& !user.isBlocked()) {
+				&& user.canPost()) {
 			Comment comment = question.comment(user,
 					Tools.markdownToHtml(content));
 			flash.success("secure.newcommentquestionflash");

@@ -386,6 +386,17 @@ div.tags .tag {
 .ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 /*********************** 
+Various overlays
+************************/
+div.overlay {
+	color: #000;
+	text-shadow: #FFF 0px 0px 5px;
+	background: #555;
+	text-align: center;
+	padding: 4px;
+	opacity: 0.9;
+}
+/*********************** 
 HTML5 form validation
 ************************/
 span.placeholder {
