@@ -247,10 +247,25 @@ public class Application extends Controller {
 	 *            the page-number which will be displayed.
 	 */
 	public static void search(String term, int index) {
+		User user = Session.get().currentUser();
+		if (term.matches("^tag:\\S+$")) {
+			// we currently allow the search for a single tag for all
+			// users all the time
+		} else if (user == null) {
+			flash.error("search.notloggedin");
+			if (!CUser.redirectToCallingPage()) {
+				index(0);
+			}
+		} else if (!user.canSearch()) {
+			flash.error("search.hastowait");
+			if (!CUser.redirectToCallingPage()) {
+				index(0);
+			}
+		}
+
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
-		User user = Session.get().currentUser();
 		if (user != null) {
 			user.setLastSearchTime(SystemInformation.get().now().getTime());
 		}
