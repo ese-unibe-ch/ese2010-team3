@@ -121,6 +121,8 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForCheater() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
 		User user = new User("TheSupported", "supported");
 		User user2 = new User("Cheater", "cheater");
 		assertFalse(user.isBlocked());
@@ -131,9 +133,14 @@ public class UserTest extends UnitTest {
 		for (int i = 0; i < 5; i++) {
 			new Question(user, "This is my " + i + ". question").voteUp(user2);
 		}
+		sys.setTestMode(false);
 		assertTrue(user2.isMaybeCheater());
 		assertTrue(user2.isCheating());
 		assertTrue(user2.isBlocked());
+		sys.setTestMode(true);
+		assertFalse(user2.isCheating());
+		sys.setTestMode(false);
+		assertTrue(user2.isCheating());
 		assertEquals(user2.getStatusMessage(), "User voted up somebody");
 		assertFalse(user.isMaybeCheater());
 		assertFalse(user.isCheating());
@@ -588,12 +595,11 @@ public class UserTest extends UnitTest {
 		sys.second(14);
 		assertEquals(james.timeToSearch(), 1);
 		assertFalse(james.canSearchFor("search 2"));
-		assertTrue(james.canSearchFor("search 1"));
+		assertFalse(james.canSearchFor("search 1"));
 		sys.second(15);
 		assertEquals(james.timeToSearch(), 0);
 		assertTrue(james.canSearchFor("search 2"));
-		assertTrue(james.canSearchFor("search 1"));
-
+		assertFalse(james.canSearchFor("search 1"));
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		james.setLastPostTime(sys.now());
 		assertEquals(james.timeToPost(), 30);
@@ -602,6 +608,30 @@ public class UserTest extends UnitTest {
 		assertFalse(james.canPost());
 		sys.second(30);
 		assertEquals(james.timeToPost(), 0);
+		assertTrue(james.canPost());
+	}
+
+	@Test
+	public void testTestMode() {
+		SystemInformationMock sys = new SystemInformationMock();
+		SystemInformation.mockWith(sys);
+		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James", "james");
+		sys.setTestMode(false);
+		assertFalse(sys.isInTestMode());
+		james.setLastPostTime(sys.now());
+		james.setLastSearch("search 1", sys.now());
+		assertFalse(james.canSearchFor("search 2"));
+		assertFalse(james.canPost());
+		sys.setTestMode(false);
+		assertEquals(sys.isInTestMode(), false);
+		sys.setTestMode(true);
+		assertEquals(sys.isInTestMode(), true);
+		assertTrue(sys.isInTestMode());
+		sys.isInTestMode();
+		james.setLastPostTime(sys.now());
+		james.setLastSearch("search 3", sys.now());
+		assertTrue(james.canSearchFor("search 4"));
 		assertTrue(james.canPost());
 	}
 }
