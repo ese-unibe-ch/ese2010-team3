@@ -22,7 +22,7 @@ public class Bootstrap extends Job {
 		 * The cheating detection, preventions and consequences are NOT
 		 * activated if this option is set true
 		 */
-		SystemInformation.get().setTestMode(true);
+		SystemInformation.get().setTestMode(false);
 
 		// User
 		User jack = Database.get().users().register("Jack", "jack",
