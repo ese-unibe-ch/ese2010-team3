@@ -162,9 +162,16 @@ public class Application extends Controller {
 		    	render("Application/register.html", randomID);
 		    }
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			Database.get().users().register(username, password, email);
-			Mails.welcome(Database.get().users().get(username));
-			index(0);
+			User user = Database.get().users().register(username, password, email);
+			boolean success = Mails.welcome(user);
+			if (success) {
+				flash.success("secure.mail.success");
+				index(0);
+			} else {
+				user.delete();
+				flash.error("secure.mail.error");
+				register();
+			}
 		} else {
 			flash.keep("url");
 			if (!isUsernameAvailable) {
@@ -238,8 +245,9 @@ public class Application extends Controller {
 
 	/**
 	 * Performs a search for the entered term. The view is displayed at the
-	 * given index. Sets the users lastSearchTime to the time now, thereby we
-	 * can allow or restrict a further search of this user.
+	 * given index. Prevents a user from searching something different too soon
+	 * or anonymous users from searching at all - with the exception of the
+	 * search for a single tag which remains unrestricted.
 	 * 
 	 * @param term
 	 *            the term to be searched for.
@@ -247,12 +255,28 @@ public class Application extends Controller {
 	 *            the page-number which will be displayed.
 	 */
 	public static void search(String term, int index) {
+		User user = Session.get().currentUser();
+		boolean isPureTagSearch = term.matches("^tag:\\S+$");
+		if (isPureTagSearch) {
+			// we currently allow the search for a single tag for all
+			// users all the time
+		} else if (user == null) {
+			flash.error("search.notloggedin");
+			// don't redirect to the calling page, as that might be a search
+			// page which would lead to an infinite loop of failing
+			index(0);
+		} else if (!user.canSearchFor(term)) {
+			flash.error("search.hastowait");
+			// don't redirect to the calling page, as that might be a search
+			// page which would lead to an infinite loop of failing
+			index(0);
+		}
+
 		List<Question> results = Database.get().questions().searchFor(term);
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
-		User user = Session.get().currentUser();
-		if (user != null) {
-			user.setLastSearchTime(SystemInformation.get().now().getTime());
+		if (user != null && !isPureTagSearch) {
+			user.setLastSearch(term, SystemInformation.get().now());
 		}
 		render(results, term, index, maxIndex);
 	}

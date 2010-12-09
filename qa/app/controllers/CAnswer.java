@@ -33,7 +33,7 @@ public class CAnswer extends Controller {
 		Question question = Database.get().questions().get(questionId);
 		if (!Validation.hasErrors() && question != null) {
 			User user = Session.get().currentUser();
-			if (!question.isLocked() && !user.isBlocked()) {
+			if (!question.isLocked() && user.canPost()) {
 				Answer answer = question.answer(user,
 						Tools.markdownToHtml(content));
 				flash.success("secure.newanswerflash");
@@ -64,7 +64,7 @@ public class CAnswer extends Controller {
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()
-				&& !user.isBlocked()) {
+				&& user.canPost()) {
 			Comment comment = answer.comment(user, Tools.markdownToHtml(content));
 			flash.success("secure.newcommentanswerflash");
 			ActionDefinition action = reverse();

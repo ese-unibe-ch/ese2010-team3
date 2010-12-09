@@ -15,6 +15,8 @@ moderator=moderator
 search=Search
 search.button=Search
 search.fail=There is no question found matching
+search.notloggedin=Please log in, if you want to make use of this terrific feature.
+search.hastowait=Please be patient for a few seconds and let other users search as well.
 statistic=Statistics
 numberof=Number of
 reason=Reason
@@ -56,8 +58,8 @@ user.expertise=Expertise
 user.isnovice=%s is still a novice.
 user.confirm.success=You have successfully confirmed your ajopi account!
 user.confirm.error=The ajopi account is not confirmed or does not consist!
-user.cannotsearch=Wait %d seconds to search.
-user.cannotpost=Wait %d seconds to post.
+user.cannotsearch=Please wait %d seconds.
+user.cannotpost=Please wait %d seconds until you may post again.
 
 # Post messages
 posts.perday=per day
@@ -177,6 +179,8 @@ secure.xmlloadflash=XML file successfully loaded to the database.
 secure.xmlloaderror=Couldn't load xml file!
 secure.cleardberror=You're a naughty boy!
 secure.cleardbflash=Tabula rasa!
+secure.mail.error=Mail could not be sent!
+secure.mail.success=Success! Go to your Mailbox and confirm your account.
 
 since.seconds=%d seconds ago
 since.minutes=%d minute(s) ago
