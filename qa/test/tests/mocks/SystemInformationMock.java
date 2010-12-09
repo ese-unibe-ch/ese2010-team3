@@ -9,11 +9,10 @@ import static java.util.Calendar.YEAR;
 import java.util.Calendar;
 import java.util.Date;
 
-import models.ISystemInformation;
+import models.SystemInformation;
 
-public class SystemInformationMock implements ISystemInformation {
+public class SystemInformationMock extends SystemInformation {
 	private final Calendar date;
-	private boolean testMode = false;
 
 	public SystemInformationMock() {
 		date = Calendar.getInstance();
@@ -54,19 +53,9 @@ public class SystemInformationMock implements ISystemInformation {
 		return this;
 	}
 
+	@Override
 	public Date now() {
 		return date.getTime();
-	}
-
-	public void performanceTest(boolean SpamOrNot) {
-	}
-
-	public boolean isPerformanceTest() {
-		return this.testMode;
-	}
-
-	public void setTestMode(boolean testMode) {
-		this.testMode = testMode;
 	}
 
 }

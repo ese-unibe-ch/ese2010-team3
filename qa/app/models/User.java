@@ -230,7 +230,7 @@ public class User implements IObserver {
 	 * 
 	 */
 	public boolean isCheating() {
-		return !SystemInformation.get().isPerformanceTest()
+		return !SystemInformation.get().isInTestMode()
 				&& (isSpammer() || isMaybeCheater());
 	}
 
@@ -803,7 +803,7 @@ public class User implements IObserver {
 	 * @return true if the user can search
 	 */
 	public boolean canSearchFor(String term) {
-		return SystemInformation.get().isPerformanceTest()
+		return SystemInformation.get().isInTestMode()
 				|| !term.equals(this.lastSearchTerm)
 				&& this.timeToSearch() <= 0;
 	}
@@ -836,7 +836,7 @@ public class User implements IObserver {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return SystemInformation.get().isPerformanceTest() || !this.isBlocked() && this.timeToPost() <= 0;
+		return SystemInformation.get().isInTestMode() || !this.isBlocked() && this.timeToPost() <= 0;
 	}
 
 	/**
