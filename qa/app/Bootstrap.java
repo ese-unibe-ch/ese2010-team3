@@ -22,13 +22,17 @@ public class Bootstrap extends Job {
 		 * The cheating detection, preventions and consequences are NOT
 		 * activated if this option is set true
 		 */
-		SystemInformation.get().setTestMode(false);
+		SystemInformation.get().setTestMode(true);
 
 		// User
-		User jack = Database.get().users().register("Jack", "jack", "jack@example.com");
-		User john = Database.get().users().register("John", "john", "john@example.com");
-		User bill = Database.get().users().register("Bill", "bill", "bill@example.com");
-		User kate = Database.get().users().register("Kate", "kate", "kate@example.com");
+		User jack = Database.get().users().register("Jack", "jack",
+				"jack@example.com");
+		User john = Database.get().users().register("John", "john",
+				"john@example.com");
+		User bill = Database.get().users().register("Bill", "bill",
+				"bill@example.com");
+		User kate = Database.get().users().register("Kate", "kate",
+				"kate@example.com");
 		User xss = Database.get().users().register(
 				"<script>alert('XSS')</script>", "xss", "");
 
