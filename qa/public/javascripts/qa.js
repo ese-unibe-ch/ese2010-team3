@@ -104,6 +104,34 @@ $(document).ready(function() {
 			return false;
 		});
 	}
+	
+	// allow to enable certain functionality only after a predefined timeout
+	// <div timeout="seconds" timeoutMsg="display this instead (999s left)">
+	$("div[timeout]").each(function() {
+		var timeout = parseInt(this.getAttribute("timeout"));
+		if (timeout > 0) {
+			var message = this.getAttribute("timeoutMsg");
+			var self = $(this);
+			var overlay = $('<div class="overlay" />').appendTo(document.body);
+			
+			(function() {
+				// reposition the overlay, in case the underlying div isn't
+				// completely static, either (happens e.g. when images haven't
+				// finished loading yet)
+				overlay.css({
+					width: self.outerWidth(), height: self.outerHeight(),
+					left: self.offset().left, top: self.offset().top,
+					position: "absolute"
+				});
+				overlay.text(message.replace(999, timeout));
+				
+				if (--timeout > 0)
+					setTimeout(arguments.callee, 1000);
+				else
+					overlay.fadeOut("fast", function() { overlay.remove(); });
+			})();
+		}
+	});
 });
 
 // configure the WMD editor

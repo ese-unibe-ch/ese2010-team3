@@ -15,6 +15,8 @@ moderator=|\\/|0Ð3r470r
 search=$34r(|-|
 search.button=$34r(|-|
 search.fail=7|-|3r3 1$ |\\|0 qµ3$710|\\| ƒ0µ|\\|Ð |\\/|47(|-|1|\\|9
+search.notloggedin=P£34$3 £09 1|\\|, 1ƒ ¥0µ \\/\\/4|\\|7 70 |\\/|4|{3 µ$3 0ƒ 7|-|1$ 73rr1ƒ1( ƒ347µr3.
+search.hastowait=P£34$3 b3 p4713|\\|7 ƒ0r 4 ƒ3\\/\\/ $3(0|\\|Ð$ 4|\\|Ð £37 07|-|3r µ$3r$ $34r(|-| 4$ \\/\\/3££.
 statistic=$7471$71(5
 numberof=|\\|µ|\\/|b3r 0ƒ
 reason=R34$0|\\|
@@ -56,8 +58,8 @@ user.expertise=3xp3r71$3
 user.isnovice=%s 1$ $71££ 4 |\\|0\\/1(3.
 user.confirm.success=¥0µ |-|4\\/3 $µ((3$$ƒµ££¥ (0|\\|ƒ1r|\\/|3Ð ¥0µr 4j0p1 4((0µ|\\|7!
 user.confirm.error=7|-|3 4j0p1 4((0µ|\|7 1$ |\|07 (0|\|ƒ1r|\\/|3Ð 0r Ð03$ |\\|07 (0|\\|$1$7$!
-user.cannotsearch=\\/\\/417 %d $3(0|\\|Ð$ 70 $34r(|-|.
-user.cannotpost=\\/\\/417 %d $3(0|\\|Ð$ 70 p0$7.
+user.cannotsearch=P£34$3 \\/\\/417 %d $3(0|\\|Ð$.
+user.cannotpost=P£34$3 \\/\\/417 %d $3(0|\\|Ð$ µ|\\|71£ ¥0µ |\\/|4¥ p0$7 4941|\\|.
 
 # Post messages
 posts.perday=p3r Ð4¥
@@ -177,8 +179,8 @@ secure.xmlloadflash=X|\\/|£ ƒ1£3 $µ((3$$ƒµ££¥ £04Ð3Ð 70 7|-|3 Ð474b
 secure.xmlloaderror=(0µ£Ð|\\|'7 £04Ð x|\\/|£ ƒ1£3!
 secure.cleardberror=¥0µ'r3 4 ƒ|{|\\| |\\|4µ9|-|7¥ b0¥!
 secure.cleardbflash=74bµ£4 r4$4!
-secure.mail.error=***Mail could not be sent!***
-secure.mail.success=***Success! Go to your Mailbox and confirm your account.***
+secure.mail.error=|\\/|41£ (0µ£Ð |\\|07 b3 $3|\\|7!
+secure.mail.success=$µ((3$$! 90 70 ¥0µr |\\/|41£b0x 4|\\|Ð (0|\\|ƒ1r|\\/| ¥0µr 4((0µ|\\|7.
 
 since.seconds=%d $3(0|\\|Ð$ 460
 since.minutes=%d |\\/\1|\\|µt3[$] 460
@@ -196,3 +198,8 @@ mail.welcome.hi=|-|1
 mail.welcome.introduction=P£34$3 (0|\\|ƒ1r|\\/| ¥0µr 4j0p1 4((0µ|\\|7 b¥ (£1(|{1|\\|9 7|-|1$ £1|\\||{:
 mail.welcome.introduction2=0|\\|(3 ¥0µ (0|\\|ƒ1r|\\/|, ¥0µ \\/\\/1££ |-|4\\/3 ƒµ££ 4((3$$ 70 4j0p1 4|\\|Ð 4££ ƒµ7µr3 |\\|071ƒ1(4710|\\|$ \\/\\/1££ b3 $3|\\|7 70 7|-|1$ 3|\\/|41£ 4ÐÐr3$$.
 mail.welcome.team=B3$7 r394rÐ$ ¥0µr 4j0p1 734|\\/|
+
+
+# Leet Translator:
+# http://www.albinoblacksheep.com/text/leet
+# use 75% l33tness and do not forget to escape the backslashes!
