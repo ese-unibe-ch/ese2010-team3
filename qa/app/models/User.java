@@ -804,8 +804,7 @@ public class User implements IObserver {
 	 */
 	public boolean canSearchFor(String term) {
 		return SystemInformation.get().isInTestMode()
-				|| !term.equals(this.lastSearchTerm)
-				&& this.timeToSearch() <= 0;
+				|| term.equals(this.lastSearchTerm) || this.timeToSearch() <= 0;
 	}
 
 	/**

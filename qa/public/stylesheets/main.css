@@ -396,6 +396,10 @@ div.overlay {
 	padding: 4px;
 	opacity: 0.9;
 }
+span.highlight {
+	background: #FF0;
+	color: #000;
+}
 /*********************** 
 HTML5 form validation
 ************************/

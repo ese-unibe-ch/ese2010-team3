@@ -132,6 +132,23 @@ $(document).ready(function() {
 			})();
 		}
 	});
+	
+	// highlight search results, when the highlighter has been loaded
+	// (currently on search pages only)
+	if (jQuery.fn.highlight) {
+		$("input[type=search]").each(function() {
+			var terms = this.getAttribute("value").split(/\s+/);
+			for (var i = 0; i < terms.length; i++) {
+				if (!terms[i])
+					continue;
+				// only highlight tags when explicitly searching for tags
+				if (/^tag:(\S+)/.test(terms[i]))
+					$("a.tag").highlight(RegExp.$1);
+				else
+					$(".question").highlight(terms[i]);
+			}
+		});
+	}
 });
 
 // configure the WMD editor

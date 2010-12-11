@@ -595,11 +595,11 @@ public class UserTest extends UnitTest {
 		sys.second(14);
 		assertEquals(james.timeToSearch(), 1);
 		assertFalse(james.canSearchFor("search 2"));
-		assertFalse(james.canSearchFor("search 1"));
+		assertTrue(james.canSearchFor("search 1"));
 		sys.second(15);
 		assertEquals(james.timeToSearch(), 0);
 		assertTrue(james.canSearchFor("search 2"));
-		assertFalse(james.canSearchFor("search 1"));
+		assertTrue(james.canSearchFor("search 1"));
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		james.setLastPostTime(sys.now());
 		assertEquals(james.timeToPost(), 30);
