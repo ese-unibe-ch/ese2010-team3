@@ -1,10 +1,11 @@
 package models;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * A representation of notification collection. Each user has at least one
@@ -26,9 +27,9 @@ public class Mailbox implements IMailbox {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see models.IMailbox#recieve(models.Notification)
+	 * @see models.IMailbox#receive(models.Notification)
 	 */
-	public void recieve(Notification notification) {
+	public void receive(Notification notification) {
 		this.notifications.put(notification.id(), notification);
 	}
 
@@ -38,16 +39,17 @@ public class Mailbox implements IMailbox {
 	 * @see models.IMailbox#getAllNotifications()
 	 */
 	public List<Notification> getAllNotifications() {
-		List<Notification> result = new LinkedList();
+		LinkedList<Notification> result = new LinkedList();
 		List<Notification> all = new LinkedList(this.notifications.values());
 		for (Notification notification : all) {
 			if (notification.getAbout().isDeleted()) {
-				deleteNotification(notification.id());
+				this.deleteNotification(notification.id());
 			} else {
-				result.add(notification);
+				result.addLast(notification);
 			}
 		}
-		return sort(result);
+		Collections.sort(result);
+		return result;
 	}
 
 	/*
@@ -57,12 +59,12 @@ public class Mailbox implements IMailbox {
 	 */
 	public List<Notification> getRecentNotifications() {
 		List<Notification> recent = new LinkedList();
-		for (Notification notification : getAllNotifications()) {
+		for (Notification notification : this.getAllNotifications()) {
 			if (notification.isVeryRecent()) {
 				recent.add(notification);
 			}
 		}
-		return sort(recent);
+		return recent;
 	}
 
 	/*
@@ -72,29 +74,24 @@ public class Mailbox implements IMailbox {
 	 */
 	public List<Notification> getNewNotifications() {
 		List<Notification> unread = new LinkedList();
-		for (Notification notification : getAllNotifications()) {
+		for (Notification notification : this.getAllNotifications()) {
 			if (notification.isNew()) {
 				unread.add(notification);
 			}
 		}
-		return sort(unread);
+		return unread;
 	}
 
 	public void deleteNotification(int id) {
 		this.notifications.remove(id);
 	}
 
-	private List<Notification> sort(List<Notification> l) {
-		Collections.sort(l);
-		return l;
-	}
-
 	public String toString() {
-		return "MB[" + this.notifications.size() + "]";
+		return "MB[" + this.name + "(" + this.notifications.size() + ")" + "]";
 	}
 
 	public void delete() {
-		for (Notification notification : getAllNotifications()) {
+		for (Notification notification : this.getAllNotifications()) {
 			notification.unregister();
 		}
 	}

@@ -159,9 +159,13 @@ public class CUser extends Controller {
 		if (notification != null) {
 			notification.unsetNew();
 		}
-		if (notification != null && notification.getAbout() instanceof Answer) {
-			Application.question(((Answer) notification.getAbout())
-					.getQuestion().id());
+		if (notification != null) {
+			if (notification.getAbout() instanceof Answer) {
+				Application.question(((Answer) notification.getAbout())
+						.getQuestion().id());
+			} else if (notification.getAbout() instanceof Question) {
+				Application.question(((Question) notification.getAbout()).id());
+			}
 		} else if (!CUser.redirectToCallingPage()) {
 			Application.notifications(0);
 		}

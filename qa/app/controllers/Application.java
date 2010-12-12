@@ -3,11 +3,11 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
 import models.Comment;
-import models.Entry;
 import models.Notification;
 import models.Question;
 import models.SystemInformation;
@@ -288,6 +288,7 @@ public class Application extends Controller {
 	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
+			List<Notification> spamNotification = new LinkedList();
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
 			List<Question> questions = Database.get().questions().all();
@@ -297,8 +298,12 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
+			if (user.isModerator()) {
+				spamNotification.addAll(Database.get().users()
+						.getModeratorMailbox().getNewNotifications());
+			}
 			render(notifications, watchingQuestions, suggestedQuestions,
-					content);
+					spamNotification, content);
 		} else {
 			Application.index(0);
 		}
@@ -426,10 +431,4 @@ public class Application extends Controller {
 		renderBinary(captcha);
 	}
 
-	/**
-	 * Informs the moderators that this post is spam.
-	 */
-	static void markSpam(Entry entry) {
-		entry.markSpam();
-	}
 }

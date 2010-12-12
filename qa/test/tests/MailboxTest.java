@@ -36,7 +36,7 @@ public class MailboxTest extends UnitTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		this.pete = new User("Pete", "");
 		this.susane = new User("Susane", "");
 		this.mailbox = new Mailbox("We're married");
@@ -50,13 +50,14 @@ public class MailboxTest extends UnitTest {
 	}
 
 	@Test
-	public void testRecieve() {
+	public void testReceive() {
+		assertEquals(this.mailbox.getName(), "We're married");
 		new Notification(this.mailbox, this.question);
 	}
 
 	@Test
 	public void testGetAll() {
-		testRecieve();
+		new Notification(this.mailbox, this.question);
 		List<Notification> petesNotifications = this.pete.getAllNotifications();
 		List<Notification> susanesNotifications = this.susane
 				.getAllNotifications();
@@ -68,7 +69,7 @@ public class MailboxTest extends UnitTest {
 
 	@Test
 	public void testGetRecent() {
-		testGetAll();
+		new Notification(this.mailbox, this.question);
 		List<Notification> petesNotifications = this.pete
 				.getRecentNotifications();
 		List<Notification> susanesNotifications = this.susane
@@ -87,7 +88,7 @@ public class MailboxTest extends UnitTest {
 
 	@Test
 	public void testGetNew() {
-		testGetAll();
+		new Notification(this.mailbox, this.question);
 		List<Notification> petesNotifications = this.pete.getNewNotifications();
 		List<Notification> susanesNotifications = this.susane
 				.getNewNotifications();

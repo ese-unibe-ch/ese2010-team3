@@ -1,10 +1,9 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import models.Question;
 import models.User;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ public class MarkSpamTest extends UnitTest {
 	private Question otherQuestion;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		this.alex = new User("Alex", "123");
 		this.alex.setModerator(true);
 		this.pete = new User("Pete", "789");
@@ -26,11 +25,17 @@ public class MarkSpamTest extends UnitTest {
 		this.otherQuestion = new Question(this.pete, "MOAR SPAM!!!!");
 	}
 
+	@After
+	public void tearDown() {
+		this.alex.delete();
+		this.pete.delete();
+	}
+
 	@Test
 	public void shouldInformModerator() {
 		this.question.markSpam();
 		assertTrue(this.question.isPossiblySpam());
-		assertEquals(1, this.alex.getNotifications().size());
+		assertEquals(1, this.alex.getAllNotifications().size());
 	}
 
 	@Test
@@ -43,16 +48,20 @@ public class MarkSpamTest extends UnitTest {
 
 	@Test
 	public void shouldEaseProcess() {
-		shouldDeleteSpam();
+		this.question.markSpam();
+		this.question.confirmSpam();
 		this.otherQuestion.markSpam();
-		assertEquals(this.alex.getNotifications().size(), 1);
+		assertEquals(this.alex.getAllNotifications().size(), 0);
 		assertTrue(this.otherQuestion.isDeleted());
 	}
 
 	@Test
 	public void shouldntBotherNonMods() {
-		shouldEaseProcess();
+		this.question.markSpam();
+		this.question.markSpam();
+		this.question.confirmSpam();
+		this.otherQuestion.markSpam();
 		this.alex.setModerator(false);
-		assertEquals(this.alex.getNotifications().size(), 0);
+		assertEquals(this.alex.getAllNotifications().size(), 0);
 	}
 }

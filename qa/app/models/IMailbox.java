@@ -10,7 +10,7 @@ public interface IMailbox {
 	 * @param notification
 	 *            A non-null notification
 	 */
-	public void recieve(Notification notification);
+	public void receive(Notification notification);
 
 	/**
 	 * Gets all Notifications regardless of status.

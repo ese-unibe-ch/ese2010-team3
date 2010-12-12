@@ -54,6 +54,8 @@ public class User implements IObserver, IMailbox {
 	private String lastSearchTerm = "";
 	private long lastPost = 0;
 
+	// Check if and how these can be combined. The question is,
+	// if we need this distinction in the view.
 	private Mailbox mainMailbox;
 	private List<IMailbox> otherMailboxes;
 
@@ -85,7 +87,7 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public boolean canEdit(Entry entry) {
-		return entry.owner() == this && !isBlocked() || isModerator();
+		return entry.owner() == this && !this.isBlocked() || this.isModerator();
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class User implements IObserver, IMailbox {
 	 */
 	public void registerItem(Item item) {
 		this.items.add(item);
-		updateCheaterStatus();
+		this.updateCheaterStatus();
 	}
 
 	/**
@@ -212,8 +214,7 @@ public class User implements IObserver, IMailbox {
 		// operate on a clone to prevent a ConcurrentModificationException
 		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
-			if (item instanceof Question || keepOnlyQuestions
-					&& item instanceof Entry) {
+			if (item instanceof Question || keepOnlyQuestions) {
 				((Entry) item).anonymize();
 				this.items.remove(item);
 			}
@@ -227,7 +228,7 @@ public class User implements IObserver, IMailbox {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
-		int number = howManyItemsPerHour();
+		int number = this.howManyItemsPerHour();
 		if (number >= 60)
 			return true;
 		return false;
@@ -242,7 +243,7 @@ public class User implements IObserver, IMailbox {
 	 */
 	public boolean isCheating() {
 		return !SystemInformation.get().isInTestMode()
-				&& (isSpammer() || isMaybeCheater());
+				&& (this.isSpammer() || this.isMaybeCheater());
 	}
 
 	/**
@@ -254,12 +255,12 @@ public class User implements IObserver, IMailbox {
 	 * spamming prevention.
 	 */
 	public void updateCheaterStatus() {
-		if (isSpammer()) {
-			block("User is a Spammer");
-		} else if (isMaybeCheater()) {
-			block("User voted up somebody");
+		if (this.isSpammer()) {
+			this.block("User is a Spammer");
+		} else if (this.isMaybeCheater()) {
+			this.block("User voted up somebody");
 		}
-		setLastPostTime(SystemInformation.get().now());
+		this.setLastPostTime(SystemInformation.get().now());
 	}
 
 	/**
@@ -303,7 +304,7 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public int getAge() {
-		return age();
+		return this.age();
 	}
 
 	public void setWebsite(String website) {
@@ -418,9 +419,11 @@ public class User implements IObserver, IMailbox {
 		if (this.isModerator != mod) {
 			this.isModerator = mod;
 			if (mod) {
-				addMailbox(Database.get().users().getModeratorMailbox());
+				this.addMailbox(Database.get().users().getModeratorMailbox());
 			} else {
-				removeMailbox(Database.get().users().getModeratorMailbox());
+				this
+						.removeMailbox(Database.get().users()
+								.getModeratorMailbox());
 			}
 		}
 	}
@@ -482,7 +485,7 @@ public class User implements IObserver, IMailbox {
 	 * @return user
 	 */
 	public List<Question> getRecentQuestions() {
-		return getRecentItemsByType(Question.class);
+		return this.getRecentItemsByType(Question.class);
 	}
 
 	/**
@@ -498,7 +501,7 @@ public class User implements IObserver, IMailbox {
 		 * those questions belonging to negative rated answers.
 		 */
 		// getAnswers already sorts all answers - best first
-		for (Answer a : getAnswers()) {
+		for (Answer a : this.getAnswers()) {
 			Question q = a.getQuestion();
 			if (!sortedAnsweredQuestions.contains(q) && a.rating() >= 0) {
 				sortedAnsweredQuestions.add(q);
@@ -515,7 +518,8 @@ public class User implements IObserver, IMailbox {
 	 */
 	public List<Question> getSuggestedQuestions() {
 		List<Question> suggestedQuestions = new ArrayList<Question>();
-		List<Question> sortedAnsweredQuestions = getSortedAnsweredQuestions();
+		List<Question> sortedAnsweredQuestions = this
+				.getSortedAnsweredQuestions();
 
 		/*
 		 * Don't list questions that have many answers or already have a best
@@ -548,7 +552,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code>
 	 */
 	public List<Answer> getRecentAnswers() {
-		return getRecentItemsByType(Answer.class);
+		return this.getRecentItemsByType(Answer.class);
 	}
 
 	/**
@@ -559,7 +563,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code>
 	 */
 	public List<Comment> getRecentComments() {
-		return getRecentItemsByType(Comment.class);
+		return this.getRecentItemsByType(Comment.class);
 	}
 
 	/**
@@ -570,7 +574,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code>
 	 */
 	protected List getRecentItemsByType(Class type) {
-		List recentItems = getItemsByType(type);
+		List recentItems = this.getItemsByType(type);
 		Collections.sort(recentItems, new Comparator<Item>() {
 			public int compare(Item i1, Item i2) {
 				return i2.timestamp().compareTo(i1.timestamp());
@@ -588,7 +592,7 @@ public class User implements IObserver, IMailbox {
 	 * @return ArrayList<Question> All questions of this <code>User</code>
 	 */
 	public List<Question> getQuestions() {
-		return getItemsByType(Question.class);
+		return this.getItemsByType(Question.class);
 	}
 
 	/**
@@ -599,7 +603,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code>
 	 */
 	public List<Answer> getAnswers() {
-		return getItemsByType(Answer.class);
+		return this.getItemsByType(Answer.class);
 	}
 
 	/**
@@ -610,7 +614,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code>
 	 */
 	public List<Comment> getComments() {
-		return getItemsByType(Comment.class);
+		return this.getItemsByType(Comment.class);
 	}
 
 	/**
@@ -619,7 +623,7 @@ public class User implements IObserver, IMailbox {
 	 * @return List<Answer> All best rated answers
 	 */
 	public List<Answer> bestAnswers() {
-		return Mapper.filter(getAnswers(), new IFilter<Answer, Boolean>() {
+		return Mapper.filter(this.getAnswers(), new IFilter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isBestAnswer();
 			}
@@ -632,7 +636,7 @@ public class User implements IObserver, IMailbox {
 	 * @return List<Answer> All high rated answers
 	 */
 	public List<Answer> highRatedAnswers() {
-		return Mapper.filter(getAnswers(), new IFilter<Answer, Boolean>() {
+		return Mapper.filter(this.getAnswers(), new IFilter<Answer, Boolean>() {
 			public Boolean visit(Answer a) {
 				return a.isHighRated();
 			}
@@ -640,7 +644,7 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public List<Notification> getNotifications() {
-		return getAllNotifications();
+		return this.mainMailbox.getAllNotifications();
 	}
 
 	/**
@@ -649,7 +653,7 @@ public class User implements IObserver, IMailbox {
 	 * @return a very recent notification (or null, if there isn't any)
 	 */
 	public Notification getVeryRecentNewNotification() {
-		for (Notification n : getNewNotifications())
+		for (Notification n : this.mainMailbox.getNewNotifications())
 			if (n.isVeryRecent())
 				return n;
 		return null;
@@ -667,7 +671,7 @@ public class User implements IObserver, IMailbox {
 	 * @return a notification with the given id
 	 */
 	public Notification getNotification(int id) {
-		for (Notification n : getNotifications())
+		for (Notification n : this.getAllNotifications())
 			if (n.id() == id)
 				return n;
 		return null;
@@ -774,7 +778,7 @@ public class User implements IObserver, IMailbox {
 	public boolean canSearchFor(String term) {
 		return SystemInformation.get().isInTestMode()
 				|| !term.equals(this.lastSearchTerm)
-				&& timeToSearch() <= 0;
+				&& this.timeToSearch() <= 0;
 	}
 
 	/**
@@ -805,8 +809,8 @@ public class User implements IObserver, IMailbox {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return SystemInformation.get().isInTestMode() || !isBlocked()
-				&& timeToPost() <= 0;
+		return SystemInformation.get().isInTestMode() || !this.isBlocked()
+				&& this.timeToPost() <= 0;
 	}
 
 	/**
@@ -865,7 +869,7 @@ public class User implements IObserver, IMailbox {
 	 */
 	public List<Notification> getAllNotifications() {
 		List<Notification> all = new LinkedList();
-		for (IMailbox mailbox : getAllMailboxes()) {
+		for (IMailbox mailbox : this.getAllMailboxes()) {
 			all.addAll(mailbox.getAllNotifications());
 		}
 		return all;
@@ -878,10 +882,19 @@ public class User implements IObserver, IMailbox {
 	 */
 	public List<Notification> getNewNotifications() {
 		List<Notification> allNew = new LinkedList();
-		for (IMailbox mailbox : getAllMailboxes()) {
+		for (IMailbox mailbox : this.getAllMailboxes()) {
 			allNew.addAll(mailbox.getNewNotifications());
 		}
 		return allNew;
+	}
+
+	/**
+	 * Gets new Notifications, but only the ones personally for me.
+	 * 
+	 * @return List of notifications (newest first)
+	 */
+	public List<Notification> getMyNewNotifications() {
+		return this.mainMailbox.getNewNotifications();
 	}
 
 	/*
@@ -891,14 +904,23 @@ public class User implements IObserver, IMailbox {
 	 */
 	public List<Notification> getRecentNotifications() {
 		List<Notification> allRecent = new LinkedList();
-		for (IMailbox mailbox : getAllMailboxes()) {
+		for (IMailbox mailbox : this.getAllMailboxes()) {
 			allRecent.addAll(mailbox.getRecentNotifications());
 		}
 		return allRecent;
 	}
 
-	public void recieve(Notification notification) {
-		this.mainMailbox.recieve(notification);
+	/**
+	 * Gets recent notifications, but only the ones personally for me.
+	 * 
+	 * @return List of notifications (newest first)
+	 */
+	public List<Notification> getMyRecentNotifications() {
+		return this.mainMailbox.getRecentNotifications();
+	}
+
+	public void receive(Notification notification) {
+		this.mainMailbox.receive(notification);
 	}
 
 	public void deleteNotification(int id) {
