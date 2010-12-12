@@ -12,18 +12,25 @@ public class Notification extends Item implements Comparable<Notification> {
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
 
+	private IMailbox mailbox;
+
+	protected boolean isDeleted;
+
 	/**
-	 * Instantiates a new notification.
+	 * Sends a Notification to a Mailbox. This can for example be the <q>Spam
+	 * claims</q> inbox of the moderators.
 	 * 
-	 * @param owner
-	 *            the owner
+	 * @param mailbox
+	 *            the mailbox that should receive the message
 	 * @param about
-	 *            what the notification is all about.
+	 *            what Entry this is all about.
 	 */
-	public Notification(User owner, Entry about) {
-		super(owner);
+	public Notification(IMailbox mailbox, Entry about) {
+		super(null);
 		this.about = about;
 		this.isNew = true;
+		this.mailbox = mailbox;
+		mailbox.recieve(this);
 	}
 
 	/**
@@ -38,7 +45,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	/**
 	 * Checks if the notification is very recent.
 	 * 
-	 * @return true, if it is very recent
+	 * @return true, if it is very recent, ie no older than 5 minutes
 	 */
 	public boolean isVeryRecent() {
 		return SystemInformation.get().now().getTime() - timestamp().getTime() <= 5 * 60 * 1000;
@@ -62,10 +69,20 @@ public class Notification extends Item implements Comparable<Notification> {
 	}
 
 	/**
+	 * Sort notifications most-recent one first.
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Notification n) {
-		// sort notifications most-recent one first
 		return n.id() - id();
+	}
+
+	public void unregister() {
+		this.mailbox.deleteNotification(id());
+		super.unregister();
+	}
+
+	public String toString() {
+		return "N[" + this.mailbox.toString() + this.about.toString() + "]";
 	}
 }

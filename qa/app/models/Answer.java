@@ -61,11 +61,12 @@ public class Answer extends Entry {
 		for (Comment comment : this.comments.values()) {
 			comment.unregister();
 		}
-		this.comments = new HashMap<Integer, Comment>();
+		this.comments.clear();
 
 		this.question.unregister(this);
 		unregisterVotes();
 		unregisterUser();
+		super.unregister();
 	}
 
 	/**

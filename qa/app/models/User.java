@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +23,15 @@ import models.helpers.Tools;
  * {@link Answer}s, {@link Comment}s and {@link Vote}s. When deleted, the
  * <code>User</code> requests all his {@link Item}s to delete themselves.
  * 
+ * Furthermore, they have their own profile with informations about them,
+ * an email address to contact them and some more attributes and methods that
+ * represent the user of the system and their actions.
+ * 
  * @author Simon Marti
  * @author Mirco Kocher
  * 
  */
-public class User implements IObserver {
+public class User implements IObserver, IMailbox {
 
 	private final String name;
 	private String password;
@@ -38,7 +43,7 @@ public class User implements IObserver {
 	private String profession;
 	private String employer;
 	private String biography;
-	
+
 	private String confirmKey;
 
 	private String statustext = "";
@@ -48,6 +53,9 @@ public class User implements IObserver {
 	private long lastSearch = 0;
 	private String lastSearchTerm = "";
 	private long lastPost = 0;
+
+	private Mailbox mainMailbox;
+	private List<IMailbox> otherMailboxes;
 
 	/**
 	 * Creates a <code>User</code> with a given name.
@@ -61,10 +69,12 @@ public class User implements IObserver {
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
+		this.mainMailbox = new Mailbox();
+		this.otherMailboxes = new LinkedList();
 	}
-	
+
 	/**
-	 * Only for tests: 
+	 * Only for tests:
 	 * Creates a <code>User</code> with a given name.
 	 * 
 	 * @param name
@@ -119,6 +129,7 @@ public class User implements IObserver {
 			item.unregister();
 		}
 		this.items.clear();
+		this.mainMailbox.delete();
 		Database.get().users().remove(this.name);
 	}
 
@@ -248,7 +259,7 @@ public class User implements IObserver {
 		} else if (isMaybeCheater()) {
 			block("User voted up somebody");
 		}
-		this.setLastPostTime(SystemInformation.get().now());
+		setLastPostTime(SystemInformation.get().now());
 	}
 
 	/**
@@ -334,11 +345,11 @@ public class User implements IObserver {
 	public void setSHA1Password(String password) {
 		this.password = Tools.encrypt(password);
 	}
-	
+
 	public String getConfirmKey() {
 		return this.confirmKey;
 	}
-	
+
 	public void setConfirmKey(String key) {
 		this.confirmKey = key;
 	}
@@ -387,9 +398,10 @@ public class User implements IObserver {
 	public boolean isModerator() {
 		return this.isModerator;
 	}
-	
+
 	/**
 	 * Get the status of the user if he is confirmed or not.
+	 * 
 	 * @return true, if the user is confirmed
 	 */
 	public boolean isConfirmed() {
@@ -405,7 +417,7 @@ public class User implements IObserver {
 	public void setModerator(Boolean mod) {
 		this.isModerator = mod;
 	}
-	
+
 	/**
 	 * Set the status of the user on confirmed
 	 */
@@ -620,59 +632,8 @@ public class User implements IObserver {
 		});
 	}
 
-	/**
-	 * Get an ArrayList of all notifications of this user, sorted most-recent
-	 * one first and optionally fulfilling one filter criterion.
-	 * 
-	 * @param filter
-	 *            an optional name of a filter method (e.g. "isNew")
-	 * @return ArrayList<Notification> All notifications of this user
-	 */
-	protected List<Notification> getAllNotifications() {
-		ArrayList<Notification> result = new ArrayList<Notification>();
-		/*
-		 * Hack: remove all notifications to deleted answers
-		 * 
-		 * unfortunately, there's currently no other way to achieve this, as
-		 * there is no global list of all existing notifications nor an easy way
-		 * to register all users for observing the deletion of answers (because
-		 * there's no global list of all existing users, either)
-		 */
-		List<Notification> notifications = getItemsByType(Notification.class);
-		for (Notification n : notifications) {
-			// currently, we only notify about answers
-			Answer answer = (Answer) n.getAbout();
-			if (answer.getQuestion() != null) {
-				result.add(n);
-			} else {
-				n.unregister();
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Get an ArrayList of all notifications of this user, sorted most-recent
-	 * one first.
-	 * 
-	 * @return ArrayList<Notification> All notifications of this user
-	 */
 	public List<Notification> getNotifications() {
 		return getAllNotifications();
-	}
-
-	/**
-	 * Get an ArrayList of all unread notifications of this user
-	 * 
-	 * @return the unread notifications
-	 */
-	public List<Notification> getNewNotifications() {
-		return Mapper.filter(getAllNotifications(),
-				new IFilter<Notification, Boolean>() {
-					public Boolean visit(Notification n) {
-						return n.isNew();
-					}
-				});
 	}
 
 	/**
@@ -764,13 +725,14 @@ public class User implements IObserver {
 				continue;
 			}
 			// ignore tags this user knows hardly anything about
-			if (stats.get(tag).get(this) < MINIMAL_EXPERTISE_THRESHOLD) {
+			if (stats.get(tag).get(this) < this.MINIMAL_EXPERTISE_THRESHOLD) {
 				continue;
 			}
 
 			Map<User, Integer> tagStats = stats.get(tag);
 			List<User> experts = Mapper.sortByValue(tagStats);
-			int threshold = (100 - EXPERTISE_PERCENTILE) * experts.size() / 100;
+			int threshold = (100 - this.EXPERTISE_PERCENTILE) * experts.size()
+					/ 100;
 			if (tagStats.get(this) >= tagStats.get(experts.get(threshold))) {
 				expertise.add(tag);
 			}
@@ -805,7 +767,7 @@ public class User implements IObserver {
 	public boolean canSearchFor(String term) {
 		return SystemInformation.get().isInTestMode()
 				|| !term.equals(this.lastSearchTerm)
-				&& this.timeToSearch() <= 0;
+				&& timeToSearch() <= 0;
 	}
 
 	/**
@@ -836,7 +798,8 @@ public class User implements IObserver {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return SystemInformation.get().isInTestMode() || !this.isBlocked() && this.timeToPost() <= 0;
+		return SystemInformation.get().isInTestMode() || !isBlocked()
+				&& timeToPost() <= 0;
 	}
 
 	/**
@@ -849,4 +812,89 @@ public class User implements IObserver {
 		return (int) (30 - (SystemInformation.get().now().getTime() - this.lastPost) / 1000);
 	}
 
+	/**
+	 * Gives the main mailbox of the user, where all personal stuff should end
+	 * up in.
+	 * 
+	 * @return
+	 *         the primary mailbox of the user
+	 */
+	public IMailbox getMailbox() {
+		return this.mainMailbox;
+	}
+
+	public List<IMailbox> getAllMailboxes() {
+		List<IMailbox> mailboxes = new LinkedList();
+		mailboxes.addAll(this.otherMailboxes);
+		mailboxes.add(this.mainMailbox);
+		return mailboxes;
+	}
+
+	/**
+	 * Adds an additional Mailbox to the user, eg because they became mod and
+	 * thus gain access to the moderators mailbox.
+	 * 
+	 * @param mailbox
+	 *            mailbox to be added to the user so they see the updates.
+	 */
+
+	public void addMailbox(IMailbox mailbox) {
+		this.otherMailboxes.add(mailbox);
+	}
+
+	/**
+	 * Revoke access to the Mailbox.
+	 * 
+	 * @param mailbox
+	 */
+	public void removeMailbox(IMailbox mailbox) {
+		this.otherMailboxes.remove(mailbox);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see models.IMailbox#getAll()
+	 */
+	public List<Notification> getAllNotifications() {
+		List<Notification> all = new LinkedList();
+		for (IMailbox mailbox : getAllMailboxes()) {
+			all.addAll(mailbox.getAllNotifications());
+		}
+		return all;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see models.IMailbox#getNew()
+	 */
+	public List<Notification> getNewNotifications() {
+		List<Notification> allNew = new LinkedList();
+		for (IMailbox mailbox : getAllMailboxes()) {
+			allNew.addAll(mailbox.getNewNotifications());
+		}
+		return allNew;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see models.IMailbox#getRecent()
+	 */
+	public List<Notification> getRecentNotifications() {
+		List<Notification> allRecent = new LinkedList();
+		for (IMailbox mailbox : getAllMailboxes()) {
+			allRecent.addAll(mailbox.getRecentNotifications());
+		}
+		return allRecent;
+	}
+
+	public void recieve(Notification notification) {
+		this.mainMailbox.recieve(notification);
+	}
+
+	public void deleteNotification(int id) {
+		this.mainMailbox.deleteNotification(id);
+	}
 }

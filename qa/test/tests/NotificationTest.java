@@ -27,42 +27,42 @@ public class NotificationTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		savedSysInfo = SystemInformation.get();
-		norbert = new User("Norbert", "norbert");
-		question = new Question(norbert, "Need I be watched?");
-		andrew = new User("Andrew", "andrew");
+		this.savedSysInfo = SystemInformation.get();
+		this.norbert = new User("Norbert", "norbert");
+		this.question = new Question(this.norbert, "Need I be watched?");
+		this.andrew = new User("Andrew", "andrew");
 	}
 
 	@After
 	public void tearDown() {
-		SystemInformation.mockWith(savedSysInfo);
+		SystemInformation.mockWith(this.savedSysInfo);
 	}
 
 	@Test
 	public void shouldBeObserving() {
-		assertFalse(norbert.isObserving(question));
-		norbert.startObserving(question);
-		assertTrue(norbert.isObserving(question));
-		norbert.stopObserving(question);
-		assertFalse(norbert.isObserving(question));
+		assertFalse(this.norbert.isObserving(this.question));
+		this.norbert.startObserving(this.question);
+		assertTrue(this.norbert.isObserving(this.question));
+		this.norbert.stopObserving(this.question);
+		assertFalse(this.norbert.isObserving(this.question));
 	}
 
 	@Test
 	public void shouldBeNotified() {
-		assertEquals(norbert.getNotifications().size(), 0);
-		question.answer(andrew, "Answer one");
-		assertEquals(norbert.getNotifications().size(), 0);
-		norbert.startObserving(question);
-		Answer answer2 = question.answer(andrew, "Answer two");
-		assertEquals(norbert.getNotifications().size(), 1);
-		assertEquals(norbert.getNotifications().get(0).getAbout(), answer2);
-		norbert.getNotifications().get(0).unregister();
-		assertEquals(norbert.getNotifications().size(), 0);
-		question.answer(andrew, "Answer three");
-		assertEquals(norbert.getNotifications().size(), 1);
-		norbert.stopObserving(question);
-		question.answer(andrew, "Answer four");
-		assertEquals(norbert.getNotifications().size(), 1);
+		assertEquals(this.norbert.getNotifications().size(), 0);
+		this.question.answer(this.andrew, "Answer one");
+		assertEquals(this.norbert.getNotifications().size(), 0);
+		this.norbert.startObserving(this.question);
+		Answer answer2 = this.question.answer(this.andrew, "Answer two");
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		assertEquals(this.norbert.getNotifications().get(0).getAbout(), answer2);
+		this.norbert.getNotifications().get(0).unregister();
+		assertEquals(this.norbert.getNotifications().size(), 0);
+		this.question.answer(this.andrew, "Answer three");
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		this.norbert.stopObserving(this.question);
+		this.question.answer(this.andrew, "Answer four");
+		assertEquals(this.norbert.getNotifications().size(), 1);
 	}
 
 	@Test
@@ -71,101 +71,106 @@ public class NotificationTest extends UnitTest {
 		SystemInformation.mockWith(sys);
 		sys.hour(12).minute(0);
 
-		norbert.startObserving(question);
-		assertNull(norbert.getVeryRecentNewNotification());
-		assertEquals(norbert.getNewNotifications().size(), 0);
+		this.norbert.startObserving(this.question);
+		assertNull(this.norbert.getVeryRecentNewNotification());
+		assertEquals(this.norbert.getNewNotifications().size(), 0);
 
-		question.answer(andrew, "recent answer?");
-		Notification recent = norbert.getVeryRecentNewNotification();
+		this.question.answer(this.andrew, "recent answer?");
+		Notification recent = this.norbert.getVeryRecentNewNotification();
 		assertNotNull(recent);
 		assertEquals(recent.getAbout().summary(), "recent answer?");
 
 		sys.minute(2);
-		assertNotNull(norbert.getVeryRecentNewNotification());
-		assertEquals(norbert.getVeryRecentNewNotification(), recent);
+		assertNotNull(this.norbert.getVeryRecentNewNotification());
+		assertEquals(this.norbert.getVeryRecentNewNotification(), recent);
 		sys.minute(10);
-		assertNull(norbert.getVeryRecentNewNotification());
+		assertNull(this.norbert.getVeryRecentNewNotification());
 
 		assertTrue(recent.isNew());
-		assertEquals(norbert.getNewNotifications().size(), 1);
+		assertEquals(this.norbert.getNewNotifications().size(), 1);
 		recent.unsetNew();
 		assertFalse(recent.isNew());
-		assertEquals(norbert.getNewNotifications().size(), 0);
+		assertEquals(this.norbert.getNewNotifications().size(), 0);
 	}
 
 	@Test
 	public void shouldHaveDifferentNotificationIDs() {
-		norbert.startObserving(question);
+		this.norbert.startObserving(this.question);
 		for (int i = 0; i < 10; i++) {
-			question.answer(andrew, "Answer " + i);
+			this.question.answer(this.andrew, "Answer " + i);
 		}
-		assertEquals(norbert.getNotifications().size(), 10);
+		assertEquals(this.norbert.getNotifications().size(), 10);
 
-		Notification first = Collections.max(norbert.getNotifications());
-		assertEquals(norbert.getNotification(first.id()), first);
-		assertEquals(norbert.getNotifications().get(9), first);
+		Notification first = Collections.max(this.norbert.getNotifications());
+		assertEquals(this.norbert.getNotification(first.id()), first);
+		// What is this about and why is it tested here? and #get(9) should
+		// equal first?
+		assertEquals(this.norbert.getNotifications().get(9), first);
 
 		for (int i = 0; i < 9; i++) {
-			assertTrue(norbert.getNotifications().get(i).id() > norbert
+			assertTrue(this.norbert.getNotifications().get(i).id() > this.norbert
 					.getNotifications().get(i + 1).id());
 		}
 
-		Notification last = Collections.min(norbert.getNotifications());
-		assertEquals(norbert.getNotifications().get(0), last);
-		assertEquals(norbert.getVeryRecentNewNotification(), last);
+		Notification last = Collections.min(this.norbert.getNotifications());
+		assertEquals(this.norbert.getNotifications().get(0), last);
+		assertEquals(this.norbert.getVeryRecentNewNotification(), last);
 
 		last.unsetNew();
-		assertEquals(norbert.getVeryRecentNewNotification(), norbert
+		assertEquals(this.norbert.getVeryRecentNewNotification(), this.norbert
 				.getNotifications().get(1));
 
-		assertNull(norbert.getNotification(-1));
+		assertNull(this.norbert.getNotification(-1));
 	}
 
 	@Test
 	public void shouldNotGetSelfNotified() {
-		norbert.startObserving(question);
-		andrew.startObserving(question);
-		question.answer(norbert, "Norbert's answer");
-		question.answer(andrew, "Andrew's answer");
-		assertEquals(norbert.getNotifications().size(), 1);
-		assertEquals(andrew.getNotifications().size(), 1);
-		assertEquals(norbert.getVeryRecentNewNotification().getAbout().owner(),
-				andrew);
-		assertEquals(andrew.getVeryRecentNewNotification().getAbout().owner(),
-				norbert);
+		this.norbert.startObserving(this.question);
+		this.andrew.startObserving(this.question);
+		this.question.answer(this.norbert, "Norbert's answer");
+		this.question.answer(this.andrew, "Andrew's answer");
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		assertEquals(this.andrew.getNotifications().size(), 1);
+		assertEquals(this.norbert.getVeryRecentNewNotification().getAbout()
+				.owner(),
+				this.andrew);
+		assertEquals(this.andrew.getVeryRecentNewNotification().getAbout()
+				.owner(),
+				this.norbert);
 	}
 
 	@Test
 	public void shouldNotNotifyAboutDeletedEntries() {
-		norbert.startObserving(question);
-		question.answer(andrew, "soon to be gone");
-		assertEquals(norbert.getNotifications().size(), 1);
-		assertNotNull(norbert.getVeryRecentNewNotification());
-		andrew.delete();
-		assertEquals(norbert.getNotifications().size(), 0);
-		assertNull(norbert.getVeryRecentNewNotification());
+		this.norbert.startObserving(this.question);
+		this.question.answer(this.andrew, "soon to be gone");
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		assertNotNull(this.norbert.getVeryRecentNewNotification());
+		this.andrew.delete();
+		assertEquals(this.norbert.getNotifications().size(), 0);
+		assertNull(this.norbert.getVeryRecentNewNotification());
 	}
 
 	@Test
 	public void shouldNotifyAboutAnonymousEntries() {
-		norbert.startObserving(question);
-		question.answer(andrew, "soon to be gone");
-		assertEquals(norbert.getNotifications().size(), 1);
-		assertNotNull(norbert.getVeryRecentNewNotification());
-		andrew.anonymize(true);
-		andrew.delete();
-		assertEquals(norbert.getNotifications().size(), 1);
-		assertNotNull(norbert.getVeryRecentNewNotification());
-		assertNull(norbert.getVeryRecentNewNotification().getAbout().owner());
+		this.norbert.startObserving(this.question);
+		this.question.answer(this.andrew, "soon to be gone");
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		assertNotNull(this.norbert.getVeryRecentNewNotification());
+		this.andrew.anonymize(true);
+		this.andrew.delete();
+		assertEquals(this.norbert.getNotifications().size(), 1);
+		assertNotNull(this.norbert.getVeryRecentNewNotification());
+		assertNull(this.norbert.getVeryRecentNewNotification().getAbout()
+				.owner());
 	}
 
 	@Test
 	public void shouldUnregisterNotifications() {
-		norbert.observe(question, question.answer(andrew, "???"));
-		Notification notification = norbert.getNotifications().get(0);
-		assertNotNull(notification.owner());
-		norbert.anonymize(true);
-		norbert.delete();
+		this.norbert.observe(this.question, this.question.answer(this.andrew,
+				"???"));
+		Notification notification = this.norbert.getNotifications().get(0);
+		this.norbert.anonymize(true);
+		this.norbert.delete();
 		assertNull(notification.owner());
 	}
 
@@ -174,30 +179,33 @@ public class NotificationTest extends UnitTest {
 		IObservable unobservable = new IObservable() {
 			public void addObserver(IObserver o) {
 			}
+
 			public void removeObserver(IObserver o) {
 			}
+
 			public boolean hasObserver(IObserver o) {
 				return false;
 			}
+
 			public void notifyObservers(Object arg) {
 			}
 		};
-		norbert.observe(unobservable, null);
-		norbert.observe(question, null);
-		assertEquals(norbert.getNotifications().size(), 0);
+		this.norbert.observe(unobservable, null);
+		this.norbert.observe(this.question, null);
+		assertEquals(this.norbert.getNotifications().size(), 0);
 
 		// keep Cobertura happy
-		unobservable.addObserver(norbert);
-		unobservable.removeObserver(norbert);
-		assertFalse(unobservable.hasObserver(norbert));
-		unobservable.notifyObservers(norbert);
+		unobservable.addObserver(this.norbert);
+		unobservable.removeObserver(this.norbert);
+		assertFalse(unobservable.hasObserver(this.norbert));
+		unobservable.notifyObservers(this.norbert);
 	}
 
 	@Test
 	public void shouldRequireObserver() {
 		boolean hasThrown = false;
 		try {
-			question.addObserver(null);
+			this.question.addObserver(null);
 		} catch (IllegalArgumentException ex) {
 			hasThrown = true;
 		}
