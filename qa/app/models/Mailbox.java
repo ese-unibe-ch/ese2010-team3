@@ -16,8 +16,10 @@ import java.util.TreeMap;
  */
 public class Mailbox implements IMailbox {
 	private SortedMap<Integer, Notification> notifications;
+	private String name;
 
-	public Mailbox() {
+	public Mailbox(String name) {
+		this.name = name;
 		this.notifications = new TreeMap();
 	}
 
@@ -36,15 +38,16 @@ public class Mailbox implements IMailbox {
 	 * @see models.IMailbox#getAllNotifications()
 	 */
 	public List<Notification> getAllNotifications() {
-		List<Notification> all = new LinkedList();
-		for (Notification notification : this.notifications.values()) {
-			if (notification.isDeleted() || notification.getAbout().isDeleted()) {
+		List<Notification> result = new LinkedList();
+		List<Notification> all = new LinkedList(this.notifications.values());
+		for (Notification notification : all) {
+			if (notification.getAbout().isDeleted()) {
 				deleteNotification(notification.id());
 			} else {
-				all.add(notification);
+				result.add(notification);
 			}
 		}
-		return sort(all);
+		return sort(result);
 	}
 
 	/*
@@ -94,5 +97,9 @@ public class Mailbox implements IMailbox {
 		for (Notification notification : getAllNotifications()) {
 			notification.unregister();
 		}
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

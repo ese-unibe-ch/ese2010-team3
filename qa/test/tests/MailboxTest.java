@@ -39,7 +39,7 @@ public class MailboxTest extends UnitTest {
 	public void setUp() throws Exception {
 		this.pete = new User("Pete", "");
 		this.susane = new User("Susane", "");
-		this.mailbox = new Mailbox();
+		this.mailbox = new Mailbox("We're married");
 		this.pete.addMailbox(this.mailbox);
 		this.susane.addMailbox(this.mailbox);
 		this.question = new Question(this.susane, "ORLY?");

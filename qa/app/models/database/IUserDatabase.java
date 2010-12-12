@@ -2,6 +2,7 @@ package models.database;
 
 import java.util.Collection;
 
+import models.IMailbox;
 import models.User;
 
 public interface IUserDatabase {
@@ -82,4 +83,10 @@ public interface IUserDatabase {
 	 * Get moderating crowd.
 	 */
 	public Collection<User> allModerators();
+
+	/**
+	 * Returns the mailbox that every moderator can read.
+	 */
+
+	public IMailbox getModeratorMailbox();
 }

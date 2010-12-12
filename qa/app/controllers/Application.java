@@ -7,6 +7,7 @@ import java.util.List;
 
 import models.Answer;
 import models.Comment;
+import models.Entry;
 import models.Notification;
 import models.Question;
 import models.SystemInformation;
@@ -136,8 +137,8 @@ public class Application extends Controller {
 	}
 
 	public static void register() {
-	    String randomID = Codec.UUID();
-	    render(randomID);
+		String randomID = Codec.UUID();
+		render(randomID);
 	}
 
 	/**
@@ -152,17 +153,19 @@ public class Application extends Controller {
 	 * @param passwordrepeat
 	 *            the repeated password.
 	 */
-	public static void signup(@Required String username, String password, @Required String email, 
+	public static void signup(@Required String username, String password,
+			@Required String email,
 			String passwordrepeat, @Required String code, String randomID) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
 		validation.equals(code, Cache.get(randomID));
-		    if(validation.hasErrors()) {
-		    	flash.error("captcha.invalid");
-		    	render("Application/register.html", randomID);
-		    }
+		if (validation.hasErrors()) {
+			flash.error("captcha.invalid");
+			render("Application/register.html", randomID);
+		}
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			User user = Database.get().users().register(username, password, email);
+			User user = Database.get().users().register(username, password,
+					email);
 			boolean success = Mails.welcome(user);
 			if (success) {
 				flash.success("secure.mail.success");
@@ -385,12 +388,14 @@ public class Application extends Controller {
 		}
 		render(showUser);
 	}
-	
+
 	/**
 	 * Confirm a {@link User}'s profile if they clicked on the right link
 	 * 
-	 * @param username of the {@link User}
-	 * @param key for the Confirmation
+	 * @param username
+	 *            of the {@link User}
+	 * @param key
+	 *            for the Confirmation
 	 */
 	public static void confirmUser(@Required String username, String key) {
 		User user = Database.get().users().get(username);
@@ -403,22 +408,28 @@ public class Application extends Controller {
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			flash.error("user.confirm.error");
 			index(0);
-			}
 		}
-		
+	}
+
 	/**
 	 * Generates a random captcha-image.
 	 * 
 	 * @param id
 	 */
 	public static void captcha(String id) {
-	    Images.Captcha captcha = Images.captcha();
-	    String code = captcha.getText("#ff8400");
-	    Cache.set(id, code, "3mn");
-	    renderBinary(captcha);
+		Images.Captcha captcha = Images.captcha();
+		String code = captcha.getText("#ff8400");
+		Cache.set(id, code, "3mn");
+		renderBinary(captcha);
+	}
+
+	/**
+	 * Informs the moderators that this post is spam.
+	 */
+	static void markSpam(Entry entry) {
+		entry.markSpam();
 	}
 }

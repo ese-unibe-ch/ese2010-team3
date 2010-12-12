@@ -3,6 +3,7 @@ package models;
 import java.util.Collection;
 import java.util.HashMap;
 
+import models.database.Database;
 import models.helpers.Tools;
 
 /**
@@ -15,6 +16,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
 	private HashMap<User, Vote> votes;
+	private boolean possiblySpam;
 
 	/**
 	 * Create an <code>Entry</code>.
@@ -26,10 +28,12 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public Entry(User owner, String content) {
 		super(owner);
-		if (content == null)
+		if (content == null) {
 			content = "";
+		}
 		this.content = content;
 		this.votes = new HashMap<User, Vote>();
+		this.possiblySpam = false;
 	}
 
 	/**
@@ -160,7 +164,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return the {@link Vote} that was removed (or <code>null</code>)
 	 */
 	public Vote voteCancel(User user) {
-		if (this.hasVote(user)) {
+		if (hasVote(user)) {
 			this.votes.get(user).unregister();
 		}
 		return this.votes.remove(user);
@@ -175,7 +179,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 *         <code>Entry</code>
 	 */
 	public boolean hasUpVote(User user) {
-		return this.hasVote(user) && this.votes.get(user).up();
+		return hasVote(user) && this.votes.get(user).up();
 	}
 
 	/**
@@ -187,7 +191,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 *         <code>Entry</code>
 	 */
 	public boolean hasDownVote(User user) {
-		return this.hasVote(user) && !this.votes.get(user).up();
+		return hasVote(user) && !this.votes.get(user).up();
 	}
 
 	/**
@@ -212,7 +216,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	private Vote vote(User user, boolean up) {
 		if (user == owner())
 			return null;
-		if (this.hasVote(user)) {
+		if (hasVote(user)) {
 			this.votes.get(user).unregister();
 		}
 
@@ -239,7 +243,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
 				.replaceFirst("^(.{75}\\S{0,9} ?).{5,}", "$1...");
 	}
-	
+
 	/**
 	 * Get all <code>Votes</code>.
 	 * 
@@ -247,6 +251,25 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public Collection<Vote> getVotes() {
 		return this.votes.values();
+	}
+
+	public void markSpam() {
+		if (owner().isBlocked()) {
+			confirmSpam();
+		} else if (!this.possiblySpam) {
+			new Notification(NotificationType.SPAM, Database.get().users()
+					.getModeratorMailbox(), this);
+			this.possiblySpam = true;
+		}
+	}
+
+	public void confirmSpam() {
+		owner().block("Declared Spammer");
+		this.unregister();
+	}
+
+	public boolean isPossiblySpam() {
+		return this.possiblySpam;
 	}
 
 	@Override

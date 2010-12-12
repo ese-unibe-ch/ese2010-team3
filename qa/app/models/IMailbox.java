@@ -44,4 +44,9 @@ public interface IMailbox {
 	 */
 	public void deleteNotification(int id);
 
+	/**
+	 * Gets the name of the mailbox. Useful for display and possibly debugging.
+	 */
+	public String getName();
+
 }

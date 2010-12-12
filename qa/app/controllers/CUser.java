@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.ParseException;
 
 import models.Answer;
+import models.Entry;
 import models.Notification;
 import models.Question;
 import models.User;

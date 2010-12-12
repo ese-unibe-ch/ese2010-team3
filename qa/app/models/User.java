@@ -69,7 +69,7 @@ public class User implements IObserver, IMailbox {
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
-		this.mainMailbox = new Mailbox();
+		this.mainMailbox = new Mailbox(name);
 		this.otherMailboxes = new LinkedList();
 	}
 
@@ -415,7 +415,14 @@ public class User implements IObserver, IMailbox {
 	 *            , true if the user will be a moderator
 	 */
 	public void setModerator(Boolean mod) {
-		this.isModerator = mod;
+		if (this.isModerator != mod) {
+			this.isModerator = mod;
+			if (mod) {
+				addMailbox(Database.get().users().getModeratorMailbox());
+			} else {
+				removeMailbox(Database.get().users().getModeratorMailbox());
+			}
+		}
 	}
 
 	/**
