@@ -44,7 +44,7 @@ public abstract class Item {
 	public Item(User owner) {
 		this.owner = owner;
 		this.timestamp = SystemInformation.get().now();
-		this.id = autoIncrementID();
+		this.id = this.autoIncrementID();
 		if (owner != null) {
 			owner.registerItem(this);
 		}
@@ -93,7 +93,7 @@ public abstract class Item {
 	 */
 	public void unregister() {
 		this.isDeleted = true;
-		unregisterUser();
+		this.unregisterUser();
 	}
 
 	/**
@@ -106,6 +106,11 @@ public abstract class Item {
 		this.owner = null;
 	}
 
+	/**
+	 * Has this Item been deleted?
+	 * 
+	 * @return iff the unregister method has been called.
+	 */
 	public boolean isDeleted() {
 		return this.isDeleted;
 	}

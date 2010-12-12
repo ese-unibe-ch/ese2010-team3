@@ -42,7 +42,7 @@ public interface IMailbox {
 	 * @param id
 	 *            unique id identifying the notification to be deleted.
 	 */
-	public void deleteNotification(int id);
+	public void removeNotification(int id);
 
 	/**
 	 * Gets the name of the mailbox. Useful for display and possibly debugging.

@@ -43,7 +43,7 @@ public class Mailbox implements IMailbox {
 		List<Notification> all = new LinkedList(this.notifications.values());
 		for (Notification notification : all) {
 			if (notification.getAbout().isDeleted()) {
-				this.deleteNotification(notification.id());
+				this.removeNotification(notification.id());
 			} else {
 				result.addLast(notification);
 			}
@@ -82,7 +82,7 @@ public class Mailbox implements IMailbox {
 		return unread;
 	}
 
-	public void deleteNotification(int id) {
+	public void removeNotification(int id) {
 		this.notifications.remove(id);
 	}
 

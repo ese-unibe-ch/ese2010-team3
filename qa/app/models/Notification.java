@@ -66,7 +66,8 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * @return true, if it is very recent, ie no older than 5 minutes
 	 */
 	public boolean isVeryRecent() {
-		return SystemInformation.get().now().getTime() - timestamp().getTime() <= 5 * 60 * 1000;
+		return SystemInformation.get().now().getTime()
+				- this.timestamp().getTime() <= 5 * 60 * 1000;
 	}
 
 	/**
@@ -92,11 +93,11 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Notification n) {
-		return n.id() - id();
+		return n.id() - this.id();
 	}
 
 	public void unregister() {
-		this.mailbox.deleteNotification(id());
+		this.mailbox.removeNotification(this.id());
 		super.unregister();
 	}
 

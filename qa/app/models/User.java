@@ -923,7 +923,7 @@ public class User implements IObserver, IMailbox {
 		this.mainMailbox.receive(notification);
 	}
 
-	public void deleteNotification(int id) {
-		this.mainMailbox.deleteNotification(id);
+	public void removeNotification(int id) {
+		this.mainMailbox.removeNotification(id);
 	}
 }
