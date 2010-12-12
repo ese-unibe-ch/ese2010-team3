@@ -5,6 +5,7 @@ import models.Question;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
+import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
@@ -33,6 +34,7 @@ public class CQuestion extends Controller {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
 			if (user.canPost()) {
+				Cache.delete("index.questions");
 				Question question = Database.get().questions().add(user,
 						Tools.markdownToHtml(content));
 				question.setTagString(tags);

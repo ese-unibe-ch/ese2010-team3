@@ -169,6 +169,9 @@ public class User implements IObserver {
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
 	public boolean isMaybeCheater() {
+		if (SystemInformation.get().isInTestMode())
+			return false;
+
 		int voteCount = 0;
 		HashMap<User, Integer> votesForUser = new HashMap<User, Integer>();
 		for (Item item : this.items) {
@@ -216,6 +219,8 @@ public class User implements IObserver {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
+		if (SystemInformation.get().isInTestMode())
+			return false;
 		int number = howManyItemsPerHour();
 		if (number >= 60)
 			return true;
@@ -230,8 +235,7 @@ public class User implements IObserver {
 	 * 
 	 */
 	public boolean isCheating() {
-		return !SystemInformation.get().isInTestMode()
-				&& (isSpammer() || isMaybeCheater());
+		return isSpammer() || isMaybeCheater();
 	}
 
 	/**

@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import models.Answer;
-import models.Comment;
 import models.Notification;
 import models.Question;
 import models.SystemInformation;
@@ -43,14 +42,19 @@ public class Application extends Controller {
 	 *            the number of the page of {@link Question}'s.
 	 */
 	public static void index(int index) {
-		List<Question> questions = Database.get().questions().all();
-		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
-		Collections.sort(questions, new Comparator<Question>() {
-			public int compare(Question q1, Question q2) {
-				return q2.timestamp().compareTo(q1.timestamp());
-			}
-		});
+		List<Question> questions = (List<Question>) Cache
+				.get("index.questions");
+		if (questions == null) {
+			questions = Database.get().questions().all();
+			Collections.sort(questions, new Comparator<Question>() {
+				public int compare(Question q1, Question q2) {
+					return q2.timestamp().compareTo(q1.timestamp());
+				}
+			});
+			Cache.set("index.questions", questions, "10mn");
+		}
 		questions = Tools.paginate(questions, entriesPerPage, index);
+		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
 		render(questions, index, maxIndex);
 	}
 
@@ -65,29 +69,19 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			List<Question> similarQuestions = new ArrayList(question
-					.getSimilarQuestions());
-			if (similarQuestions.size() > 5) {
-				similarQuestions = similarQuestions.subList(0, 5);
+			List<Question> similarQuestions = (List<Question>) Cache
+					.get("question." + id + ".similar");
+			if (similarQuestions == null) {
+				similarQuestions = new ArrayList(question.getSimilarQuestions());
+				if (similarQuestions.size() > 5) {
+					similarQuestions = similarQuestions.subList(0, 5);
+				}
+				Cache.set("question." + id + ".similar", similarQuestions,
+						"10mn");
 			}
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
-	}
-
-	/**
-	 * Renders the detailed view of a {@link Question} and it's {@link Answer} 
-	 * 's.
-	 * 
-	 * @param id
-	 *            the id of the {@link Question}.
-	 */
-	public static void answerQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		List<Question> questions = Database.get().questions().all();
-		List<Answer> answers = question.answers();
-		int count = question.answers().size();
-		render(questions, question, answers, count);
 	}
 
 	/**
@@ -99,10 +93,7 @@ public class Application extends Controller {
 	 */
 	public static void commentQuestion(int id) {
 		Question question = Database.get().questions().get(id);
-		List<Question> questions = Database.get().questions().all();
-		List<Comment> comments = question.comments();
-		int count = question.comments().size();
-		render(questions, question, comments, count);
+		render(question);
 	}
 
 	/**
@@ -115,8 +106,7 @@ public class Application extends Controller {
 	public static void commentAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
-		List<Comment> comments = answer.comments();
-		render(answer, comments, question);
+		render(answer, question);
 	}
 
 	/**
@@ -156,7 +146,7 @@ public class Application extends Controller {
 			String passwordrepeat, @Required String code, String randomID) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
-		validation.equals(code, Cache.get(randomID));
+		validation.equals(code, Cache.get("captcha." + randomID));
 		    if(validation.hasErrors()) {
 		    	flash.error("captcha.invalid");
 		    	render("Application/register.html", randomID);
@@ -255,9 +245,14 @@ public class Application extends Controller {
 	 *            the page-number which will be displayed.
 	 */
 	public static void search(String term, int index) {
+		List<Question> results = (List<Question>) Cache.get("search." + term);
 		User user = Session.get().currentUser();
 		boolean isPureTagSearch = term.matches("^tag:\\S+$");
-		if (isPureTagSearch) {
+
+		if (results != null) {
+			// we've already done this search lately, so we can
+			// let the user do it with hardly any additional cost
+		} else if (isPureTagSearch) {
 			// we currently allow the search for a single tag for all
 			// users all the time
 		} else if (user == null) {
@@ -272,7 +267,10 @@ public class Application extends Controller {
 			index(0);
 		}
 
-		List<Question> results = Database.get().questions().searchFor(term);
+		if (results == null) {
+			results = Database.get().questions().searchFor(term);
+			Cache.set("search." + term, results, "5mn");
+		}
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
 		if (user != null && !isPureTagSearch) {
@@ -418,7 +416,7 @@ public class Application extends Controller {
 	public static void captcha(String id) {
 	    Images.Captcha captcha = Images.captcha();
 	    String code = captcha.getText("#ff8400");
-	    Cache.set(id, code, "3mn");
+		Cache.set(id, "captcha." + code, "3mn");
 	    renderBinary(captcha);
 	}
 }
