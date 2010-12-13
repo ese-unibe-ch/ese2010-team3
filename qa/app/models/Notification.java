@@ -16,8 +16,6 @@ public class Notification extends Item implements Comparable<Notification> {
 
 	protected boolean isDeleted;
 
-	private final NotificationType type;
-
 	/**
 	 * Sends a Notification to a Mailbox, signifying that an answer was posted
 	 * to a watched question.
@@ -28,23 +26,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	 *            what Entry this is all about.
 	 */
 	public Notification(IMailbox mailbox, Entry about) {
-		this(NotificationType.ANSWER, mailbox, about);
-	}
-
-	/**
-	 * Sends a Notification to a Mailbox.
-	 * 
-	 * @param type
-	 *            What kind of a notification this is. Might be ANSWER,
-	 *            SPAM.
-	 * @param mailbox
-	 *            the mailbox that should receive the message
-	 * @param about
-	 *            what Entry this is all about.
-	 */
-	public Notification(NotificationType type, IMailbox mailbox, Entry about) {
 		super(null);
-		this.type = type;
 		this.about = about;
 		this.isNew = true;
 		this.mailbox = mailbox;
@@ -104,9 +86,4 @@ public class Notification extends Item implements Comparable<Notification> {
 	public String toString() {
 		return "N[" + this.mailbox.toString() + this.about.toString() + "]";
 	}
-
-	public NotificationType getType() {
-		return this.type;
-	}
-
 }

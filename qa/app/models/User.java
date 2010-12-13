@@ -59,6 +59,8 @@ public class User implements IObserver, IMailbox {
 	private Mailbox mainMailbox;
 	private List<IMailbox> otherMailboxes;
 
+	private boolean isSpammer;
+
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
@@ -73,6 +75,7 @@ public class User implements IObserver, IMailbox {
 		this.items = new HashSet<Item>();
 		this.mainMailbox = new Mailbox(name);
 		this.otherMailboxes = new LinkedList();
+		this.isSpammer = false;
 	}
 
 	/**
@@ -228,6 +231,8 @@ public class User implements IObserver, IMailbox {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
+		if (this.isSpammer)
+			return true;
 		int number = this.howManyItemsPerHour();
 		if (number >= 60)
 			return true;
@@ -377,8 +382,13 @@ public class User implements IObserver, IMailbox {
 		this.statustext = reason;
 	}
 
+	/**
+	 * Cleans the name of the User. They are no longer accused of any spamming
+	 * or any other thing causing them to be blocked.
+	 */
 	public void unblock() {
 		this.isBlocked = false;
+		this.isSpammer = false;
 		this.statustext = "";
 	}
 
@@ -925,5 +935,9 @@ public class User implements IObserver, IMailbox {
 
 	public void removeNotification(int id) {
 		this.mainMailbox.removeNotification(id);
+	}
+
+	public void setIsSpammer(boolean b) {
+		this.isSpammer = b;
 	}
 }
