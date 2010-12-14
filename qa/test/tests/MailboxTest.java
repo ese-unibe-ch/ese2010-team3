@@ -107,4 +107,28 @@ public class MailboxTest extends UnitTest {
 		assertEquals(0, susanesNotifications.size());
 	}
 
+	@Test
+	public void testPersonalMailbox() {
+		new Notification(this.pete, this.question);
+		List<Notification> petesNotifications = this.pete
+				.getMyNewNotifications();
+		List<Notification> susanesNotifications = this.susane
+				.getMyNewNotifications();
+		assertEquals(1, petesNotifications.size());
+		assertEquals(petesNotifications.get(0).getAbout(), this.question);
+		assertEquals(0, susanesNotifications.size());
+		petesNotifications = this.pete
+				.getMyRecentNotifications();
+		susanesNotifications = this.susane
+				.getMyRecentNotifications();
+		assertEquals(1, petesNotifications.size());
+		assertEquals(petesNotifications.get(0).getAbout(), this.question);
+		assertEquals(0, susanesNotifications.size());
+	}
+
+	@Test
+	public void shouldHaveNiceDebuggingToString() {
+		assertEquals(this.mailbox.toString(), "MB[" + this.mailbox.getName()
+				+ "(" + this.mailbox.getAllNotifications().size() + ")" + "]");
+	}
 }

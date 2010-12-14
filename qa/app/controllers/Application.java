@@ -131,6 +131,17 @@ public class Application extends Controller {
 		render(question);
 	}
 
+	/**
+	 * Prompts the user to mark this {@link Question} as Spam.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}
+	 */
+	public static void confirmMarkSpam(int id) {
+		Question question = Database.get().questions().get(id);
+		render(question);
+	}
+
 	public static void deleteuser() {
 		User showUser = Session.get().currentUser();
 		render(showUser);

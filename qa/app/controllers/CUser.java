@@ -180,7 +180,10 @@ public class CUser extends Controller {
 			n.unsetNew();
 		}
 		flash.success("secure.notificationsmarkedasreadflash");
-		Application.notifications(0);
+
+		if (!CUser.redirectToCallingPage()) {
+			Application.index(0);
+		}
 	}
 
 	/**
@@ -196,7 +199,10 @@ public class CUser extends Controller {
 			n.unregister();
 			flash.success("secure.deletenotificationflash");
 		}
-		Application.notifications(0);
+
+		if (!CUser.redirectToCallingPage()) {
+			Application.index(0);
+		}
 	}
 
 	/**

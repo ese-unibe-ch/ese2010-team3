@@ -211,4 +211,14 @@ public class NotificationTest extends UnitTest {
 		}
 		assertTrue(hasThrown);
 	}
+
+	@Test
+	public void shouldMakeCoberturaHappy() {
+		this.norbert.observe(this.question, this.question.answer(this.andrew,
+				"???"));
+		Notification notification = this.norbert.getNotifications().get(0);
+		assertEquals("N[" + this.question.owner().toString()
+				+ notification.getAbout().toString() + "]",
+				notification.toString());
+	}
 }

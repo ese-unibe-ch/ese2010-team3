@@ -12,6 +12,8 @@ POST		/question/{questionId}						CAnswer.newAnswer
 
 GET     	/question/{id}/comments/					Application.commentQuestion
 
+GET		/question/{id}/confirmspam					Application.confirmMarkSpam
+
 GET		/question/{id}/up						CQuestion.voteQuestionUp
 GET		/question/{id}/down						CQuestion.voteQuestionDown
 GET		/question/{id}/cancel						CQuestion.voteQuestionCancel

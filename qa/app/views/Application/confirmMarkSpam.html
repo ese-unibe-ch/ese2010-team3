@@ -1,0 +1,17 @@
+#{extends 'main.html' /}
+
+#{if question}
+	#{set title:'ajopi - mark spam: ' + question.summary().escape() /}
+	<div class="deleteQuestion">
+		<p>&{'question.reallyspam'}</p>
+	</div>
+	<ul>#{question question:question, user:user, extended:false /}</ul>
+	<ul class="optionLinks">
+		<p><a href="@{CQuestion.markSpam(question.id())}">&{'question.confirmspam'}</a></p>
+		<p><a href="@{Application.question(question.id())}">&{'question.notconfirm'}</a></p>
+	</ul>
+#{/if}
+#{else}
+	#{set title:'Error' /}
+	<h1>No such question</h1>
+#{/else}

@@ -833,17 +833,6 @@ public class User implements IObserver, IMailbox {
 		return (int) (30 - (SystemInformation.get().now().getTime() - this.lastPost) / 1000);
 	}
 
-	/**
-	 * Gives the main mailbox of the user, where all personal stuff should end
-	 * up in.
-	 * 
-	 * @return
-	 *         the primary mailbox of the user
-	 */
-	public IMailbox getMailbox() {
-		return this.mainMailbox;
-	}
-
 	public List<IMailbox> getAllMailboxes() {
 		List<IMailbox> mailboxes = new LinkedList();
 		mailboxes.addAll(this.otherMailboxes);
