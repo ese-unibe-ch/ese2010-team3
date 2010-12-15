@@ -75,7 +75,10 @@ public class Application extends Controller {
 			if (similarQuestions == null) {
 				similarQuestions = new ArrayList(question.getSimilarQuestions());
 				if (similarQuestions.size() > 5) {
-					similarQuestions = similarQuestions.subList(0, 5);
+					List<Question> similarQuestionsTemp = new ArrayList<Question>();
+					similarQuestionsTemp.addAll(similarQuestions.subList(0, 5));
+					similarQuestions.clear();
+					similarQuestions = similarQuestionsTemp;
 				}
 				Cache.set("question." + id + ".similar", similarQuestions,
 						"10mn");
@@ -155,10 +158,10 @@ public class Application extends Controller {
 	 *            the repeated password.
 	 */
 	public static void signup(@Required String username, String password,
-			@Required String email,
-			String passwordrepeat, @Required String code, String randomID) {
-		boolean isUsernameAvailable = Database.get().users()
-				.isAvailable(username);
+			@Required String email, String passwordrepeat,
+			@Required String code, String randomID) {
+		boolean isUsernameAvailable = Database.get().users().isAvailable(
+				username);
 		validation.equals(code, Cache.get("captcha." + randomID));
 		validation.equals(code, Cache.get(randomID));
 		if (validation.hasErrors()) {
