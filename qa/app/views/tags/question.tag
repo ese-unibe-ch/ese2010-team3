@@ -24,6 +24,9 @@
 			#{/if}
 			| <a href="@{Application.confirmMarkSpam(_question.id())}">&{'spam.mark'}</a>
 		#{/if}
+		#{else}
+			<div class="isLocked"><img src="/public/images/locked.png" /></div>
+		#{/else}
 		#{if _user.isModerator() && _question.isLocked()}
 			<a href="@{CQuestion.unlockQuestion(_question.id())}">Unlock</a>
 		#{/if}

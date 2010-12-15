@@ -133,7 +133,7 @@ public class CUser extends Controller {
 			user.setBiography(biography);
 		}
 		if (!newPassword.isEmpty()) {
-			if (user.checkPW(newPassword)) {
+			if (user.checkPW(oldPassword)) {
 				user.setSHA1Password(newPassword);
 			} else if (!user.checkPW(oldPassword)) {
 				flash.error("secure.passwordChangeError");

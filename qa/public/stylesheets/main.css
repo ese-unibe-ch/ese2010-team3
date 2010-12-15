@@ -268,13 +268,9 @@ td.left {
 	vertical-align: top;
 	color: #888;
 }
-li.showprofile {
-	background: #333333;
-	width: 800px;
+ul.showprofile li {
 	list-style: none;
-	margin: 5px;
-	padding: 7px;
-	position: relative;
+	padding-top: 25px;
 }
 td.blocked {
 	color: #f00;
@@ -349,6 +345,14 @@ confirm delete question
 div.deleteQuestion {
 	color: #888;
 	font-size: 14pt;
+}
+/*********************** 
+is Locked
+************************/
+div.isLocked {
+	position: absolute;
+	top: 35px;
+	right: 7px;
 }
 /*********************** 
 tags and tag autocomplete box
