@@ -54,8 +54,9 @@ public class Application extends Controller {
 			});
 			Cache.set("index.questions", questions, "10mn");
 		}
-		questions = Tools.paginate(questions, entriesPerPage, index);
 		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
+		questions = Tools.paginate(questions, entriesPerPage, index);
+
 		render(questions, index, maxIndex);
 	}
 
@@ -76,8 +77,8 @@ public class Application extends Controller {
 				similarQuestions = new ArrayList(question.getSimilarQuestions());
 				if (similarQuestions.size() > 5) {
 					// the Cache chokes on sublists!
-					similarQuestions = new ArrayList<Question>(
-							similarQuestions.subList(0, 5));
+					similarQuestions = new ArrayList<Question>(similarQuestions
+							.subList(0, 5));
 				}
 				Cache.set("question." + id + ".similar", similarQuestions,
 						"10mn");
