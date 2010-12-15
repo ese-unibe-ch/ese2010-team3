@@ -1,11 +1,10 @@
 package models;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * A representation of notification collection. Each user has at least one
@@ -48,7 +47,7 @@ public class Mailbox implements IMailbox {
 				result.addLast(notification);
 			}
 		}
-		Collections.sort(result);
+		Collections.reverse(result);
 		return result;
 	}
 
