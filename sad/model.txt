@@ -1,0 +1,44 @@
+!! Domain Model
+!!! The Item Hierarchy
+The Item class signifies that an object is the content of the page.
+!!!! Item
+The common superclass ensures an unique id number for all objects and provide
+access to all instances over their primary key and are created by a user at
+some time. A creation timestamp is also available.
+!!!! Entry
+The entry provides the common functionality of all contents of the page - they
+can be rated (by voting it up or down), are created by an user, and can
+provide a short version of themselves in order to keep the interface clean.
+All Entries can in principle be voted upon, but in practice, only Questions
+and Answers need this feature.
+This is the base class for all entities in the application, that are
+conceptually text, eg Questions, Notifications, ...
+!!!! Question
+This is the central point of the application, but is a humble subclass of
+Entry. In addition to it, `Question`s can be tagged by the owner and answered
+by other users.
+!!!! Answer
+The Answer hierarchically belongs to a Question. 
+!!!! Comment
+A Comment is in the hierarchy by importance below a Question or an Answer.
+Instead of being voted for, it can only be liked by users. 
+!!!! Notification
+A notification is send to a user to inform them that something happened to an
+entry they are watching. It describes what happened and to what entry.
+!!! User
+Represents the action, a user can perform if signed in and gives a unique
+representation for all of them.
+!!Controllers
+As there is little if any interaction between the controllers, there is no
+gain in UML. The interaction with the model is very transparent.
+!!!Application
+This controller handles all nonspecific, non-authentificated access to the
+site. Or in short: what isn't important enough to get an own controller, is
+here.
+!!!CAnswer/Question/User
+The interaction with the corresponding models. Usually requires
+authentication for actions.
+!!!Session
+Access to the session of the user to make it mockable.
+!!!Search
+Handles differnet search requests by passing them to the DB.

@@ -3,10 +3,10 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
-import models.Comment;
 import models.Notification;
 import models.Question;
 import models.SystemInformation;
@@ -43,14 +43,19 @@ public class Application extends Controller {
 	 *            the number of the page of {@link Question}'s.
 	 */
 	public static void index(int index) {
-		List<Question> questions = Database.get().questions().all();
-		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
-		Collections.sort(questions, new Comparator<Question>() {
-			public int compare(Question q1, Question q2) {
-				return q2.timestamp().compareTo(q1.timestamp());
-			}
-		});
+		List<Question> questions = (List<Question>) Cache
+				.get("index.questions");
+		if (questions == null) {
+			questions = Database.get().questions().all();
+			Collections.sort(questions, new Comparator<Question>() {
+				public int compare(Question q1, Question q2) {
+					return q2.timestamp().compareTo(q1.timestamp());
+				}
+			});
+			Cache.set("index.questions", questions, "10mn");
+		}
 		questions = Tools.paginate(questions, entriesPerPage, index);
+		int maxIndex = Tools.determineMaximumIndex(questions, entriesPerPage);
 		render(questions, index, maxIndex);
 	}
 
@@ -65,29 +70,19 @@ public class Application extends Controller {
 		if (question == null) {
 			render();
 		} else {
-			List<Question> similarQuestions = new ArrayList(question
-					.getSimilarQuestions());
-			if (similarQuestions.size() > 5) {
-				similarQuestions = similarQuestions.subList(0, 5);
+			List<Question> similarQuestions = (List<Question>) Cache
+					.get("question." + id + ".similar");
+			if (similarQuestions == null) {
+				similarQuestions = new ArrayList(question.getSimilarQuestions());
+				if (similarQuestions.size() > 5) {
+					similarQuestions = similarQuestions.subList(0, 5);
+				}
+				Cache.set("question." + id + ".similar", similarQuestions,
+						"10mn");
 			}
 			List<Answer> answers = question.answers();
 			render(question, answers, similarQuestions);
 		}
-	}
-
-	/**
-	 * Renders the detailed view of a {@link Question} and it's {@link Answer} 
-	 * 's.
-	 * 
-	 * @param id
-	 *            the id of the {@link Question}.
-	 */
-	public static void answerQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		List<Question> questions = Database.get().questions().all();
-		List<Answer> answers = question.answers();
-		int count = question.answers().size();
-		render(questions, question, answers, count);
 	}
 
 	/**
@@ -99,10 +94,7 @@ public class Application extends Controller {
 	 */
 	public static void commentQuestion(int id) {
 		Question question = Database.get().questions().get(id);
-		List<Question> questions = Database.get().questions().all();
-		List<Comment> comments = question.comments();
-		int count = question.comments().size();
-		render(questions, question, comments, count);
+		render(question);
 	}
 
 	/**
@@ -115,8 +107,7 @@ public class Application extends Controller {
 	public static void commentAnswer(int questionId, int answerId) {
 		Question question = Database.get().questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
-		List<Comment> comments = answer.comments();
-		render(answer, comments, question);
+		render(answer, question);
 	}
 
 	/**
@@ -130,14 +121,25 @@ public class Application extends Controller {
 		render(question);
 	}
 
+	/**
+	 * Prompts the user to mark this {@link Question} as Spam.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}
+	 */
+	public static void confirmMarkSpam(int id) {
+		Question question = Database.get().questions().get(id);
+		render(question);
+	}
+
 	public static void deleteuser() {
 		User showUser = Session.get().currentUser();
 		render(showUser);
 	}
 
 	public static void register() {
-	    String randomID = Codec.UUID();
-	    render(randomID);
+		String randomID = Codec.UUID();
+		render(randomID);
 	}
 
 	/**
@@ -152,17 +154,20 @@ public class Application extends Controller {
 	 * @param passwordrepeat
 	 *            the repeated password.
 	 */
-	public static void signup(@Required String username, String password, @Required String email, 
+	public static void signup(@Required String username, String password,
+			@Required String email,
 			String passwordrepeat, @Required String code, String randomID) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
+		validation.equals(code, Cache.get("captcha." + randomID));
 		validation.equals(code, Cache.get(randomID));
-		    if(validation.hasErrors()) {
-		    	flash.error("captcha.invalid");
-		    	render("Application/register.html", randomID);
-		    }
+		if (validation.hasErrors()) {
+			flash.error("captcha.invalid");
+			render("Application/register.html", randomID);
+		}
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			User user = Database.get().users().register(username, password, email);
+			User user = Database.get().users().register(username, password,
+					email);
 			boolean success = Mails.welcome(user);
 			if (success) {
 				flash.success("secure.mail.success");
@@ -255,9 +260,14 @@ public class Application extends Controller {
 	 *            the page-number which will be displayed.
 	 */
 	public static void search(String term, int index) {
+		List<Question> results = (List<Question>) Cache.get("search." + term);
 		User user = Session.get().currentUser();
 		boolean isPureTagSearch = term.matches("^tag:\\S+$");
-		if (isPureTagSearch) {
+
+		if (results != null) {
+			// we've already done this search lately, so we can
+			// let the user do it with hardly any additional cost
+		} else if (isPureTagSearch) {
 			// we currently allow the search for a single tag for all
 			// users all the time
 		} else if (user == null) {
@@ -272,7 +282,10 @@ public class Application extends Controller {
 			index(0);
 		}
 
-		List<Question> results = Database.get().questions().searchFor(term);
+		if (results == null) {
+			results = Database.get().questions().searchFor(term);
+			Cache.set("search." + term, results, "5mn");
+		}
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
 		if (user != null && !isPureTagSearch) {
@@ -285,6 +298,7 @@ public class Application extends Controller {
 	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
+			List<Notification> spamNotification = new LinkedList();
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
 			List<Question> questions = Database.get().questions().all();
@@ -294,8 +308,12 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
+			if (user.isModerator()) {
+				spamNotification.addAll(Database.get().users()
+						.getModeratorMailbox().getNewNotifications());
+			}
 			render(notifications, watchingQuestions, suggestedQuestions,
-					content);
+					spamNotification, content);
 		} else {
 			Application.index(0);
 		}
@@ -385,12 +403,14 @@ public class Application extends Controller {
 		}
 		render(showUser);
 	}
-	
+
 	/**
 	 * Confirm a {@link User}'s profile if they clicked on the right link
 	 * 
-	 * @param username of the {@link User}
-	 * @param key for the Confirmation
+	 * @param username
+	 *            of the {@link User}
+	 * @param key
+	 *            for the Confirmation
 	 */
 	public static void confirmUser(@Required String username, String key) {
 		User user = Database.get().users().get(username);
@@ -403,22 +423,22 @@ public class Application extends Controller {
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			flash.error("user.confirm.error");
 			index(0);
-			}
 		}
-		
+	}
+
 	/**
 	 * Generates a random captcha-image.
 	 * 
 	 * @param id
 	 */
 	public static void captcha(String id) {
-	    Images.Captcha captcha = Images.captcha();
-	    String code = captcha.getText("#ff8400");
-	    Cache.set(id, code, "3mn");
-	    renderBinary(captcha);
+		Images.Captcha captcha = Images.captcha();
+		String code = captcha.getText("#ff8400");
+		Cache.set(id, "capthca." + code, "3mn");
+		renderBinary(captcha);
 	}
+
 }

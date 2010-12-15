@@ -5,15 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import models.IMailbox;
+import models.Mailbox;
 import models.User;
 import models.database.IUserDatabase;
 
 public class HotUserDatabase implements IUserDatabase {
 	/** Tracks all users by their lowercase(!) usernames. */
 	private static HashMap<String, User> users = new HashMap();
+	private static IMailbox moderatorMailbox = new Mailbox("Moderators");
 
 	public boolean isAvailable(String username) {
-		return this.get(username) == null;
+		return get(username) == null;
 	}
 
 	public User register(String username, String password, String email) {
@@ -54,5 +57,9 @@ public class HotUserDatabase implements IUserDatabase {
 			}
 		}
 		return moderators;
+	}
+
+	public IMailbox getModeratorMailbox() {
+		return this.moderatorMailbox;
 	}
 }

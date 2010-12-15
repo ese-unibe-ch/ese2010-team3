@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="695" height="702" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="311" y="160" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="205" y="224" width="109" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="201" y="156" width="110" height="68" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="256" y="167">Item</text>
+	<line stroke="black" stroke-opacity="1" x1="201" y1="176" x2="311" y2="176" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="205" y="187">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="219" y="187">timestamp : date</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="205" y="205">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="219" y="205">id : int {unique}</text>
+	<line stroke="black" stroke-opacity="1" x1="201" y1="214" x2="311" y2="214" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="200" y="404" width="3" height="131" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="14" y="532" width="189" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="10" y="400" width="190" height="132" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="105" y="411">Entry</text>
+	<line stroke="black" stroke-opacity="1" x1="10" y1="420" x2="200" y2="420" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="431">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="431">content : string</text>
+	<line stroke="black" stroke-opacity="1" x1="10" y1="440" x2="200" y2="440" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="451">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="451">rating() : int</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="469">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="469">vote(in user : User, in bool : up)</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="487">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="487">cancelVote(in user : User)</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="505">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="505">anonymize()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="14" y="523">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="28" y="523">summarize() : string</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="259" y="653" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="205" y="685" width="57" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="201" y="649" width="58" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="230" y="660">Question</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="455" y="653" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="407" y="685" width="51" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="403" y="649" width="52" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="429" y="660">Answer</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="460" y="484" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="400" y="516" width="63" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="396" y="480" width="64" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="428" y="491">Comment</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="441" y="172" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="405" y="204" width="39" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="401" y="168" width="40" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="421" y="179">Vote</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="72" y="653" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="36" y="685" width="39" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="32" y="649" width="40" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="52" y="660">Tag</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="147" y="22" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="79" y="54" width="71" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="75" y="18" width="72" height="36" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="111" y="29">Notification</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="679" y="39" width="3" height="113" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="559" y="149" width="123" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="555" y="35" width="124" height="114" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="617" y="46">User</text>
+	<line stroke="black" stroke-opacity="1" x1="555" y1="55" x2="679" y2="55" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="559" y="66">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="573" y="66">isBlocked : bool</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="559" y="84">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="573" y="84">isModerator : bool</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="559" y="102">-</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="573" y="102">profileData : ...</text>
+	<line stroke="black" stroke-opacity="1" x1="555" y1="111" x2="679" y2="111" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="559" y="122">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="573" y="122">isCheater() : bool</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="559" y="140">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="573" y="140">isSpammer() : bool</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="143" y1="399" x2="233" y2="233" />
+	<line stroke="black" stroke-opacity="1" x1="236" y1="228" x2="227" y2="230" />
+	<line stroke="black" stroke-opacity="1" x1="236" y1="228" x2="238" y2="236" />
+	<line stroke="black" stroke-opacity="1" x1="227" y1="230" x2="238" y2="236" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="315" y1="175" x2="554" y2="110" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="315,175 319,167 326,171 322,179" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="228" y1="648" x2="155" y2="540" />
+	<line stroke="black" stroke-opacity="1" x1="152" y1="536" x2="150" y2="544" />
+	<line stroke="black" stroke-opacity="1" x1="152" y1="536" x2="160" y2="537" />
+	<line stroke="black" stroke-opacity="1" x1="150" y1="544" x2="160" y2="537" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="402" y1="650" x2="209" y2="531" />
+	<line stroke="black" stroke-opacity="1" x1="204" y1="528" x2="205" y2="536" />
+	<line stroke="black" stroke-opacity="1" x1="204" y1="528" x2="212" y2="526" />
+	<line stroke="black" stroke-opacity="1" x1="205" y1="536" x2="212" y2="526" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="408" y1="479" x2="347" y2="422" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="347" y1="422" x2="209" y2="445" />
+	<line stroke="black" stroke-opacity="1" x1="204" y1="447" x2="210" y2="451" />
+	<line stroke="black" stroke-opacity="1" x1="204" y1="447" x2="208" y2="440" />
+	<line stroke="black" stroke-opacity="1" x1="210" y1="451" x2="208" y2="440" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="400" y1="188" x2="320" y2="189" />
+	<line stroke="black" stroke-opacity="1" x1="315" y1="190" x2="321" y2="195" />
+	<line stroke="black" stroke-opacity="1" x1="315" y1="190" x2="320" y2="183" />
+	<line stroke="black" stroke-opacity="1" x1="321" y1="195" x2="320" y2="183" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="183" y1="399" x2="400" y2="206" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="183,399 183,390 191,391 191,399" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="263" y1="669" x2="402" y2="669" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="263,669 269,663 275,669 269,675" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="204" y1="508" x2="273" y2="539" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="204,508 211,504 214,512 207,515" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="273" y1="539" x2="395" y2="506" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="438" y1="479" x2="590" y2="153" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="438,479 435,471 443,468 445,476" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="76" y1="669" x2="200" y2="669" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="76,669 82,663 88,669 82,675" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="121" y1="58" x2="181" y2="197" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="121,58 128,61 125,69 117,65" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="181" y1="197" x2="125" y2="399" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="112" y1="58" x2="107" y2="393" />
+	<line stroke="black" stroke-opacity="1" x1="107" y1="399" x2="113" y2="393" />
+	<line stroke="black" stroke-opacity="1" x1="107" y1="399" x2="101" y2="392" />
+	<line stroke="black" stroke-opacity="1" x1="113" y1="393" x2="101" y2="392" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="554" y1="86" x2="548" y2="79" />
+	<line stroke="black" stroke-opacity="1" x1="554" y1="86" x2="547" y2="91" />
+	<line stroke="black" stroke-opacity="1" x1="151" y1="41" x2="554" y2="86" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="291" y1="301" x2="554" y2="132" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="325" y="161">-items</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="506" y="96">-owner</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="532" y="120">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="333" y="185">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="357" y="186">-votes</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="193" y="379">-entry</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="379" y="205">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="198" y="400">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="342" y="657">-answers</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="273" y="657">-question</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="387" y="686">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="272" y="686">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="325" y="492">-comments</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="214" y="500">-entry</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="380" y="521">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="214" y="529">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="597" y="170">-likers</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="563" y="170">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="424" y="467">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="133" y="657">-questions</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="86" y="657">-tags</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="185" y="684">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="85" y="684">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="137" y="387">-about</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="110" y="387">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="109" y="75">*</text>
+</g>
+</svg>

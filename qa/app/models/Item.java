@@ -20,6 +20,8 @@ public abstract class Item {
 	/** This item's ID. */
 	private final int id;
 
+	private boolean isDeleted;
+
 	/** An auto-incrementing counter for producing unique values as IDs. */
 	private static int auto_increment = 0;
 
@@ -42,10 +44,11 @@ public abstract class Item {
 	public Item(User owner) {
 		this.owner = owner;
 		this.timestamp = SystemInformation.get().now();
-		this.id = autoIncrementID();
+		this.id = this.autoIncrementID();
 		if (owner != null) {
 			owner.registerItem(this);
 		}
+		this.isDeleted = false;
 	}
 
 	/**
@@ -89,7 +92,8 @@ public abstract class Item {
 	 * Unregisters the <code>Item</code> if it gets deleted.
 	 */
 	public void unregister() {
-		unregisterUser();
+		this.isDeleted = true;
+		this.unregisterUser();
 	}
 
 	/**
@@ -100,5 +104,14 @@ public abstract class Item {
 			this.owner.unregister(this);
 		}
 		this.owner = null;
+	}
+
+	/**
+	 * Has this Item been deleted?
+	 * 
+	 * @return iff the unregister method has been called.
+	 */
+	public boolean isDeleted() {
+		return this.isDeleted;
 	}
 }

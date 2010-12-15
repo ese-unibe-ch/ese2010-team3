@@ -27,66 +27,67 @@ public class AnswerTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		savedSysInfo = SystemInformation.get();
+		this.savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
 		SystemInformation.mockWith(sys);
-		james = new User("James", "jack");
+		this.james = new User("James", "jack");
 
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
-		questionDate = sys.now();
-		sys.changeTo(questionDate);
-		question = new Question(new User("Jack", "jack"),
+		this.questionDate = sys.now();
+		sys.changeTo(this.questionDate);
+		this.question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 		sys.minute(5);
-		answerDate = sys.now();
-		sys.changeTo(answerDate);
+		this.answerDate = sys.now();
+		sys.changeTo(this.answerDate);
 
-		question = new Question(new User("Jack", "jack"),
+		this.question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
 
-		answer = question.answer(james, "To get to the other side.");
+		this.answer = this.question.answer(this.james,
+				"To get to the other side.");
 
 	}
 
 	@Test
 	public void shouldCreateAnswer() {
-		assertTrue(answer != null);
+		assertTrue(this.answer != null);
 	}
 
 	@Test
 	public void shouldHaveCorrectContent() {
-		assertEquals(answer.content(), "To get to the other side.");
+		assertEquals(this.answer.content(), "To get to the other side.");
 	}
 
 	@Test
 	public void shouldHaveOwner() {
-		assertEquals(answer.owner(), james);
+		assertEquals(this.answer.owner(), this.james);
 	}
 
 	@Test
 	public void shouldHaveQuestion() {
-		assertEquals(answer.getQuestion(), question);
+		assertEquals(this.answer.getQuestion(), this.question);
 	}
 
 	@Test
 	public void shouldHaveTimestamp() {
-		assertEquals(answer.timestamp(), answerDate);
+		assertEquals(this.answer.timestamp(), this.answerDate);
 	}
 
 	@Test
 	public void shouldRegisterItself() {
-		assertTrue(james.hasItem(answer));
-		assertTrue(question.hasAnswer(answer));
+		assertTrue(this.james.hasItem(this.answer));
+		assertTrue(this.question.hasAnswer(this.answer));
 	}
 
 	@Test
 	public void shouldFindAnswer() {
-		assertEquals(answer, question.getAnswer(answer.id()));
+		assertEquals(this.answer, this.question.getAnswer(this.answer.id()));
 	}
 
 	@After
 	public void tearDown() {
-		SystemInformation.mockWith(savedSysInfo);
+		SystemInformation.mockWith(this.savedSysInfo);
 	}
 
 	@Test
@@ -97,13 +98,13 @@ public class AnswerTest extends UnitTest {
 		User d = new User("d", "d");
 		User e = new User("e", "e");
 
-		answer.voteUp(a);
-		answer.voteUp(b);
-		answer.voteUp(c);
-		answer.voteUp(d);
-		answer.voteUp(e);
+		this.answer.voteUp(a);
+		this.answer.voteUp(b);
+		this.answer.voteUp(c);
+		this.answer.voteUp(d);
+		this.answer.voteUp(e);
 
-		assertTrue(answer.isHighRated());
+		assertTrue(this.answer.isHighRated());
 
 		a.delete();
 		b.delete();
@@ -111,19 +112,25 @@ public class AnswerTest extends UnitTest {
 		d.delete();
 		e.delete();
 
-		assertFalse(answer.isHighRated());
+		assertFalse(this.answer.isHighRated());
 	}
 
 	@Test
 	public void shouldBeBestAnswer() {
-		assertTrue(question.isBestAnswerSettable());
-		question.setBestAnswer(answer);
-		assertTrue(answer.isBestAnswer());
+		assertTrue(this.question.isBestAnswerSettable());
+		this.question.setBestAnswer(this.answer);
+		assertTrue(this.answer.isBestAnswer());
 		assertTrue(Database.get().questions().countBestRatedAnswers() > 0);
 	}
 
 	@Test
 	public void shouldCompareToQuestion() {
-		assertEquals(answer.compareTo(question), 1);
+		assertEquals(this.answer.compareTo(this.question), 1);
+	}
+
+	@Test
+	public void shouldNotClaimtoBelongtoQuestion() {
+		this.question.unregister(this.answer);
+		assertNull(this.answer.getQuestion());
 	}
 }

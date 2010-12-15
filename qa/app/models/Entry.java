@@ -3,6 +3,7 @@ package models;
 import java.util.Collection;
 import java.util.HashMap;
 
+import models.database.Database;
 import models.helpers.Tools;
 
 /**
@@ -15,6 +16,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
 	private HashMap<User, Vote> votes;
+	private boolean possiblySpam;
 
 	/**
 	 * Create an <code>Entry</code>.
@@ -26,10 +28,12 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public Entry(User owner, String content) {
 		super(owner);
-		if (content == null)
+		if (content == null) {
 			content = "";
+		}
 		this.content = content;
 		this.votes = new HashMap<User, Vote>();
+		this.possiblySpam = false;
 	}
 
 	/**
@@ -77,7 +81,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return number of positive {@link Vote}s
 	 */
 	public int upVotes() {
-		return countVotes(true);
+		return this.countVotes(true);
 	}
 
 	/**
@@ -86,7 +90,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return number of negative {@link Vote}s
 	 */
 	public int downVotes() {
-		return countVotes(false);
+		return this.countVotes(false);
 	}
 
 	/**
@@ -95,7 +99,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return rating as an <code>Integer</code>
 	 */
 	public int rating() {
-		return upVotes() - downVotes();
+		return this.upVotes() - this.downVotes();
 	}
 
 	/**
@@ -105,11 +109,11 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return comparison result (-1 = this Entry has more upVotes)
 	 */
 	public int compareTo(Entry e) {
-		int diff = e.rating() - rating();
+		int diff = e.rating() - this.rating();
 		if (diff == 0)
 			// compare by ID instead of - potentially identical - timestamp
 			// for a guaranteed stable sorting (makes testing easier)
-			return id() - e.id();
+			return this.id() - e.id();
 		return diff;
 	}
 
@@ -138,7 +142,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return the {@link Vote}
 	 */
 	public Vote voteUp(User user) {
-		return vote(user, true);
+		return this.vote(user, true);
 	}
 
 	/**
@@ -149,7 +153,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return the {@link Vote}
 	 */
 	public Vote voteDown(User user) {
-		return vote(user, false);
+		return this.vote(user, false);
 	}
 
 	/**
@@ -210,7 +214,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return vote of the <code>User</code>
 	 */
 	private Vote vote(User user, boolean up) {
-		if (user == owner())
+		if (user == this.owner())
 			return null;
 		if (this.hasVote(user)) {
 			this.votes.get(user).unregister();
@@ -225,7 +229,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * Turns this Entry into an anonymous (user-less) one.
 	 */
 	public void anonymize() {
-		unregisterUser();
+		this.unregisterUser();
 	}
 
 	/**
@@ -239,7 +243,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
 				.replaceFirst("^(.{75}\\S{0,9} ?).{5,}", "$1...");
 	}
-	
+
 	/**
 	 * Get all <code>Votes</code>.
 	 * 
@@ -249,10 +253,38 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return this.votes.values();
 	}
 
+	/**
+	 * Declare this post to be probably spam. Sends a notice to the moderating
+	 * staff to check if this really is spam.
+	 */
+	public void markSpam() {
+		if (this.owner().isSpammer()) {
+			this.confirmSpam();
+		} else if (!this.possiblySpam) {
+			new Notification(Database.get().users()
+					.getModeratorMailbox(), this);
+			this.possiblySpam = true;
+		}
+	}
+
+	/**
+	 * A moderator declares this to be definitively spam. It deletes the post
+	 * and blocks the user that posted it in the first place.
+	 */
+	public void confirmSpam() {
+		this.owner().block("Declared Spammer");
+		this.owner().setIsSpammer(true);
+		this.unregister();
+	}
+
+	public boolean isPossiblySpam() {
+		return this.possiblySpam;
+	}
+
 	@Override
 	public String toString() {
 		String className = this.getClass().getName();
 		className = className.substring(className.lastIndexOf(".") + 1);
-		return className + "(" + summary() + ")";
+		return className + "(" + this.summary() + ")";
 	}
 }

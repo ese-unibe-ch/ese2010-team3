@@ -75,10 +75,11 @@ public class Question extends Entry implements IObservable {
 			comment.unregister();
 		}
 		this.observers.clear();
-		Database.get().questions().remove(this.id());
+		Database.get().questions().remove(id());
 		unregisterVotes();
 		unregisterUser();
 		setTagString("");
+		super.unregister();
 	}
 
 	/**
@@ -357,7 +358,8 @@ public class Question extends Entry implements IObservable {
 	 */
 	public boolean isOldQuestion() {
 		double dayDiff = (double) (SystemInformation.get().now().getTime() - timestamp()
-				.getTime()) / (1000 * 60 * 60 * 24);
+				.getTime())
+				/ (1000 * 60 * 60 * 24);
 		return dayDiff > 120;
 	}
 

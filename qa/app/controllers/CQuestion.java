@@ -5,11 +5,12 @@ import models.Question;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
+import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
-import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
+import play.mvc.Router.ActionDefinition;
 
 /**
  * The controller for all routes that concern the {@link Question}'s.
@@ -33,6 +34,7 @@ public class CQuestion extends Controller {
 		if (!Validation.hasErrors()) {
 			User user = Session.get().currentUser();
 			if (user.canPost()) {
+				Cache.delete("index.questions");
 				Question question = Database.get().questions().add(user,
 						Tools.markdownToHtml(content));
 				question.setTagString(tags);
@@ -287,6 +289,24 @@ public class CQuestion extends Controller {
 			flash.success("secure.lockquestionflash");
 			Application.question(id);
 		}
+	}
+
+	/**
+	 * Informs the moderators that this post is spam or deletes it, if the User
+	 * is a moderator.
+	 */
+	public static void markSpam(int id) {
+		Question question = Database.get().questions().get(id);
+		User user = Session.get().currentUser();
+		if (user != null && question != null) {
+			if (user.isModerator()) {
+				question.confirmSpam();
+			} else {
+				question.markSpam();
+			}
+			flash.success("spam.thx");
+		}
+		Application.index(0);
 	}
 
 }
