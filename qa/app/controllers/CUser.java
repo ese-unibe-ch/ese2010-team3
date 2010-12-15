@@ -11,9 +11,8 @@ import models.User;
 import models.Vote;
 import models.database.Database;
 import models.database.importers.Importer;
+import play.cache.Cache;
 import play.data.validation.Required;
-import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.With;
 
 /**
@@ -23,57 +22,31 @@ import play.mvc.With;
  * 
  */
 @With(Secure.class)
-public class CUser extends Controller {
+public class CUser extends BaseController {
 
 	/**
 	 * Deletes the {@link User} and all it's {@link Question}' {@link Answer}'s
 	 * {@link Vote}'s.
 	 * 
-	 * @param name
-	 *            the name of the {@link User} to be deleted.
-	 * @throws Throwable
-	 */
-	public static void deleteUser(String name) throws Throwable {
-		User user = Database.get().users().get(name);
-		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
-			user.delete();
-			flash.success("secure.userdeletedflash");
-			Secure.logout();
-			Application.index(0);
-		}
-		flash.error("secure.userdeleteerror");
-		if (!CUser.redirectToCallingPage()) {
-			Application.index(0);
-		}
-	}
-
-	/**
-	 * Instead of deleting all {@link Entry}'s of a {@link User}. This method
-	 * anonymizes all of them replacing the username with 'anonymous'.
+	 * Instead of deleting all {@link Entry}'s of a {@link User}, these entries
+	 * can optionally be kept in anonymized form by setting their owners to
+	 * <code>null</code> first.
 	 * 
-	 * @param name
-	 *            the name of the {@link User} to be anonymized.
+	 * @param anonymize
+	 *            whether to anonymize or just plain delete the user's entries
 	 * @throws Throwable
 	 */
-	public static void anonymizeUser(String name) throws Throwable {
-		User user = Database.get().users().get(name);
-		if (hasPermissionToDelete(Session.get().currentUser(), user)) {
+	public static void deleteUser(boolean anonymize)
+			throws Throwable {
+		User user = Session.get().currentUser();
+		if (anonymize)
 			user.anonymize(true);
-		}
-		deleteUser(name);
-	}
-
-	/**
-	 * Checks for permission to delete.
-	 * 
-	 * @param currentUser
-	 *            the currently logged in {@link User}.
-	 * @param user
-	 *            the owner of the profile.
-	 * @return true, if successful
-	 */
-	private static boolean hasPermissionToDelete(User currentUser, User user) {
-		return currentUser == user;
+		else
+			Cache.delete("index.questions");
+		user.delete();
+		flash.success("secure.userdeletedflash");
+		Secure.logout();
+		Application.index(0);
 	}
 
 	/**
@@ -166,7 +139,7 @@ public class CUser extends Controller {
 			} else if (notification.getAbout() instanceof Question) {
 				Application.question(((Question) notification.getAbout()).id());
 			}
-		} else if (!CUser.redirectToCallingPage()) {
+		} else if (!redirectToCallingPage()) {
 			Application.notifications(0);
 		}
 	}
@@ -181,7 +154,7 @@ public class CUser extends Controller {
 		}
 		flash.success("secure.notificationsmarkedasreadflash");
 
-		if (!CUser.redirectToCallingPage()) {
+		if (!redirectToCallingPage()) {
 			Application.index(0);
 		}
 	}
@@ -200,7 +173,7 @@ public class CUser extends Controller {
 			flash.success("secure.deletenotificationflash");
 		}
 
-		if (!CUser.redirectToCallingPage()) {
+		if (!redirectToCallingPage()) {
 			Application.index(0);
 		}
 	}
@@ -282,18 +255,5 @@ public class CUser extends Controller {
 		Database.clearKeepAdmins();
 		flash.success("secure.cleardbflash");
 		Application.admin();
-	}
-
-	/**
-	 * Redirect to calling page.
-	 * 
-	 * @return true, if successful
-	 */
-	static boolean redirectToCallingPage() {
-		Http.Header referer = request.headers.get("referer");
-		if (referer == null)
-			return false;
-		redirect(referer.value());
-		return true;
 	}
 }

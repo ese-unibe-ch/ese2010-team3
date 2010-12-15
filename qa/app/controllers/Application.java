@@ -22,20 +22,10 @@ import play.data.validation.Required;
 import play.i18n.Lang;
 import play.libs.Codec;
 import play.libs.Images;
-import play.mvc.Before;
-import play.mvc.Controller;
 
-public class Application extends Controller {
+public class Application extends BaseController {
 
 	private static final int entriesPerPage = 15;
-
-	@Before
-	static void setConnectedUser() {
-		if (Secure.Security.isConnected()) {
-			User user = Database.get().users().get(Secure.Security.connected());
-			renderArgs.put("user", user);
-		}
-	}
 
 	/**
 	 * Leads to the index page at a given page of {@link Question}'s.
@@ -380,7 +370,7 @@ public class Application extends Controller {
 		} else {
 			flash.error("Wanna silence me? Try again!");
 		}
-		if (!CUser.redirectToCallingPage()) {
+		if (!redirectToCallingPage()) {
 			index(0);
 		}
 	}

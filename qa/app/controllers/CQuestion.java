@@ -7,7 +7,6 @@ import models.database.Database;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
-import play.mvc.Controller;
 import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
 
@@ -18,7 +17,7 @@ import play.mvc.With;
  * 
  */
 @With(Secure.class)
-public class CQuestion extends Controller {
+public class CQuestion extends BaseController {
 
 	/**
 	 * Add a new {@link Question}. It is required that the content is not empty.
@@ -130,7 +129,7 @@ public class CQuestion extends Controller {
 		if (question != null) {
 			question.voteUp(Session.get().currentUser());
 			flash.success("secure.upvoteflash");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {
@@ -149,7 +148,7 @@ public class CQuestion extends Controller {
 		if (question != null) {
 			question.voteDown(Session.get().currentUser());
 			flash.success("secure.downvoteflash");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {
@@ -168,7 +167,7 @@ public class CQuestion extends Controller {
 		if (question != null) {
 			question.voteCancel(Session.get().currentUser());
 			flash.success("Your vote has been forgotten.");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {

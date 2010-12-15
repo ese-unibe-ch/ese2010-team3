@@ -39,17 +39,13 @@ POST		/comment/{questionId}/{answerId}				CAnswer.newCommentAnswer
 GET		/comment/{questionId}/{commentId}/delete			CQuestion.deleteCommentQuestion
 GET		/comment/{questionId}/{answerId}/{commentId}/delete		CAnswer.deleteCommentAnswer
 
-GET    		/user/{name}/delete            					Application.deleteuser
-GET    		/user/{name}/truedelete         	 			CUser.deleteUser
-GET    		/user/{name}/trueanonymize        				CUser.anonymizeUser
-
 GET		/register							Application.register
 POST		/register							Application.signup
 
 GET		/user/{userName}/showprofile/					Application.showprofile
 GET		/user/{userName}/editprofile/					Application.editProfile
 POST		/user/savedProfile						CUser.saveProfile
-
+GET    	/user/delete/{anonymize}	 				CUser.deleteUser
 GET		/user/{userName}/blockuser					CUser.blockUser
 
 GET		/user/notifications/{content}					Application.notifications

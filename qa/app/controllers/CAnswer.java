@@ -7,7 +7,6 @@ import models.User;
 import models.database.Database;
 import play.data.validation.Required;
 import play.data.validation.Validation;
-import play.mvc.Controller;
 import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
 
@@ -18,7 +17,7 @@ import play.mvc.With;
  * 
  */
 @With(Secure.class)
-public class CAnswer extends Controller {
+public class CAnswer extends BaseController {
 
 	/**
 	 * Add a new {@link Answer}.
