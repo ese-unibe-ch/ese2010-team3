@@ -191,6 +191,16 @@ since.years=%d an(s) avant
 
 search.placeholder="Chercher question"
 
+# Moderator
+mod.nospam=Il n'y a pas de spam. Vous avez de la chance!
+mod.spamnotify=Avis Spam
+mod.mightbespam=Peut être Spam
+mod.spamhint=Les utilisateurs peuvent marquer quelque chose comme spam et vous pouvez bloquer le spammeur.
+mod.mightbespammer=pourrait être un spammeur, parce que ce poste a été marquée:
+
+spam.mark=Marque
+spam.thx=Merci de rendre notre site sans spam
+
 # Mails
 
 mail.welcome.title=confirmer votre compte ajopi

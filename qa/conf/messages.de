@@ -191,6 +191,16 @@ since.years=vor %d Jahr(en)
 
 search.placeholder="Frage suchen"
 
+# Moderator
+mod.nospam=Es gibt kein Spam. Glück gehabt!
+mod.spamnotify=Spam Nachrichten
+mod.mightbespam=Könnte Spam sein
+mod.spamhint=Benutzer können etwas als Spam melden und Sie als Moderator können den Spammer blocken.
+mod.mightbespammer=könnte ein Spammer sein, da dieser Beitrag gemeldet wurde:
+
+spam.mark=Melden
+spam.thx=Vielen Dank für Ihre Hilfe unsere Webseite Spamfrei zu halten
+
 # Mails
 
 mail.welcome.title=Bestätigung des ajopi-Konto
