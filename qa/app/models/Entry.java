@@ -268,7 +268,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (this.owner().isSpammer()) {
 			this.confirmSpam();
 		} else if (!this.possiblySpam) {
-			new Notification(Database.get().users()
+			new Notification(Database.users()
 					.getModeratorMailbox(), this);
 			this.possiblySpam = true;
 		}

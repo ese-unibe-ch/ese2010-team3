@@ -38,7 +38,7 @@ public class CUser extends BaseController {
 	 */
 	public static void deleteUser(boolean anonymize)
 			throws Throwable {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (anonymize)
 			user.anonymize(true);
 		else
@@ -79,7 +79,7 @@ public class CUser extends BaseController {
 			String birthday, String website, String profession,
 			String employer, String biography, String oldPassword,
 			String newPassword) throws ParseException {
-		User user = Database.get().users().get(name);
+		User user = Database.users().get(name);
 		if (!Application.userCanEditProfile(user)) {
 			flash.error("secure.editprofileerror");
 			Application.showprofile(user.getName());
@@ -127,7 +127,7 @@ public class CUser extends BaseController {
 	 *            the id of the notification.
 	 */
 	public static void followNotification(int id) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		Notification notification = user.getNotification(id);
 		if (notification != null) {
 			notification.unsetNew();
@@ -148,7 +148,7 @@ public class CUser extends BaseController {
 	 * Clear new notifications. Notifications will no longer appear as new.
 	 */
 	public static void clearNewNotifications() {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		for (Notification n : user.getNewNotifications()) {
 			n.unsetNew();
 		}
@@ -166,7 +166,7 @@ public class CUser extends BaseController {
 	 *            the id of the notification to be deleted.
 	 */
 	public static void deleteNotification(int id) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		Notification n = user.getNotification(id);
 		if (n != null) {
 			n.unregister();
@@ -187,8 +187,8 @@ public class CUser extends BaseController {
 	 *            the reason the {@link User} is being blocked.
 	 */
 	public static void blockUser(String username, String reason) {
-		User user = Database.get().users().get(username);
-		User mod = Session.get().currentUser();
+		User user = Database.users().get(username);
+		User mod = Session.user();
 		if (mod.isModerator() && mod != user) {
 			if (reason.equals("")) {
 				reason = "secure.blockreasonerror";
@@ -206,8 +206,8 @@ public class CUser extends BaseController {
 	 *            the username of the {@link User} to be unblocked.
 	 */
 	public static void unblockUser(String username) {
-		User user = Database.get().users().get(username);
-		User mod = Session.get().currentUser();
+		User user = Database.users().get(username);
+		User mod = Session.user();
 		if (mod.isModerator() && mod != user) {
 			user.unblock();
 			flash.success("secure.unlockuserflash");
@@ -222,7 +222,7 @@ public class CUser extends BaseController {
 	 *            the XML database file to be loaded. This field is mandatory.
 	 */
 	public static void loadXML(@Required File xml) {
-		if (!Session.get().currentUser().isModerator()) {
+		if (!Session.user().isModerator()) {
 			Application.index(0);
 		}
 		if (xml == null) {
@@ -248,7 +248,7 @@ public class CUser extends BaseController {
 	 * Clear the entire database.
 	 */
 	public static void clearDB() {
-		if (!Session.get().currentUser().isModerator()) {
+		if (!Session.user().isModerator()) {
 			flash.error("secure.cleardberror");
 			Application.index(0);
 		}

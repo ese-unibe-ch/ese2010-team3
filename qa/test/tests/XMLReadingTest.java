@@ -118,8 +118,7 @@ public class XMLReadingTest extends UnitTest {
 	@BeforeClass
 	public static void setUp() throws SAXException, IOException,
 			ParserConfigurationException {
-		old = Database.get();
-		Database.swapWith(mock);
+		old = Database.swapWith(mock);
 
 	}
 
@@ -137,30 +136,30 @@ public class XMLReadingTest extends UnitTest {
 	public void shouldReadTom() throws SAXException, IOException,
 			ParserConfigurationException {
 		Importer.importXML(this.xml);
-		assertFalse(Database.get().users().isAvailable("sdaau"));
+		assertFalse(Database.users().isAvailable("sdaau"));
 	}
 
 	@Test
 	public void shouldReadQuestion() throws SAXException, IOException,
 			ParserConfigurationException {
-		assertEquals(0, Database.get().questions().count());
+		assertEquals(0, Database.questions().count());
 		Importer.importXML(this.xml);
-		assertEquals(1, Database.get().questions().count());
+		assertEquals(1, Database.questions().count());
 	}
 
 	@Test
 	public void shouldReadAnswerToo() throws SAXException, IOException,
 			ParserConfigurationException {
-		assertEquals(0, Database.get().questions().countAllAnswers());
+		assertEquals(0, Database.questions().countAllAnswers());
 		Importer.importXML(this.xml);
-		assertEquals(1, Database.get().questions().countAllAnswers());
+		assertEquals(1, Database.questions().countAllAnswers());
 	}
 
 	@Test
 	public void shouldNotContainCDATA() throws SAXException, IOException,
 			ParserConfigurationException {
 		Importer.importXML(this.xml);
-		Question question = Database.get().questions().all().get(0);
+		Question question = Database.questions().all().get(0);
 		assertFalse(question.content().startsWith("<![CDATA["));
 		assertFalse(question.answers().get(0).content().contains("<![CDATA["));
 	}
@@ -224,7 +223,7 @@ public class XMLReadingTest extends UnitTest {
 			IOException, ParserConfigurationException {
 		Importer.importXML(xml.replace("<ownerid>277826</ownerid>",
 				"<ownerid/>").replace("<answer id=\"4120453\">", "<answer>"));
-		Question question = Database.get().questions().all().get(0);
+		Question question = Database.questions().all().get(0);
 		assertNull(question.owner());
 		assertNull(question.answers().get(0).owner());
 	}

@@ -43,7 +43,7 @@ public abstract class Item {
 	 */
 	public Item(User owner) {
 		this.owner = owner;
-		this.timestamp = SystemInformation.get().now();
+		this.timestamp = SysInfo.now();
 		this.id = this.autoIncrementID();
 		if (owner != null) {
 			owner.registerItem(this);

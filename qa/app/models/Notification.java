@@ -12,7 +12,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
 
-	private IMailbox mailbox;
+	private final IMailbox mailbox;
 
 	protected boolean isDeleted;
 
@@ -48,8 +48,7 @@ public class Notification extends Item implements Comparable<Notification> {
 	 * @return true, if it is very recent, ie no older than 5 minutes
 	 */
 	public boolean isVeryRecent() {
-		return SystemInformation.get().now().getTime()
-				- this.timestamp().getTime() <= 5 * 60 * 1000;
+		return SysInfo.now().getTime() - this.timestamp().getTime() <= 5 * 60 * 1000;
 	}
 
 	/**
@@ -78,11 +77,13 @@ public class Notification extends Item implements Comparable<Notification> {
 		return n.id() - this.id();
 	}
 
+	@Override
 	public void unregister() {
 		this.mailbox.removeNotification(this.id());
 		super.unregister();
 	}
 
+	@Override
 	public String toString() {
 		return "N[" + this.mailbox.toString() + this.about.toString() + "]";
 	}

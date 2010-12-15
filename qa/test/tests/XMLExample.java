@@ -30,8 +30,7 @@ public class XMLExample extends FunctionalTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		old = Database.get();
-		Database.swapWith(new HotDatabase());
+		old = Database.swapWith(new HotDatabase());
 
 		loaded = loadFile("conf/fixtures/QA3.xml");
 		incomplete = loadFile("conf/fixtures/incompleteData.xml");
@@ -70,21 +69,21 @@ public class XMLExample extends FunctionalTest {
 	public void hasCorrectUserCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		loadFile();
-		assertEquals(52, Database.get().users().count());
+		assertEquals(52, Database.users().count());
 	}
 
 	@Test
 	public void hasCorrectQuestionCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		loadFile();
-		assertEquals(44, Database.get().questions().count());
+		assertEquals(44, Database.questions().count());
 	}
 
 	@Test
 	public void hasCorrectAnswerCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		loadFile();
-		assertEquals(51, Database.get().questions().countAllAnswers());
+		assertEquals(51, Database.questions().countAllAnswers());
 	}
 
 	@Ignore("Answers are not read correctly. I guess")
@@ -92,8 +91,8 @@ public class XMLExample extends FunctionalTest {
 	public void withIncompleteData() throws SAXException, IOException,
 			ParserConfigurationException {
 		Importer.importXML(incomplete);
-		assertEquals(50, Database.get().users().count());
-		assertEquals(41, Database.get().questions().count());
-		assertEquals(51, Database.get().questions().countAllAnswers());
+		assertEquals(50, Database.users().count());
+		assertEquals(41, Database.questions().count());
+		assertEquals(51, Database.questions().countAllAnswers());
 	}
 }

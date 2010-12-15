@@ -42,12 +42,12 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			if (s.startsWith("tag:") && s.length() > 4) {
 				// search for tag only
 				terms.add(s);
-				tags.add(Database.get().tags().get(s.substring(4)));
+				tags.add(Database.tags().get(s.substring(4)));
 			} else {
 				// search for this term anywhere, so ignore all non-alphanumeric
 				// characters
 				terms.addAll(Arrays.asList(s.split("\\W+")));
-				tags.add(Database.get().tags().get(s));
+				tags.add(Database.tags().get(s));
 			}
 		}
 		return Mapper.sort(this.questions.values(),
@@ -144,7 +144,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics() {
 		Map<Tag, Map<User, Integer>> stats = new HashMap();
 		// only check each question (and answer) once
-		for (Question question : Database.get().questions().all()) {
+		for (Question question : Database.questions().all()) {
 			List<Tag> tags = question.getTags();
 			// skip untagged questions
 			if (tags.isEmpty())

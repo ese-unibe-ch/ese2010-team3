@@ -4,12 +4,16 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Question;
+import models.SysInfo;
 import models.SystemInformation;
 import models.Tag;
 import models.User;
 import models.database.Database;
+import models.database.IDatabase;
+import models.database.HotDatabase.HotDatabase;
 import models.helpers.Tools;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +22,22 @@ import tests.mocks.SystemInformationMock;
 
 public class UserTest extends UnitTest {
 
+	private static IDatabase origDB;
+	private SystemInformation savedSysInfo;
+	private SystemInformationMock sys;
+
 	@Before
 	public void setUp() {
+		origDB = Database.swapWith(new HotDatabase());
+		sys = new SystemInformationMock();
+		savedSysInfo = SysInfo.mockWith(sys);
 		Database.clear();
+	}
+
+	@After
+	public void tearDown() {
+		Database.swapWith(origDB);
+		SysInfo.mockWith(savedSysInfo);
 	}
 
 	@Test
@@ -37,11 +54,11 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkUsernameAvailable() {
-		assertTrue(Database.get().users().isAvailable("JaneSmith"));
-		Database.get().users().register("JaneSmith", "janesmith", "jane@smith.com");
-		assertFalse(Database.get().users().isAvailable("JaneSmith"));
-		assertFalse(Database.get().users().isAvailable("janesmith"));
-		assertFalse(Database.get().users().isAvailable("jAnEsMiTh"));
+		assertTrue(Database.users().isAvailable("JaneSmith"));
+		Database.users().register("JaneSmith", "janesmith", "jane@smith.com");
+		assertFalse(Database.users().isAvailable("JaneSmith"));
+		assertFalse(Database.users().isAvailable("janesmith"));
+		assertFalse(Database.users().isAvailable("jAnEsMiTh"));
 	}
 
 	@Test
@@ -71,8 +88,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2010).month(12).day(3);
 
 		User user = new User("Jack", "jack");
@@ -123,8 +138,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForCheater() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		User user = new User("TheSupported", "supported");
 		User user2 = new User("Cheater", "cheater");
 		assertFalse(user.isBlocked());
@@ -261,8 +274,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveRecentEntries() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		User user = new User("Jack", "jack");
@@ -291,7 +302,7 @@ public class UserTest extends UnitTest {
 		q.answer(user, "Because");
 
 		assertEquals(0, user.highRatedAnswers().size());
-		assertTrue(Database.get().questions().countHighRatedAnswers() == 0);
+		assertTrue(Database.questions().countHighRatedAnswers() == 0);
 
 		User A = new User("A", "a");
 		User B = new User("B", "b");
@@ -306,7 +317,7 @@ public class UserTest extends UnitTest {
 		q.answers().get(0).voteUp(E);
 
 		assertEquals(1, user.highRatedAnswers().size());
-		assertTrue(Database.get().questions().countHighRatedAnswers() > 0);
+		assertTrue(Database.questions().countHighRatedAnswers() > 0);
 
 		A.delete();
 		B.delete();
@@ -395,8 +406,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldNotSuggestOldQuestions() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		User user5 = new User("User5", "user5");
@@ -556,8 +565,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testPostAndSearchDelay() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		User james = new User("James", "james");
 		assertTrue(james.canPost());
@@ -587,8 +594,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testTimeToSearchAndPost() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		User james = new User("James", "james");
 
@@ -615,8 +620,6 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testTestMode() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
 		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		User james = new User("James", "james");
 		sys.setTestMode(false);
@@ -640,6 +643,6 @@ public class UserTest extends UnitTest {
 	@Test
 	public void shouldNotWatchAnything() {
 		User user = new User("Jack", "jack");
-		assertEquals(0, Database.get().questions().getWatchList(user).size());
+		assertEquals(0, Database.questions().getWatchList(user).size());
 	}
 }

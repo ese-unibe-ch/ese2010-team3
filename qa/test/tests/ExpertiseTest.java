@@ -24,8 +24,7 @@ public class ExpertiseTest extends UnitTest {
 
 	@BeforeClass
 	public static void mockDB() {
-		origDB = Database.get();
-		Database.swapWith(new HotDatabase());
+		origDB = Database.swapWith(new HotDatabase());
 
 	}
 
@@ -59,7 +58,7 @@ public class ExpertiseTest extends UnitTest {
 		for (int i = 0; i < 10; i++)
 			answer.voteUp(users.get(i));
 
-		Tag tag = Database.get().tags().get("sole-expert");
+		Tag tag = Database.tags().get("sole-expert");
 		assertEquals(john.getExpertise().size(), 1);
 		assertTrue(john.getExpertise().contains(tag));
 		assertFalse(question.owner().getExpertise().contains(tag));
@@ -81,7 +80,7 @@ public class ExpertiseTest extends UnitTest {
 		Answer answer = question.answer(john, "Answer");
 		question.setBestAnswer(answer);
 
-		Tag tag = Database.get().tags().get("also-expert");
+		Tag tag = Database.tags().get("also-expert");
 		assertEquals(john.getExpertise().size(), 1);
 		assertTrue(john.getExpertise().contains(tag));
 		assertFalse(question.owner().getExpertise().contains(tag));
@@ -105,7 +104,7 @@ public class ExpertiseTest extends UnitTest {
 		for (int i = 0; i < 4; i++)
 			answer.voteUp(users.get(i));
 
-		Tag tag = Database.get().tags().get("no-expert");
+		Tag tag = Database.tags().get("no-expert");
 		assertEquals(john.getExpertise().size(), 0);
 		assertFalse(question.owner().getExpertise().contains(tag));
 		for (int i = 0; i < 20; i++)
@@ -130,7 +129,7 @@ public class ExpertiseTest extends UnitTest {
 			k--;
 		}
 
-		Tag tag = Database.get().tags().get("no-answer");
+		Tag tag = Database.tags().get("no-answer");
 		assertEquals(john.getExpertise().size(), 0);
 		assertFalse(question.owner().getExpertise().contains(tag));
 		for (int i = 0; i < 20; i++)
@@ -144,7 +143,7 @@ public class ExpertiseTest extends UnitTest {
 		Answer answer = question.answer(james, "Answer");
 		question.setBestAnswer(answer);
 
-		Tag tag = Database.get().tags().get("own-answer");
+		Tag tag = Database.tags().get("own-answer");
 		assertEquals(james.getExpertise().size(), 0);
 		assertFalse(question.owner().getExpertise().contains(tag));
 	}
@@ -165,7 +164,7 @@ public class ExpertiseTest extends UnitTest {
 		for (int i = 0; i < 3; i++)
 			john.getAnswers().get(3 + i).voteUp(question.owner());
 
-		Tag tag = Database.get().tags().get("sole-expert");
+		Tag tag = Database.tags().get("sole-expert");
 		assertEquals(john.getExpertise().size(), 1);
 		assertTrue(john.getExpertise().contains(tag));
 		assertFalse(question.owner().getExpertise().contains(tag));

@@ -1,6 +1,6 @@
 package tests;
 
-import models.ISystemInformation;
+import models.SysInfo;
 import models.SystemInformation;
 import models.TimeTracker;
 import models.database.Database;
@@ -14,21 +14,26 @@ import tests.mocks.SystemInformationMock;
 
 public class TimeTrackerTest extends UnitTest {
 
-	private ISystemInformation savedSysInfo;
+	private SystemInformation savedSysInfo;
 	private TimeTracker t;
 	private SystemInformationMock sys;
 
 	@Before
 	public void setUp() throws Exception {
 		Database.clear();
-		savedSysInfo = SystemInformation.get();
 		sys = new SystemInformationMock();
 		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
 		t = TimeTracker.getTimeTracker();
 		t.injectMockedStartTime(sys.now());
-		SystemInformation.mockWith(sys);
+		savedSysInfo = SysInfo.mockWith(sys);
 		sys.year(2010).month(12).day(1).hour(0).minute(0).second(0);
 
+	}
+
+	@After
+	public void tearDown() {
+		Database.clear();
+		SysInfo.mockWith(savedSysInfo);
 	}
 
 	@Test
@@ -90,11 +95,5 @@ public class TimeTrackerTest extends UnitTest {
 		sys.year(2010).month(9).day(1).hour(0).minute(0).second(0);
 		int months = t.getMonths();
 		assertEquals(0, months);
-	}
-
-	@After
-	public void tearDown() {
-		Database.clear();
-		SystemInformation.mockWith(savedSysInfo);
 	}
 }

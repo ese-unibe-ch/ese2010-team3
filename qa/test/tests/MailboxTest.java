@@ -2,16 +2,15 @@ package tests;
 
 import java.util.List;
 
-import models.ISystemInformation;
 import models.Mailbox;
 import models.Notification;
 import models.Question;
+import models.SysInfo;
 import models.SystemInformation;
 import models.User;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import play.test.UnitTest;
@@ -23,17 +22,7 @@ public class MailboxTest extends UnitTest {
 	private Mailbox mailbox;
 	private Question question;
 	private SystemInformationMock sys;
-	private static ISystemInformation old;
-
-	@BeforeClass
-	public static void setUpClass() {
-		old = SystemInformation.get();
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-		SystemInformation.mockWith(old);
-	}
+	private static SystemInformation old;
 
 	@Before
 	public void setUp() {
@@ -46,7 +35,12 @@ public class MailboxTest extends UnitTest {
 		this.sys = new SystemInformationMock();
 		this.sys.year(2000).month(4).day(2).hour(9).minute(0).second(0);
 
-		SystemInformation.mockWith(this.sys);
+		this.old = SysInfo.mockWith(this.sys);
+	}
+
+	@After
+	public void tearDown() {
+		SysInfo.mockWith(this.old);
 	}
 
 	@Test

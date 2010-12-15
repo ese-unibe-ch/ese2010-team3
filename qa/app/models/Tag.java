@@ -67,7 +67,7 @@ public class Tag implements Comparable<Tag> {
 
 		// remove this tag from the database
 		if (this.questions.isEmpty()) {
-			Database.get().tags().remove(this);
+			Database.tags().remove(this);
 		}
 	}
 

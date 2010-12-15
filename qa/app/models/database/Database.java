@@ -13,23 +13,45 @@ public class Database {
 	private static IDatabase instance = new HotDatabase();
 
 	/**
-	 * Gain access to the database.
-	 * 
-	 * @return the database that is currently responsible.
-	 */
-	public static IDatabase get() {
-		return instance;
-	}
-
-	/**
 	 * Exchanges the Database. Useful for mocking or hot replacement to other
 	 * engine.
 	 * 
-	 * @param d
+	 * @param database
 	 *            The fully functional database to take responsibility.
+	 * @return the previously active database (in case you want to restore it
+	 *         later)
 	 */
-	public static void swapWith(IDatabase d) {
-		instance = d;
+	public static IDatabase swapWith(IDatabase database) {
+		IDatabase previousDB = instance;
+		instance = database;
+		return previousDB;
+	}
+
+	/**
+	 * Gain access to the current question database.
+	 * 
+	 * @return the database that is currently responsible for questions.
+	 */
+	public static IQuestionDatabase questions() {
+		return instance.questions();
+	}
+
+	/**
+	 * Gain access to the current user database.
+	 * 
+	 * @return the database that is currently responsible for users.
+	 */
+	public static IUserDatabase users() {
+		return instance.users();
+	}
+
+	/**
+	 * Gain access to the current tag database.
+	 * 
+	 * @return the database that is currently responsible for tags.
+	 */
+	public static ITagDatabase tags() {
+		return instance.tags();
 	}
 
 	/**
@@ -38,16 +60,16 @@ public class Database {
 	 */
 
 	public static void clear() {
-		get().users().clear();
-		get().tags().clear();
-		get().questions().clear();
+		users().clear();
+		tags().clear();
+		questions().clear();
 	}
 
 	public static void clearKeepAdmins() {
-		Collection<User> mods = Database.get().users().allModerators();
+		Collection<User> mods = Database.users().allModerators();
 		Database.clear();
 		for (User mod : mods) {
-			Database.get().users().add(mod);
+			Database.users().add(mod);
 		}
 	}
 }

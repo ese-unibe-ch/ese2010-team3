@@ -17,7 +17,7 @@ public class BaseController extends Controller {
 	@Before
 	static void setConnectedUser() {
 		if (Security.isConnected()) {
-			User user = Database.get().users().get(Security.connected());
+			User user = Database.users().get(Security.connected());
 			renderArgs.put("user", user);
 		}
 	}

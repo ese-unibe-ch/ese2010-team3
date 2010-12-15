@@ -25,7 +25,7 @@ public class TagTest extends UnitTest {
 	@Before
 	public void setUp() {
 		Database.clear();
-		tagDB = Database.get().tags();
+		tagDB = Database.tags();
 		douglas = new User("Douglas", "douglas");
 		question1 = new Question(douglas, "Why did the chicken cross the road?");
 		question2 = new Question(douglas, "Is this question meaningless?");
@@ -189,7 +189,7 @@ public class TagTest extends UnitTest {
 				questionE };
 		Question[] possibility2 = { questionF, questionB, questionC, questionD,
 				questionE };
-		List<Question> similar = Database.get().questions().findSimilar(
+		List<Question> similar = Database.questions().findSimilar(
 				questionA);
 		assertEquals(similar.size(), 5);
 		assertTrue(SetOperations.arrayEquals(possibility1, similar.toArray())

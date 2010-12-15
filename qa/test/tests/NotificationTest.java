@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import models.Answer;
-import models.ISystemInformation;
 import models.Notification;
 import models.Question;
+import models.SysInfo;
 import models.SystemInformation;
 import models.User;
 import models.database.Database;
@@ -22,14 +22,16 @@ import tests.mocks.SystemInformationMock;
 
 public class NotificationTest extends UnitTest {
 
-	private ISystemInformation savedSysInfo;
+	private SystemInformationMock sys;
+	private SystemInformation savedSysInfo;
 	private Question question;
 	private User norbert;
 	private User andrew;
 
 	@Before
 	public void setUp() {
-		this.savedSysInfo = SystemInformation.get();
+		this.sys = new SystemInformationMock();
+		this.savedSysInfo = SysInfo.mockWith(this.sys);
 		this.norbert = new User("Norbert", "norbert");
 		this.question = new Question(this.norbert, "Need I be watched?");
 		this.andrew = new User("Andrew", "andrew");
@@ -37,7 +39,7 @@ public class NotificationTest extends UnitTest {
 
 	@After
 	public void tearDown() {
-		SystemInformation.mockWith(this.savedSysInfo);
+		SysInfo.mockWith(this.savedSysInfo);
 	}
 
 	@Test
@@ -70,9 +72,7 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldHaveRecentNotifications() {
-		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
-		sys.hour(12).minute(0);
+		this.sys.hour(12).minute(0);
 
 		assertNull(this.norbert.getVeryRecentNewNotification());
 		assertEquals(this.norbert.getNewNotifications().size(), 0);
@@ -213,7 +213,7 @@ public class NotificationTest extends UnitTest {
 	@Test
 	public void shouldBeOnWatchList() {
 		Question question2 = new Question(this.andrew, "another question");
-		List<Question> watchList = Database.get().questions()
+		List<Question> watchList = Database.questions()
 				.getWatchList(this.norbert);
 		assertTrue(watchList.contains(this.question));
 		assertFalse(watchList.contains(question2));

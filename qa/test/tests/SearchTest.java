@@ -38,75 +38,75 @@ public class SearchTest extends UnitTest {
 
 	@Test
 	public void shouldFindFulltext() {
-		assertTrue(Database.get().questions().searchFor("relevant").contains(
+		assertTrue(Database.questions().searchFor("relevant").contains(
 				fulltextPositive));
 	}
 
 	@Test
 	public void shouldntFindFulltextNegative() {
-		assertFalse(Database.get().questions().searchFor("relevant").contains(
+		assertFalse(Database.questions().searchFor("relevant").contains(
 				fulltextNegative));
 	}
 
 	@Test
 	public void shouldFindByTag() {
-		assertTrue(Database.get().questions().searchFor("relevant")
+		assertTrue(Database.questions().searchFor("relevant")
 				.contains(taggedPositive));
 	}
 
 	@Test
 	public void shouldFindByTagOnly() {
-		assertFalse(Database.get().questions().searchFor("tag:relevant")
+		assertFalse(Database.questions().searchFor("tag:relevant")
 				.contains(fulltextPositive));
-		assertTrue(Database.get().questions().searchFor("tag:relevant")
+		assertTrue(Database.questions().searchFor("tag:relevant")
 				.contains(taggedPositive));
 	}
 
 	@Test
 	public void shouldntFindByTagNegative() {
-		assertFalse(Database.get().questions().searchFor("relevant")
+		assertFalse(Database.questions().searchFor("relevant")
 				.contains(taggedNegative));
 	}
 
 	@Test
 	public void shouldntSearchForStupidWords() {
-		assertTrue(Database.get().questions().searchFor("is").isEmpty());
-		assertTrue(Database.get().questions().searchFor("???").isEmpty());
+		assertTrue(Database.questions().searchFor("is").isEmpty());
+		assertTrue(Database.questions().searchFor("???").isEmpty());
 	}
 	
 	@Test
 	public void shouldSearchMixedWord() {
-		assertTrue(Database.get().questions().searchFor("is relevant").contains(fulltextPositive));
-		assertTrue(Database.get().questions().searchFor("is relevant").contains(taggedPositive));
-		assertTrue(Database.get().questions().searchFor("??? relevant")
+		assertTrue(Database.questions().searchFor("is relevant").contains(fulltextPositive));
+		assertTrue(Database.questions().searchFor("is relevant").contains(taggedPositive));
+		assertTrue(Database.questions().searchFor("??? relevant")
 				.contains(taggedPositive));
 	}
 
 	@Test
 	public void shouldBeANDSearch() {
-		assertEquals(Database.get().questions().searchFor("relevant").size(), 2);
-		List<Question> relevantImportant = Database.get().questions()
+		assertEquals(Database.questions().searchFor("relevant").size(), 2);
+		List<Question> relevantImportant = Database.questions()
 				.searchFor("relevant important");
 		assertEquals(relevantImportant.size(), 1);
 		assertTrue(relevantImportant.contains(taggedPositive));
-		assertTrue(Database.get().questions().searchFor("relevant dummy")
+		assertTrue(Database.questions().searchFor("relevant dummy")
 				.isEmpty());
 	}
 
 	@Test
 	public void shouldFindUsername() {
-		List<Question> jills = Database.get().questions().searchFor("jill");
+		List<Question> jills = Database.questions().searchFor("jill");
 		assertEquals(jills.size(), 2);
 		assertTrue(jills.contains(fulltextPositive));
 		assertTrue(jills.contains(fulltextNegative));
 
-		List<Question> jackImportant = Database.get().questions()
+		List<Question> jackImportant = Database.questions()
 				.searchFor("jack important");
 		assertEquals(jackImportant.size(), 2);
 		assertTrue(jackImportant.contains(taggedPositive));
 		assertTrue(jackImportant.contains(taggedNegative));
 
-		List<Question> jackTagged = Database.get().questions()
+		List<Question> jackTagged = Database.questions()
 				.searchFor("jack tag:plop");
 		assertEquals(jackTagged.size(), 1);
 		assertTrue(jackTagged.contains(taggedNegative));
@@ -114,7 +114,7 @@ public class SearchTest extends UnitTest {
 
 	@Test
 	public void shouldNotSearchInTags() {
-		List<Question> questions = Database.get().questions().all();
+		List<Question> questions = Database.questions().all();
 		assertNotSame(questions.size(), 0);
 		Set<String> terms = new HashSet();
 		terms.add("relevant");
@@ -137,7 +137,7 @@ public class SearchTest extends UnitTest {
 		Question question = new Question(null, "about tag 'relevant'");
 		Set<String> terms = new HashSet();
 		terms.add("tag:");
-		List<Question> found = Database.get().questions().searchFor("tag:");
+		List<Question> found = Database.questions().searchFor("tag:");
 		assertEquals(1, found.size());
 		assertTrue(found.contains(question));
 	}

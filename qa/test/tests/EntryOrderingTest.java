@@ -62,7 +62,7 @@ public class EntryOrderingTest extends UnitTest {
 	}
 
 	public void shouldPreferMoreRecentQuestionEventhoughTheyMightBeWorse() {
-		List<Question> questions = Database.get().questions().all();
+		List<Question> questions = Database.questions().all();
 		assertEquals(goodQuestion, questions.get(1));
 		assertEquals(badQuestion, questions.get(0));
 	}

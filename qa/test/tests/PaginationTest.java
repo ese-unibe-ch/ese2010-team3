@@ -2,8 +2,8 @@ package tests;
 
 import java.util.List;
 
-import models.ISystemInformation;
 import models.Question;
+import models.SysInfo;
 import models.SystemInformation;
 import models.User;
 import models.database.Database;
@@ -22,14 +22,13 @@ public class PaginationTest extends UnitTest {
 	private Question question3;
 	User jack = new User("Jack", "jack");
 	private int questionsPerPage;
-	private ISystemInformation savedSysInfo;
+	private SystemInformation savedSysInfo;
 
 	@Before
 	public void setup() {
 		Database.clear();
-		savedSysInfo = SystemInformation.get();
 		SystemInformationMock sys = new SystemInformationMock();
-		SystemInformation.mockWith(sys);
+		savedSysInfo = SysInfo.mockWith(sys);
 		questionsPerPage = 15;
 		sys.year(2010).month(9).day(3).hour(0).minute(0).second(0);
 		question3 = new Question(jack, "Who?");
@@ -44,12 +43,12 @@ public class PaginationTest extends UnitTest {
 	@After
 	public void tearDown() {
 		Database.clear();
-		SystemInformation.mockWith(savedSysInfo);
+		SysInfo.mockWith(savedSysInfo);
 	}
 
 	@Test
 	public void shouldDetermineMaxIndexZeroForThreeQuestions() {
-		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+		int maxIndex = Tools.determineMaximumIndex(Database.questions()
 				.all(), questionsPerPage);
 
 		assertEquals(0, maxIndex);
@@ -57,10 +56,10 @@ public class PaginationTest extends UnitTest {
 
 	@Test
 	public void shouldDetermineMaxIndexZeroForZeroQuestions() {
-		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+		int maxIndex = Tools.determineMaximumIndex(Database.questions()
 				.all(), questionsPerPage);
 		jack.delete();
-		assertEquals(0, Database.get().questions().all().size());
+		assertEquals(0, Database.questions().all().size());
 		assertEquals(0, maxIndex);
 	}
 
@@ -69,7 +68,7 @@ public class PaginationTest extends UnitTest {
 		for (int i = 0; i < 42; i++) {
 			new Question(jack, "Could you repeat this please?");
 		}
-		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+		int maxIndex = Tools.determineMaximumIndex(Database.questions()
 				.all(), questionsPerPage);
 		assertEquals(2, maxIndex);
 	}
@@ -79,7 +78,7 @@ public class PaginationTest extends UnitTest {
 		for (int i = 0; i < 43; i++) {
 			new Question(jack, "Could you repeat this please?");
 		}
-		int maxIndex = Tools.determineMaximumIndex(Database.get().questions()
+		int maxIndex = Tools.determineMaximumIndex(Database.questions()
 				.all(), questionsPerPage);
 		assertEquals(3, maxIndex);
 	}
@@ -87,7 +86,7 @@ public class PaginationTest extends UnitTest {
 	@Test
 	public void shouldBeOfSizeThree() {
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(3, questions.size());
 	}
@@ -98,11 +97,11 @@ public class PaginationTest extends UnitTest {
 			new Question(jack, "Could you repeat this please?");
 		}
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(15, questions.size());
 		index = 1;
-		questions = Tools.paginate(Database.get().questions().all(),
+		questions = Tools.paginate(Database.questions().all(),
 				questionsPerPage, index);
 		assertEquals(3, questions.size());
 
@@ -114,15 +113,15 @@ public class PaginationTest extends UnitTest {
 			new Question(jack, "Could you repeat this please?");
 		}
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(15, questions.size());
 		index = 1;
-		questions = Tools.paginate(Database.get().questions().all(),
+		questions = Tools.paginate(Database.questions().all(),
 				questionsPerPage, index);
 		assertEquals(15, questions.size());
 		index = 2;
-		questions = Tools.paginate(Database.get().questions().all(),
+		questions = Tools.paginate(Database.questions().all(),
 				questionsPerPage, index);
 		assertEquals(15, questions.size());
 	}
@@ -131,7 +130,7 @@ public class PaginationTest extends UnitTest {
 	public void shouldPaginateCorrectlyForZeroQuestions() {
 		jack.delete();
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(0, questions.size());
 	}
@@ -141,7 +140,7 @@ public class PaginationTest extends UnitTest {
 		question1.unregister();
 		question3.unregister();
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(1, questions.size());
 	}
@@ -152,11 +151,11 @@ public class PaginationTest extends UnitTest {
 			new Question(jack, "Could you repeat this please?");
 		}
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(15, questions.size());
 		index = 1;
-		questions = Tools.paginate(Database.get().questions().all(),
+		questions = Tools.paginate(Database.questions().all(),
 				questionsPerPage, index);
 		assertEquals(0, questions.size());
 	}
@@ -167,18 +166,18 @@ public class PaginationTest extends UnitTest {
 			new Question(jack, "Could you repeat this please?");
 		}
 		int index = 0;
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, index);
 		assertEquals(15, questions.size());
 		index = 1;
-		questions = Tools.paginate(Database.get().questions().all(),
+		questions = Tools.paginate(Database.questions().all(),
 				questionsPerPage, index);
 		assertEquals(1, questions.size());
 	}
 
 	@Test
 	public void shouldYieldEmptyPagesAfterEnd() {
-		List<Question> questions = Tools.paginate(Database.get().questions()
+		List<Question> questions = Tools.paginate(Database.questions()
 				.all(), questionsPerPage, 1);
 		assertEquals(0, questions.size());
 	}

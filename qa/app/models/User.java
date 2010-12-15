@@ -135,7 +135,7 @@ public class User implements IObserver, IMailbox {
 		}
 		this.items.clear();
 		this.mainMailbox.delete();
-		Database.get().users().remove(this.name);
+		Database.users().remove(this.name);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code> in this Hour.
 	 */
 	public int howManyItemsPerHour() {
-		Date now = SystemInformation.get().now();
+		Date now = SysInfo.now();
 		int i = 0;
 		for (Item item : this.items) {
 			if (now.getTime() - item.timestamp().getTime() <= 60 * 60 * 1000) {
@@ -185,7 +185,7 @@ public class User implements IObserver, IMailbox {
 	 * @return True if the <code>User</code> is supporting somebody.
 	 */
 	public boolean isMaybeCheater() {
-		if (SystemInformation.get().isInTestMode())
+		if (SysInfo.isInTestMode())
 			return false;
 
 		int voteCount = 0;
@@ -234,7 +234,7 @@ public class User implements IObserver, IMailbox {
 	 * @return True if the <code>User</code> is a Spammer.
 	 */
 	public boolean isSpammer() {
-		if (SystemInformation.get().isInTestMode())
+		if (SysInfo.isInTestMode())
 			return false;
 		if (this.isSpammer)
 			return true;
@@ -269,7 +269,7 @@ public class User implements IObserver, IMailbox {
 		} else if (this.isMaybeCheater()) {
 			this.block("User voted up somebody");
 		}
-		this.setLastPostTime(SystemInformation.get().now());
+		this.setLastPostTime(SysInfo.now());
 	}
 
 	/**
@@ -278,9 +278,8 @@ public class User implements IObserver, IMailbox {
 	 * @return age of the <code>User</code>
 	 */
 	private int age() {
-		Date now = SystemInformation.get().now();
 		if (this.dateOfBirth != null) {
-			long age = now.getTime() - this.dateOfBirth.getTime();
+			long age = SysInfo.now().getTime() - this.dateOfBirth.getTime();
 			return (int) (age / ((long) 1000 * 3600 * 24 * 365));
 		} else
 			return 0;
@@ -439,10 +438,10 @@ public class User implements IObserver, IMailbox {
 		if (this.isModerator != mod) {
 			this.isModerator = mod;
 			if (mod) {
-				this.addMailbox(Database.get().users().getModeratorMailbox());
+				this.addMailbox(Database.users().getModeratorMailbox());
 			} else {
 				this
-						.removeMailbox(Database.get().users()
+						.removeMailbox(Database.users()
 								.getModeratorMailbox());
 			}
 		}
@@ -746,7 +745,7 @@ public class User implements IObserver, IMailbox {
 	 * @return the list of tags for which this user is an expert
 	 */
 	public List<Tag> getExpertise() {
-		Map<Tag, Map<User, Integer>> stats = Database.get().questions()
+		Map<Tag, Map<User, Integer>> stats = Database.questions()
 				.collectExpertiseStatistics();
 
 		List<Tag> expertise = new ArrayList();
@@ -796,7 +795,7 @@ public class User implements IObserver, IMailbox {
 	 * @return true if the user can search
 	 */
 	public boolean canSearchFor(String term) {
-		return SystemInformation.get().isInTestMode()
+		return SysInfo.isInTestMode()
 				|| term.equals(this.lastSearchTerm) || this.timeToSearch() <= 0;
 	}
 
@@ -807,7 +806,7 @@ public class User implements IObserver, IMailbox {
 	 * @return an Integer that equals the remaining seconds.
 	 */
 	public int timeToSearch() {
-		return (int) (15 - (SystemInformation.get().now().getTime() - this.lastSearch) / 1000);
+		return (int) (15 - (SysInfo.now().getTime() - this.lastSearch) / 1000);
 	}
 
 	/**
@@ -828,7 +827,7 @@ public class User implements IObserver, IMailbox {
 	 * @return true if the user can post
 	 */
 	public boolean canPost() {
-		return SystemInformation.get().isInTestMode() || !this.isBlocked()
+		return SysInfo.isInTestMode() || !this.isBlocked()
 				&& this.timeToPost() <= 0;
 	}
 
@@ -839,7 +838,7 @@ public class User implements IObserver, IMailbox {
 	 * @return an Integer that equals the remaining seconds.
 	 */
 	public int timeToPost() {
-		return (int) (30 - (SystemInformation.get().now().getTime() - this.lastPost) / 1000);
+		return (int) (30 - (SysInfo.now().getTime() - this.lastPost) / 1000);
 	}
 
 	public List<IMailbox> getAllMailboxes() {

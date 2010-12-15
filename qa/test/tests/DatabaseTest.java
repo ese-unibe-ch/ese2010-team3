@@ -18,9 +18,7 @@ public class DatabaseTest extends UnitTest {
 
 	@Before
 	public void mockDB() {
-		origDB = Database.get();
-		Database.swapWith(new HotDatabase());
-
+		origDB = Database.swapWith(new HotDatabase());
 	}
 
 	@After
@@ -30,7 +28,7 @@ public class DatabaseTest extends UnitTest {
 
 	@Test
 	public void shouldKeepAdmins() {
-		IUserDatabase userDB = Database.get().users();
+		IUserDatabase userDB = Database.users();
 		userDB.clear();
 
 		User admin = userDB.register("admin", "admin", "admin@example.com");

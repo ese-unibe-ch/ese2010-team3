@@ -46,7 +46,7 @@ public class Question extends Entry implements IObservable {
 		this.answers = new HashMap<Integer, Answer>();
 		this.comments = new HashMap<Integer, Comment>();
 		this.observers = new HashSet<IObserver>();
-		Database.get().questions().register(this);
+		Database.questions().register(this);
 		// all users watch their own questions by default
 		if (owner != null)
 			owner.startObserving(this);
@@ -69,7 +69,7 @@ public class Question extends Entry implements IObservable {
 			comment.unregister();
 		}
 		this.observers.clear();
-		Database.get().questions().remove(id());
+		Database.questions().remove(id());
 		unregisterVotes();
 		unregisterUser();
 		setTagString("");
@@ -283,7 +283,7 @@ public class Question extends Entry implements IObservable {
 				bit = bit.substring(0, 32);
 			}
 
-			Tag tag = Database.get().tags().get(bit);
+			Tag tag = Database.tags().get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);
 				tag.register(this);
@@ -341,7 +341,7 @@ public class Question extends Entry implements IObservable {
 	 *         least one of the first question.
 	 */
 	public List<Question> getSimilarQuestions() {
-		return Database.get().questions().findSimilar(this);
+		return Database.questions().findSimilar(this);
 	}
 
 	/**
@@ -350,9 +350,8 @@ public class Question extends Entry implements IObservable {
 	 * @return boolean
 	 */
 	public boolean isOldQuestion() {
-		double dayDiff = (double) (SystemInformation.get().now().getTime() - timestamp()
-				.getTime())
-				/ (1000 * 60 * 60 * 24);
+		double dayDiff = (double) (SysInfo.now().getTime() - timestamp()
+				.getTime()) / (1000 * 60 * 60 * 24);
 		return dayDiff > 120;
 	}
 

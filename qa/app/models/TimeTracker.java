@@ -14,11 +14,11 @@ import java.util.GregorianCalendar;
  */
 public final class TimeTracker {
 
-	private GregorianCalendar startTime = new GregorianCalendar();
+	private final GregorianCalendar startTime = new GregorianCalendar();
 	private static TimeTracker t;
 
 	private TimeTracker() {
-		startTime.setTime(SystemInformation.get().now());
+		startTime.setTime(SysInfo.now());
 	}
 
 	public static TimeTracker getTimeTracker() {
@@ -38,27 +38,7 @@ public final class TimeTracker {
 	 * @return int the number of days
 	 */
 	public int getDays() {
-		GregorianCalendar startClone = new GregorianCalendar();
-		GregorianCalendar nowClone = new GregorianCalendar();
-		int elapsed = 0;
-		nowClone.setTime(SystemInformation.get().now());
-		startClone = (GregorianCalendar) this.startTime.clone();
-
-		startClone.clear(Calendar.MILLISECOND);
-		startClone.clear(Calendar.SECOND);
-		startClone.clear(Calendar.MINUTE);
-		startClone.clear(Calendar.HOUR_OF_DAY);
-		startClone.clear(Calendar.HOUR_OF_DAY);
-		nowClone.clear(Calendar.MILLISECOND);
-		nowClone.clear(Calendar.SECOND);
-		nowClone.clear(Calendar.MINUTE);
-		nowClone.clear(Calendar.HOUR_OF_DAY);
-
-		while (startClone.before(nowClone)) {
-			startClone.add(Calendar.DATE, 1);
-			elapsed++;
-		}
-		return elapsed;
+		return getDifference(Calendar.DATE);
 	}
 
 	/**
@@ -67,28 +47,7 @@ public final class TimeTracker {
 	 * @return int the number of weeks
 	 */
 	public int getWeeks() {
-		GregorianCalendar startClone, nowClone;
-		int elapsed = 0;
-
-		startClone = (GregorianCalendar) this.startTime.clone();
-		nowClone = new GregorianCalendar();
-		nowClone.setTime(SystemInformation.get().now());
-
-		startClone.clear(Calendar.MILLISECOND);
-		startClone.clear(Calendar.SECOND);
-		startClone.clear(Calendar.MINUTE);
-		startClone.clear(Calendar.HOUR_OF_DAY);
-
-		nowClone.clear(Calendar.MILLISECOND);
-		nowClone.clear(Calendar.SECOND);
-		nowClone.clear(Calendar.MINUTE);
-		nowClone.clear(Calendar.HOUR_OF_DAY);
-
-		while (startClone.before(nowClone)) {
-			startClone.add(Calendar.WEEK_OF_YEAR, 1);
-			elapsed++;
-		}
-		return elapsed;
+		return this.getDifference(Calendar.WEEK_OF_YEAR);
 	}
 
 	/**
@@ -97,12 +56,16 @@ public final class TimeTracker {
 	 * @return int the number of months
 	 */
 	public int getMonths() {
+		return this.getDifference(Calendar.MONTH);
+	}
+
+	private int getDifference(int field) {
 		GregorianCalendar startClone, nowClone;
 		int elapsed = 0;
 
 		startClone = (GregorianCalendar) this.startTime.clone();
 		nowClone = new GregorianCalendar();
-		nowClone.setTime(SystemInformation.get().now());
+		nowClone.setTime(SysInfo.now());
 
 		startClone.clear(Calendar.MILLISECOND);
 		startClone.clear(Calendar.SECOND);
@@ -115,10 +78,9 @@ public final class TimeTracker {
 		nowClone.clear(Calendar.HOUR_OF_DAY);
 
 		while (startClone.before(nowClone)) {
-			startClone.add(Calendar.MONTH, 1);
+			startClone.add(field, 1);
 			elapsed++;
 		}
 		return elapsed;
 	}
-
 }
