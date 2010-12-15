@@ -181,4 +181,14 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public void clear() {
 		this.questions.clear();
 	}
+
+	public List<Question> getWatchList(User user) {
+		List<Question> watchList = new ArrayList();
+		for (Question question : this.questions.values()) {
+			if (question.hasObserver(user)) {
+				watchList.add(question);
+			}
+		}
+		return watchList;
+	}
 }

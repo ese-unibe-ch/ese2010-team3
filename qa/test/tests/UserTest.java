@@ -77,6 +77,7 @@ public class UserTest extends UnitTest {
 
 		User user = new User("Jack", "jack");
 		assertEquals(user.getAge(), 0);
+		assertNull(user.getBiographyHTML());
 
 		user.setDateOfBirth("14.9.1987");
 		user.setBiography("I lived");
@@ -89,6 +90,7 @@ public class UserTest extends UnitTest {
 		assertEquals(user.getAge(), 23);
 		assertEquals(user.getDateOfBirth(), "14.09.1987");
 		assertEquals(user.getBiography(), "I lived");
+		assertEquals(user.getBiographyHTML(), "<p>I lived</p>");
 		assertEquals(user.getEmail(), "test@test.tt");
 		assertEquals(user.getEmployer(), "TestInc");
 		assertEquals(user.getFullname(), "Test Tester");
@@ -633,5 +635,11 @@ public class UserTest extends UnitTest {
 		james.setLastSearch("search 3", sys.now());
 		assertTrue(james.canSearchFor("search 4"));
 		assertTrue(james.canPost());
+	}
+
+	@Test
+	public void shouldNotWatchAnything() {
+		User user = new User("Jack", "jack");
+		assertEquals(0, Database.get().questions().getWatchList(user).size());
 	}
 }

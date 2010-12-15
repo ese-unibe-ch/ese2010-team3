@@ -4,13 +4,12 @@ import models.Comment;
 import models.Question;
 import models.User;
 import models.database.Database;
-import models.helpers.Tools;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
-import play.mvc.With;
 import play.mvc.Router.ActionDefinition;
+import play.mvc.With;
 
 /**
  * The controller for all routes that concern the {@link Question}'s.
@@ -35,10 +34,8 @@ public class CQuestion extends Controller {
 			User user = Session.get().currentUser();
 			if (user.canPost()) {
 				Cache.delete("index.questions");
-				Question question = Database.get().questions().add(user,
-						Tools.markdownToHtml(content));
-				question.setTagString(tags);
-				user.startObserving(question);
+				Question question = Database.get().questions()
+						.add(user, content);
 				question.setTagString(tags);
 				flash.success("secure.newquestionflash");
 				Application.question(question.id());
@@ -82,8 +79,7 @@ public class CQuestion extends Controller {
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && question != null && !question.isLocked()
 				&& user.canPost()) {
-			Comment comment = question.comment(user,
-					Tools.markdownToHtml(content));
+			Comment comment = question.comment(user, content);
 			flash.success("secure.newcommentquestionflash");
 			ActionDefinition action = reverse();
 			Application.question(questionId);

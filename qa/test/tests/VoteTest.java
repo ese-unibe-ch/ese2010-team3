@@ -121,7 +121,7 @@ public class VoteTest extends UnitTest {
 	@Test
 	public void shouldSortCorrectly() {
 		// for equal ratings, sort the older answer first
-		assertEquals(this.answer.compareTo(this.secondAnswer), -1);
+		assertTrue(this.answer.compareTo(this.secondAnswer) < 0);
 		this.answer.voteUp(bill);
 		assertEquals(this.answer.compareTo(this.secondAnswer), -1);
 		assertSame(this.question.answers().get(0), this.answer);

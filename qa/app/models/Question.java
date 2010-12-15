@@ -33,7 +33,8 @@ public class Question extends Entry implements IObservable {
 	protected HashSet<IObserver> observers;
 
 	/**
-	 * Create a Question.
+	 * Create a Question, store it in the database and have its owner notified
+	 * about all answers (opt-out).
 	 * 
 	 * @param owner
 	 *            the {@link User} who posted the <code>Question</code>
@@ -41,21 +42,14 @@ public class Question extends Entry implements IObservable {
 	 *            the question
 	 */
 	public Question(User owner, String content) {
-		/**
-		 * Adds a <code>Question</code> to the database.
-		 * 
-		 * @param owner
-		 *            of the <code>Question</code>
-		 * @param content
-		 *            of the <code>Question</code>
-		 * @param id
-		 *            of the <code>Question</code>
-		 */
 		super(owner, content);
 		this.answers = new HashMap<Integer, Answer>();
 		this.comments = new HashMap<Integer, Comment>();
 		this.observers = new HashSet<IObserver>();
 		Database.get().questions().register(this);
+		// all users watch their own questions by default
+		if (owner != null)
+			owner.startObserving(this);
 	}
 
 	/**
@@ -128,8 +122,7 @@ public class Question extends Entry implements IObservable {
 	 * @return an {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
-		Comment comment = new Comment(user, this,
-				content);
+		Comment comment = new Comment(user, this, content);
 		this.comments.put(comment.id(), comment);
 		return comment;
 	}

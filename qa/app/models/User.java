@@ -56,8 +56,8 @@ public class User implements IObserver, IMailbox {
 
 	// Check if and how these can be combined. The question is,
 	// if we need this distinction in the view.
-	private Mailbox mainMailbox;
-	private List<IMailbox> otherMailboxes;
+	private final Mailbox mainMailbox;
+	private final List<IMailbox> otherMailboxes;
 
 	private boolean isSpammer;
 
@@ -346,6 +346,12 @@ public class User implements IObserver, IMailbox {
 
 	public String getBiography() {
 		return this.biography;
+	}
+
+	public String getBiographyHTML() {
+		if (this.biography == null)
+			return null;
+		return Tools.markdownToHtml(this.biography);
 	}
 
 	public String getSHA1Password() {

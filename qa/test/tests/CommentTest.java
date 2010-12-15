@@ -49,8 +49,8 @@ public class CommentTest extends UnitTest {
 	/* testing getters is useless. */
 	@Test
 	public void shouldHaveCorrectContent() {
-		assertTrue(commentQuestion.content().equals("Strange Question!"));
-		assertTrue(commentAnswer.content().equals("Good point!"));
+		assertTrue(commentQuestion.getContentText().equals("Strange Question!"));
+		assertTrue(commentAnswer.getContentText().equals("Good point!"));
 	}
 
 	@Test

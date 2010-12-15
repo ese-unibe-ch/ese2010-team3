@@ -1,6 +1,7 @@
 package tests;
 
 import java.util.Collections;
+import java.util.List;
 
 import models.Answer;
 import models.ISystemInformation;
@@ -8,6 +9,7 @@ import models.Notification;
 import models.Question;
 import models.SystemInformation;
 import models.User;
+import models.database.Database;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 
@@ -40,15 +42,16 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldBeObserving() {
-		assertFalse(this.norbert.isObserving(this.question));
-		this.norbert.startObserving(this.question);
 		assertTrue(this.norbert.isObserving(this.question));
 		this.norbert.stopObserving(this.question);
 		assertFalse(this.norbert.isObserving(this.question));
+		this.norbert.startObserving(this.question);
+		assertTrue(this.norbert.isObserving(this.question));
 	}
 
 	@Test
 	public void shouldBeNotified() {
+		this.norbert.stopObserving(this.question);
 		assertEquals(this.norbert.getNotifications().size(), 0);
 		this.question.answer(this.andrew, "Answer one");
 		assertEquals(this.norbert.getNotifications().size(), 0);
@@ -71,7 +74,6 @@ public class NotificationTest extends UnitTest {
 		SystemInformation.mockWith(sys);
 		sys.hour(12).minute(0);
 
-		this.norbert.startObserving(this.question);
 		assertNull(this.norbert.getVeryRecentNewNotification());
 		assertEquals(this.norbert.getNewNotifications().size(), 0);
 
@@ -95,7 +97,6 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldHaveDifferentNotificationIDs() {
-		this.norbert.startObserving(this.question);
 		for (int i = 0; i < 10; i++) {
 			this.question.answer(this.andrew, "Answer " + i);
 		}
@@ -125,7 +126,6 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldNotGetSelfNotified() {
-		this.norbert.startObserving(this.question);
 		this.andrew.startObserving(this.question);
 		this.question.answer(this.norbert, "Norbert's answer");
 		this.question.answer(this.andrew, "Andrew's answer");
@@ -141,7 +141,6 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldNotNotifyAboutDeletedEntries() {
-		this.norbert.startObserving(this.question);
 		this.question.answer(this.andrew, "soon to be gone");
 		assertEquals(this.norbert.getNotifications().size(), 1);
 		assertNotNull(this.norbert.getVeryRecentNewNotification());
@@ -152,7 +151,6 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldNotifyAboutAnonymousEntries() {
-		this.norbert.startObserving(this.question);
 		this.question.answer(this.andrew, "soon to be gone");
 		assertEquals(this.norbert.getNotifications().size(), 1);
 		assertNotNull(this.norbert.getVeryRecentNewNotification());
@@ -210,6 +208,15 @@ public class NotificationTest extends UnitTest {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);
+	}
+
+	@Test
+	public void shouldBeOnWatchList() {
+		Question question2 = new Question(this.andrew, "another question");
+		List<Question> watchList = Database.get().questions()
+				.getWatchList(this.norbert);
+		assertTrue(watchList.contains(this.question));
+		assertFalse(watchList.contains(question2));
 	}
 
 	@Test

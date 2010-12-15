@@ -14,6 +14,7 @@ import models.Tag;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
+import models.database.IQuestionDatabase;
 import models.helpers.Tools;
 import notifiers.Mails;
 import play.cache.Cache;
@@ -74,12 +75,12 @@ public class Application extends Controller {
 			List<Question> similarQuestions = (List<Question>) Cache
 					.get("question." + id + ".similar");
 			if (similarQuestions == null) {
-				similarQuestions = new ArrayList(question.getSimilarQuestions());
+				similarQuestions = question.getSimilarQuestions();
 				if (similarQuestions.size() > 5) {
-					// the Cache chokes on sublists!
-					similarQuestions = new ArrayList<Question>(similarQuestions
-							.subList(0, 5));
+					similarQuestions = similarQuestions.subList(0, 5);
 				}
+				// the Cache chokes on sublists!
+				similarQuestions = new ArrayList(similarQuestions);
 				Cache.set("question." + id + ".similar", similarQuestions,
 						"10mn");
 			}
@@ -216,12 +217,8 @@ public class Application extends Controller {
 	 */
 	public static void showprofile(String userName) {
 		User showUser = Database.get().users().get(userName);
-		String biography = showUser.getBiography();
-		if (biography != null) {
-			biography = Tools.markdownToHtml(biography);
-		}
 		boolean canEdit = userCanEditProfile(showUser);
-		render(showUser, biography, canEdit);
+		render(showUser, canEdit);
 	}
 
 	/**
@@ -305,13 +302,8 @@ public class Application extends Controller {
 			List<Notification> spamNotification = new LinkedList();
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
-			List<Question> questions = Database.get().questions().all();
-			ArrayList<Question> watchingQuestions = new ArrayList<Question>();
-			for (Question question : questions) {
-				if (question.hasObserver(user)) {
-					watchingQuestions.add(question);
-				}
-			}
+			List<Question> watchingQuestions = Database.get().questions()
+					.getWatchList(user);
 			if (user.isModerator()) {
 				spamNotification.addAll(Database.get().users()
 						.getModeratorMailbox().getNewNotifications());
@@ -329,13 +321,12 @@ public class Application extends Controller {
 	 */
 	public static void showStatisticalOverview() {
 		TimeTracker t = TimeTracker.getTimeTracker();
+		IQuestionDatabase questionDB = Database.get().questions();
 		int numberOfUsers = Database.get().users().count();
-		int numberOfQuestions = Database.get().questions().count();
-		int numberOfAnswers = Database.get().questions().countAllAnswers();
-		int numberOfHighRatedAnswers = Database.get().questions()
-				.countHighRatedAnswers();
-		int numberOfBestAnswers = Database.get().questions()
-				.countBestRatedAnswers();
+		int numberOfQuestions = questionDB.count();
+		int numberOfAnswers = questionDB.countAllAnswers();
+		int numberOfHighRatedAnswers = questionDB.countHighRatedAnswers();
+		int numberOfBestAnswers = questionDB.countBestRatedAnswers();
 		float questionsPerDay = (float) numberOfQuestions / t.getDays();
 		float questionsPerWeek = (float) numberOfQuestions / t.getWeeks();
 		float questionsPerMonth = (float) numberOfQuestions / t.getMonths();

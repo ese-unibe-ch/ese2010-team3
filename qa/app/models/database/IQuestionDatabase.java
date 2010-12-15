@@ -121,6 +121,16 @@ public interface IQuestionDatabase {
 	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics();
 
 	/**
+	 * Returns the list of all the questions the given user is currently
+	 * observing.
+	 * 
+	 * @param user
+	 *            the user who must be watching all the returned questions
+	 * @return the user's watch list
+	 */
+	public List<Question> getWatchList(User user);
+
+	/**
 	 * Empties the Database.
 	 */
 	public void clear();

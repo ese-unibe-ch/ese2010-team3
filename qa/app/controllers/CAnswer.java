@@ -5,12 +5,11 @@ import models.Comment;
 import models.Question;
 import models.User;
 import models.database.Database;
-import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
-import play.mvc.With;
 import play.mvc.Router.ActionDefinition;
+import play.mvc.With;
 
 /**
  * The controller for all routes concerning the {@link Answer}'s.
@@ -34,8 +33,7 @@ public class CAnswer extends Controller {
 		if (!Validation.hasErrors() && question != null) {
 			User user = Session.get().currentUser();
 			if (!question.isLocked() && user.canPost()) {
-				Answer answer = question.answer(user,
-						Tools.markdownToHtml(content));
+				Answer answer = question.answer(user, content);
 				flash.success("secure.newanswerflash");
 				ActionDefinition action = reverse();
 				Application.question(questionId);
@@ -65,8 +63,7 @@ public class CAnswer extends Controller {
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()
 				&& user.canPost()) {
-			Comment comment = answer.comment(user, Tools
-					.markdownToHtml(content));
+			Comment comment = answer.comment(user, content);
 			flash.success("secure.newcommentanswerflash");
 			ActionDefinition action = reverse();
 			Application.question(questionId);

@@ -56,7 +56,8 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldHaveCorrectContent() {
-		assertEquals(this.answer.content(), "To get to the other side.");
+		assertEquals(this.answer.content(), "<p>To get to the other side.</p>");
+		assertEquals(this.answer.getContentText(), "To get to the other side.");
 	}
 
 	@Test

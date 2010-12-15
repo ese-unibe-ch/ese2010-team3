@@ -38,7 +38,10 @@ public class QuestionTest extends UnitTest {
 
 	@Test
 	public void shouldHaveCorrectContent() {
-		assertEquals(question.content(), "Why did the chicken cross the road?");
+		assertEquals(question.getContentText(),
+				"Why did the chicken cross the road?");
+		assertEquals(question.content(),
+				"<p>Why did the chicken cross the road?</p>");
 	}
 
 	@Test
