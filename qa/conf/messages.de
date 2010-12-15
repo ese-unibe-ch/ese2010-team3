@@ -84,6 +84,9 @@ question.newanswer=Neue Antwort auf eine deiner Fragen
 question.nonexistent=Frage existiert nicht.
 question.lock=Sperren
 question.unlock=Entsperren
+question.confirmspam=Ja, dies ist Spam.
+question.reallyspam=Ist diese Frage wirklich Spam?
+question.notconfirm=Nein, doch kein Spam.
 #   Answer messages
 answers=Antworten
 answer.add=Antwort hinzufügen
@@ -192,17 +195,16 @@ since.years=vor %d Jahr(en)
 search.placeholder="Frage suchen"
 
 # Moderator
-mod.nospam=Es gibt kein Spam. Glück gehabt!
-mod.spamnotify=Spam Nachrichten
+mod.nospam=Derzeit kein Spam vorhanden, glück gehabt!
+mod.spamnotify=Spam Benachrichtigungen
 mod.mightbespam=Könnte Spam sein
-mod.spamhint=Benutzer können etwas als Spam melden und Sie als Moderator können den Spammer blocken.
-mod.mightbespammer=könnte ein Spammer sein, da dieser Beitrag gemeldet wurde:
+mod.spamhint=Benutzer können Beiträge als Spam kennzeichnen und du als Moderator solltest diese Fälle untersuchen und bei Bedarf Spamer sperren.
+mod.mightbespammer=Könnte ein Spamer sein. Folgender Beitrag wurde als Spam gekennzeichnet:
 
-spam.mark=Melden
-spam.thx=Vielen Dank für Ihre Hilfe unsere Webseite Spamfrei zu halten
+spam.mark=Report
+spam.thx=Thanks for making our site Spam-free
 
 # Mails
-
 mail.welcome.title=Bestätigung des ajopi-Konto
 mail.welcome.subject="Willkommen"
 mail.welcome.hi=Hallo

@@ -75,10 +75,9 @@ public class Application extends Controller {
 			if (similarQuestions == null) {
 				similarQuestions = new ArrayList(question.getSimilarQuestions());
 				if (similarQuestions.size() > 5) {
-					List<Question> similarQuestionsTemp = new ArrayList<Question>();
-					similarQuestionsTemp.addAll(similarQuestions.subList(0, 5));
-					similarQuestions.clear();
-					similarQuestions = similarQuestionsTemp;
+					// the Cache chokes on sublists!
+					similarQuestions = new ArrayList<Question>(
+							similarQuestions.subList(0, 5));
 				}
 				Cache.set("question." + id + ".similar", similarQuestions,
 						"10mn");

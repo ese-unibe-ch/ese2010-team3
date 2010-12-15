@@ -84,6 +84,9 @@ question.newanswer=Nouvelle réponse à une de vôtre questions.
 question.nonexistent=Cette question n'existe pas.
 question.lock=Ferme
 question.unlock=Ouvre
+question.confirmspam=Oui, c'est du spam.
+question.reallyspam=Est-ce vraiment une question du spam?
+question.notconfirm=Non, j'ai changé d'avis.
 #   Answer messages
 answers=Réponse
 answer.add=Donner une réponse
@@ -192,17 +195,16 @@ since.years=%d an(s) avant
 search.placeholder="Chercher question"
 
 # Moderator
-mod.nospam=Il n'y a pas de spam. Vous avez de la chance!
+mod.nospam=Il n'ya pas de Spam, hereusement!
 mod.spamnotify=Avis Spam
 mod.mightbespam=Peut être Spam
-mod.spamhint=Les utilisateurs peuvent marquer quelque chose comme spam et vous pouvez bloquer le spammeur.
-mod.mightbespammer=pourrait être un spammeur, parce que ce poste a été marquée:
+mod.spamhint=Les utilisateurs peuvent marquer quelque chose comme Spam et vous en tant que modérateur doit se sentir libre pour bloquer le spammeur.
+mod.mightbespammer=peut-être un spammeur. Ce poste a été marqué:
 
-spam.mark=Marque
-spam.thx=Merci de rendre notre site sans spam
+spam.mark=Rapport
+spam.thx=Merci pour rendre notre site sans spam
 
 # Mails
-
 mail.welcome.title=confirmer votre compte ajopi
 mail.welcome.hi=Hi
 mail.welcome.introduction=S'il vous plaît confirmer votre compte ajopi en cliquant sur ce lien:
