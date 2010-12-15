@@ -14,72 +14,78 @@
 		#{get 'moreScripts' /}
 	</head>
 	<body #{if user && user.isBlocked()}class="cheaterWarning"#{/if}>
-		<div class="main">
-			<div class="header">
-				<a href="@{Application.index}"></a>
-			</div><!-- end header -->
+		<div class="global">
 			<div class="navigation">
-			#{if user}
-				<div class="search"
-					#{if user.timeToSearch() > 0}
-						timeout="${user.timeToSearch()}"
-						timeoutMsg="&{'user.cannotsearch', 999}"
+			<div class="user">
+				<ul>
+				#{if user}
+					<li>&{'hello'} ${user.getName()}!</li>
+					<hr/>
+					#{if user.isModerator()}
+						<li><a href="@{Application.admin}">(&{'moderator'})</a>
 					#{/if}
-				>
+					<li><a href="@{Application.index}#askquestion">&{'question.new'}</a></li>
+					<li><a href="@{Application.notifications(0)}">&{'notifications'} ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a></li>
+					<li><a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a></li>
+					<li><a href="@{Secure.logout}">&{'user.logout'}</a></li>
+				#{/if}
+				#{else}
+					<a href="@{Secure.login}">&{'user.login'}</a>
+					&{'or'}
+					<a href="@{Application.register}">&{'user.signup'}</a>
+				#{/else}	
+				</div><!-- end user -->
+				#{if user}
+					<div class="search"
+						#{if user.timeToSearch() > 0}
+							timeout="${user.timeToSearch()}"
+							timeoutMsg="&{'user.cannotsearch', 999}"
+						#{/if}
+					>
+					<hr/>
 					<form class="search" action="@{Application.search}" method="GET">
-						<input type="search" results="5" name="term" #{if term}value="${term}"#{/if} placeholder=&{'search.placeholder'} required />
+						<input type="search" size="15" results="5" name="term" #{if term}value="${term}"#{/if} placeholder=&{'search.placeholder'} required />
 						<input type="submit" value="&{'search.button'}" />
 					</form>
-				</div><!-- end search -->
-			#{/if}
-			<div class="user">
-			#{if user}
-				<a href="@{Application.index}#askquestion">&{'question.new'}</a> |
-				&{'hello'} ${user.getName()}!
-				#{if user.isModerator()}
-					<a href="@{Application.admin}">(&{'moderator'})</a>
+					</div><!-- end search -->
 				#{/if}
-				<a href="@{Application.notifications(0)}">&{'notifications'} ${user.getNewNotifications().size() > 0 ? '(' + user.getNewNotifications().size() + ')' : ''}</a>
-				<a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a>
-				<a href="@{Secure.logout}">&{'user.logout'}</a>
-			#{/if}
-			#{else}
-				<a href="@{Secure.login}">&{'user.login'}</a>
-				&{'or'}
-				<a href="@{Application.register}">&{'user.signup'}</a>
-			#{/else}	
-			</div><!-- end user -->
-			</div><!-- end navigaion -->
-			#{if flash.error}
-				<div class="notificationInfo error">
-					&{flash.error}
-				</div>
-			#{/if}
-			#{elseif flash.success}
-				<div class="notificationInfo">
-					&{flash.success}
-				</div>
-			#{/elseif}
-	 		#{elseif user && user.getVeryRecentNewNotification() != null}
-				<div class="notificationInfo">
-					&{'question.newanswer'}:
-					<a href="@{CUser.followNotification(user.getVeryRecentNewNotification().id())}#answer-${user.getVeryRecentNewNotification().getAbout().id()}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
-				</div>
-			#{/elseif}
-			#{elseif user && user.isBlocked()}
-				<div class="cheaterWarning">&{'user.blockedbymoderator'} &{'reason'} ${user.getStatusMessage()}</div>
-			#{/elseif}
-			<div class="content">
-			#{doLayout /}
-			</div><!-- end content -->
-			<div class="footer">
-				<a href="@{Application.selectLanguage("en")}">&{'english'}</a> | 
-				<a href="@{Application.selectLanguage("de")}">&{'german'}</a> | 
-	 			<a href="@{Application.selectLanguage("fr")}">&{'french'}</a> | 
-				<a href="@{Application.selectLanguage("h4")}">&{'haxor'}</a> || 
-				<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
-				&{'group3ftw'}
-			</div><!-- end footer>
-		</div><!-- end main -->
+				</ul>
+				</div><!-- end navigaion -->
+			<div class="main">
+				<div class="header">
+					<a href="@{Application.index}"></a>
+				</div><!-- end header -->
+				#{if flash.error}
+					<div class="notificationInfo error">
+						&{flash.error}
+					</div>
+				#{/if}
+				#{elseif flash.success}
+					<div class="notificationInfo">
+						&{flash.success}
+					</div>
+				#{/elseif}
+		 		#{elseif user && user.getVeryRecentNewNotification() != null}
+					<div class="notificationInfo">
+						&{'question.newanswer'}:
+						<a href="@{CUser.followNotification(user.getVeryRecentNewNotification().id())}#answer-${user.getVeryRecentNewNotification().getAbout().id()}">${user.getVeryRecentNewNotification().getAbout().summary()}</a>
+					</div>
+				#{/elseif}
+				#{elseif user && user.isBlocked()}
+					<div class="cheaterWarning">&{'user.blockedbymoderator'} &{'reason'} ${user.getStatusMessage()}</div>
+				#{/elseif}
+				<div class="content">
+				#{doLayout /}
+				</div><!-- end content -->
+				<div class="footer">
+					<a href="@{Application.selectLanguage("en")}">&{'english'}</a> | 
+					<a href="@{Application.selectLanguage("de")}">&{'german'}</a> | 
+		 			<a href="@{Application.selectLanguage("fr")}">&{'french'}</a> | 
+					<a href="@{Application.selectLanguage("h4")}">&{'haxor'}</a> || 
+					<a href="@{Application.showStatisticalOverview}">&{'statistic'}</a>
+					&{'group3ftw'}
+				</div><!-- end footer>
+			</div><!-- end main -->
+		</div><!--  end global -->
 	</body>
 </html>

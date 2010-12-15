@@ -43,58 +43,36 @@ a:hover {
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 /*********************** 
-main
+global
 ************************/
-div.main {
-	background: #000000;
-	margin:	20px auto;
-	max-width: 900px;
-	min-width:500px;
-	padding: 0;
-	position: relative;
-}
-p.pagination {
-	color: #888;
-	text-align: center;
-}
-
-/*********************** 
-header
-************************/
-div.header {
-	margin:	0;
-}
-
-div.header a {
-	display: block;
-	height: 131px;
-	width: 250px;
-	background: url(../images/logo.png) no-repeat center;
+div.global {
+	width: 980px;
+	margin: 0 auto;
 }
 /*********************** 
 navigation
 ************************/
 div.navigation {
-	padding: 5px;
+	margin:	20px auto;
+	padding: 10px;
 	background: #555555;
 	color: #222222;
-	height:28px;
+	width:170px;
+	float:right;
+	
 }
-
-div.navigation div.user {			
-	float: right;
-	right: 5px;
-	margin-top: 4px;
+div.navigation ul{
+	list-style:none;
+	padding: 0;
+	margin: 0;
 }
-
-div.navigation div.user a {
-	margin-left: 5px;
+div.navigation ul li{
+	list-style:none;
+	margin:5px;
 }
-
-div.navigation div.search {
-	float:left;
+div.hiddenlogin {
+	width: 170px;
 }
-
 #mini_login {
 	float: right;
 	right: 5px;
@@ -106,6 +84,33 @@ div.navigation div.search {
 	display: none;
 }
 
+/*********************** 
+main
+************************/
+div.main {
+	background: #000000;
+	margin:	20px auto;
+	padding: 0;
+	position: relative;
+	width:780px;
+	float:left;
+}
+p.pagination {
+	color: #888;
+	text-align: center;
+}
+/*********************** 
+header
+************************/
+div.header {
+	margin:	0;
+}
+div.header a {
+	display: block;
+	height: 131px;
+	width: 250px;
+	background: url(../images/logo.png) no-repeat center;
+}
 /*********************** 
 content
 ************************/	
