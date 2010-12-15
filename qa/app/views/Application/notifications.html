@@ -6,6 +6,9 @@
 		<a href="@{Application.notifications(0)}">&{'user.notification'}</a> | 
 		<a href="@{Application.notifications(1)}">&{'user.watchinglist'}</a> | 
 		<a href="@{Application.notifications(2)}">&{'question.recommended'}</a>
+		#{if user.isModerator}
+			| <a href="@{Application.notifications(3)}">&{'mod.spamnotify'}</a>
+		#{/if}
 	</div><!-- end profilenavi -->
 	#{if content == 0}
 		<h1>&{'notification.inbox'}</h1>
@@ -69,6 +72,32 @@
 		#{/else}
 		<div class="message">
 			<p class="hint">&{'question.recommendhint'}</p>
+		</div><!-- end message -->
+	#{/elseif}
+	#{elseif content == 3}
+		<h1>&{'mod.spamnotify'}</h1>
+		#{if spamNotification.size() != 0}
+			<h2>&{'mod.mightbespam'}:</h2>
+			<ul>
+				#{list items:spamNotification, as:'notification'}
+					<li>
+					<div class="message">
+						#{if notification.isNew()}&{'new'}#{/if}
+						#{showProfile notification.getAbout() /} &{'mod.mightbespammer'}
+						<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a></p>
+						#{date notification.getAbout() /}
+						<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
+					</div><!-- end message -->
+				#{/list}
+			</ul>
+		#{/if}
+		#{else} 
+			<div class="message">
+				<p>&{'mod.nospam'}</p>
+			</div><!-- end message -->
+		#{/else}
+		<div class="message">
+			<p class="hint">&{'mod.spamhint'}</p>
 		</div><!-- end message -->
 	#{/elseif}
 </div>

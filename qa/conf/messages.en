@@ -84,6 +84,9 @@ question.newanswer=New answer to one of your questions
 question.nonexistent=Question does not exist.
 question.lock=Lock
 question.unlock=Unlock
+question.confirmspam=Yes, this is spam.
+question.reallyspam=Is this question really spam?
+question.notconfirm=No, I changed my mind.
 #   Answer messages
 answers=Answers
 answer.add=Add answer
@@ -191,6 +194,15 @@ since.years=%d year(s) ago
 
 search.placeholder="Search question"
 
+# Moderator
+mod.nospam=There's no Spam. Lucky You!
+mod.spamnotify=Spam Notices
+mod.mightbespam=Might be Spam
+mod.spamhint=Users can report something as spam and you as a moderator should feel free to block the Spammer
+mod.mightbespammer=might be a spammer, as this post was reported:
+
+spam.mark=Report
+spam.thx=Thanks for making our site Spam-free
 
 # Mails
 

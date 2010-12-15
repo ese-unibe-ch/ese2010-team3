@@ -9,8 +9,8 @@ import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Controller;
-import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
+import play.mvc.Router.ActionDefinition;
 
 /**
  * The controller for all routes concerning the {@link Answer}'s.
@@ -65,7 +65,8 @@ public class CAnswer extends Controller {
 		User user = Session.get().currentUser();
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()
 				&& user.canPost()) {
-			Comment comment = answer.comment(user, Tools.markdownToHtml(content));
+			Comment comment = answer.comment(user, Tools
+					.markdownToHtml(content));
 			flash.success("secure.newcommentanswerflash");
 			ActionDefinition action = reverse();
 			Application.question(questionId);
@@ -224,6 +225,28 @@ public class CAnswer extends Controller {
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
 		flash.success("secure.bestanswerflash");
+		Application.question(questionId);
+	}
+
+	/**
+	 * Informs the moderators that this post is spam.
+	 */
+	static void markSpam(int questionId, int answerId) {
+		Question question = Database.get().questions().get(questionId);
+		if (question == null) {
+			Application.index(0);
+		}
+		Answer answer = question.getAnswer(answerId);
+		User user = Session.get().currentUser();
+		if (user != null && answer != null) {
+			if (!user.isModerator()) {
+				answer.markSpam();
+			} else {
+				answer.confirmSpam();
+			}
+			flash.success("spam.thx");
+
+		}
 		Application.question(questionId);
 	}
 

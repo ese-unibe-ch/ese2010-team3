@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.ParseException;
 
 import models.Answer;
+import models.Entry;
 import models.Notification;
 import models.Question;
 import models.User;
@@ -158,9 +159,13 @@ public class CUser extends Controller {
 		if (notification != null) {
 			notification.unsetNew();
 		}
-		if (notification != null && notification.getAbout() instanceof Answer) {
-			Application.question(((Answer) notification.getAbout())
-					.getQuestion().id());
+		if (notification != null) {
+			if (notification.getAbout() instanceof Answer) {
+				Application.question(((Answer) notification.getAbout())
+						.getQuestion().id());
+			} else if (notification.getAbout() instanceof Question) {
+				Application.question(((Question) notification.getAbout()).id());
+			}
 		} else if (!CUser.redirectToCallingPage()) {
 			Application.notifications(0);
 		}
@@ -175,7 +180,10 @@ public class CUser extends Controller {
 			n.unsetNew();
 		}
 		flash.success("secure.notificationsmarkedasreadflash");
-		Application.notifications(0);
+
+		if (!CUser.redirectToCallingPage()) {
+			Application.index(0);
+		}
 	}
 
 	/**
@@ -191,7 +199,10 @@ public class CUser extends Controller {
 			n.unregister();
 			flash.success("secure.deletenotificationflash");
 		}
-		Application.notifications(0);
+
+		if (!CUser.redirectToCallingPage()) {
+			Application.index(0);
+		}
 	}
 
 	/**

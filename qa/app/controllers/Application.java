@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
@@ -120,14 +121,25 @@ public class Application extends Controller {
 		render(question);
 	}
 
+	/**
+	 * Prompts the user to mark this {@link Question} as Spam.
+	 * 
+	 * @param id
+	 *            the id of the {@link Question}
+	 */
+	public static void confirmMarkSpam(int id) {
+		Question question = Database.get().questions().get(id);
+		render(question);
+	}
+
 	public static void deleteuser() {
 		User showUser = Session.get().currentUser();
 		render(showUser);
 	}
 
 	public static void register() {
-	    String randomID = Codec.UUID();
-	    render(randomID);
+		String randomID = Codec.UUID();
+		render(randomID);
 	}
 
 	/**
@@ -142,17 +154,20 @@ public class Application extends Controller {
 	 * @param passwordrepeat
 	 *            the repeated password.
 	 */
-	public static void signup(@Required String username, String password, @Required String email, 
+	public static void signup(@Required String username, String password,
+			@Required String email,
 			String passwordrepeat, @Required String code, String randomID) {
 		boolean isUsernameAvailable = Database.get().users()
 				.isAvailable(username);
 		validation.equals(code, Cache.get("captcha." + randomID));
-		    if(validation.hasErrors()) {
-		    	flash.error("captcha.invalid");
-		    	render("Application/register.html", randomID);
-		    }
+		validation.equals(code, Cache.get(randomID));
+		if (validation.hasErrors()) {
+			flash.error("captcha.invalid");
+			render("Application/register.html", randomID);
+		}
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			User user = Database.get().users().register(username, password, email);
+			User user = Database.get().users().register(username, password,
+					email);
 			boolean success = Mails.welcome(user);
 			if (success) {
 				flash.success("secure.mail.success");
@@ -283,6 +298,7 @@ public class Application extends Controller {
 	public static void notifications(int content) {
 		User user = Session.get().currentUser();
 		if (user != null) {
+			List<Notification> spamNotification = new LinkedList();
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
 			List<Question> questions = Database.get().questions().all();
@@ -292,8 +308,12 @@ public class Application extends Controller {
 					watchingQuestions.add(question);
 				}
 			}
+			if (user.isModerator()) {
+				spamNotification.addAll(Database.get().users()
+						.getModeratorMailbox().getNewNotifications());
+			}
 			render(notifications, watchingQuestions, suggestedQuestions,
-					content);
+					spamNotification, content);
 		} else {
 			Application.index(0);
 		}
@@ -383,12 +403,14 @@ public class Application extends Controller {
 		}
 		render(showUser);
 	}
-	
+
 	/**
 	 * Confirm a {@link User}'s profile if they clicked on the right link
 	 * 
-	 * @param username of the {@link User}
-	 * @param key for the Confirmation
+	 * @param username
+	 *            of the {@link User}
+	 * @param key
+	 *            for the Confirmation
 	 */
 	public static void confirmUser(@Required String username, String key) {
 		User user = Database.get().users().get(username);
@@ -401,22 +423,22 @@ public class Application extends Controller {
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			flash.error("user.confirm.error");
 			index(0);
-			}
 		}
-		
+	}
+
 	/**
 	 * Generates a random captcha-image.
 	 * 
 	 * @param id
 	 */
 	public static void captcha(String id) {
-	    Images.Captcha captcha = Images.captcha();
-	    String code = captcha.getText("#ff8400");
-		Cache.set(id, "captcha." + code, "3mn");
-	    renderBinary(captcha);
+		Images.Captcha captcha = Images.captcha();
+		String code = captcha.getText("#ff8400");
+		Cache.set(id, "capthca." + code, "3mn");
+		renderBinary(captcha);
 	}
+
 }

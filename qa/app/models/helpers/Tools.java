@@ -105,24 +105,28 @@ public class Tools {
 	public static String extractImportantWords(String input) {
 		HashMap<String, Integer> keywords = new HashMap();
 		for (String word : input.toLowerCase().split("\\s+")) {
-			if (word.length() <= 3)
+			if (word.length() <= 3) {
 				continue;
+			}
 			Integer count = keywords.get(word);
-			if (count == null)
+			if (count == null) {
 				count = 0;
+			}
 			keywords.put(word, count + 1);
 		}
 
 		HashMap<String, Integer> filtered = new HashMap();
 		for (String word : keywords.keySet()) {
 			Integer count = keywords.get(word);
-			if (count > 1 && !StopWords.get().contains(word))
+			if (count > 1 && !StopWords.get().contains(word)) {
 				filtered.put(word, -count);
+			}
 		}
 
 		List<String> sorted = Mapper.sortByValue(filtered);
-		if (sorted.size() > 5)
+		if (sorted.size() > 5) {
 			sorted = sorted.subList(0, 5);
+		}
 		Collections.sort(sorted);
 		return fromStringList(sorted, " ");
 	}
@@ -138,10 +142,12 @@ public class Tools {
 	 */
 	public static String fromStringList(List<String> list, String joiner) {
 		String result = "";
-		for (String string : list)
+		for (String string : list) {
 			result += joiner + string;
-		if (result.length() > 0)
+		}
+		if (result.length() > 0) {
 			result = result.substring(joiner.length());
+		}
 		return result;
 	}
 
@@ -165,9 +171,8 @@ public class Tools {
 		int limit = entries.size();
 		int upperBound = ((index + 1) * entriesPerPage);
 
-		if (upperBound <= limit) {
+		if (upperBound <= limit)
 			return entries.subList(index * entriesPerPage, upperBound);
-		}
 		if (index * entriesPerPage <= limit)
 			return entries.subList(index * entriesPerPage, limit);
 
@@ -214,11 +219,13 @@ public class Tools {
 		char[] letters = new char[26];
 		char[] buffer = new char[length];
 		Random random = new Random();
-		for (int i = 0; i < 26; i++)
+		for (int i = 0; i < 26; i++) {
 			letters[i] = (char) ('a' + i);
+		}
 
-		for (int i = 0; i < length; i++)
+		for (int i = 0; i < length; i++) {
 			buffer[i] = letters[random.nextInt(letters.length)];
+		}
 
 		return new String(buffer);
 	}

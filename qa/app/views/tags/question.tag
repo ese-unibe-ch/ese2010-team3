@@ -22,6 +22,7 @@
 			#{if _user.isModerator()}
 				| <a href="@{CQuestion.lockQuestion(_question.id())}">Lock</a>
 			#{/if}
+			| <a href="@{Application.confirmMarkSpam(_question.id())}">&{'spam.mark'}</a>
 		#{/if}
 		#{if _user.isModerator() && _question.isLocked()}
 			<a href="@{CQuestion.unlockQuestion(_question.id())}">Unlock</a>

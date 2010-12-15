@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abiword PUBLIC "-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+<abiword template="false" styles="unlocked" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:math="http://www.w3.org/1998/Math/MathML" xid-max="103" xmlns:dc="http://purl.org/dc/elements/1.1/" fileformat="1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:awml="http://www.abisource.com/awml.dtd" xmlns="http://www.abisource.com/awml.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" version="0.99.2" xml:space="preserve" props="dom-dir:ltr; document-footnote-restart-section:0; document-endnote-type:numeric; document-endnote-place-enddoc:1; document-endnote-initial:1; lang:en-US; document-endnote-restart-section:0; document-footnote-restart-page:0; document-footnote-type:numeric; document-footnote-initial:1; document-endnote-place-endsection:0">
+<!-- ======================================================================== -->
+<!-- This file is an AbiWord document.                                        -->
+<!-- AbiWord is a free, Open Source word processor.                           -->
+<!-- More information about AbiWord is available at http://www.abisource.com/ -->
+<!-- You should not edit this file by hand.                                   -->
+<!-- ======================================================================== -->
+
+<metadata>
+<m key="dc.format">application/x-abiword</m>
+<m key="abiword.generator">AbiWord</m>
+</metadata>
+<history version="7" edit-time="2195" last-saved="1291762042" uid="4317ffc0-e343-11df-8129-de6d1b5c7f74">
+<version id="2" started="1288347319" uid="7d3186ac-e345-11df-8129-de6d1b5c7f74" auto="0" top-xid="28"/>
+<version id="3" started="1288347650" uid="33c92398-e346-11df-994c-b78eb97c4927" auto="0" top-xid="36"/>
+<version id="4" started="1288375046" uid="fd5be896-e385-11df-8d76-943c682c5a05" auto="0" top-xid="36"/>
+<version id="5" started="1288375076" uid="0f6e2aa8-e386-11df-81ab-90d95620517a" auto="0" top-xid="36"/>
+<version id="7" started="1291761987" uid="f47f361e-0253-11e0-8265-e60baa4f7a78" auto="0" top-xid="100"/>
+</history>
+<styles>
+<s type="P" name="Heading 1" basedon="Normal" followedby="Normal" props="keep-with-next:1; margin-top:22pt; font-weight:bold; margin-bottom:3pt; font-family:Arial; font-size:17pt"/>
+<s type="P" name="Normal" followedby="Current Settings" props="font-family:Times New Roman; margin-top:0pt; font-style:normal; margin-left:0pt; bgcolor:transparent; widows:2; text-align:left; text-indent:0in; text-position:normal; margin-bottom:0pt; font-weight:normal; margin-right:0pt; font-size:12pt; font-variant:normal; text-decoration:none; line-height:1.0; color:000000; font-stretch:normal"/>
+<s type="P" name="Heading 2" basedon="Normal" followedby="Normal" props="keep-with-next:1; margin-top:22pt; font-weight:bold; margin-bottom:3pt; font-family:Arial; font-size:14pt"/>
+<s type="P" name="Heading 3" basedon="Normal" followedby="Normal" props="keep-with-next:1; margin-top:22pt; font-weight:bold; margin-bottom:3pt; font-family:Arial; font-size:12pt"/>
+<s type="C" name="Reference" props="font-size:10pt"/>
+<s type="P" name="Bullet List" followedby="Current Settings" props="list-delim:%L; list-decimal:NULL; list-style:Bullet List; start-value:0; field-color:transparent; margin-left:0.500000in; text-indent:-0.300000in; field-font:Symbol"/>
+</styles>
+<pagesize pagetype="A4" orientation="portrait" width="8.267717" height="11.692913" units="in" page-scale="1.000000"/>
+<section xid="1" props="page-margin-footer:0.5in; page-margin-header:0.5in">
+<p style="Heading 1" xid="2" props="dom-dir:ltr"><c>Domain Model</c></p>
+<p style="Heading 2" xid="37" props="dom-dir:ltr"><c>The Item Hierarchy</c></p>
+<p style="Normal" xid="38" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">The Item class signifies that an object is the content of the page.</c></p>
+<p style="Heading 3" xid="39" props="dom-dir:ltr"><c>Item</c></p>
+<p style="Normal" xid="40" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">The common superclass ensures an unique id number for all objects and provide</c></p>
+<p style="Normal" xid="41" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">access to all instances over their primary key and are created by a user at</c></p>
+<p style="Normal" xid="42" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">some time. A creation timestamp is also available.</c></p>
+<p style="Heading 3" xid="43" props="dom-dir:ltr"><c>Entry</c></p>
+<p style="Normal" xid="44" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">The entry provides the common functionality of all contents of the page - they</c></p>
+<p style="Normal" xid="45" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">can be rated (by voting it up or down), are created by an user, and can</c></p>
+<p style="Normal" xid="46" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">provide a short version of themselves in order to keep the interface clean.</c></p>
+<p style="Normal" xid="47" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">All Entries can in principle be voted upon, but in practice, only Questions</c></p>
+<p style="Normal" xid="48" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">and Answers need this feature.</c></p>
+<p style="Normal" xid="49" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">This is the base class for all entities in the application, that are</c></p>
+<p style="Normal" xid="50" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">conceptually text, eg Questions, Notifications, ...</c></p>
+<p style="Heading 3" xid="51" props="dom-dir:ltr"><c>Question</c></p>
+<p style="Normal" xid="52" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">This is the central point of the application, but is a humble subclass of</c></p>
+<p style="Normal" xid="53" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">Entry. In addition to it, `Question`s can be tagged by the owner and answered</c></p>
+<p style="Normal" xid="54" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">by other users.</c></p>
+<p style="Heading 3" xid="55" props="dom-dir:ltr"><c>Answer</c></p>
+<p style="Normal" xid="56" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">The Answer hierarchically belongs to a Question. </c></p>
+<p style="Heading 3" xid="57" props="dom-dir:ltr"><c>Comment</c></p>
+<p style="Normal" xid="58" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">A Comment is in the hierarchy by importance below a Question or an Answer.</c></p>
+<p style="Normal" xid="59" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">Instead of being voted for, it can only be liked by users. </c></p>
+<p style="Heading 3" xid="60" props="dom-dir:ltr"><c>Notification</c></p>
+<p style="Normal" xid="61" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">A notification is send to a user to inform them that something happened to an</c></p>
+<p style="Normal" xid="62" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">entry they are watching. It describes what happened and to what entry.</c></p>
+<p style="Heading 2" xid="63" props="dom-dir:ltr"><c>User</c></p>
+<p style="Normal" xid="64" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">Represents the action, a user can perform if signed in and gives a unique</c></p>
+<p style="Normal" xid="65" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">representation for all of them.</c></p>
+<p style="Heading 1" xid="66" props="dom-dir:ltr"><c>Controllers</c></p>
+<p style="Normal" xid="67" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">As there is little if any interaction between the controllers, there is no</c></p>
+<p style="Normal" xid="68" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">gain in UML. The interaction with the model is very transparent.</c></p>
+<p style="Heading 2" xid="69" props="dom-dir:ltr"><c>Application</c></p>
+<p style="Normal" xid="70" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">This controller handles all nonspecific, non-authentificated access to the</c></p>
+<p style="Normal" xid="71" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">site. Or in short: what isn't important enough to get an own controller, is</c></p>
+<p style="Normal" xid="72" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">here.</c></p>
+<p style="Heading 2" xid="73" props="dom-dir:ltr"><c>CAnswer/Question/User</c></p>
+<p style="Normal" xid="74" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">The interaction with the corresponding models. Usually requires</c></p>
+<p style="Normal" xid="75" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">authentication for actions.</c></p>
+<p style="Heading 2" xid="76" props="dom-dir:ltr"><c>Session</c></p>
+<p style="Normal" xid="77" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">Access to the session of the user to make it mockable.</c></p>
+<p style="Heading 2" xid="78" props="dom-dir:ltr"><c>Search</c></p>
+<p style="Normal" xid="79" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial">Handles differnet search requests by passing them to the DB.</c></p>
+<p style="Normal" xid="101" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial"></c></p>
+<p style="Normal" xid="103" props="text-align:left; dom-dir:ltr"><c props="font-family:Arial"></c></p>
+<frame strux-image-dataid="49902a88-0253-11e0-8265-de6d1b5c7f74" xid="92" props="xpad:0.03in; ypad:0.03in; frame-col-ypos:12.909722in; bot-style:none; frame-col-xpos:-0.177083in; position-to:block-above-text; left-style:none; xpos:-0.177083in; right-style:none; ypos:8.104861in; frame-width:3.250000in; frame-height:3.865278in; frame-page-ypos:12.909722in; relocate:0; wrap-mode:wrapped-to-left; top-style:none; frame-page-xpos:-0.000000in; frame-type:image; tight-wrap:0; pref-page:1">
+<p xid="97" props="margin-top:0.0000in; margin-left:0.0000in; text-indent:0.0000in; dom-dir:ltr; margin-bottom:0.0000in; line-height:1.000000; text-align:left; margin-right:0.0000in"></p>
+</frame><p xid="94"></p>
+</section>
+<data>
+<d name="49902a88-0253-11e0-8265-de6d1b5c7f74" mime-type="image/svg+xml" base64="no">
+<![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="448" height="533" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="226" y="264" width="2" height="152" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="172" y="414" width="56" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="169" y="261" width="57" height="153" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="198" y="268">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="198" y="281">IUserDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="169" y1="287" x2="226" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="169" y1="292" x2="226" y2="292" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="299">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="311">register()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="323">needSignUp()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="335">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="347">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="359">count()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="371">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="383">add()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="395">allModerators()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="171" y="407">searchFor()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="127" y="264" width="2" height="188" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="35" y="450" width="94" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="32" y="261" width="95" height="189" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="80" y="268">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="80" y="281">IQuestionDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="32" y1="287" x2="127" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="32" y1="292" x2="127" y2="292" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="299">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="311">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="323">searchFor()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="335">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="347">register()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="359">add()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="371">count()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="383">countBestRatedAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="395">countHighRatedAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="407">countAllAnswers()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="419">findSimilar()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="431">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="34" y="443">searchForAnswer()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="236" y="53" width="2" height="66" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="168" y="117" width="70" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="165" y="50" width="71" height="67" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="201" y="57">Database</text>
+	<line stroke="black" stroke-opacity="1" x1="165" y1="63" x2="236" y2="63" />
+	<line stroke="black" stroke-opacity="1" x1="165" y1="68" x2="236" y2="68" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="75">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="87">swapWith()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="99">clear()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="167" y="111">clearKeepAdmins()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="155" x2="308" y2="146" />
+	<line stroke="black" stroke-opacity="1" x1="310" y1="155" x2="301" y2="156" />
+	<line stroke="black" stroke-opacity="1" x1="239" y1="108" x2="310" y2="155" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="75" y1="492" x2="75" y2="458" />
+	<line stroke="black" stroke-opacity="1" x1="76" y1="453" x2="69" y2="458" />
+	<line stroke="black" stroke-opacity="1" x1="76" y1="453" x2="81" y2="459" />
+	<line stroke="black" stroke-opacity="1" x1="69" y1="458" x2="81" y2="459" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="201" y1="493" x2="200" y2="422" />
+	<line stroke="black" stroke-opacity="1" x1="200" y1="417" x2="194" y2="423" />
+	<line stroke="black" stroke-opacity="1" x1="200" y1="417" x2="206" y2="422" />
+	<line stroke="black" stroke-opacity="1" x1="194" y1="423" x2="206" y2="422" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="312" y="263" width="2" height="92" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="260" y="353" width="54" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="257" y="260" width="55" height="93" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="285" y="267">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="285" y="280">ITagDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="257" y1="286" x2="312" y2="286" />
+	<line stroke="black" stroke-opacity="1" x1="257" y1="291" x2="312" y2="291" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="298">all()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="310">getOrAdd()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="322">get()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="334">remove()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="259" y="346">clear()</text>
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="283" y1="486" x2="283" y2="361" />
+	<line stroke="black" stroke-opacity="1" x1="284" y1="356" x2="277" y2="361" />
+	<line stroke="black" stroke-opacity="1" x1="284" y1="356" x2="289" y2="362" />
+	<line stroke="black" stroke-opacity="1" x1="277" y1="361" x2="289" y2="362" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="308" y="479">tags</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="272" y="153">instance</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="108" y="479">questions</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="225" y="477">users</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="364" y="142" width="2" height="68" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="314" y="208" width="52" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="311" y="139" width="53" height="69" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-anchor="middle" x="338" y="146">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="338" y="159">IDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="311" y1="165" x2="364" y2="165" />
+	<line stroke="black" stroke-opacity="1" x1="311" y1="170" x2="364" y2="170" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="177">questions()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="189">users()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="313" y="201">tags()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="175" x2="284" y2="175" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,175 304,181 298,175 304,169" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="175" x2="79" y2="175" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,175 304,181 298,175 304,169" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="310" y1="174" x2="198" y2="174" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="310,174 304,180 298,174 304,168" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="394" y1="308" x2="354" y2="216" />
+	<line stroke="black" stroke-opacity="1" x1="352" y1="211" x2="348" y2="218" />
+	<line stroke="black" stroke-opacity="1" x1="352" y1="211" x2="359" y2="214" />
+	<line stroke="black" stroke-opacity="1" x1="348" y1="218" x2="359" y2="214" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="198" y1="174" x2="198" y2="260" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="284" y1="175" x2="285" y2="259" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="79" y1="175" x2="79" y2="260" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="433" y="312" width="2" height="54" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="383" y="364" width="52" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="380" y="309" width="53" height="55" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="407" y="316">HotDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="380" y1="322" x2="433" y2="322" />
+	<line stroke="black" stroke-opacity="1" x1="380" y1="327" x2="433" y2="327" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="334">questions()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="346">users()</text>
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" x="382" y="358">tags()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="98" y1="492" x2="106" y2="494" />
+	<line stroke="black" stroke-opacity="1" x1="98" y1="492" x2="100" y2="483" />
+	<line stroke="black" stroke-opacity="1" x1="379" y1="350" x2="98" y2="492" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="239" y1="84" x2="419" y2="84" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="215" y1="493" x2="223" y2="493" />
+	<line stroke="black" stroke-opacity="1" x1="215" y1="493" x2="215" y2="484" />
+	<line stroke="black" stroke-opacity="1" x1="379" y1="360" x2="215" y2="493" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="294" y1="486" x2="302" y2="484" />
+	<line stroke="black" stroke-opacity="1" x1="294" y1="486" x2="292" y2="477" />
+	<line stroke="black" stroke-opacity="1" x1="384" y1="367" x2="294" y2="486" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="408" y1="308" x2="414" y2="302" />
+	<line stroke="black" stroke-opacity="1" x1="408" y1="308" x2="402" y2="301" />
+	<line stroke="black" stroke-opacity="1" x1="419" y1="84" x2="408" y2="308" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="315" y="490" width="2" height="30" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="251" y="518" width="66" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="248" y="487" width="67" height="31" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="282" y="494">HotTagDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="248" y1="500" x2="315" y2="500" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" text-decoration="underline" x="250" y="507">tagRegex</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="117" y="496" width="2" height="22" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="33" y="516" width="86" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="30" y="493" width="87" height="23" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="74" y="500">HotQuestionDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="30" y1="506" x2="117" y2="506" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="235" y="497" width="2" height="22" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="169" y="517" width="68" height="2" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="166" y="494" width="69" height="23" />
+	<text font-family="Helvetica" font-size="6" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="201" y="501">HotUserDatabase</text>
+	<line stroke="black" stroke-opacity="1" x1="166" y1="507" x2="235" y2="507" />
+</g>
+</svg>
+]]>
+</d>
+</data>
+</abiword>
