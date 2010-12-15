@@ -198,14 +198,13 @@ search.placeholder="Search question"
 mod.nospam=There's no Spam. Lucky You!
 mod.spamnotify=Spam Notices
 mod.mightbespam=Might be Spam
-mod.spamhint=Users can report something as spam and you as a moderator should feel free to block the Spammer
+mod.spamhint=Users can report something as spam and you as a moderator should feel free to block the Spammer.
 mod.mightbespammer=might be a spammer, as this post was reported:
 
 spam.mark=Report
 spam.thx=Thanks for making our site Spam-free
 
 # Mails
-
 mail.welcome.title=confirm your ajopi account
 mail.welcome.subject="Welcome"
 mail.welcome.hi=Hi

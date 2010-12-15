@@ -84,6 +84,9 @@ question.newanswer=|\\|3\\/\\/ 4|\\|$\\/\\/3r 70 0|\\|3 0ƒ ¥0µr qµ3$710|\\|$
 question.nonexistent=Qµ3$710|\\| Ð03$ |\\|07 3x1$7.
 question.lock=£0(|{
 question.unlock=µ|\\|£0(|{
+question.confirmspam=¥3$, 7|-|1$ 1$ $p4|\/|.
+question.reallyspam=1$ 7|-|1$ qµ3$710|\| r34££¥ $p4|\/|?
+question.notconfirm=\|0, 1 (|-|4|\|93Ð |\/|¥ |\/|1|\|Ð.
 #   Answer messages
 answers=4|\\|$\\/\\/3r$
 answer.add=4ÐÐ 4|\\|$\\/\\/3r
@@ -191,9 +194,19 @@ since.years=%d ¥34r[$] 460
 
 search.placeholder="$34r(|-| Cu3$710|\\|"
 
-# Mails
+# Moderator
+mod.nospam=7|-|3r3'$ |\|0 $p4|\/|. £µ(|{¥ ¥0µ!
+mod.spamnotify=$p4|\/| |\|071(3$
+mod.mightbespam=|\/|19|-|7 b3 $p4|\/|
+mod.spamhint=µ$3r$ (4|\| r3p0r7 $0|\/|37|-|1|\|9 4$ $p4|\/| 4|\|Ð ¥0µ 4$ 4 |\/|0Ð3r470r $|-|0µ£Ð ƒ33£ ƒr33 70 b£0(|{ 7|-|3 $p4|\/||\/|3r.
+mod.mightbespammer=|\/|19|-|7 b3 4 $p4|\/||\/|3r, 4$ 7|-|1$ p0$7 \/\/4$ r3p0r73Ð:
 
+spam.mark=R3p0r7
+spam.thx=7|-|4|\||{$ ƒ0r |\/|4|{1|\|9 0µr $173 $p4|\/|-ƒr33
+
+# Mails
 mail.welcome.title=(0|\\|ƒ1r|\\/| ¥0µr 4j0p1 4((0µ|\\|7
+mail.welcome.subject="\/\/3£(0|\/|3"
 mail.welcome.hi=|-|1
 mail.welcome.introduction=P£34$3 (0|\\|ƒ1r|\\/| ¥0µr 4j0p1 4((0µ|\\|7 b¥ (£1(|{1|\\|9 7|-|1$ £1|\\||{:
 mail.welcome.introduction2=0|\\|(3 ¥0µ (0|\\|ƒ1r|\\/|, ¥0µ \\/\\/1££ |-|4\\/3 ƒµ££ 4((3$$ 70 4j0p1 4|\\|Ð 4££ ƒµ7µr3 |\\|071ƒ1(4710|\\|$ \\/\\/1££ b3 $3|\\|7 70 7|-|1$ 3|\\/|41£ 4ÐÐr3$$.
