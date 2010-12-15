@@ -163,7 +163,8 @@ public class Application extends Controller {
 		validation.equals(code, Cache.get(randomID));
 		if (validation.hasErrors()) {
 			flash.error("captcha.invalid");
-			render("Application/register.html", randomID);
+			params.flash();
+			register();
 		}
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
 			User user = Database.get().users().register(username, password,
