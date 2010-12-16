@@ -40,6 +40,12 @@ a {
 a:hover {
 	color: #c71c1c;
 }
+/*********************** 
+lines
+************************/
+hr {
+	color: #000;	
+}
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 /*********************** 
@@ -53,7 +59,6 @@ div.global {
 navigation
 ************************/
 div.navigation {
-	margin:	20px auto;
 	padding: 10px;
 	background: #555555;
 	color: #222222;
@@ -73,27 +78,16 @@ div.navigation ul li{
 div.hiddenlogin {
 	width: 170px;
 }
-#mini_login {
-	float: right;
-	right: 5px;
-}
-#mini_login input {
-	max-width: 100px;
-}
-#mini_login + .user {
-	display: none;
-}
 
 /*********************** 
 main
 ************************/
 div.main {
 	background: #000000;
-	margin:	20px auto;
+	margin: 20px 200px 20px 0px;
 	padding: 0;
-	position: relative;
-	width:780px;
-	float:left;
+	min-width: 580px;
+	max-width: 780px;
 }
 p.pagination {
 	color: #888;

@@ -76,17 +76,17 @@ $(document).ready(function() {
 	// add an inline login form
 	$(".navigation .user a[href=/login]").click(function() {
 		$('<form action="/login" method="POST" id="mini_login"> \
-			<div class="hiddenlogin"><table> \
+			<div class=hiddenlogin"><table> \
 			<tr><td><a href="javascript:void($(\'#mini_login\').remove())" title="hide login">[x]</a></td></tr> \
-			<tr><td><span class="placeholder">Username:</span></td></tr> \
-			<tr><td><input type="text" name="username" placeholder="user name"></td></tr> \
-			<tr><td><span class="placeholder">Password:</span></td></tr> \
-			<tr><td><input type="password" name="password" placeholder="password"></td></tr> \
+			<tr><td>Username:</td></tr> \
+			<tr><td><input size="15" type="text" name="username" placeholder="user name"></td></tr> \
+			<tr><td>Password:</td></tr> \
+			<tr><td><input size="15" type="password" name="password" placeholder="password"></td></tr> \
 			<tr><td><input type="submit" value="Log in"></td></tr> \
 			</table></div></form>')
 			.insertBefore(this.parentNode);
 		if ("placeholder" in document.createElement("input"))
-			$("#mini_login .placeholder").remove();
+			$(".loginform").remove();
 		$("#mini_login input[name=username]").focus();
 		return false;
 	});
