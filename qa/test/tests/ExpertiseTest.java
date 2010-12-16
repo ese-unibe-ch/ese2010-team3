@@ -8,30 +8,11 @@ import models.Question;
 import models.Tag;
 import models.User;
 import models.database.Database;
-import models.database.IDatabase;
-import models.database.HotDatabase.HotDatabase;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class ExpertiseTest extends UnitTest {
-
-	private static IDatabase origDB;
-
-	@BeforeClass
-	public static void mockDB() {
-		origDB = Database.swapWith(new HotDatabase());
-
-	}
-
-	@AfterClass
-	public static void restoreDB() {
-		Database.swapWith(origDB);
-	}
+public class ExpertiseTest extends MockedUnitTest {
 
 	private User john;
 	private List<User> users;

@@ -13,9 +13,7 @@ import models.helpers.Mapper;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class SearchTest extends UnitTest {
+public class SearchTest extends MockedUnitTest {
 
 	private Question fulltextPositive;
 	private Question fulltextNegative;
@@ -23,7 +21,7 @@ public class SearchTest extends UnitTest {
 	private Question taggedPositive;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		Database.clear();
 		User jack = new User("Jack","");
 		User jill = new User("Jill","");

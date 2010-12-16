@@ -13,9 +13,9 @@ import models.database.IUserDatabase;
  * 
  */
 public class HotDatabase implements IDatabase {
-	static final HotQuestionDatabase questions = new HotQuestionDatabase();
-	static final HotUserDatabase users = new HotUserDatabase();
-	static final HotTagDatabase tags = new HotTagDatabase();
+	private final HotQuestionDatabase questions = new HotQuestionDatabase();
+	private final HotUserDatabase users = new HotUserDatabase();
+	private final HotTagDatabase tags = new HotTagDatabase();
 
 	public IQuestionDatabase questions() {
 		return questions;

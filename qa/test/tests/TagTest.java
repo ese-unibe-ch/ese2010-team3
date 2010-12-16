@@ -12,9 +12,7 @@ import models.helpers.SetOperations;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class TagTest extends UnitTest {
+public class TagTest extends MockedUnitTest {
 
 	private ITagDatabase tagDB;
 	private Question question1;

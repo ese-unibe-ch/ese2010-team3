@@ -6,20 +6,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import models.Question;
 import models.database.Database;
-import models.database.IDatabase;
-import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
 import models.database.importers.SemanticError;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import play.test.UnitTest;
-
-public class XMLReadingTest extends UnitTest {
+public class XMLReadingTest extends MockedUnitTest {
 
 	static final String xml = "<?xml version=\"1.0\"?>\n"
 			+
@@ -111,21 +105,6 @@ public class XMLReadingTest extends UnitTest {
 			"  </answers>" +
 			"" +
 			"</QA>";
-
-	private static HotDatabase mock = new HotDatabase();
-	private static IDatabase old;
-
-	@BeforeClass
-	public static void setUp() throws SAXException, IOException,
-			ParserConfigurationException {
-		old = Database.swapWith(mock);
-
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		Database.swapWith(old);
-	}
 
 	@Before
 	public void clean() {

@@ -6,40 +6,25 @@ import java.util.List;
 import models.Answer;
 import models.Notification;
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 import models.database.Database;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
+public class NotificationTest extends MockedUnitTest {
 
-public class NotificationTest extends UnitTest {
-
-	private SystemInformationMock sys;
-	private SystemInformation savedSysInfo;
 	private Question question;
 	private User norbert;
 	private User andrew;
 
 	@Before
 	public void setUp() {
-		this.sys = new SystemInformationMock();
-		this.savedSysInfo = SysInfo.mockWith(this.sys);
 		this.norbert = new User("Norbert", "norbert");
 		this.question = new Question(this.norbert, "Need I be watched?");
 		this.andrew = new User("Andrew", "andrew");
-	}
-
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(this.savedSysInfo);
 	}
 
 	@Test
@@ -72,7 +57,7 @@ public class NotificationTest extends UnitTest {
 
 	@Test
 	public void shouldHaveRecentNotifications() {
-		this.sys.hour(12).minute(0);
+		sysInfo.hour(12).minute(0);
 
 		assertNull(this.norbert.getVeryRecentNewNotification());
 		assertEquals(this.norbert.getNewNotifications().size(), 0);
@@ -82,10 +67,10 @@ public class NotificationTest extends UnitTest {
 		assertNotNull(recent);
 		assertEquals(recent.getAbout().summary(), "recent answer?");
 
-		sys.minute(2);
+		sysInfo.minute(2);
 		assertNotNull(this.norbert.getVeryRecentNewNotification());
 		assertEquals(this.norbert.getVeryRecentNewNotification(), recent);
-		sys.minute(10);
+		sysInfo.minute(10);
 		assertNull(this.norbert.getVeryRecentNewNotification());
 
 		assertTrue(recent.isNew());
@@ -224,7 +209,8 @@ public class NotificationTest extends UnitTest {
 		this.norbert.observe(this.question, this.question.answer(this.andrew,
 				"???"));
 		Notification notification = this.norbert.getNotifications().get(0);
-		assertEquals("N[" + this.question.owner().toString()
+		assertEquals("N["
+				+ this.question.owner().getAllMailboxes().get(0).toString()
 				+ notification.getAbout().toString() + "]",
 				notification.toString());
 	}

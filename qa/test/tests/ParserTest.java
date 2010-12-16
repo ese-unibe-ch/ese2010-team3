@@ -8,9 +8,7 @@ import models.database.importers.Syntax;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class ParserTest extends UnitTest {
+public class ParserTest extends MockedUnitTest {
 	private ElementParser parser;
 	private boolean isUpdated;
 

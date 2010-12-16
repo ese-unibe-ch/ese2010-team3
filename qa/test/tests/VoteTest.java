@@ -9,9 +9,7 @@ import models.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class VoteTest extends UnitTest {
+public class VoteTest extends MockedUnitTest {
 
 	private Question question;
 	private Answer answer;

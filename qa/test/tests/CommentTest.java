@@ -11,8 +11,6 @@ import models.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
 /**
  * 
  * Unregistering is tested in {@link UnregisterTest}
@@ -21,7 +19,7 @@ import play.test.UnitTest;
  * 
  */
 
-public class CommentTest extends UnitTest {
+public class CommentTest extends MockedUnitTest {
 	private User james;
 	private Question question;
 	private Answer answer;

@@ -31,7 +31,7 @@ import models.helpers.Tools;
  * @author Mirco Kocher
  * 
  */
-public class User implements IObserver, IMailbox {
+public class User implements IObserver {
 
 	private final String name;
 	private String password;
@@ -54,11 +54,7 @@ public class User implements IObserver, IMailbox {
 	private String lastSearchTerm = "";
 	private long lastPost = 0;
 
-	// Check if and how these can be combined. The question is,
-	// if we need this distinction in the view.
 	private final Mailbox mainMailbox;
-	private final List<IMailbox> otherMailboxes;
-
 	private boolean isSpammer;
 
 	/**
@@ -74,7 +70,6 @@ public class User implements IObserver, IMailbox {
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
 		this.mainMailbox = new Mailbox(name);
-		this.otherMailboxes = new LinkedList();
 		this.isSpammer = false;
 	}
 
@@ -434,17 +429,8 @@ public class User implements IObserver, IMailbox {
 	 * @param mod
 	 *            , true if the user will be a moderator
 	 */
-	public void setModerator(Boolean mod) {
-		if (this.isModerator != mod) {
-			this.isModerator = mod;
-			if (mod) {
-				this.addMailbox(Database.users().getModeratorMailbox());
-			} else {
-				this
-						.removeMailbox(Database.users()
-								.getModeratorMailbox());
-			}
-		}
+	public void setModerator(boolean mod) {
+		this.isModerator = mod;
 	}
 
 	/**
@@ -490,7 +476,7 @@ public class User implements IObserver, IMailbox {
 	public void observe(IObservable o, Object arg) {
 		if (o instanceof Question && arg instanceof Answer
 				&& ((Answer) arg).owner() != this) {
-			new Notification(this, (Answer) arg);
+			new Notification(this.mainMailbox, (Answer) arg);
 		}
 	}
 
@@ -663,7 +649,11 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public List<Notification> getNotifications() {
-		return this.mainMailbox.getAllNotifications();
+		List<Notification> all = new LinkedList();
+		for (IMailbox mailbox : this.getAllMailboxes()) {
+			all.addAll(mailbox.getAllNotifications());
+		}
+		return all;
 	}
 
 	/**
@@ -690,7 +680,7 @@ public class User implements IObserver, IMailbox {
 	 * @return a notification with the given id
 	 */
 	public Notification getNotification(int id) {
-		for (Notification n : this.getAllNotifications())
+		for (Notification n : this.getNotifications())
 			if (n.id() == id)
 				return n;
 		return null;
@@ -842,44 +832,11 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public List<IMailbox> getAllMailboxes() {
-		List<IMailbox> mailboxes = new LinkedList();
-		mailboxes.addAll(this.otherMailboxes);
+		List<IMailbox> mailboxes = new ArrayList();
 		mailboxes.add(this.mainMailbox);
+		if (this.isModerator())
+			mailboxes.add(Database.users().getModeratorMailbox());
 		return mailboxes;
-	}
-
-	/**
-	 * Adds an additional Mailbox to the user, eg because they became mod and
-	 * thus gain access to the moderators mailbox.
-	 * 
-	 * @param mailbox
-	 *            mailbox to be added to the user so they see the updates.
-	 */
-
-	public void addMailbox(IMailbox mailbox) {
-		this.otherMailboxes.add(mailbox);
-	}
-
-	/**
-	 * Revoke access to the Mailbox.
-	 * 
-	 * @param mailbox
-	 */
-	public void removeMailbox(IMailbox mailbox) {
-		this.otherMailboxes.remove(mailbox);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see models.IMailbox#getAll()
-	 */
-	public List<Notification> getAllNotifications() {
-		List<Notification> all = new LinkedList();
-		for (IMailbox mailbox : this.getAllMailboxes()) {
-			all.addAll(mailbox.getAllNotifications());
-		}
-		return all;
 	}
 
 	/*
@@ -924,14 +881,6 @@ public class User implements IObserver, IMailbox {
 	 */
 	public List<Notification> getMyRecentNotifications() {
 		return this.mainMailbox.getRecentNotifications();
-	}
-
-	public void receive(Notification notification) {
-		this.mainMailbox.receive(notification);
-	}
-
-	public void removeNotification(int id) {
-		this.mainMailbox.removeNotification(id);
 	}
 
 	public void setIsSpammer(boolean b) {

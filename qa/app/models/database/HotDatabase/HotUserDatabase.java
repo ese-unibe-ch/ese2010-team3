@@ -7,13 +7,14 @@ import java.util.Set;
 
 import models.IMailbox;
 import models.Mailbox;
+import models.Notification;
 import models.User;
 import models.database.IUserDatabase;
 
 public class HotUserDatabase implements IUserDatabase {
 	/** Tracks all users by their lowercase(!) usernames. */
-	private static HashMap<String, User> users = new HashMap();
-	private static IMailbox moderatorMailbox = new Mailbox("Moderators");
+	private final HashMap<String, User> users = new HashMap();
+	private final IMailbox moderatorMailbox = new Mailbox("Moderators");
 
 	public boolean isAvailable(String username) {
 		return get(username) == null;
@@ -43,6 +44,9 @@ public class HotUserDatabase implements IUserDatabase {
 
 	public void clear() {
 		users.clear();
+		for (Notification n : moderatorMailbox.getAllNotifications()) {
+			moderatorMailbox.removeNotification(n.id());
+		}
 	}
 
 	public void add(User user) {

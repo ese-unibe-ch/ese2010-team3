@@ -3,47 +3,32 @@ package tests;
 import java.util.List;
 
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 import models.database.Database;
 import models.helpers.Tools;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class PaginationTest extends UnitTest {
+public class PaginationTest extends MockedUnitTest {
 
 	private Question question1;
 	private Question question3;
 	User jack = new User("Jack", "jack");
 	private int questionsPerPage;
-	private SystemInformation savedSysInfo;
 
 	@Before
 	public void setup() {
 		Database.clear();
-		SystemInformationMock sys = new SystemInformationMock();
-		savedSysInfo = SysInfo.mockWith(sys);
 		questionsPerPage = 15;
-		sys.year(2010).month(9).day(3).hour(0).minute(0).second(0);
+		sysInfo.year(2010).month(9).day(3).hour(0).minute(0).second(0);
 		question3 = new Question(jack, "Who?");
-		sys.year(2010).month(10).day(3).hour(0).minute(0).second(0);
+		sysInfo.year(2010).month(10).day(3).hour(0).minute(0).second(0);
 		new Question(jack, "Where?");
-		sys.year(2010).month(10).day(3).hour(0).minute(0).second(5);
+		sysInfo.year(2010).month(10).day(3).hour(0).minute(0).second(5);
 		question1 = new Question(jack, "Why?");
 		// To make sure all other questions have a different timestamp
-		sys.year(2010).month(10).day(4).hour(0).minute(0).second(5);
-	}
-
-	@After
-	public void tearDown() {
-		Database.clear();
-		SysInfo.mockWith(savedSysInfo);
+		sysInfo.year(2010).month(10).day(4).hour(0).minute(0).second(5);
 	}
 
 	@Test

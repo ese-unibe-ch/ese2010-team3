@@ -11,9 +11,7 @@ import models.helpers.Tools;
 
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class ToolsTest extends UnitTest {
+public class ToolsTest extends MockedUnitTest {
 
 	@Test
 	public void shouldConvertMarkdown() {

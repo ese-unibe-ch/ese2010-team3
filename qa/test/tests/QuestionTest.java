@@ -1,36 +1,21 @@
 package tests;
 
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 import models.helpers.Tools;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class QuestionTest extends UnitTest {
+public class QuestionTest extends MockedUnitTest {
 	private User user;
 	private Question question;
-	private SystemInformationMock sys;
-	private SystemInformation savedSysInfo;
 
 	@Before
 	public void setUp() {
-		this.sys = new SystemInformationMock();
-		savedSysInfo = SysInfo.mockWith(this.sys);
 		this.user = new User("Jack", "jack");
 		this.question = new Question(user,
 				"Why did the chicken cross the road?");
-	}
-
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(this.savedSysInfo);
 	}
 
 	@Test
@@ -95,20 +80,20 @@ public class QuestionTest extends UnitTest {
 	@Test
 	public void shouldBeOldQuestion() {
 		User user2 = new User("User2", "user2");
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		Question oldQuestion = new Question(user2, "Why?");
-		sys.year(2001);
+		sysInfo.year(2001);
 		assertTrue(oldQuestion.isOldQuestion());
 	}
 
 	@Test
 	public void shouldNotBeOldQuestion() {
 		User user2 = new User("User2", "user2");
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		Question oldQuestion = new Question(user2, "Why?");
-		sys.year(2000).month(9);
+		sysInfo.year(2000).month(9);
 		assertFalse(oldQuestion.isOldQuestion());
 	}
 

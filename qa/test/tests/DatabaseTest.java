@@ -2,29 +2,11 @@ package tests;
 
 import models.User;
 import models.database.Database;
-import models.database.IDatabase;
 import models.database.IUserDatabase;
-import models.database.HotDatabase.HotDatabase;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class DatabaseTest extends UnitTest {
-
-	private static IDatabase origDB;
-
-	@Before
-	public void mockDB() {
-		origDB = Database.swapWith(new HotDatabase());
-	}
-
-	@After
-	public void restoreDB() {
-		Database.swapWith(origDB);
-	}
+public class DatabaseTest extends MockedUnitTest {
 
 	@Test
 	public void shouldKeepAdmins() {

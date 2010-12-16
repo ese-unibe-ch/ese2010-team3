@@ -11,9 +11,7 @@ import models.database.Database;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class EntryOrderingTest extends UnitTest {
+public class EntryOrderingTest extends MockedUnitTest {
 
 	private Question badQuestion;
 	private Question goodQuestion;

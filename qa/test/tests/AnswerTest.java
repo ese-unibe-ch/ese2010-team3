@@ -4,41 +4,32 @@ import java.util.Date;
 
 import models.Answer;
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 import models.database.Database;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class AnswerTest extends UnitTest {
+public class AnswerTest extends MockedUnitTest {
 
 	private User james;
 	private Question question;
 	private Answer answer;
 	private Date questionDate;
 	private Date answerDate;
-	private SystemInformation savedSysInfo;
 
 	@Before
 	public void setUp() {
-		SystemInformationMock sys = new SystemInformationMock();
-		this.savedSysInfo = SysInfo.mockWith(sys);
 		this.james = new User("James", "jack");
 
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
-		this.questionDate = sys.now();
-		sys.changeTo(this.questionDate);
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		this.questionDate = sysInfo.now();
+		sysInfo.changeTo(this.questionDate);
 		this.question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
-		sys.minute(5);
-		this.answerDate = sys.now();
-		sys.changeTo(this.answerDate);
+		sysInfo.minute(5);
+		this.answerDate = sysInfo.now();
+		sysInfo.changeTo(this.answerDate);
 
 		this.question = new Question(new User("Jack", "jack"),
 				"Why did the chicken cross the road?");
@@ -83,11 +74,6 @@ public class AnswerTest extends UnitTest {
 	@Test
 	public void shouldFindAnswer() {
 		assertEquals(this.answer, this.question.getAnswer(this.answer.id()));
-	}
-
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(this.savedSysInfo);
 	}
 
 	@Test

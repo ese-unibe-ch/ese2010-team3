@@ -7,9 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class MarkSpamTest extends UnitTest {
+public class MarkSpamTest extends MockedUnitTest {
 
 	private User alex;
 	private User pete;
@@ -35,7 +33,7 @@ public class MarkSpamTest extends UnitTest {
 	public void shouldInformModerator() {
 		this.question.markSpam();
 		assertTrue(this.question.isPossiblySpam());
-		assertEquals(1, this.alex.getAllNotifications().size());
+		assertEquals(1, this.alex.getNotifications().size());
 	}
 
 	@Test
@@ -51,7 +49,7 @@ public class MarkSpamTest extends UnitTest {
 		this.question.markSpam();
 		this.question.confirmSpam();
 		this.otherQuestion.markSpam();
-		assertEquals(this.alex.getAllNotifications().size(), 0);
+		assertEquals(this.alex.getNotifications().size(), 0);
 		assertTrue(this.otherQuestion.isDeleted());
 	}
 
@@ -62,6 +60,6 @@ public class MarkSpamTest extends UnitTest {
 		this.question.confirmSpam();
 		this.otherQuestion.markSpam();
 		this.alex.setModerator(false);
-		assertEquals(this.alex.getAllNotifications().size(), 0);
+		assertEquals(this.alex.getNotifications().size(), 0);
 	}
 }
