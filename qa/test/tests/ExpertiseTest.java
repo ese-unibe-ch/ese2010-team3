@@ -24,9 +24,9 @@ public class ExpertiseTest extends MockedUnitTest {
 
 		users = new ArrayList();
 		for (int i = 0; i < 20; i++)
-			users.add(new User("user " + i, ""));
-		john = new User("John", "john");
-		question = new Question(new User("James", "james"),
+			users.add(new User("user " + i));
+		john = new User("John");
+		question = new Question(new User("James"),
 				"Question");
 	}
 

@@ -28,12 +28,12 @@ public class CommentTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		james = new User("James", "james");
-		question = new Question(new User("Jack", "jack"),
+		james = new User("James");
+		question = new Question(new User("Jack"),
 				"Why did the chicken cross the road?");
 		answer = question.answer(james, "To get to the other side.");
 		commentQuestion = question.comment(james, "Strange Question!");
-		commentAnswer = answer.comment(new User("Jill", "jill"), "Good point!");
+		commentAnswer = answer.comment(new User("Jill"), "Good point!");
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class CommentTest extends MockedUnitTest {
 	@Test
 	public void shouldClearLikersList() {
 		commentAnswer.addLiker(james);
-		commentAnswer.addLiker(new User("anonym", "1234"));
+		commentAnswer.addLiker(new User("anonym"));
 		assertTrue(commentAnswer.getLikers().size() > 0);
 		commentAnswer.clearAllLikers();
 		assertTrue(commentAnswer.getLikers().isEmpty());

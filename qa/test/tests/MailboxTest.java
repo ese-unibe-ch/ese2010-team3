@@ -21,8 +21,8 @@ public class MailboxTest extends MockedUnitTest {
 	@Before
 	public void setUp() {
 		Database.clear();
-		this.pete = new User("Pete", "");
-		this.susane = new User("Susane", "");
+		this.pete = new User("Pete");
+		this.susane = new User("Susane");
 		this.mailbox = Database.users().getModeratorMailbox();
 		this.pete.setModerator(true);
 		this.susane.setModerator(true);

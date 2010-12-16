@@ -22,9 +22,9 @@ public class NotificationTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		this.norbert = new User("Norbert", "norbert");
+		this.norbert = new User("Norbert");
 		this.question = new Question(this.norbert, "Need I be watched?");
-		this.andrew = new User("Andrew", "andrew");
+		this.andrew = new User("Andrew");
 	}
 
 	@Test

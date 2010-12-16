@@ -18,12 +18,12 @@ public class VoteTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		question = new Question(new User("Jack", "jack"),
+		question = new Question(new User("Jack"),
 				"Why did the chicken cross the road?");
-		answer = question.answer(new User("James", "james"),
+		answer = question.answer(new User("James"),
 				"To get to the other side.");
-		bill = new User("Bill", "bill");
-		secondAnswer = question.answer(new User("Paul", "paul"), "Because.");
+		bill = new User("Bill");
+		secondAnswer = question.answer(new User("Paul"), "Because.");
 	}
 
 	@Test
@@ -41,7 +41,6 @@ public class VoteTest extends MockedUnitTest {
 		assertEquals(question.upVotes(), 1);
 		assertEquals(question.downVotes(), 0);
 		assertTrue(question.hasUpVote(bill));
-		assertEquals(question.getVotes().size(), 1);
 
 		assertEquals(answer.upVotes(), 1);
 		assertEquals(answer.downVotes(), 0);
@@ -65,10 +64,10 @@ public class VoteTest extends MockedUnitTest {
 	@Test
 	public void shouldCount() {
 		for (int i = 0; i < 11; i++) {
-			answer.voteUp(new User("up" + i, "pw"));
+			answer.voteUp(new User("up" + i));
 		}
 		for (int i = 0; i < 42; i++) {
-			answer.voteDown(new User("down" + i, "down"));
+			answer.voteDown(new User("down" + i));
 		}
 		assertEquals(answer.upVotes(), 11);
 		assertEquals(answer.downVotes(), 42);

@@ -16,9 +16,9 @@ public class MarkSpamTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		this.alex = new User("Alex", "123");
+		this.alex = new User("Alex");
 		this.alex.setModerator(true);
-		this.pete = new User("Pete", "789");
+		this.pete = new User("Pete");
 		this.question = new Question(this.pete, "SPAMSPAMSPAM!!!1eleven");
 		this.otherQuestion = new Question(this.pete, "MOAR SPAM!!!!");
 	}

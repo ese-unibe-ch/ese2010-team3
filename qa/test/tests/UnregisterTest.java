@@ -26,12 +26,12 @@ public class UnregisterTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		jack = new User("Jack", "jack");
-		john = new User("John", "john");
-		bill = new User("Bill", "bill");
-		kate = new User("Kate", "kate");
-		sahra = new User("Sahra", "sahra");
-		michael = new User("Michael", "michael");
+		jack = new User("Jack");
+		john = new User("John");
+		bill = new User("Bill");
+		kate = new User("Kate");
+		sahra = new User("Sahra");
+		michael = new User("Michael");
 		question = new Question(jack, "Why did the chicken cross the road?");
 		answer = question.answer(john, "To get to the other side.");
 		questionVote = question.voteUp(kate);

@@ -23,8 +23,8 @@ public class SearchTest extends MockedUnitTest {
 	@Before
 	public void setUp() {
 		Database.clear();
-		User jack = new User("Jack","");
-		User jill = new User("Jill","");
+		User jack = new User("Jack");
+		User jill = new User("Jill");
 		fulltextPositive = new Question(jack,"This is relevant.");
 		fulltextNegative = new Question(jill,"This is not.");
 		taggedPositive   = new Question(jack,"This is about an important thing.");

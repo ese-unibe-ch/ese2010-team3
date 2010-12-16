@@ -23,7 +23,7 @@ public class EntryOrderingTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		jack = new User("jack", "b");
+		jack = new User("jack");
 		createEntries();
 		voting();
 	}
@@ -39,14 +39,14 @@ public class EntryOrderingTest extends MockedUnitTest {
 	}
 
 	private void voteUpNTimes(Entry entry, int n) {
-		for (Integer i = 0; i < n; i++) {
-			entry.voteUp(new User(i.toString(), i.toString()));
+		for (int i = 0; i < n; i++) {
+			entry.voteUp(new User("user" + i));
 		}
 	}
 
 	private void voteDownNTimes(Entry entry, int n) {
-		for (Integer i = 0; i < n; i++) {
-			entry.voteDown(new User(i.toString(), i.toString()));
+		for (int i = 0; i < n; i++) {
+			entry.voteDown(new User("user" + i));
 		}
 	}
 

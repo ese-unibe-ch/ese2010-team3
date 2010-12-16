@@ -21,13 +21,13 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldCreateUser() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertTrue(user != null);
 	}
 
 	@Test
 	public void shouldBeCalledJack() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(user.getName(), "Jack");
 	}
 
@@ -51,14 +51,14 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void checkMailAssertion() {
-		User user = new User("Bill", "bill");
+		User user = new User("Bill");
 		user.setEmail("bill@aol.com");
 		assertEquals(user.getEmail(), "bill@aol.com");
 	}
 
 	@Test
 	public void checkPassw() {
-		User user = new User("Bill", "bill");
+		User user = new User("Bill", "bill", "bill@example.net");
 		assertTrue(user.checkPW("bill"));
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
 		user.setSHA1Password("bill2");
@@ -69,7 +69,7 @@ public class UserTest extends MockedUnitTest {
 	public void shouldEditProfileCorrectly() throws ParseException {
 		sysInfo.year(2010).month(12).day(3);
 
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(user.getAge(), 0);
 		assertNull(user.getBiographyHTML());
 
@@ -94,7 +94,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void checkForSpammer() {
-		User user = new User("Spammer", "spammer");
+		User user = new User("Spammer");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		assertTrue(user.howManyItemsPerHour() == 0);
@@ -117,8 +117,8 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void checkForCheater() {
-		User user = new User("TheSupported", "supported");
-		User user2 = new User("Cheater", "cheater");
+		User user = new User("TheSupported");
+		User user2 = new User("Cheater");
 		assertFalse(user.isBlocked());
 		assertFalse(user2.isBlocked());
 		assertFalse(user2.isMaybeCheater());
@@ -144,9 +144,9 @@ public class UserTest extends MockedUnitTest {
 	
 	@Test
 	public void shouldAllowVotingOften() {
-		User voter = new User("Voter", "voter");
-		User user1 = new User("User1", "user1");
-		User user2 = new User("User2", "user2");
+		User voter = new User("Voter");
+		User user1 = new User("User1");
+		User user2 = new User("User2");
 
 		for (int i = 0; i < 5; i++) {
 			new Question(user1, "Q1-" + i).voteUp(voter);
@@ -160,9 +160,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotBeAbleToEditForeignPosts() {
-		User user1 = new User("Jack", "jack");
-		User user2 = new User("John", "john");
-		User user3 = new User("Geronimo", "geronimo");
+		User user1 = new User("Jack");
+		User user2 = new User("John");
+		User user3 = new User("Geronimo");
 		user1.setModerator(true);
 		Question q = new Question(user2, "Can you edit this post?");
 		/* moderator should be able to edit the question */
@@ -179,7 +179,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveOneQuestion() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		assertEquals(1, user.getQuestions().size());
 		q.unregister();
@@ -187,7 +187,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveNoQuestion() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.unregister();
 		assertEquals(0, user.getQuestions().size());
@@ -195,7 +195,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveOneAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		assertEquals(1, user.getAnswers().size());
@@ -203,7 +203,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveNoAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.answers().get(0).unregister();
@@ -212,7 +212,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveOneBestAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -221,7 +221,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveNoBestAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -231,7 +231,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void testModerator() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertFalse(user.isModerator());
 		user.setModerator(true);
 		assertTrue(user.isModerator());
@@ -239,7 +239,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void testBlock() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		user.block("offending comments");
@@ -255,7 +255,7 @@ public class UserTest extends MockedUnitTest {
 	public void shouldHaveRecentEntries() {
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(0, user.getRecentQuestions().size());
 		assertEquals(0, user.getRecentAnswers().size());
 		assertEquals(0, user.getRecentComments().size());
@@ -276,18 +276,18 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveOneHighRatedAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 
 		assertEquals(0, user.highRatedAnswers().size());
 		assertTrue(Database.questions().countHighRatedAnswers() == 0);
 
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
-		User E = new User("E", "e");
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
+		User E = new User("E");
 
 		q.answers().get(0).voteUp(A);
 		q.answers().get(0).voteUp(B);
@@ -309,9 +309,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldSuggestQuestion() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 
@@ -331,9 +331,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldSuggestThreeQuestions() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -353,8 +353,8 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldSuggestSixQuestionsMax() {
-		User user3 = new User("User3", "user3");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user5 = new User("User5");
 		for (int i = 0; i < 10; i++) {
 			Question q = new Question(user3, "Hard question " + i);
 			q.setTagString("demo");
@@ -369,7 +369,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotSuggestSameQuestionTwice() {
-		User user5 = new User("User5", "user5");
+		User user5 = new User("User5");
 		Question q = new Question(null, "suggest me!");
 		q.setTagString("demo");
 		Question r = new Question(null, "answer me!");
@@ -387,7 +387,7 @@ public class UserTest extends MockedUnitTest {
 	public void shouldNotSuggestOldQuestions() {
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
-		User user5 = new User("User5", "user5");
+		User user5 = new User("User5");
 		Question q = new Question(null, "suggest me!");
 		q.setTagString("demo");
 
@@ -402,9 +402,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldSuggestQuestionsFromBestAnswersFirst() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -427,9 +427,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldSuggestQuestionsSortedByRatingOfAnswers() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
 		Question m = new Question(user3, "Why?");
 		Question n = new Question(user4, "Where?");
 		Question o = new Question(user3, "Who?");
@@ -459,9 +459,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotSuggestQuestionsFromBadAnswers() {
-		User user6 = new User("User6", "user6");
-		User user7 = new User("User7", "user7");
-		User user8 = new User("User8", "user8");
+		User user6 = new User("User6");
+		User user7 = new User("User7");
+		User user8 = new User("User8");
 		Question m = new Question(user6, "Why?");
 		Question n = new Question(user7, "Where?");
 		Question o = new Question(user6, "Who?");
@@ -481,8 +481,8 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotSuggestOwnQuestions() {
-		User user = new User("Jack", "jack");
-		User user2 = new User("John", "john");
+		User user = new User("Jack");
+		User user2 = new User("John");
 		Question q = new Question(user, "Why?");
 		Question f = new Question(user2, "Where?");
 		q.setTagString("demo");
@@ -494,9 +494,9 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotSuggestQuestionsWithBestAnswer() {
-		User james = new User("James", "james");
-		User john = new User("John", "john");
-		User kate = new User("Kate", "kate");
+		User james = new User("James");
+		User john = new User("John");
+		User kate = new User("Kate");
 		Question k = new Question(james, "Why?");
 		Question l = new Question(john, "Where?");
 
@@ -510,8 +510,8 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotSuggestQuestionsWithManyAnswers() {
-		User user3 = new User("User3", "user3");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user5 = new User("User5");
 
 		Question p = new Question(user3, "Hard question");
 		p.setTagString("demo");
@@ -531,7 +531,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldHaveDebugFriendly_toString() {
-		User james = new User("James", "james");
+		User james = new User("James");
 		Question question = new Question(james, "Why?");
 		Answer answer = question.answer(james, "No idea");
 		question.setTagString("TAG");
@@ -545,7 +545,7 @@ public class UserTest extends MockedUnitTest {
 	@Test
 	public void testPostAndSearchDelay() {
 		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
+		User james = new User("James");
 		assertTrue(james.canPost());
 		assertTrue(james.canSearchFor("search 1"));
 
@@ -574,7 +574,7 @@ public class UserTest extends MockedUnitTest {
 	@Test
 	public void testTimeToSearchAndPost() {
 		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
+		User james = new User("James");
 
 		james.setLastSearch("search 1", sysInfo.now());
 		assertEquals(james.timeToSearch(), 15);
@@ -600,7 +600,7 @@ public class UserTest extends MockedUnitTest {
 	@Test
 	public void testTestMode() {
 		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
+		User james = new User("James");
 		sysInfo.setTestMode(false);
 		assertFalse(sysInfo.isInTestMode());
 		james.setLastPostTime(sysInfo.now());
@@ -621,7 +621,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotWatchAnything() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(0, Database.questions().getWatchList(user).size());
 	}
 }

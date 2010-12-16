@@ -24,7 +24,7 @@ public class TagTest extends MockedUnitTest {
 	public void setUp() {
 		Database.clear();
 		tagDB = Database.tags();
-		douglas = new User("Douglas", "douglas");
+		douglas = new User("Douglas");
 		question1 = new Question(douglas, "Why did the chicken cross the road?");
 		question2 = new Question(douglas, "Is this question meaningless?");
 		tagName = "tag";
@@ -133,10 +133,10 @@ public class TagTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotListQuestionWithZeroTags() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
 		Question questionK = new Question(A, "K?");
 		Question questionL = new Question(B, "L?");
 		Question questionM = new Question(C, "M?");
@@ -164,10 +164,10 @@ public class TagTest extends MockedUnitTest {
 
 	@Test
 	public void shouldListCorrectOrderOfSimilarQuestions() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
 		Question questionA = new Question(A, "A?");
 		Question questionB = new Question(B, "B?");
 		Question questionC = new Question(C, "C?");

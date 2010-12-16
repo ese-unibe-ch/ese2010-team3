@@ -20,18 +20,18 @@ public class AnswerTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		this.james = new User("James", "jack");
+		this.james = new User("James");
 
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 		this.questionDate = sysInfo.now();
 		sysInfo.changeTo(this.questionDate);
-		this.question = new Question(new User("Jack", "jack"),
+		this.question = new Question(new User("Jack"),
 				"Why did the chicken cross the road?");
 		sysInfo.minute(5);
 		this.answerDate = sysInfo.now();
 		sysInfo.changeTo(this.answerDate);
 
-		this.question = new Question(new User("Jack", "jack"),
+		this.question = new Question(new User("Jack"),
 				"Why did the chicken cross the road?");
 
 		this.answer = this.question.answer(this.james,
@@ -78,11 +78,11 @@ public class AnswerTest extends MockedUnitTest {
 
 	@Test
 	public void shouldBeHighRated() {
-		User a = new User("a", "a");
-		User b = new User("b", "b");
-		User c = new User("c", "c");
-		User d = new User("d", "d");
-		User e = new User("e", "e");
+		User a = new User("a");
+		User b = new User("b");
+		User c = new User("c");
+		User d = new User("d");
+		User e = new User("e");
 
 		this.answer.voteUp(a);
 		this.answer.voteUp(b);

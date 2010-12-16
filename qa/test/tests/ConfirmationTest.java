@@ -13,8 +13,8 @@ public class ConfirmationTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		norbert = new User("Norbert", "norbert");
-		andrew = new User("Andrew", "andrew");
+		norbert = new User("Norbert");
+		andrew = new User("Andrew");
 	}
 	
 	@Test

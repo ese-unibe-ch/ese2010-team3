@@ -65,7 +65,11 @@ public class User implements IObserver {
 	 */
 	public User(String name, String password, String email) {
 		this.name = name;
-		this.password = Tools.encrypt(password);
+		if (password != null) {
+			// null passwords may happen during testing, as hashing a password
+			// can be quite slow in comparison
+			this.password = Tools.encrypt(password);
+		}
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
@@ -80,8 +84,8 @@ public class User implements IObserver {
 	 * @param name
 	 *            the name of the <code>User</code>
 	 */
-	public User(String name, String password) {
-		this(name, password, null);
+	public User(String name) {
+		this(name, null, null);
 	}
 
 	public boolean canEdit(Entry entry) {
@@ -109,7 +113,8 @@ public class User implements IObserver {
 
 	/**
 	 * Registers an {@link Item} which should be deleted in case the
-	 * <code>User</code> gets deleted.
+	 * <code>User</code> gets deleted and, if the item is an {@link Entry},
+	 * remembers the time of the user's last post for spamming prevention.
 	 * 
 	 * @param item
 	 *            the {@link Item} to register
@@ -117,6 +122,9 @@ public class User implements IObserver {
 	public void registerItem(Item item) {
 		this.items.add(item);
 		this.updateCheaterStatus();
+		if (item instanceof Entry) {
+			this.setLastPostTime(SysInfo.now());
+		}
 	}
 
 	/**
@@ -163,10 +171,10 @@ public class User implements IObserver {
 	 *         <code>User</code> in this Hour.
 	 */
 	public int howManyItemsPerHour() {
-		Date now = SysInfo.now();
+		long now = SysInfo.now().getTime();
 		int i = 0;
 		for (Item item : this.items) {
-			if (now.getTime() - item.timestamp().getTime() <= 60 * 60 * 1000) {
+			if (now - item.timestamp().getTime() <= 60 * 60 * 1000) {
 				i++;
 			}
 		}
@@ -258,13 +266,12 @@ public class User implements IObserver {
 	 * we will remember here the time of the user's last post for future
 	 * spamming prevention.
 	 */
-	public void updateCheaterStatus() {
+	private void updateCheaterStatus() {
 		if (this.isSpammer()) {
 			this.block("User is a Spammer");
 		} else if (this.isMaybeCheater()) {
 			this.block("User voted up somebody");
 		}
-		this.setLastPostTime(SysInfo.now());
 	}
 
 	/**

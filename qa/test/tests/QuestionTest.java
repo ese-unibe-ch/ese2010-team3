@@ -13,7 +13,7 @@ public class QuestionTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		this.user = new User("Jack", "jack");
+		this.user = new User("Jack");
 		this.question = new Question(user,
 				"Why did the chicken cross the road?");
 	}
@@ -79,7 +79,7 @@ public class QuestionTest extends MockedUnitTest {
 
 	@Test
 	public void shouldBeOldQuestion() {
-		User user2 = new User("User2", "user2");
+		User user2 = new User("User2");
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		Question oldQuestion = new Question(user2, "Why?");
@@ -89,7 +89,7 @@ public class QuestionTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotBeOldQuestion() {
-		User user2 = new User("User2", "user2");
+		User user2 = new User("User2");
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		Question oldQuestion = new Question(user2, "Why?");

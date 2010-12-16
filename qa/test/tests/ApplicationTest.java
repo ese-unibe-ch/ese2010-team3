@@ -20,7 +20,7 @@ public class ApplicationTest extends FunctionalTest {
 
 	@Test
 	public void testThatQuestionPageLoads() {
-		Question question = new Question(new User("Jack", ""), "what's up?");
+		Question question = new Question(new User("Jack"), "what's up?");
 		Response response = GET("/question/" + question.id());
 		assertIsOk(response);
 		assertContentType("text/html", response);
