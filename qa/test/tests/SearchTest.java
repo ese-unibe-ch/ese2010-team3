@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import models.Question;
+import models.SearchFilter;
 import models.User;
-import models.SearchEngine.SearchFilter;
 import models.database.Database;
 import models.helpers.Mapper;
 

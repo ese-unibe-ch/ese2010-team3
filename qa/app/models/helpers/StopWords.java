@@ -1,4 +1,4 @@
-package models.SearchEngine;
+package models.helpers;
 
 import java.util.HashSet;
 

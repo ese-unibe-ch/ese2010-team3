@@ -1,4 +1,4 @@
-package models.SearchEngine;
+package models;
 
 import static models.helpers.SetOperations.difference;
 import static models.helpers.SetOperations.intersection;
@@ -7,11 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import models.Answer;
-import models.Entry;
-import models.Question;
-import models.Tag;
 import models.helpers.IFilter;
+import models.helpers.StopWords;
 
 /**
  * SearchFilter can be used as a Filter-Visitor that classifies a list of

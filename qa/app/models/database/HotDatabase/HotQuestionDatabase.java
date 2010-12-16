@@ -11,9 +11,9 @@ import java.util.Set;
 
 import models.Answer;
 import models.Question;
+import models.SearchFilter;
 import models.Tag;
 import models.User;
-import models.SearchEngine.SearchFilter;
 import models.database.Database;
 import models.database.IQuestionDatabase;
 import models.helpers.Mapper;

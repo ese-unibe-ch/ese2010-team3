@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import models.Question;
-import models.SearchEngine.StopWords;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -152,7 +149,7 @@ public class Tools {
 	}
 
 	/**
-	 * Sorts a list of Questions and segments them into parts according to a
+	 * Sorts a list of entries and segments them into parts according to a
 	 * certain number of entries per part.
 	 * 
 	 * @param entries
@@ -166,8 +163,7 @@ public class Tools {
 	 * @return a list of the entries on the given page number.
 	 * 
 	 */
-	public static List<Question> paginate(List<Question> entries,
-			int entriesPerPage, int index) {
+	public static List paginate(List entries, int entriesPerPage, int index) {
 		int limit = entries.size();
 		int upperBound = ((index + 1) * entriesPerPage);
 
@@ -176,12 +172,11 @@ public class Tools {
 		if (index * entriesPerPage <= limit)
 			return entries.subList(index * entriesPerPage, limit);
 
-		return new ArrayList<Question>();
+		return new ArrayList();
 	}
 
-	public static int determineMaximumIndex(List<Question> questions,
-			int entriesPerPage) {
-		return (questions.size() - 1) / entriesPerPage;
+	public static int determineMaximumIndex(List entries, int entriesPerPage) {
+		return (entries.size() - 1) / entriesPerPage;
 	}
 
 	/**
