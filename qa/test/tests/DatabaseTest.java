@@ -2,7 +2,9 @@ package tests;
 
 import models.User;
 import models.database.Database;
+import models.database.IDatabase;
 import models.database.IUserDatabase;
+import models.database.HotDatabase.HotDatabase;
 
 import org.junit.Test;
 
@@ -35,5 +37,17 @@ public class DatabaseTest extends MockedUnitTest {
 		assertFalse(userDB.all().contains(admin));
 
 		Database.clearKeepAdmins();
+	}
+
+	@Test
+	public void shouldSwapAndBack() {
+		IDatabase newDB = new HotDatabase();
+		assertNotSame(newDB.users(), Database.users());
+		IDatabase current = Database.swapWith(newDB);
+		assertNotSame(current, newDB);
+		assertEquals(newDB.users(), Database.users());
+		IDatabase prevDB = Database.swapWith(current);
+		assertEquals(prevDB, newDB);
+		assertEquals(current.questions(), Database.questions());
 	}
 }
