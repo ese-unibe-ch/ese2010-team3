@@ -19,7 +19,6 @@ h1 {
 h1:first-child {
 	margin-top: 0px;
 }
-
 h2 {
 	color: #ff8400;
 	margin: 0;
@@ -40,72 +39,76 @@ a {
 a:hover {
 	color: #c71c1c;
 }
+/*********************** 
+lines
+************************/
+hr {
+	color: #000;	
+}
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
+/*********************** 
+global
+************************/
+div.global {
+	min-width: 780;
+	max-width: 980px;
+	margin: 0 auto;
+}
+/*********************** 
+navigation
+************************/
+div.navigation {
+	padding: 10px;
+	background: #555555;
+	color: #222222;
+	width:170px;
+	float:right;
+}
+div.navigation ul{
+	list-style:none;
+	padding: 0;
+	margin: 0;
+}
+div.navigation ul li{
+	list-style:none;
+	margin:5px;
+}
+div.hiddenlogin {
+	width: 170px;
+}
+div.hiddenlogin input{
+	width: 150px;
+}
+#mini_login + .userlogin {
+	display: none;
+}
 /*********************** 
 main
 ************************/
 div.main {
 	background: #000000;
-	margin:	20px auto;
-	max-width: 900px;
-	min-width:500px;
+	margin: 20px 200px 20px 0px;
 	padding: 0;
-	position: relative;
+	min-width: 580px;
+	max-width: 780px;
 }
 p.pagination {
 	color: #888;
 	text-align: center;
 }
-
 /*********************** 
 header
 ************************/
 div.header {
 	margin:	0;
 }
-
 div.header a {
 	display: block;
 	height: 131px;
 	width: 250px;
 	background: url(../images/logo.png) no-repeat center;
 }
-/*********************** 
-navigation
-************************/
-div.navigation {
-	padding: 5px;
-	background: #555555;
-	color: #222222;
-	height:28px;
-}
-
-div.navigation div.user {			
-	float: right;
-	right: 5px;
-	margin-top: 4px;
-}
-
-div.navigation div.user a {
-	margin-left: 5px;
-}
-
-div.navigation div.search {
-	float:left;
-}
-
-#mini_login {
-	float: right;
-	right: 5px;
-}
-#mini_login input {
-	max-width: 100px;
-}
-#mini_login + .user {
-	display: none;
-}
-
 /*********************** 
 content
 ************************/	
@@ -123,14 +126,12 @@ div.content ul {
 	padding: 0;
 	margin: 0;
 }
-
 div.content li.bestAnswer {
 	background: #2b6026;
 }
 div.content li.own {
 	background: #320;
 }
-
 div.content li {
 	background: #333333;
 	list-style: none;
@@ -140,22 +141,18 @@ div.content li {
 }
 div.content pre {
 	overflow-x: auto;
-}
-		
+}	
 div.content li[onclick] {
 	cursor: pointer;
-}
-		
+}	
 div.content li[onclick]:hover {
 	background: #666;
 }
-
 div.content li.question p,
 div.content ul.answers p {
 	margin-top: 0.2em;
 	margin-bottom: 0.5em;
 }
-	
 div.content li p {
 	color: #aecbfb;
 }
@@ -163,7 +160,6 @@ div.content li p.relatedQ {
 	margin: 2px;
 	color: #ff8400;
 }
-	
 div.content span.vote {
 	bottom: 7px;
 	font-size: 2em;
@@ -188,7 +184,7 @@ div.content div.date {
 			
 div.content textarea {
 	height: 50px;
-	width: 710px;
+	max-width: 99%;
 	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;
@@ -268,13 +264,9 @@ td.left {
 	vertical-align: top;
 	color: #888;
 }
-li.showprofile {
-	background: #333333;
-	width: 800px;
+ul.showprofile li {
 	list-style: none;
-	margin: 5px;
-	padding: 7px;
-	position: relative;
+	padding-top: 25px;
 }
 td.blocked {
 	color: #f00;
@@ -349,6 +341,14 @@ confirm delete question
 div.deleteQuestion {
 	color: #888;
 	font-size: 14pt;
+}
+/*********************** 
+is Locked
+************************/
+div.isLocked {
+	position: absolute;
+	top: 35px;
+	right: 7px;
 }
 /*********************** 
 tags and tag autocomplete box
