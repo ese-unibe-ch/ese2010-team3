@@ -16,7 +16,7 @@ import java.util.List;
 public class Answer extends Entry {
 
 	private final Question question;
-	private HashMap<Integer, Comment> comments;
+	private final HashMap<Integer, Comment> comments;
 
 	/**
 	 * Create an <code>Answer</code> to a {@link Question}.

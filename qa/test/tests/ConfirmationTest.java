@@ -1,11 +1,8 @@
 package tests;
 
-import static org.junit.Assert.*;
-import models.ISystemInformation;
-import models.Question;
+import models.SysInfo;
 import models.SystemInformation;
 import models.User;
-import models.database.Database;
 import models.helpers.Tools;
 
 import org.junit.After;
@@ -17,20 +14,22 @@ import tests.mocks.SystemInformationMock;
 
 public class ConfirmationTest extends UnitTest {
 	
-	private ISystemInformation savedSysInfo;
+	private SystemInformation sys;
+	private SystemInformation savedSysInfo;
 	private User norbert;
 	private User andrew;
 
 	@Before
 	public void setUp() {
-		savedSysInfo = SystemInformation.get();
+		sys = new SystemInformationMock();
+		savedSysInfo = SysInfo.mockWith(sys);
 		norbert = new User("Norbert", "norbert");
 		andrew = new User("Andrew", "andrew");
 	}
 	
 	@After
 	public void tearDown() {
-		SystemInformation.mockWith(savedSysInfo);
+		SysInfo.mockWith(savedSysInfo);
 	}
 	
 	@Test

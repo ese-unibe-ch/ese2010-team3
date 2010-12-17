@@ -145,7 +145,7 @@ public class XMLParser extends DefaultHandler {
 		String name = e.getText("displayname");
 		String password = e.getText("password");
 		String email = e.getText("email");
-		User user = Database.get().users().register(name, password,email);
+		User user = Database.users().register(name, password,email);
 		Integer age = new Integer(e.getText("age"));
 		if (age != -1) {
 			Calendar pseudobirthday = GregorianCalendar.getInstance();
@@ -219,7 +219,7 @@ public class XMLParser extends DefaultHandler {
 
 			String content = protoquestion.body;
 			content = "<h3>" + protoquestion.title + "</h3>\n" + content;
-			Question question = Database.get().questions().add(owner, content);
+			Question question = Database.questions().add(owner, content);
 			question.setTimestamp(protoquestion.creation);
 			this.idQuestionBase.put(protoquestion.id, question);
 			question.setTagString(protoquestion.tags);

@@ -15,6 +15,7 @@ import models.helpers.Tools;
 public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
+	private String contentText;
 	private HashMap<User, Vote> votes;
 	private boolean possiblySpam;
 
@@ -31,7 +32,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (content == null) {
 			content = "";
 		}
-		this.content = content;
+		this.content = Tools.markdownToHtml(content);
 		this.votes = new HashMap<User, Vote>();
 		this.possiblySpam = false;
 	}
@@ -73,6 +74,12 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public String content() {
 		return this.content;
+	}
+
+	public String getContentText() {
+		if (this.contentText == null)
+			this.contentText = Tools.htmlToText(this.content);
+		return this.contentText;
 	}
 
 	/**
@@ -240,7 +247,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return a one-line summary of an <code>Entry</code>.
 	 * */
 	public String summary() {
-		return Tools.htmlToText(this.content).replaceAll("\\s+", " ")
+		return this.getContentText().replaceAll("\\s+", " ")
 				.replaceFirst("^(.{75}\\S{0,9} ?).{5,}", "$1...");
 	}
 
@@ -261,7 +268,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (this.owner().isSpammer()) {
 			this.confirmSpam();
 		} else if (!this.possiblySpam) {
-			new Notification(Database.get().users()
+			new Notification(Database.users()
 					.getModeratorMailbox(), this);
 			this.possiblySpam = true;
 		}

@@ -5,12 +5,10 @@ import models.Comment;
 import models.Question;
 import models.User;
 import models.database.Database;
-import models.helpers.Tools;
 import play.data.validation.Required;
 import play.data.validation.Validation;
-import play.mvc.Controller;
-import play.mvc.With;
 import play.mvc.Router.ActionDefinition;
+import play.mvc.With;
 
 /**
  * The controller for all routes concerning the {@link Answer}'s.
@@ -19,7 +17,7 @@ import play.mvc.Router.ActionDefinition;
  * 
  */
 @With(Secure.class)
-public class CAnswer extends Controller {
+public class CAnswer extends BaseController {
 
 	/**
 	 * Add a new {@link Answer}.
@@ -30,12 +28,11 @@ public class CAnswer extends Controller {
 	 *            the content of the {@link Answer}.
 	 */
 	public static void newAnswer(int questionId, @Required String content) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		if (!Validation.hasErrors() && question != null) {
-			User user = Session.get().currentUser();
+			User user = Session.user();
 			if (!question.isLocked() && user.canPost()) {
-				Answer answer = question.answer(user,
-						Tools.markdownToHtml(content));
+				Answer answer = question.answer(user, content);
 				flash.success("secure.newanswerflash");
 				ActionDefinition action = reverse();
 				Application.question(questionId);
@@ -60,13 +57,12 @@ public class CAnswer extends Controller {
 	 */
 	public static void newCommentAnswer(int questionId, int answerId,
 			@Required String content) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Answer answer = question != null ? question.getAnswer(answerId) : null;
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (!Validation.hasErrors() && answer != null && !question.isLocked()
 				&& user.canPost()) {
-			Comment comment = answer.comment(user, Tools
-					.markdownToHtml(content));
+			Comment comment = answer.comment(user, content);
 			flash.success("secure.newcommentanswerflash");
 			ActionDefinition action = reverse();
 			Application.question(questionId);
@@ -86,9 +82,9 @@ public class CAnswer extends Controller {
 	 */
 	public static void addLikerAnswerComment(int commentId, int questionId,
 			int answerId) {
-		Comment comment = Database.get().questions().get(questionId).getAnswer(
+		Comment comment = Database.questions().get(questionId).getAnswer(
 				answerId).getComment(commentId);
-		comment.addLiker(Session.get().currentUser());
+		comment.addLiker(Session.user());
 		flash.success("secure.likecommentflash");
 		Application.question(questionId);
 	}
@@ -105,9 +101,9 @@ public class CAnswer extends Controller {
 	 */
 	public static void removeLikerAnswerComment(int commentId, int questionId,
 			int answerId) {
-		Comment comment = Database.get().questions().get(questionId).getAnswer(
+		Comment comment = Database.questions().get(questionId).getAnswer(
 				answerId).getComment(commentId);
-		comment.removeLiker(Session.get().currentUser());
+		comment.removeLiker(Session.user());
 		flash.success("secure.dislikecommentflash");
 		Application.question(questionId);
 	}
@@ -122,10 +118,10 @@ public class CAnswer extends Controller {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerUp(int question, int id) {
-		Question q = Database.get().questions().get(question);
+		Question q = Database.questions().get(question);
 		Answer answer = q.getAnswer(id);
 		if (answer != null) {
-			answer.voteUp(Session.get().currentUser());
+			answer.voteUp(Session.user());
 			flash.success("secure.upvoteflash");
 			Application.question(question);
 		} else {
@@ -143,10 +139,10 @@ public class CAnswer extends Controller {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerDown(int question, int id) {
-		Question q = Database.get().questions().get(question);
+		Question q = Database.questions().get(question);
 		Answer answer = q.getAnswer(id);
 		if (answer != null) {
-			answer.voteDown(Session.get().currentUser());
+			answer.voteDown(Session.user());
 			flash.success("secure.downvoteflash");
 			Application.question(question);
 		} else {
@@ -164,10 +160,10 @@ public class CAnswer extends Controller {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerCancel(int question, int id) {
-		Question q = Database.get().questions().get(question);
+		Question q = Database.questions().get(question);
 		Answer answer = q.getAnswer(id);
 		if (answer != null) {
-			answer.voteCancel(Session.get().currentUser());
+			answer.voteCancel(Session.user());
 			flash.success("Your vote has been forgotten.");
 			Application.question(question);
 		} else {
@@ -185,7 +181,7 @@ public class CAnswer extends Controller {
 	 *            the id of the {@link Answer}
 	 */
 	public static void deleteAnswer(int questionId, int answerId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		answer.unregister();
 		flash.success("secure.answerdeletedflash");
@@ -204,7 +200,7 @@ public class CAnswer extends Controller {
 	 */
 	public static void deleteCommentAnswer(int questionId, int answerId,
 			int commentId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		Comment comment = answer.getComment(commentId);
 		answer.unregister(comment);
@@ -221,7 +217,7 @@ public class CAnswer extends Controller {
 	 *            the answer id
 	 */
 	public static void selectBestAnswer(int questionId, int answerId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		question.setBestAnswer(answer);
 		flash.success("secure.bestanswerflash");
@@ -232,12 +228,12 @@ public class CAnswer extends Controller {
 	 * Informs the moderators that this post is spam.
 	 */
 	static void markSpam(int questionId, int answerId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		if (question == null) {
 			Application.index(0);
 		}
 		Answer answer = question.getAnswer(answerId);
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user != null && answer != null) {
 			if (!user.isModerator()) {
 				answer.markSpam();

@@ -4,22 +4,21 @@ import models.User;
 import models.database.Database;
 
 public class Session implements ISession {
-	private static ISession instance;
+	private static ISession instance = new Session();
 
-	public static void mockWith(ISession session) {
+	public static ISession mockWith(ISession session) {
+		ISession previous = instance;
 		instance = session;
+		return previous;
 	}
 
-	public static ISession get() {
-		if (instance == null) {
-			instance = new Session();
-		}
-		return instance;
+	public static User user() {
+		return instance.currentUser();
 	}
 
 	public User currentUser() {
-		if (!Secure.Security.isConnected())
+		if (!Security.isConnected())
 			return null;
-		return Database.get().users().get(Secure.Security.connected());
+		return Database.users().get(Security.connected());
 	}
 }

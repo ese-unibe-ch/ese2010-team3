@@ -4,13 +4,11 @@ import models.Comment;
 import models.Question;
 import models.User;
 import models.database.Database;
-import models.helpers.Tools;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
-import play.mvc.Controller;
-import play.mvc.With;
 import play.mvc.Router.ActionDefinition;
+import play.mvc.With;
 
 /**
  * The controller for all routes that concern the {@link Question}'s.
@@ -19,7 +17,7 @@ import play.mvc.Router.ActionDefinition;
  * 
  */
 @With(Secure.class)
-public class CQuestion extends Controller {
+public class CQuestion extends BaseController {
 
 	/**
 	 * Add a new {@link Question}. It is required that the content is not empty.
@@ -32,13 +30,11 @@ public class CQuestion extends Controller {
 	 */
 	public static void newQuestion(@Required String content, String tags) {
 		if (!Validation.hasErrors()) {
-			User user = Session.get().currentUser();
+			User user = Session.user();
 			if (user.canPost()) {
 				Cache.delete("index.questions");
-				Question question = Database.get().questions().add(user,
-						Tools.markdownToHtml(content));
-				question.setTagString(tags);
-				user.startObserving(question);
+				Question question = Database.questions()
+						.add(user, content);
 				question.setTagString(tags);
 				flash.success("secure.newquestionflash");
 				Application.question(question.id());
@@ -58,8 +54,8 @@ public class CQuestion extends Controller {
 	 *            the tags to be updated
 	 */
 	public static void updateTags(int id, String tags) {
-		Question question = Database.get().questions().get(id);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(id);
+		User user = Session.user();
 		if (question != null && user.canEdit(question)) {
 			flash.success("secure.editprofileflash");
 			question.setTagString(tags);
@@ -78,12 +74,11 @@ public class CQuestion extends Controller {
 	 */
 	public static void newCommentQuestion(int questionId,
 			@Required String content) {
-		Question question = Database.get().questions().get(questionId);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(questionId);
+		User user = Session.user();
 		if (!Validation.hasErrors() && question != null && !question.isLocked()
 				&& user.canPost()) {
-			Comment comment = question.comment(user,
-					Tools.markdownToHtml(content));
+			Comment comment = question.comment(user, content);
 			flash.success("secure.newcommentquestionflash");
 			ActionDefinition action = reverse();
 			Application.question(questionId);
@@ -100,9 +95,9 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void addLikerQuestionComment(int commentId, int questionId) {
-		Comment comment = Database.get().questions().get(questionId)
+		Comment comment = Database.questions().get(questionId)
 				.getComment(commentId);
-		comment.addLiker(Session.get().currentUser());
+		comment.addLiker(Session.user());
 		flash.success("secure.likecommentflash");
 		Application.question(questionId);
 	}
@@ -116,9 +111,9 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void removeLikerQuestionComment(int commentId, int questionId) {
-		Comment comment = Database.get().questions().get(questionId)
+		Comment comment = Database.questions().get(questionId)
 				.getComment(commentId);
-		comment.removeLiker(Session.get().currentUser());
+		comment.removeLiker(Session.user());
 		flash.success("secure.dislikecommentflash");
 		Application.question(questionId);
 	}
@@ -130,11 +125,11 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void voteQuestionUp(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		if (question != null) {
-			question.voteUp(Session.get().currentUser());
+			question.voteUp(Session.user());
 			flash.success("secure.upvoteflash");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {
@@ -149,11 +144,11 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void voteQuestionDown(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		if (question != null) {
-			question.voteDown(Session.get().currentUser());
+			question.voteDown(Session.user());
 			flash.success("secure.downvoteflash");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {
@@ -168,11 +163,11 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void voteQuestionCancel(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		if (question != null) {
-			question.voteCancel(Session.get().currentUser());
+			question.voteCancel(Session.user());
 			flash.success("Your vote has been forgotten.");
-			if (!CUser.redirectToCallingPage()) {
+			if (!redirectToCallingPage()) {
 				Application.question(id);
 			}
 		} else {
@@ -187,7 +182,7 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be deleted.
 	 */
 	public static void deleteQuestion(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		flash.success("secure.questiondeletedflash");
 		question.unregister();
 		Application.index(0);
@@ -203,7 +198,7 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Comment}.
 	 */
 	public static void deleteCommentQuestion(int questionId, int commentId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Comment comment = question.getComment(commentId);
 		question.unregister(comment);
 		flash.success("secure.commentdeletedflash");
@@ -217,8 +212,8 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be watched.
 	 */
 	public static void watchQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(id);
+		User user = Session.user();
 		if (question != null) {
 			user.startObserving(question);
 			flash.success("secure.startwatchquestionflash");
@@ -233,8 +228,8 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be unwatched.
 	 */
 	public static void unwatchQuestion(int id) {
-		Question question = Database.get().questions().get(id);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(id);
+		User user = Session.user();
 		if (question != null) {
 			user.stopObserving(question);
 			flash.success("secure.stopwatchquestionflash");
@@ -249,8 +244,8 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be unwatched.
 	 */
 	public static void unwatchQuestionFromList(int id) {
-		Question question = Database.get().questions().get(id);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(id);
+		User user = Session.user();
 		if (question != null) {
 			user.stopObserving(question);
 			flash.success("secure.stopwatchquestionflash", id, question
@@ -266,9 +261,9 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be unlocked.
 	 */
 	public static void unlockQuestion(int id) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user.isModerator()) {
-			Question question = Database.get().questions().get(id);
+			Question question = Database.questions().get(id);
 			question.unlock();
 			flash.success("secure.unlockquestionflash");
 			Application.question(id);
@@ -282,9 +277,9 @@ public class CQuestion extends Controller {
 	 *            the id of the {@link Question} to be locked.
 	 */
 	public static void lockQuestion(int id) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user.isModerator()) {
-			Question question = Database.get().questions().get(id);
+			Question question = Database.questions().get(id);
 			question.lock();
 			flash.success("secure.lockquestionflash");
 			Application.question(id);
@@ -296,8 +291,8 @@ public class CQuestion extends Controller {
 	 * is a moderator.
 	 */
 	public static void markSpam(int id) {
-		Question question = Database.get().questions().get(id);
-		User user = Session.get().currentUser();
+		Question question = Database.questions().get(id);
+		User user = Session.user();
 		if (user != null && question != null) {
 			if (user.isModerator()) {
 				question.confirmSpam();

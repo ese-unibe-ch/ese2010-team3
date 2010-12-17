@@ -12,7 +12,6 @@ import models.Entry;
 import models.Question;
 import models.Tag;
 import models.helpers.IFilter;
-import models.helpers.Tools;
 
 /**
  * SearchFilter can be used as a Filter-Visitor that classifies a list of
@@ -128,7 +127,7 @@ public class SearchFilter implements IFilter<Question, Double> {
 	 *         terms
 	 */
 	private double rateText(Entry entry, Set<String> mustHave) {
-		String content = entry.content();
+		String content = entry.getContentText();
 		if (entry.owner() != null)
 			content += " " + entry.owner().getName();
 		if (this.queryFulltext == null)
@@ -171,9 +170,6 @@ public class SearchFilter implements IFilter<Question, Double> {
 	 * @return a set of words for easier rating through intersections
 	 */
 	private Set<String> getWords(String string) {
-		// this isn't ideally placed...
-		string = Tools.htmlToText(string);
-
 		Set<String> words = new HashSet<String>();
 		for (String word : string.split("\\W+")) {
 			words.add(word.toLowerCase());

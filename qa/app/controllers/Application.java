@@ -9,11 +9,12 @@ import java.util.List;
 import models.Answer;
 import models.Notification;
 import models.Question;
-import models.SystemInformation;
+import models.SysInfo;
 import models.Tag;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
+import models.database.IQuestionDatabase;
 import models.helpers.Tools;
 import notifiers.Mails;
 import play.cache.Cache;
@@ -21,20 +22,10 @@ import play.data.validation.Required;
 import play.i18n.Lang;
 import play.libs.Codec;
 import play.libs.Images;
-import play.mvc.Before;
-import play.mvc.Controller;
 
-public class Application extends Controller {
+public class Application extends BaseController {
 
 	private static final int entriesPerPage = 15;
-
-	@Before
-	static void setConnectedUser() {
-		if (Secure.Security.isConnected()) {
-			User user = Database.get().users().get(Secure.Security.connected());
-			renderArgs.put("user", user);
-		}
-	}
 
 	/**
 	 * Leads to the index page at a given page of {@link Question}'s.
@@ -46,7 +37,7 @@ public class Application extends Controller {
 		List<Question> questions = (List<Question>) Cache
 				.get("index.questions");
 		if (questions == null) {
-			questions = Database.get().questions().all();
+			questions = Database.questions().all();
 			Collections.sort(questions, new Comparator<Question>() {
 				public int compare(Question q1, Question q2) {
 					return q2.timestamp().compareTo(q1.timestamp());
@@ -67,19 +58,19 @@ public class Application extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void question(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		if (question == null) {
 			render();
 		} else {
 			List<Question> similarQuestions = (List<Question>) Cache
 					.get("question." + id + ".similar");
 			if (similarQuestions == null) {
-				similarQuestions = new ArrayList(question.getSimilarQuestions());
+				similarQuestions = question.getSimilarQuestions();
 				if (similarQuestions.size() > 5) {
-					// the Cache chokes on sublists!
-					similarQuestions = new ArrayList<Question>(similarQuestions
-							.subList(0, 5));
+					similarQuestions = similarQuestions.subList(0, 5);
 				}
+				// the Cache chokes on sublists!
+				similarQuestions = new ArrayList(similarQuestions);
 				Cache.set("question." + id + ".similar", similarQuestions,
 						"10mn");
 			}
@@ -96,7 +87,7 @@ public class Application extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void commentQuestion(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		render(question);
 	}
 
@@ -108,7 +99,7 @@ public class Application extends Controller {
 	 *            the id of the {@link Answer}
 	 */
 	public static void commentAnswer(int questionId, int answerId) {
-		Question question = Database.get().questions().get(questionId);
+		Question question = Database.questions().get(questionId);
 		Answer answer = question.getAnswer(answerId);
 		render(answer, question);
 	}
@@ -120,7 +111,7 @@ public class Application extends Controller {
 	 *            the id of the {@link Question}.
 	 */
 	public static void confirmDeleteQuestion(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		render(question);
 	}
 
@@ -131,12 +122,12 @@ public class Application extends Controller {
 	 *            the id of the {@link Question}
 	 */
 	public static void confirmMarkSpam(int id) {
-		Question question = Database.get().questions().get(id);
+		Question question = Database.questions().get(id);
 		render(question);
 	}
 
 	public static void deleteuser() {
-		User showUser = Session.get().currentUser();
+		User showUser = Session.user();
 		render(showUser);
 	}
 
@@ -160,7 +151,7 @@ public class Application extends Controller {
 	public static void signup(@Required String username, String password,
 			@Required String email, String passwordrepeat,
 			@Required String code, String randomID) {
-		boolean isUsernameAvailable = Database.get().users().isAvailable(
+		boolean isUsernameAvailable = Database.users().isAvailable(
 				username);
 		validation.equals(code, Cache.get("captcha." + randomID));
 		validation.equals(code, Cache.get(randomID));
@@ -170,7 +161,7 @@ public class Application extends Controller {
 			register();
 		}
 		if (password.equals(passwordrepeat) && isUsernameAvailable) {
-			User user = Database.get().users().register(username, password,
+			User user = Database.users().register(username, password,
 					email);
 			boolean success = Mails.welcome(user);
 			if (success) {
@@ -202,7 +193,7 @@ public class Application extends Controller {
 	 * @return
 	 */
 	public static boolean userCanEditProfile(User showUser) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user == null)
 			return false;
 		return user == showUser && !showUser.isBlocked() || user.isModerator();
@@ -215,13 +206,9 @@ public class Application extends Controller {
 	 *            the name of the {@link User} who is the owner of the profile.
 	 */
 	public static void showprofile(String userName) {
-		User showUser = Database.get().users().get(userName);
-		String biography = showUser.getBiography();
-		if (biography != null) {
-			biography = Tools.markdownToHtml(biography);
-		}
+		User showUser = Database.users().get(userName);
 		boolean canEdit = userCanEditProfile(showUser);
-		render(showUser, biography, canEdit);
+		render(showUser, canEdit);
 	}
 
 	/**
@@ -238,7 +225,7 @@ public class Application extends Controller {
 	 */
 	public static void tags(String term, String content) {
 		String tagString = "";
-		for (Tag tag : Database.get().tags().all()) {
+		for (Tag tag : Database.tags().all()) {
 			if (term == null || tag.getName().startsWith(term.toLowerCase())) {
 				tagString += tag.getName() + " ";
 			}
@@ -265,7 +252,7 @@ public class Application extends Controller {
 	 */
 	public static void search(String term, int index) {
 		List<Question> results = (List<Question>) Cache.get("search." + term);
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		boolean isPureTagSearch = term.matches("^tag:\\S+$");
 
 		if (results != null) {
@@ -287,33 +274,28 @@ public class Application extends Controller {
 		}
 
 		if (results == null) {
-			results = Database.get().questions().searchFor(term);
+			results = Database.questions().searchFor(term);
 			Cache.set("search." + term, results, "5mn");
 		}
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
 		if (user != null && !isPureTagSearch) {
-			user.setLastSearch(term, SystemInformation.get().now());
+			user.setLastSearch(term, SysInfo.now());
 		}
 		render(results, term, index, maxIndex);
 	}
 
 	// TODO Javadoc
 	public static void notifications(int content) {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user != null) {
 			List<Notification> spamNotification = new LinkedList();
 			List<Question> suggestedQuestions = user.getSuggestedQuestions();
 			List<Notification> notifications = user.getNotifications();
-			List<Question> questions = Database.get().questions().all();
-			ArrayList<Question> watchingQuestions = new ArrayList<Question>();
-			for (Question question : questions) {
-				if (question.hasObserver(user)) {
-					watchingQuestions.add(question);
-				}
-			}
+			List<Question> watchingQuestions = Database.questions()
+					.getWatchList(user);
 			if (user.isModerator()) {
-				spamNotification.addAll(Database.get().users()
+				spamNotification.addAll(Database.users()
 						.getModeratorMailbox().getNewNotifications());
 			}
 			render(notifications, watchingQuestions, suggestedQuestions,
@@ -329,13 +311,12 @@ public class Application extends Controller {
 	 */
 	public static void showStatisticalOverview() {
 		TimeTracker t = TimeTracker.getTimeTracker();
-		int numberOfUsers = Database.get().users().count();
-		int numberOfQuestions = Database.get().questions().count();
-		int numberOfAnswers = Database.get().questions().countAllAnswers();
-		int numberOfHighRatedAnswers = Database.get().questions()
-				.countHighRatedAnswers();
-		int numberOfBestAnswers = Database.get().questions()
-				.countBestRatedAnswers();
+		IQuestionDatabase questionDB = Database.questions();
+		int numberOfUsers = Database.users().count();
+		int numberOfQuestions = questionDB.count();
+		int numberOfAnswers = questionDB.countAllAnswers();
+		int numberOfHighRatedAnswers = questionDB.countHighRatedAnswers();
+		int numberOfBestAnswers = questionDB.countBestRatedAnswers();
 		float questionsPerDay = (float) numberOfQuestions / t.getDays();
 		float questionsPerWeek = (float) numberOfQuestions / t.getWeeks();
 		float questionsPerMonth = (float) numberOfQuestions / t.getMonths();
@@ -354,7 +335,7 @@ public class Application extends Controller {
 	 * clear the database.
 	 */
 	public static void admin() {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user == null || !user.isModerator()) {
 			flash.error("secure.moderatorerror");
 			Application.index(0);
@@ -366,7 +347,7 @@ public class Application extends Controller {
 	 * Leads the the clearDB page.
 	 */
 	public static void clearDB() {
-		User user = Session.get().currentUser();
+		User user = Session.user();
 		if (user == null || !user.isModerator()) {
 			flash.error("secure.moderatorerror");
 			Application.index(0);
@@ -389,7 +370,7 @@ public class Application extends Controller {
 		} else {
 			flash.error("Wanna silence me? Try again!");
 		}
-		if (!CUser.redirectToCallingPage()) {
+		if (!redirectToCallingPage()) {
 			index(0);
 		}
 	}
@@ -401,7 +382,7 @@ public class Application extends Controller {
 	 *            the name of the {@link User} who owns the profile
 	 */
 	public static void editProfile(@Required String userName) {
-		User showUser = Database.get().users().get(userName);
+		User showUser = Database.users().get(userName);
 		if (!userCanEditProfile(showUser)) {
 			showprofile(userName);
 		}
@@ -417,8 +398,8 @@ public class Application extends Controller {
 	 *            for the Confirmation
 	 */
 	public static void confirmUser(@Required String username, String key) {
-		User user = Database.get().users().get(username);
-		boolean existsUser = Database.get().users().isAvailable(username);
+		User user = Database.users().get(username);
+		boolean existsUser = Database.users().isAvailable(username);
 		if (!existsUser && key.equals(user.getConfirmKey())) {
 			user.confirm();
 			flash.success("user.confirm.success");

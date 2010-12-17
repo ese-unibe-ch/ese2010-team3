@@ -2,7 +2,7 @@ import java.io.File;
 import java.util.GregorianCalendar;
 
 import models.Question;
-import models.SystemInformation;
+import models.SysInfo;
 import models.TimeTracker;
 import models.User;
 import models.database.Database;
@@ -22,21 +22,21 @@ public class Bootstrap extends Job {
 		 * The cheating detection, preventions and consequences are NOT
 		 * activated if this option is set true
 		 */
-		SystemInformation.get().setTestMode(false);
+		SysInfo.setTestMode(false);
 
 		// User
-		User jack = Database.get().users().register("Jack", "jack",
+		User jack = Database.users().register("Jack", "jack",
 				"jack@example.com");
-		User john = Database.get().users().register("John", "john",
+		User john = Database.users().register("John", "john",
 				"john@example.com");
-		User bill = Database.get().users().register("Bill", "bill",
+		User bill = Database.users().register("Bill", "bill",
 				"bill@example.com");
-		User kate = Database.get().users().register("Kate", "kate",
+		User kate = Database.users().register("Kate", "kate",
 				"kate@example.com");
-		User xss = Database.get().users().register(
+		User xss = Database.users().register(
 				"<script>alert('XSS')</script>", "xss", "");
 
-		for (User user : Database.get().users().all()) {
+		for (User user : Database.users().all()) {
 			user.confirm();
 		}
 
@@ -48,11 +48,11 @@ public class Bootstrap extends Job {
 
 		// Questions
 
-		Question question = Database.get().questions().add(jack,
+		Question question = Database.questions().add(jack,
 				"Why did the chicken cross the road?");
 		question.answer(bill, "To get to the other side.");
 
-		question = Database.get().questions().add(john,
+		question = Database.questions().add(john,
 				"What is the answer to life the universe and everything?");
 
 		question.answer(kate, "42");

@@ -8,7 +8,7 @@ import play.jobs.Job;
 public class CleanUpJobs extends Job{
 	
 	public void UnconfirmedUser(){
-		for(User user:Database.get().users().all())
+		for(User user:Database.users().all())
 			if(!user.isConfirmed())
 				user.delete();
 	}

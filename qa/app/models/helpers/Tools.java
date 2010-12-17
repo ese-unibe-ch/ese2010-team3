@@ -192,6 +192,10 @@ public class Tools {
 	 * @return that content in plain and sanitized HTML (XSS safe!)
 	 */
 	public static String markdownToHtml(String content) {
+		// optimization for the XML importer: don't use the slow
+		// Markdown processor for content that's already HTML
+		if (content.startsWith("<h3>"))
+			return Jsoup.clean(content, Whitelist.basic());
 		return Jsoup.clean(new PegDownProcessor().markdownToHtml(content),
 				Whitelist.basic());
 	}

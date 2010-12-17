@@ -40,16 +40,16 @@ public class UserInteractionTest extends FunctionalTest {
 		// question = q;
 		// }
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		assertNotNull(question);
 		assertEquals(question.owner(), jack);
-		assertTrue(Database.get().questions().all().contains(question));
+		assertTrue(Database.questions().all().contains(question));
 	}
 
 	@Test
 	public void shouldPostAnswer() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		assertNotNull(answer);
@@ -60,7 +60,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldPostComment() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		controllers.CQuestion.newCommentQuestion(question.id(),
 				"Could I specify?");
 		Comment comment = question.comments().get(0);
@@ -72,7 +72,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldPostAnswerComment() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		controllers.CAnswer.newCommentAnswer(question.id(), answer.id(),
@@ -86,7 +86,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldVoteQuestion() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		User jill = new User("Jill", "");
 		session.loginAs(jill);
 		CQuestion.voteQuestionDown(question.id());
@@ -98,7 +98,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldVoteAnswer() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		User jill = new User("Jill", "");
@@ -112,15 +112,15 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldDeleteQuestion() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CQuestion.deleteQuestion(question.id());
-		assertFalse(Database.get().questions().all().contains(question));
+		assertFalse(Database.questions().all().contains(question));
 	}
 
 	@Test
 	public void shouldDeleteAnswer() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.answers().get(0);
 		CQuestion.deleteQuestion(answer.id());
@@ -130,7 +130,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldDeleteQuestionComment() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		controllers.CQuestion.newCommentQuestion(question.id(),
 				"Could I specify?");
 		Comment comment = question.comments().get(0);
@@ -141,7 +141,7 @@ public class UserInteractionTest extends FunctionalTest {
 	@Test
 	public void shouldDeleteAnswerComment() {
 		controllers.CQuestion.newQuestion("why?", "stupid");
-		Question question = Database.get().questions().searchFor("why").get(0);
+		Question question = Database.questions().searchFor("why").get(0);
 		CAnswer.newAnswer(question.id(), "nevermind");
 		Answer answer = question.getAnswer(0);
 		controllers.CAnswer.newCommentAnswer(answer.id(), question.id(),

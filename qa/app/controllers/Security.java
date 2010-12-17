@@ -6,7 +6,7 @@ import models.database.Database;
 public class Security extends Secure.Security {
 
 	static boolean authenticate(String username, String password) {
-		User user = Database.get().users().get(username);
+		User user = Database.users().get(username);
 		return user != null && user.checkPW(password) && user.isConfirmed();
 	}
 
