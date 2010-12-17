@@ -31,10 +31,6 @@ public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 		return users.get(name.toLowerCase());
 	}
 
-	public void remove(String name) {
-		users.remove(name.toLowerCase());
-	}
-
 	public Collection<User> all() {
 		return users.values();
 	}
@@ -47,18 +43,14 @@ public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 		Collection<User> mods = this.allModerators();
 		users.clear();
 		for (Notification n : moderatorMailbox.getAllNotifications()) {
-			moderatorMailbox.removeNotification(n.id());
+			n.delete();
 		}
 
 		if (keepAdmins) {
 			for (User mod : mods) {
-				this.add(mod);
+				users.put(mod.getName().toLowerCase(), mod);
 			}
 		}
-	}
-
-	public void add(User user) {
-		users.put(user.getName().toLowerCase(), user);
 	}
 
 	public Collection<User> allModerators() {
@@ -75,8 +67,13 @@ public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 		return this.moderatorMailbox;
 	}
 
-	@Override
+	/**
+	 * Remove all references to the <code>User</code> when it's being deleted
+	 * (Callback method).
+	 * 
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
+	 */
 	public void cleanUp(User user) {
-		this.remove(user.getName());
+		this.users.remove(user.getName().toLowerCase());
 	}
 }

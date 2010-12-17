@@ -1,10 +1,13 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import models.helpers.ICleanup;
 
 /**
  * A representation of notification collection. Each user has at least one
@@ -14,9 +17,9 @@ import java.util.TreeMap;
  * All methods to access Notifications return them in their natural order.
  * 
  */
-public class Mailbox implements IMailbox {
-	private SortedMap<Integer, Notification> notifications;
-	private String name;
+public class Mailbox implements IMailbox, ICleanup<Notification> {
+	private final SortedMap<Integer, Notification> notifications;
+	private final String name;
 
 	public Mailbox(String name) {
 		this.name = name;
@@ -28,7 +31,8 @@ public class Mailbox implements IMailbox {
 	 * 
 	 * @see models.IMailbox#receive(models.Notification)
 	 */
-	public void receive(Notification notification) {
+	public void notify(User user, Entry about) {
+		Notification notification = new Notification(user, about, this);
 		this.notifications.put(notification.id(), notification);
 	}
 
@@ -38,15 +42,7 @@ public class Mailbox implements IMailbox {
 	 * @see models.IMailbox#getAllNotifications()
 	 */
 	public List<Notification> getAllNotifications() {
-		LinkedList<Notification> result = new LinkedList();
-		List<Notification> all = new LinkedList(this.notifications.values());
-		for (Notification notification : all) {
-			if (notification.getAbout().isDeleted()) {
-				this.removeNotification(notification.id());
-			} else {
-				result.addLast(notification);
-			}
-		}
+		List<Notification> result = new ArrayList(this.notifications.values());
 		Collections.reverse(result);
 		return result;
 	}
@@ -81,17 +77,23 @@ public class Mailbox implements IMailbox {
 		return unread;
 	}
 
-	public void removeNotification(int id) {
-		this.notifications.remove(id);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
+	 */
+	public void cleanUp(Notification notification) {
+		this.notifications.remove(notification.id());
 	}
 
+	@Override
 	public String toString() {
 		return "MB[" + this.name + "(" + this.notifications.size() + ")" + "]";
 	}
 
 	public void delete() {
 		for (Notification notification : this.getAllNotifications()) {
-			notification.unregister();
+			notification.delete();
 		}
 	}
 

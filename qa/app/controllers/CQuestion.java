@@ -183,7 +183,7 @@ public class CQuestion extends BaseController {
 	public static void deleteQuestion(int id) {
 		Question question = Database.questions().get(id);
 		flash.success("secure.questiondeletedflash");
-		question.unregister();
+		question.delete();
 		Application.index(0);
 	}
 
@@ -199,7 +199,7 @@ public class CQuestion extends BaseController {
 	public static void deleteCommentQuestion(int questionId, int commentId) {
 		Question question = Database.questions().get(questionId);
 		Comment comment = question.getComment(commentId);
-		question.unregister(comment);
+		comment.delete();
 		flash.success("secure.commentdeletedflash");
 		Application.question(questionId);
 	}

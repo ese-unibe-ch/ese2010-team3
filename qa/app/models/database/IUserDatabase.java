@@ -48,15 +48,6 @@ public interface IUserDatabase {
 	public boolean isAvailable(String username);
 
 	/**
-	 * Deletes the user from the database without clean up.
-	 * 
-	 * @param name
-	 *            the name
-	 */
-
-	public void remove(String name);
-
-	/**
 	 * A collection of all registered Users in the system.
 	 * 
 	 * @return the collection
@@ -82,15 +73,6 @@ public interface IUserDatabase {
 	 */
 
 	public void clear(boolean keepAdmins);
-
-	/**
-	 * Add a User directly.
-	 * 
-	 * @param user
-	 *            the user
-	 */
-
-	public void add(User user);
 
 	/**
 	 * Get moderating crowd.

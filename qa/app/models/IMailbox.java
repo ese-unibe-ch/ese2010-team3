@@ -2,50 +2,53 @@ package models;
 
 import java.util.List;
 
+/**
+ * A mailbox collects all the notifications for a user or a user group.
+ */
 public interface IMailbox {
 
 	/**
-	 * Sends the notification to the Mailbox.
+	 * Creates a new notification in the Mailbox (Factory-method). To remove a
+	 * notification from the mailbox, just delete the notification.
 	 * 
-	 * @param notification
-	 *            A non-null notification
+	 * @see Notification#delete()
+	 * @param user
+	 *            the user this notification is for (<code>null</code> for a
+	 *            group of users)
+	 * @param about
+	 *            what the notification is about
 	 */
-	public void receive(Notification notification);
+	public void notify(User user, Entry about);
 
 	/**
-	 * Gets all Notifications regardless of status.
+	 * Gets all Notifications regardless of status (being recent or not).
 	 * 
-	 * @return
-	 *         a list of all notifications sorted (desc) by id.
+	 * @return a list of all notifications sorted by creation time (newest
+	 *         first).
 	 */
 	public List<Notification> getAllNotifications();
 
 	/**
-	 * Gets the recent Notifications.
+	 * Gets a list of recent Notifications (i.e. notifications created within
+	 * the last 5 minutes)
 	 * 
-	 * @return
-	 *         a list of recent notifications sorted (desc) by id.
+	 * @return a list of recent notifications sorted by creation time (newest
+	 *         first).
 	 */
 	public List<Notification> getRecentNotifications();
 
 	/**
-	 * Gets the unread notifications.
+	 * Gets the list of unread notifications.
 	 * 
-	 * @return
-	 *         a list of all unread notifications sorted (desc) by id.
+	 * @return a list of all unread notifications sorted by creation time
+	 *         (newest first).
 	 */
 	public List<Notification> getNewNotifications();
 
 	/**
-	 * Removes the identified notification from the mailbox.
-	 * 
-	 * @param id
-	 *            unique id identifying the notification to be deleted.
-	 */
-	public void removeNotification(int id);
-
-	/**
 	 * Gets the name of the mailbox. Useful for display and possibly debugging.
+	 * 
+	 * @return the name
 	 */
 	public String getName();
 

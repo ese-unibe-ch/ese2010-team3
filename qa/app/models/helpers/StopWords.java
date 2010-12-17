@@ -2,6 +2,11 @@ package models.helpers;
 
 import java.util.HashSet;
 
+/**
+ * StopWords is a list of words that are to be ignored e.g. during searches or
+ * for tag auto-completion suggestions. The StopWords class acts as a state-less
+ * Singleton object.
+ */
 public class StopWords {
 	private static HashSet<String> instance;
 	private static String[] starters = { "a", "about", "above", "above",

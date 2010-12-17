@@ -120,7 +120,7 @@ public class AnswerTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotClaimtoBelongtoQuestion() {
-		this.question.unregister(this.answer);
+		this.question.cleanUp(this.answer);
 		assertNull(this.answer.getQuestion());
 	}
 

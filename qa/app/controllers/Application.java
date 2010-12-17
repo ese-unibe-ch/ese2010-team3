@@ -22,6 +22,11 @@ import play.i18n.Lang;
 import play.libs.Codec;
 import play.libs.Images;
 
+/**
+ * The Application controller controls all the views and none of the actions
+ * associated with the views (see {@link CUser}, {@link CCQuestion} and
+ * {@link CAnswer} for these).
+ */
 public class Application extends BaseController {
 
 	private static final int entriesPerPage = 15;
@@ -126,12 +131,19 @@ public class Application extends BaseController {
 		render(question);
 	}
 
+	/**
+	 * Displays the "are you sure" page before deleting a user.
+	 */
 	public static void deleteuser() {
 		User showUser = Session.user();
 		render(showUser);
 	}
 
+	/**
+	 * Displays the registration form.
+	 */
 	public static void register() {
+		// random identifier for the CAPTCHA
 		String randomID = Codec.UUID();
 		render(randomID);
 	}
@@ -278,7 +290,27 @@ public class Application extends BaseController {
 		render(results, term, index, maxIndex);
 	}
 
-	// TODO Javadoc
+	/**
+	 * Displays one of four different view-parts concerned with user
+	 * notifications:
+	 * <ol start="0">
+	 * <li>A user's notifications about watched questions so that the user can
+	 * easily access all the new answers to his/her questions.
+	 * <li>A list of all the questions the user is currently watching so that
+	 * he/she can easily unwatch questions from a centralized place.
+	 * <li>A list of questions suggested to the user because he/she might know
+	 * to answer them as well, as they do have the same tags as questions the
+	 * user has already successfully answered.
+	 * <li>For moderators only: A list of questions and answers that have been
+	 * marked by other users as possibly being spam so that the moderator can
+	 * verify these claims and also easily delete spam and block spamming users.
+	 * </ol>
+	 * 
+	 * @param content
+	 *            the index of what view-part to display (0 =
+	 *            watch-notifications, 1 = watched questions, 2 = suggested
+	 *            questions, 3 = spam reports)
+	 */
 	public static void notifications(int content) {
 		User user = Session.user();
 		if (user != null) {
@@ -338,7 +370,7 @@ public class Application extends BaseController {
 	}
 
 	/**
-	 * Leads the the clearDB page.
+	 * Leads to the clearDB page.
 	 */
 	public static void clearDB() {
 		User user = Session.user();
@@ -409,14 +441,16 @@ public class Application extends BaseController {
 	}
 
 	/**
-	 * Generates a random captcha-image.
+	 * Generates a random captcha-image for a new user to confirm when he/she is
+	 * registering for an account (before even a confirmation e-mail is sent).
 	 * 
 	 * @param id
+	 *            a random ID identify a specific CAPTCHA
 	 */
 	public static void captcha(String id) {
 		Images.Captcha captcha = Images.captcha();
 		String code = captcha.getText("#ff8400");
-		Cache.set(id, "capthca." + code, "3mn");
+		Cache.set(id, "captcha." + code, "3mn");
 		renderBinary(captcha);
 	}
 

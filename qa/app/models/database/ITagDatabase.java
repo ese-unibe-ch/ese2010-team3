@@ -43,21 +43,11 @@ public interface ITagDatabase {
 	public List<String> suggestTagNames(String start);
 
 	/**
-	 * Removes a Tag from the grid. Call only if
-	 * <code>tag.getQuestions().isEmpty()</code>.
-	 * 
-	 * @param tag
-	 *            to be removed
-	 */
-	public void remove(Tag tag);
-
-	/**
 	 * Removes each and every Tag from the DB. This means, that
 	 * <ul>
 	 * <li>No questions can be in the DB anymore
 	 * <li>or all questions are untagged
 	 * </ul>
 	 */
-
 	public void clear();
 }

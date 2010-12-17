@@ -1,6 +1,5 @@
 package tests;
 
-import models.Notification;
 import models.Question;
 import models.User;
 import models.database.IDatabase;
@@ -65,7 +64,7 @@ public class DatabaseTest extends MockedUnitTest {
 		User user = db.users().register("user", "password", "user@example.com");
 		Question question = db.questions().add(user, "question");
 		question.setTagString("tag");
-		new Notification(db.users().getModeratorMailbox(), question);
+		db.users().getModeratorMailbox().notify(null, question);
 		assertEquals(1, db.users().all().size());
 		assertEquals(1, db.questions().all().size());
 		assertEquals(1, db.tags().all().size());

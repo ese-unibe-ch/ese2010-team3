@@ -32,12 +32,12 @@ public class MailboxTest extends MockedUnitTest {
 	@Test
 	public void testReceive() {
 		assertEquals(this.mailbox.getName(), "We're married");
-		new Notification(this.mailbox, this.question);
+		this.mailbox.notify(null, this.question);
 	}
 
 	@Test
 	public void testGetAll() {
-		new Notification(this.mailbox, this.question);
+		this.mailbox.notify(null, this.question);
 		List<Notification> petesNotifications = this.pete.getNotifications();
 		List<Notification> susanesNotifications = this.susane
 				.getNotifications();
@@ -49,7 +49,7 @@ public class MailboxTest extends MockedUnitTest {
 
 	@Test
 	public void testGetRecent() {
-		new Notification(this.mailbox, this.question);
+		this.mailbox.notify(null, this.question);
 		List<Notification> petesNotifications = this.pete
 				.getRecentNotifications();
 		List<Notification> susanesNotifications = this.susane
@@ -68,7 +68,7 @@ public class MailboxTest extends MockedUnitTest {
 
 	@Test
 	public void testGetNew() {
-		new Notification(this.mailbox, this.question);
+		this.mailbox.notify(null, this.question);
 		List<Notification> petesNotifications = this.pete.getNewNotifications();
 		List<Notification> susanesNotifications = this.susane
 				.getNewNotifications();
@@ -103,6 +103,18 @@ public class MailboxTest extends MockedUnitTest {
 		assertEquals(1, petesNotifications.size());
 		assertEquals(petesNotifications.get(0).getAbout(), answer);
 		assertEquals(0, susanesNotifications.size());
+	}
+
+	@Test
+	public void shouldDeleteNotifications() {
+		Mailbox mailbox = new Mailbox("test box");
+		User user = new User("user");
+		Question question = new Question(user, "question");
+		mailbox.notify(user, question);
+		Notification notification = mailbox.getAllNotifications().get(0);
+		assertEquals(notification.owner(), user);
+		mailbox.delete();
+		assertNull(notification.owner());
 	}
 
 	@Test

@@ -31,9 +31,9 @@ public class Answer extends Entry {
 	 * Unregisters the associated question and itself.
 	 */
 	@Override
-	public void unregister() {
-		this.question.unregister(this);
-		super.unregister();
+	public void delete() {
+		this.question.cleanUp(this);
+		super.delete();
 	}
 
 	/**
@@ -50,9 +50,14 @@ public class Answer extends Entry {
 	}
 
 	/**
-	 * Get the best <code>Answer</code> to a <code>Question</code>
+	 * Returns whether the <code>Answer</code> has been selected as the best
+	 * <code>Answer</code> for the <code>Question</code>.
 	 * 
-	 * @return the best answer of a <code>Question</code>
+	 * There can only be one best answer per question.
+	 * 
+	 * @see Question#setBestAnswer(Answer)
+	 * 
+	 * @return whether this is the best <code>Answer</code>
 	 */
 	public boolean isBestAnswer() {
 		return this.question.getBestAnswer() == this;

@@ -44,16 +44,17 @@ public class HotTagDatabase implements ITagDatabase, ICleanup<Tag> {
 		return tagNames;
 	}
 
-	public void remove(Tag tag) {
-		this.tags.remove(tag.getName());
-	}
-
 	public void clear() {
 		this.tags.clear();
 	}
 
-	@Override
+	/**
+	 * Remove all references to the <code>Tag</code> when it's being deleted
+	 * (Callback method).
+	 * 
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
+	 */
 	public void cleanUp(Tag tag) {
-		this.remove(tag);
+		this.tags.remove(tag.getName());
 	}
 }

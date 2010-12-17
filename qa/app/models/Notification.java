@@ -1,8 +1,12 @@
 package models;
 
+import models.helpers.ICleanup;
+
 /**
  * A notification about a (recent) change such as a newly added answer to a
  * question.
+ * 
+ * @author sbuenzli
  */
 public class Notification extends Item implements Comparable<Notification> {
 
@@ -12,25 +16,25 @@ public class Notification extends Item implements Comparable<Notification> {
 	/** Whether this notification has been seen by the user. */
 	protected boolean isNew;
 
-	private final IMailbox mailbox;
-
-	protected boolean isDeleted;
+	/** The mailbox this notification belongs to. */
+	private final ICleanup<Notification> cleaner;
 
 	/**
-	 * Sends a Notification to a Mailbox, signifying that an answer was posted
-	 * to a watched question.
+	 * Sends a Notification to a Mailbox, signifying that e.g. an answer was
+	 * posted to a watched question or an Entry was reported as spam. Creating a
+	 * notification will automatically add it to the mailbox that's passed in.
 	 * 
 	 * @param mailbox
 	 *            the mailbox that should receive the message
 	 * @param about
 	 *            what Entry this is all about.
 	 */
-	public Notification(IMailbox mailbox, Entry about) {
-		super(null);
+	public Notification(User owner, Entry about, ICleanup<Notification> cleaner) {
+		super(owner);
 		this.about = about;
 		this.isNew = true;
-		this.mailbox = mailbox;
-		mailbox.receive(this);
+		this.cleaner = cleaner;
+		about.registerNotification(this);
 	}
 
 	/**
@@ -43,12 +47,17 @@ public class Notification extends Item implements Comparable<Notification> {
 	}
 
 	/**
-	 * Checks if the notification is very recent.
+	 * The interval during which a notification is considered to be very recent.
+	 */
+	private final int VERY_RECENT_INTERVAL_IN_MS = 5 * 60 * 1000;
+
+	/**
+	 * Checks if the notification is very recent (i.e. no older than 5 minutes).
 	 * 
 	 * @return true, if it is very recent, ie no older than 5 minutes
 	 */
 	public boolean isVeryRecent() {
-		return SysInfo.now().getTime() - this.timestamp().getTime() <= 5 * 60 * 1000;
+		return SysInfo.now().getTime() - this.timestamp().getTime() <= VERY_RECENT_INTERVAL_IN_MS;
 	}
 
 	/**
@@ -69,7 +78,8 @@ public class Notification extends Item implements Comparable<Notification> {
 	}
 
 	/**
-	 * Sort notifications most-recent one first.
+	 * Sort notifications most-recent one first (i.e. in order of object
+	 * creation, not timestamp).
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
@@ -77,14 +87,23 @@ public class Notification extends Item implements Comparable<Notification> {
 		return n.id() - this.id();
 	}
 
+	/**
+	 * Removes all references to this <code>Notification</code> from the mailbox
+	 * this notification is in and from the <code>Entry</code> this
+	 * <code>Notification</code> is about.
+	 * 
+	 * @see models.Item#delete()
+	 */
 	@Override
-	public void unregister() {
-		this.mailbox.removeNotification(this.id());
-		super.unregister();
+	public void delete() {
+		this.about.cleanUp(this);
+		this.cleaner.cleanUp(this);
+		super.delete();
 	}
 
 	@Override
 	public String toString() {
-		return "N[" + this.mailbox.toString() + this.about.toString() + "]";
+		return "N[" + this.owner().toString() + this.about.toString()
+				+ "]";
 	}
 }

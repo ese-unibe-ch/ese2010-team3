@@ -34,8 +34,8 @@ public class Vote extends Item {
 	 * and the {@link Entry}.
 	 */
 	@Override
-	public void unregister() {
-		this.entry.unregister(this);
+	public void delete() {
+		this.entry.cleanUp(this);
 		unregisterUser();
 	}
 

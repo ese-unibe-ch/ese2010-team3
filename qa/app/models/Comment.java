@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * 
- * An {@link Entry} containing a comment as its content.
+ * An {@link Entry} containing a comment as its content. Comments can be given
+ * to all kinds of entries, although commenting comments is currently not
+ * supported by controllers and view.
  * 
  * @author Felix Langenegger
  * @author Tobias Brog (Review)
- * 
  */
 
 public class Comment extends Entry {
 
-	/** The entry. */
+	/** The entry this comment is about. */
 	private Entry entry;
 	
 	/** A set of Users who like this Comment */
@@ -29,26 +29,13 @@ public class Comment extends Entry {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see models.Entry#unregister()
+	 * @see models.Entry#delete()
 	 */
 	@Override
-	public void unregister() {
-		this.entry.unregister(this);
+	public void delete() {
+		this.entry.cleanUp(this);
 		unregisterUser();
 		this.entry = null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see models.Entry#unregister(models.Comment)
-	 */
-	@Override
-	/**
-	 * Just a stub. Should be removed with refactoring
-	 */
-	public void unregister(Comment comment) {
-		throw new IllegalArgumentException("There are no nested comments!");
 	}
 
 	/**
@@ -102,9 +89,7 @@ public class Comment extends Entry {
 	 * @return An ArrayList of Users.
 	 */
 	public ArrayList<User> getLikers() {
-		ArrayList<User> likers = new ArrayList<User>();
-		likers.addAll(this.likers);
-		return likers;
+		return new ArrayList<User>(this.likers);
 	}
 	
 	/**

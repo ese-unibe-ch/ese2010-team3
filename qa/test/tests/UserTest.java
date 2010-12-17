@@ -189,14 +189,14 @@ public class UserTest extends MockedUnitTest {
 		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		assertEquals(1, user.getQuestions().size());
-		q.unregister();
+		q.delete();
 	}
 
 	@Test
 	public void shouldHaveNoQuestion() {
 		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
-		q.unregister();
+		q.delete();
 		assertEquals(0, user.getQuestions().size());
 	}
 
@@ -213,7 +213,7 @@ public class UserTest extends MockedUnitTest {
 		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
-		q.answers().get(0).unregister();
+		q.answers().get(0).delete();
 		assertEquals(0, user.getAnswers().size());
 	}
 
@@ -232,7 +232,7 @@ public class UserTest extends MockedUnitTest {
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
-		q.answers().get(0).unregister();
+		q.answers().get(0).delete();
 		assertEquals(0, user.bestAnswers().size());
 	}
 

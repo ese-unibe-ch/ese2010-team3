@@ -44,7 +44,7 @@ public class MarkSpamTest extends MockedUnitTest {
 	public void shouldDeleteSpam() {
 		this.question.markSpam(null);
 		this.question.confirmSpam();
-		assertTrue(this.question.isDeleted());
+		assertNull(this.question.owner());
 		assertTrue(this.pete.isBlocked());
 	}
 
@@ -54,7 +54,7 @@ public class MarkSpamTest extends MockedUnitTest {
 		this.question.confirmSpam();
 		this.otherQuestion.markSpam(this.moderatorBox);
 		assertEquals(this.alex.getNotifications().size(), 0);
-		assertTrue(this.otherQuestion.isDeleted());
+		assertNull(this.otherQuestion.owner());
 	}
 
 	@Test

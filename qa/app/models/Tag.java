@@ -7,7 +7,8 @@ import models.helpers.ICleanup;
 
 /**
  * A <code>Tag</code> can belong to several questions, allowing to associate
- * them thematically.
+ * them thematically and determine user expertise based on overlapping tags of
+ * questions they have successfully answered.
  * 
  * @author sbuenzli
  */
@@ -26,10 +27,11 @@ public class Tag implements Comparable<Tag> {
 	private final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	/**
-	 * Instantiates a new Tag.
+	 * Instantiates a new Tag. Tag names must be all lowercase, may not contain
+	 * whitespace and must be at most 32 characters long.
 	 * 
 	 * @param name
-	 *            the name of this tag (should be all lowercase and not contain
+	 *            the name of this tag (must be all lowercase and not contain
 	 *            whitespace)
 	 * @param cleaner
 	 *            an optional clean-up object that wants to be notified when
@@ -60,7 +62,7 @@ public class Tag implements Comparable<Tag> {
 	 * @param question
 	 *            the question to associate with this Tag.
 	 */
-	public void register(Question question) {
+	public void addQuestion(Question question) {
 		this.questions.add(question);
 	}
 
@@ -68,7 +70,7 @@ public class Tag implements Comparable<Tag> {
 	 * @param question
 	 *            the question to de-associate from this Tag.
 	 */
-	public void unregister(Question question) {
+	public void removeQuestion(Question question) {
 		this.questions.remove(question);
 
 		// remove this tag from the database
@@ -77,6 +79,11 @@ public class Tag implements Comparable<Tag> {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	public int compareTo(Tag other) {
 		return this.name.compareTo(other.name);
 	}

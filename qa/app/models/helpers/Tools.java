@@ -17,6 +17,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.pegdown.PegDownProcessor;
 
+/**
+ * A collection of various small and state-less algorithms for use in the model.
+ */
 public class Tools {
 
 	/**
@@ -32,6 +35,10 @@ public class Tools {
 	/**
 	 * Calculates a digital fingerprint for a given string with a given hash
 	 * algorithm such as MD5 or SHA-1.
+	 * 
+	 * Note: This method exists separatly from encrypt above mainly for testing
+	 * purposes, so that the NoSuchAlgorithmException can be tested as well and
+	 * 100% code coverage achieved.
 	 * 
 	 * @param string
 	 *            the string to calculate the fingerprint for

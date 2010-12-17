@@ -20,8 +20,6 @@ public abstract class Item {
 	/** This item's ID. */
 	private final int id;
 
-	private boolean isDeleted;
-
 	/** An auto-incrementing counter for producing unique values as IDs. */
 	private static int auto_increment = 0;
 
@@ -36,7 +34,9 @@ public abstract class Item {
 	}
 
 	/**
-	 * Create an <code>Item</code>.
+	 * Create an <code>Item</code>, noting the current time and giving it a
+	 * unique (auto-incremented) ID. Also, if the item has an owner, this owner
+	 * is informed about the creation of the new item.
 	 * 
 	 * @param owner
 	 *            the {@link User} who owns the <code>Item</code>
@@ -48,7 +48,6 @@ public abstract class Item {
 		if (owner != null) {
 			owner.registerItem(this);
 		}
-		this.isDeleted = false;
 	}
 
 	/**
@@ -89,29 +88,21 @@ public abstract class Item {
 	}
 
 	/**
-	 * Unregisters the <code>Item</code> if it gets deleted.
+	 * Drops all the references this <code>Item</code> has, so that they can be
+	 * garbage collected.
 	 */
-	public void unregister() {
-		this.isDeleted = true;
+	public void delete() {
 		this.unregisterUser();
 	}
 
 	/**
-	 * Unregisters the <code>Item</code> to it's owner.
+	 * Unregisters this <code>Item</code>'s owner so that this item becomes
+	 * unowned and informs the owner that this item is no longer his/hers.
 	 */
 	protected void unregisterUser() {
 		if (this.owner != null) {
-			this.owner.unregister(this);
+			this.owner.cleanUp(this);
 		}
 		this.owner = null;
-	}
-
-	/**
-	 * Has this Item been deleted?
-	 * 
-	 * @return iff the unregister method has been called.
-	 */
-	public boolean isDeleted() {
-		return this.isDeleted;
 	}
 }

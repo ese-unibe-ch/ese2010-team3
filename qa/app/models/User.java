@@ -30,7 +30,7 @@ import models.helpers.Tools;
  * @author Mirco Kocher
  * 
  */
-public class User implements IObserver {
+public class User implements IObserver, ICleanup<Item> {
 
 	private final String name;
 	private String password;
@@ -144,7 +144,7 @@ public class User implements IObserver {
 		// operate on a clone to prevent a ConcurrentModificationException
 		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
-			item.unregister();
+			item.delete();
 		}
 		this.items.clear();
 		this.mainMailbox.delete();
@@ -153,13 +153,12 @@ public class User implements IObserver {
 		}
 	}
 
-	/**
-	 * Unregisters an {@link Item} which has been deleted.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param item
-	 *            the {@link Item} to unregister
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
 	 */
-	public void unregister(Item item) {
+	public void cleanUp(Item item) {
 		this.items.remove(item);
 	}
 
@@ -235,7 +234,8 @@ public class User implements IObserver {
 		// operate on a clone to prevent a ConcurrentModificationException
 		HashSet<Item> clone = (HashSet<Item>) this.items.clone();
 		for (Item item : clone) {
-			if (item instanceof Question || keepOnlyQuestions) {
+			if (item instanceof Question || keepOnlyQuestions
+					&& item instanceof Entry) {
 				((Entry) item).anonymize();
 				this.items.remove(item);
 			}
@@ -494,12 +494,15 @@ public class User implements IObserver {
 	}
 
 	/**
+	 * Observe new answers added to questions this user is observing (obviously
+	 * ignore answers given by this very user, though).
+	 * 
 	 * @see models.IObserver#observe(models.IObservable, java.lang.Object)
 	 */
 	public void observe(IObservable o, Object arg) {
 		if (o instanceof Question && arg instanceof Answer
 				&& ((Answer) arg).owner() != this) {
-			new Notification(this.mainMailbox, (Answer) arg);
+			this.mainMailbox.notify(this, (Answer) arg);
 		}
 	}
 

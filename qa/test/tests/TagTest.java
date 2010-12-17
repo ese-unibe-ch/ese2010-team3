@@ -225,9 +225,9 @@ public class TagTest extends MockedUnitTest {
 	@Test
 	public void shouldAllowStandaloneTags() {
 		Tag tag = new Tag(tagName, null);
-		tag.register(question1);
+		tag.addQuestion(question1);
 		assertEquals(1, tag.getQuestions().size());
-		tag.unregister(question1);
+		tag.removeQuestion(question1);
 		assertEquals(0, tag.getQuestions().size());
 	}
 

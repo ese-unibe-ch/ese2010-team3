@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import models.helpers.ICleanup;
 import models.helpers.Tools;
 
 /**
@@ -15,22 +18,26 @@ import models.helpers.Tools;
  * @author Simon Marti
  * @author Mirco Kocher
  */
-public abstract class Entry extends Item implements Comparable<Entry> {
+public abstract class Entry extends Item implements Comparable<Entry>,
+		ICleanup<Item> {
 
 	private final String content;
 	private String contentText, contentHtml;
 	private final HashMap<Integer, Comment> comments;
 	private final HashMap<User, Vote> votes;
+	private final Set<Notification> notifications;
 	private boolean possiblySpam;
 	private int cachedRating;
 
 	/**
-	 * Create an <code>Entry</code>.
+	 * Create an <code>Entry</code> with Markdown or HTML content. The content
+	 * will be sanitized before being used, the returned HTML should be safe to
+	 * include without further processing in any web page.
 	 * 
 	 * @param owner
 	 *            the {@link User} who owns the <code>Entry</code>
 	 * @param content
-	 *            the content of the <code>Entry</code>
+	 *            the content of the <code>Entry</code> (Markdown/HTML)
 	 */
 	public Entry(User owner, String content) {
 		super(owner);
@@ -40,47 +47,53 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		this.content = content;
 		this.comments = new HashMap<Integer, Comment>();
 		this.votes = new HashMap<User, Vote>();
+		this.notifications = new HashSet<Notification>();
 		this.cachedRating = 0;
 		this.possiblySpam = false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see models.Item#delete()
+	 */
 	@Override
-	public void unregister() {
+	public void delete() {
 		for (Comment comment : new ArrayList<Comment>(this.comments.values())) {
-			comment.unregister();
+			comment.delete();
 		}
 		for (Vote vote : new ArrayList<Vote>(this.votes.values())) {
-			vote.unregister();
+			vote.delete();
 		}
-		super.unregister();
+		for (Notification notification : new ArrayList<Notification>(
+				this.notifications)) {
+			notification.delete();
+		}
+		super.delete();
 	}
 
 	/**
-	 * Unregisters a deleted {@link Comment}.
+	 * Called by the various <code>Item</code>s associated with this
+	 * <code>Entry</code> when they're deleted so that the references to them
+	 * kept by this <code>Entry</code> can be removed.
 	 * 
-	 * @param comment
-	 *            the {@link Comment} to unregister
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
 	 */
-	public void unregister(Comment comment) {
-		this.comments.remove(comment.id());
+	public void cleanUp(Item item) {
+		if (item instanceof Comment) {
+			this.comments.remove(item.id());
+		} else if (item instanceof Vote) {
+			this.votes.remove(item.owner());
+			this.cachedRating -= ((Vote) item).up() ? 1 : -1;
+		} else if (item instanceof Notification) {
+			this.notifications.remove(item);
+		}
 	}
 
 	/**
-	 * Unregisters a deleted {@link Vote}.
+	 * Gets the content of an <code>Entry</code> as cleaned up HTML.
 	 * 
-	 * @param vote
-	 *            the {@link Vote} to unregister
-	 */
-	public void unregister(Vote vote) {
-		this.votes.remove(vote.owner());
-		this.cachedRating -= vote.up() ? 1 : -1;
-	}
-
-	/**
-	 * 
-	 * Get the content of an <code>Entry</code>.
-	 * 
-	 * @return the content of the <code>Entry</code>
+	 * @return the HTML-content of the <code>Entry</code>
 	 */
 	public String content() {
 		if (this.contentHtml == null)
@@ -88,6 +101,12 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		return this.contentHtml;
 	}
 
+	/**
+	 * Gets this <code>Entry</code>'s content stripped of all HTML tags. Use
+	 * this e.g. for searching.
+	 * 
+	 * @return the text extracted from this <code>Entry</code>'s content
+	 */
 	public String getContentText() {
 		if (this.contentText == null)
 			this.contentText = Tools.htmlToText(this.content());
@@ -95,13 +114,17 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
-	 * Post a {@link Comment} to an <code>Entry</code>.
+	 * This is a comment-Factory method that creates a new {@link Comment} to
+	 * this <code>Entry</code> and adds it to the <code>Entry</code>'s list of
+	 * comments. To remove the {@link Comment}, call its delete method. The
+	 * comment's content can be either Markdown or HTML, both of which will be
+	 * converted to a safe subset of HTML.
 	 * 
 	 * @param user
 	 *            the {@link User} posting the {@link Comment}
 	 * @param content
-	 *            the comment
-	 * @return an {@link Comment}
+	 *            the comment's content as Markdown or HTML
+	 * @return the created {@link Comment}
 	 */
 	public Comment comment(User user, String content) {
 		Comment comment = new Comment(user, this, content);
@@ -121,14 +144,15 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
-	 * Get all {@link Comment}s to an <code>Entry</code>.
+	 * Get all {@link Comment}s to an <code>Entry</code> sorted by age (oldest
+	 * first).
 	 * 
 	 * @return {@link Collection} of {@link Comments}
 	 */
 	public List<Comment> comments() {
 		List<Comment> list = new ArrayList<Comment>(this.comments.values());
 		Collections.sort(list);
-		return Collections.unmodifiableList(list);
+		return list;
 	}
 
 	/**
@@ -167,6 +191,10 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public int rating() {
 		return this.cachedRating;
+	}
+
+	public void registerNotification(Notification notification) {
+		this.notifications.add(notification);
 	}
 
 	/**
@@ -233,7 +261,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	public Vote voteCancel(User user) {
 		if (this.hasVote(user)) {
 			Vote oldVote = this.votes.get(user);
-			oldVote.unregister();
+			oldVote.delete();
 		}
 		return this.votes.remove(user);
 	}
@@ -324,7 +352,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 			this.confirmSpam();
 		} else if (!this.possiblySpam) {
 			if (moderatorMailbox != null) {
-				new Notification(moderatorMailbox, this);
+				moderatorMailbox.notify(null, this);
 			}
 			this.possiblySpam = true;
 		}
@@ -336,9 +364,17 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public void confirmSpam() {
 		this.owner().setIsSpammer(true);
-		this.unregister();
+		this.delete();
 	}
 
+	/**
+	 * Return whether this <code>Entry</code> has been marked as possibly being
+	 * spam by a user but this status has not yet been confirmed by a moderator
+	 * (in which case this <code>Entry</code> would already have been deleted).
+	 * 
+	 * @return true, if the <code>Entry</code> has been marked as being spam by
+	 *         any user
+	 */
 	public boolean isPossiblySpam() {
 		return this.possiblySpam;
 	}

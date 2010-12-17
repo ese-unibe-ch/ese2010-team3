@@ -12,7 +12,6 @@ import java.util.Set;
 import models.Answer;
 import models.Question;
 import models.SearchFilter;
-import models.SysInfo;
 import models.Tag;
 import models.User;
 import models.database.IQuestionDatabase;
@@ -92,17 +91,8 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 
 	public Question add(User owner, String content) {
 		Question question = new Question(owner, content, this.tagDB, this);
-		this.register(question);
+		this.questions.put(question.id(), question);
 		return question;
-	}
-
-	public void remove(int id) {
-		this.questions.remove(id);
-	}
-
-	public int register(Question q) {
-		this.questions.put(q.id(), q);
-		return q.id();
 	}
 
 	public int count() {
@@ -121,7 +111,7 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 	public int countAllAnswers() {
 		int count = 0;
 		for (Question q : this.questions.values()) {
-			count += q.countAnswers();
+			count += q.answers().size();
 		}
 		return count;
 	}
@@ -152,16 +142,16 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 
 		/*
 		 * Don't list questions that have many answers or already have a best
-		 * answer. The user should not be the owner of the suggested question.
-		 * Remove duplicates.
+		 * answer or are just plain old (older than 120 days). The user should
+		 * not be the owner of the suggested question. Remove duplicates.
 		 */
 		for (Question q : sortedAnsweredQuestions) {
 			for (Question similarQ : this.findSimilar(q)) {
 				if (!suggestedQuestions.contains(similarQ)
 						&& !sortedAnsweredQuestions.contains(similarQ)
 						&& similarQ.owner() != user
-						&& similarQ.getAgeInDays(SysInfo.now()) <= 120
-						&& similarQ.countAnswers() < 10
+						&& similarQ.getAgeInDays() <= 120
+						&& similarQ.answers().size() < 10
 						&& !similarQ.hasBestAnswer()) {
 					suggestedQuestions.add(similarQ);
 				}
@@ -274,8 +264,13 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 		return watchList;
 	}
 
-	@Override
+	/**
+	 * Remove all references to the <code>Question</code> when it's being
+	 * deleted (Callback method).
+	 * 
+	 * @see models.helpers.ICleanup#cleanUp(java.lang.Object)
+	 */
 	public void cleanUp(Question question) {
-		this.remove(question.id());
+		this.questions.remove(question.id());
 	}
 }

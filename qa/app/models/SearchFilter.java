@@ -154,7 +154,7 @@ public class SearchFilter implements IFilter<Question, Double> {
 		for (Answer ans : question.answers()) {
 			rating += rateText(ans, mustHave);
 		}
-		int answerCount = question.countAnswers();
+		int answerCount = question.answers().size();
 		return rating / (answerCount == 0 ? 1 : answerCount);
 	}
 

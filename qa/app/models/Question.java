@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,35 +76,43 @@ public class Question extends Entry implements IObservable {
 	 * Unregisters all {@link Answer}s, {@link Tag}s and itself.
 	 */
 	@Override
-	public void unregister() {
+	public void delete() {
 		for (Answer answer : new ArrayList<Answer>(this.answers.values())) {
-			answer.unregister();
+			answer.delete();
 		}
 		this.observers.clear();
 		setTagString("");
 		if (this.cleaner != null) {
 			this.cleaner.cleanUp(this);
 		}
-		super.unregister();
+		super.delete();
 	}
 
 	/**
-	 * Unregisters a deleted {@link Answer}.
+	 * This is a callback method for removing all references to an
+	 * <code>Item</code> such as an answer, comment, vote, etc. kept by this
+	 * <code>Question</code> when the <code>Item</code> is being deleted.
 	 * 
-	 * @param answer
-	 *            the {@link Answer} to unregister
+	 * @see models.Entry#cleanUp(models.Item)
 	 */
-	public void unregister(Answer answer) {
-		this.answers.remove(answer.id());
+	@Override
+	public void cleanUp(Item item) {
+		if (item instanceof Answer) {
+			this.answers.remove(item.id());
+		}
+		super.cleanUp(item);
 	}
 
 	/**
-	 * Post a {@link Answer} to a <code>Question</code>.
+	 * Factory method that creates a new {@link Answer} to this
+	 * <code>Question</code>, stores the answer in the question's list of
+	 * answers and notifies all the users observing this question about the new
+	 * answer.
 	 * 
 	 * @param user
 	 *            the {@link User} posting the {@link Answer}
 	 * @param content
-	 *            the answer
+	 *            the answer (Markdown/HTML)
 	 * @return an {@link Answer}
 	 */
 	public Answer answer(User user, String content) {
@@ -128,14 +135,15 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Get all {@link Answer}s to a <code>Question</code>.
+	 * Get all {@link Answer}s to a <code>Question</code> sorted by their rating
+	 * (best rated ones first).
 	 * 
-	 * @return {@link Collection} of {@link Answers}
+	 * @return {@link List} of {@link Answers}
 	 */
 	public List<Answer> answers() {
 		List<Answer> list = new ArrayList<Answer>(this.answers.values());
 		Collections.sort(list);
-		return Collections.unmodifiableList(list);
+		return list;
 	}
 
 	/**
@@ -149,8 +157,24 @@ public class Question extends Entry implements IObservable {
 		return this.answers.get(id);
 	}
 
+	/**
+	 * How many milliseconds may pass between a best answer has been chosen and
+	 * the point where that decision becomes permanent.
+	 */
+	private final int BEST_ANSWER_DECISION_TIME_IN_MS = 30 * 60 * 1000;
+
+	/**
+	 * Checks if for this answer a best answer can still be chosen. This is the
+	 * case when either this question doesn't have a best answer yet or when the
+	 * current best answer has been chosen less than 30 minutes ago. After that
+	 * 30 minute window, the decision becomes permanent and can no longer be
+	 * changed.
+	 * 
+	 * @return true, if is best answer settable
+	 */
 	public boolean isBestAnswerSettable() {
-		long thirtyMinutesAgo = SysInfo.now().getTime() - 30 * 60 * 1000;
+		long thirtyMinutesAgo = SysInfo.now().getTime()
+				- this.BEST_ANSWER_DECISION_TIME_IN_MS;
 		return this.settingOfBestAnswer == null
 				|| thirtyMinutesAgo <= this.settingOfBestAnswer.getTime();
 	}
@@ -172,20 +196,32 @@ public class Question extends Entry implements IObservable {
 		return true;
 	}
 
+	/**
+	 * Checks whether this question has a best answer set. The returned answer
+	 * is guaranteed to remain the best answer after 30 minutes have past (and
+	 * the answerer doesn't delete it).
+	 * 
+	 * @return true, if a best answer has been set already.
+	 */
 	public boolean hasBestAnswer() {
 		return this.bestAnswer != null;
 	}
 
+	/**
+	 * Gets the best <code>Answer</code> to this <code>Question</code>. The
+	 * returned answer has <code>answer.isBestAnswer() == true</code>.
+	 * 
+	 * @return the answer that's currently best.
+	 */
 	public Answer getBestAnswer() {
 		return this.bestAnswer;
 	}
 
 	/**
-	 * Boolean whether a <code>Question</code> is locked or not. Locked
-	 * questions
-	 * cannot be answered or commented.
+	 * Returns whether a <code>Question</code> is locked or not. Locked
+	 * questions cannot be answered or commented.
 	 * 
-	 * @return boolean whether the <code>Question</code> is locked or not
+	 * @return whether the <code>Question</code> is locked or not
 	 */
 	public boolean isLocked() {
 		return this.isLocked;
@@ -200,20 +236,26 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Unlocks a <code>Question</code>.
+	 * Unlocks a <code>Question</code> so that it can be answered or commented
+	 * again.
 	 */
 	public void unlock() {
 		this.isLocked = false;
 	}
 
 	/**
+	 * Changes this question's tags to the passed in list, removing all the tags
+	 * that aren't in the passed in tag list. Tag names must be separated by
+	 * either commas or whitespace. Tags are converted to lowercase before being
+	 * added and overlong tags are truncated to 32 characters.
+	 * 
 	 * @param tags
 	 *            a comma- or whitespace-separated list of tags to be associated
 	 *            with this question
 	 */
 	public void setTagString(String tags) {
 		for (Tag tag : this.tags) {
-			tag.unregister(this);
+			tag.removeQuestion(this);
 		}
 		this.tags.clear();
 
@@ -231,7 +273,7 @@ public class Question extends Entry implements IObservable {
 			Tag tag = this.tagDB.get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);
-				tag.register(this);
+				tag.addQuestion(this);
 			}
 		}
 		Collections.sort(this.tags);
@@ -281,16 +323,10 @@ public class Question extends Entry implements IObservable {
 	/**
 	 * Calculates the age of this question in days.
 	 * 
-	 * @param now
-	 *            a Date representing the current moment (usually SysInfo.now())
 	 * @return this question's age in days
 	 */
-	public long getAgeInDays(Date now) {
-		return (now.getTime() - this.timestamp().getTime())
+	public long getAgeInDays() {
+		return (SysInfo.now().getTime() - this.timestamp().getTime())
 				/ (1000 * 60 * 60 * 24);
-	}
-
-	public int countAnswers() {
-		return this.answers.size();
 	}
 }

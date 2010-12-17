@@ -167,7 +167,7 @@ public class CUser extends BaseController {
 		User user = Session.user();
 		Notification n = user.getNotification(id);
 		if (n != null) {
-			n.unregister();
+			n.delete();
 			flash.success("secure.deletenotificationflash");
 		}
 

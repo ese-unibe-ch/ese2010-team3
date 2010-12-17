@@ -91,14 +91,14 @@ public class UnregisterTest extends MockedUnitTest {
 	@Test
 	public void shouldDeleteAllCommentsOnQuestionDelete() {
 		assertNotNull(questionComment.getQuestion());
-		question.unregister();
+		question.delete();
 		assertNull(questionComment.getQuestion());
 	}
 
 	@Test
 	public void shouldDeleteAllCommentsOnAnswerDelete() {
 		assertNotNull(answerComment.getQuestion());
-		answer.unregister();
+		answer.delete();
 		assertNull(answerComment.getQuestion());
 	}
 
@@ -138,11 +138,11 @@ public class UnregisterTest extends MockedUnitTest {
 
 	@Test
 	public void shouldAllowRepeatedUnregistration() {
-		answer.unregister();
-		answer.unregister();
+		answer.delete();
+		answer.delete();
 
 		jack.anonymize(true);
-		question.unregister();
-		question.unregister();
+		question.delete();
+		question.delete();
 	}
 }

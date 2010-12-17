@@ -43,24 +43,6 @@ public interface IQuestionDatabase {
 	public List<Question> searchFor(String term);
 
 	/**
-	 * Deletes the Question without cleaning up. Does nothing if id doesn't
-	 * exist.
-	 * 
-	 * @param id
-	 *            unique identifier.
-	 */
-	public void remove(int id);
-
-	/**
-	 * Adds the Question and returns the assigned id.
-	 * 
-	 * <code>get(register(q)) == q</code>
-	 * 
-	 * @return unique identifier for the question.
-	 */
-	public int register(Question q);
-
-	/**
 	 * Adds a question to the DB.
 	 * 
 	 * @param owner

@@ -47,7 +47,7 @@ public class NotificationTest extends MockedUnitTest {
 		Answer answer2 = this.question.answer(this.andrew, "Answer two");
 		assertEquals(this.norbert.getNotifications().size(), 1);
 		assertEquals(this.norbert.getNotifications().get(0).getAbout(), answer2);
-		this.norbert.getNotifications().get(0).unregister();
+		this.norbert.getNotifications().get(0).delete();
 		assertEquals(this.norbert.getNotifications().size(), 0);
 		this.question.answer(this.andrew, "Answer three");
 		assertEquals(this.norbert.getNotifications().size(), 1);
@@ -211,8 +211,7 @@ public class NotificationTest extends MockedUnitTest {
 		this.norbert.observe(this.question, this.question.answer(this.andrew,
 				"???"));
 		Notification notification = this.norbert.getNotifications().get(0);
-		assertEquals("N["
-				+ this.question.owner().getAllMailboxes().get(0).toString()
+		assertEquals("N[" + this.question.owner().toString()
 				+ notification.getAbout().toString() + "]",
 				notification.toString());
 	}

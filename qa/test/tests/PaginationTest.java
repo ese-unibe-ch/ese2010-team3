@@ -105,8 +105,8 @@ public class PaginationTest extends MockedUnitTest {
 
 	@Test
 	public void shouldPaginateCorrectlyForOneQuestion() {
-		question1.unregister();
-		question3.unregister();
+		question1.delete();
+		question3.delete();
 		int index = 0;
 		List<Question> questions = Tools.paginate(this.questionDB.all(),
 				questionsPerPage, index);

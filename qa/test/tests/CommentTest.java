@@ -131,15 +131,4 @@ public class CommentTest extends MockedUnitTest {
 		commentAnswer.addLiker(james);
 		assertEquals(1,commentAnswer.countLikers());
 	}
-
-	@Test
-	public void shouldMakeCoberturaHappy() {
-		boolean hasSeenException = false;
-		try {
-			commentAnswer.unregister(commentAnswer);
-		} catch (IllegalArgumentException ex) {
-			hasSeenException = true;
-		}
-		assertTrue(hasSeenException);
-	}
 }
