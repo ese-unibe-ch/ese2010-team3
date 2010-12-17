@@ -9,7 +9,7 @@ public class CleanUpJobs extends Job {
 	@Override
 	public void doJob() {
 		for (User user : Database.users().all()) {
-			if (!user.isConfirmed()) {
+			if (!user.isConfirmed() && user.getConfirmationLimit() < 0) {
 				user.delete();
 			}
 		}

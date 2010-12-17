@@ -31,6 +31,7 @@ public class ConfirmationTest extends MockedUnitTest {
 	public void shouldNotConfirmed(){
 		assertFalse(norbert.isConfirmed());
 		assertFalse(andrew.isConfirmed());
+		assertNotNull(norbert.getConfirmKey());
 	}
 	
 	@Test
@@ -38,12 +39,15 @@ public class ConfirmationTest extends MockedUnitTest {
 		norbert.confirm();
 		assertTrue(norbert.isConfirmed());
 	}
-	
-	@Test
-	public void shouldHaveSameKey(){
-		String key = Tools.randomStringGenerator(35);
-		norbert.setConfirmKey(key);
-		assertEquals(key, norbert.getConfirmKey());
-	}
 
+	@Test
+	public void shouldHaveConfirmationWindow() {
+		this.sysInfo.hour(0).minute(0);
+		User user = new User("user");
+		assertTrue(user.getConfirmationLimit() > 0);
+		this.sysInfo.minute(30);
+		assertTrue(user.getConfirmationLimit() > 0);
+		this.sysInfo.hour(1);
+		assertTrue(user.getConfirmationLimit() < 0);
+	}
 }

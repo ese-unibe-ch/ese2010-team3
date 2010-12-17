@@ -43,7 +43,8 @@ public class User implements IObserver, ICleanup<Item> {
 	private String employer;
 	private String biography;
 
-	private String confirmKey;
+	private final String confirmKey;
+	private final Date registrationTimestamp;
 
 	private String statustext = "";
 	private boolean isBlocked = false;
@@ -81,6 +82,7 @@ public class User implements IObserver, ICleanup<Item> {
 		}
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
+		this.registrationTimestamp = SysInfo.now();
 		this.items = new HashSet<Item>();
 		this.mainMailbox = new Mailbox(name);
 		this.isSpammer = false;
@@ -361,26 +363,55 @@ public class User implements IObserver, ICleanup<Item> {
 		return this.biography;
 	}
 
+	/**
+	 * @return the user's biography as sanitized HTML. The raw biography content
+	 *         may contain Markdown and/or HTML.
+	 */
 	public String getBiographyHTML() {
 		if (this.biography == null)
 			return null;
 		return Tools.markdownToHtml(this.biography);
 	}
 
+	/**
+	 * @return the SHA-1 hash of the user's password
+	 */
 	public String getSHA1Password() {
 		return this.password;
 	}
 
+	/**
+	 * Sets the user's password by storing only its SHA-1 digest.
+	 * 
+	 * @param password
+	 *            the password to digest and store
+	 */
 	public void setSHA1Password(String password) {
 		this.password = Tools.encrypt(password);
 	}
 
+	/**
+	 * A newly registered user must provide this randomly generated key in order
+	 * to verify the validity of his/her e-mail address.
+	 * 
+	 * @return the confirmation key a user must possess in order to enable
+	 *         his/her account
+	 */
 	public String getConfirmKey() {
 		return this.confirmKey;
 	}
 
-	public void setConfirmKey(String key) {
-		this.confirmKey = key;
+	/**
+	 * Returns the time in milliseconds that the user has left before his/her
+	 * unconfirmed account might be deleted so that the username can be reused.
+	 * The confirmation window will last at least one hour. Older unconfirmed
+	 * users will be deleted by {@link CleanUpJobs}.
+	 * 
+	 * @return the confirmation limit in milliseconds
+	 */
+	public long getConfirmationLimit() {
+		return this.registrationTimestamp.getTime() + 60 * 60 * 1000
+				- SysInfo.now().getTime();
 	}
 
 	/**
@@ -748,7 +779,7 @@ public class User implements IObserver, ICleanup<Item> {
 	 * Set the time of the Users last Post to a specific one.
 	 * 
 	 * @param Time
-	 *            in milliseconds after 1970.
+	 *            of the last post
 	 */
 	public void setLastPostTime(Date time) {
 		this.lastPost = time.getTime();
@@ -776,6 +807,13 @@ public class User implements IObserver, ICleanup<Item> {
 		return (int) (30 - (SysInfo.now().getTime() - this.lastPost) / 1000);
 	}
 
+	/**
+	 * Returns all the mailboxes this user has access to. This is usually the
+	 * user's personal mailbox for watch-list notifications and, if the user is
+	 * a moderator, also the global spam report mailbox.
+	 * 
+	 * @return a list of all mailboxes
+	 */
 	public List<IMailbox> getAllMailboxes() {
 		List<IMailbox> mailboxes = new ArrayList();
 		mailboxes.add(this.mainMailbox);

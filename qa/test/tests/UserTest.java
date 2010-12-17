@@ -11,6 +11,7 @@ import models.database.IUserDatabase;
 import models.database.HotDatabase.HotQuestionDatabase;
 import models.database.HotDatabase.HotTagDatabase;
 import models.database.HotDatabase.HotUserDatabase;
+import models.helpers.ICleanup;
 import models.helpers.Tools;
 
 import org.junit.Before;
@@ -629,5 +630,14 @@ public class UserTest extends MockedUnitTest {
 	public void shouldNotWatchAnything() {
 		User user = new User("Jack");
 		assertEquals(0, this.questionDB.getWatchList(user).size());
+	}
+
+	@Test
+	public void shouldMakeCoberturaHappy() {
+		// this one's tricky, as Cobertura complains in an obscure way about the
+		// bridge function User.cleanUp(java.lang.Object) not being called; see
+		// http://sourceforge.net/tracker/?func=detail&atid=720015&aid=2015158&group_id=130558
+		ICleanup user = new User("Jimmy");
+		user.cleanUp(new Question(null, "question"));
 	}
 }
