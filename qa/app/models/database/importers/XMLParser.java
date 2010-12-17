@@ -147,7 +147,7 @@ public class XMLParser extends DefaultHandler {
 		String password = e.getText("password");
 		String email = e.getText("email");
 		User user = this.db.users().register(name, password, email);
-		Integer age = new Integer(e.getText("age"));
+		Integer age = this.toIntValue(e.getText("age"));
 		if (age != -1) {
 			Calendar pseudobirthday = GregorianCalendar.getInstance();
 			pseudobirthday.add(Calendar.YEAR, -age);
@@ -157,7 +157,7 @@ public class XMLParser extends DefaultHandler {
 		user.setWebsite(e.getText("website"));
 		user.setModerator(e.getText("ismoderator").equals("true"), this.db
 				.users().getModeratorMailbox());
-		int id = new Integer(e.getArg("id"));
+		int id = this.toIntValue(e.getArg("id"));
 		this.idUserBase.put(id, user);
 	}
 

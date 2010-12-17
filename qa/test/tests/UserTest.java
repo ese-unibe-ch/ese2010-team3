@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Question;
+import models.SysInfo;
 import models.Tag;
 import models.User;
 import models.database.IQuestionDatabase;
@@ -135,13 +136,13 @@ public class UserTest extends MockedUnitTest {
 		for (int i = 0; i < 5; i++) {
 			new Question(user, "This is my " + i + ". question").voteUp(user2);
 		}
-		sysInfo.setTestMode(false);
+		SysInfo.setTestMode(false);
 		assertTrue(user2.isMaybeCheater());
 		assertTrue(user2.isCheating());
 		assertTrue(user2.isBlocked());
-		sysInfo.setTestMode(true);
+		SysInfo.setTestMode(true);
 		assertFalse(user2.isCheating());
-		sysInfo.setTestMode(false);
+		SysInfo.setTestMode(false);
 		assertTrue(user2.isCheating());
 		assertEquals(user2.getStatusMessage(), "User voted up somebody");
 		assertFalse(user.isMaybeCheater());

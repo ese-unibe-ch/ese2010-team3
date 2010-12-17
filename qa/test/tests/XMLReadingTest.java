@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Question;
+import models.User;
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
@@ -26,7 +27,7 @@ public class XMLReadingTest extends MockedUnitTest {
 			+
 			"      <displayname>sdaau</displayname>"
 			+
-			"      <age>-1</age>"
+			"      <age>37</age>"
 			+
 			"      <ismoderator>false</ismoderator>"
 			+
@@ -204,6 +205,19 @@ public class XMLReadingTest extends MockedUnitTest {
 			hasThrown = true;
 		}
 		assertFalse(hasThrown);
+	}
+
+	@Test
+	public void shouldTolerateInvalidAge() throws SAXException, IOException,
+			ParserConfigurationException {
+		this.importer.importXML(xml);
+		User user = this.db.users().get("sdaau");
+		assertEquals(37, user.getAge());
+
+		this.db.clear(false);
+		this.importer.importXML(xml.replace("<age>37</age>", "<age>-1</age>"));
+		user = this.db.users().get("sdaau");
+		assertEquals(0, user.getAge());
 	}
 
 	@Test

@@ -6,7 +6,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
-import models.database.importers.Importer;
 import models.database.importers.SemanticError;
 
 import org.junit.Test;
@@ -18,7 +17,7 @@ public class XMLExample extends MockedUnitTest {
 	public void hasCorrectUserCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		IDatabase db = new HotDatabase();
-		new Importer(db).importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
+		db.importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
 		assertEquals(52, db.users().count());
 	}
 
@@ -26,7 +25,7 @@ public class XMLExample extends MockedUnitTest {
 	public void hasCorrectQuestionCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		IDatabase db = new HotDatabase();
-		new Importer(db).importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
+		db.importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
 		assertEquals(44, db.questions().count());
 	}
 
@@ -34,7 +33,7 @@ public class XMLExample extends MockedUnitTest {
 	public void hasCorrectAnswerCount() throws SAXException, IOException,
 			ParserConfigurationException {
 		IDatabase db = new HotDatabase();
-		new Importer(db).importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
+		db.importXML(play.Play.getFile("conf/fixtures/QA3.xml"));
 		assertEquals(51, db.questions().countAllAnswers());
 	}
 
@@ -42,8 +41,7 @@ public class XMLExample extends MockedUnitTest {
 	public void withIncompleteData() throws SAXException, IOException,
 			ParserConfigurationException {
 		IDatabase db = new HotDatabase();
-		new Importer(db).importXML(play.Play
-				.getFile("conf/fixtures/incompleteData.xml"));
+		db.importXML(play.Play.getFile("conf/fixtures/incompleteData.xml"));
 		assertEquals(50, db.users().count());
 		assertEquals(47, db.questions().count());
 		assertEquals(51, db.questions().countAllAnswers());
@@ -53,7 +51,6 @@ public class XMLExample extends MockedUnitTest {
 	public void withInconsistentData() throws SAXException, IOException,
 			ParserConfigurationException {
 		IDatabase db = new HotDatabase();
-		new Importer(db).importXML(play.Play
-				.getFile("conf/fixtures/inconsistentData.xml"));
+		db.importXML(play.Play.getFile("conf/fixtures/inconsistentData.xml"));
 	}
 }
