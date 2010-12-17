@@ -9,7 +9,6 @@ import models.Notification;
 import models.Question;
 import models.User;
 import models.Vote;
-import models.database.Database;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.mvc.With;
@@ -244,14 +243,14 @@ public class CUser extends BaseController {
 	}
 
 	/**
-	 * Clear the entire database.
+	 * Clear the entire database except for the administrator users.
 	 */
 	public static void clearDB() {
 		if (!Session.user().isModerator()) {
 			flash.error("secure.cleardberror");
 			Application.index(0);
 		}
-		Database.clearKeepAdmins();
+		Database.clear(true /* keepAdmins */);
 		flash.success("secure.cleardbflash");
 		Application.admin();
 	}

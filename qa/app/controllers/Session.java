@@ -1,7 +1,6 @@
 package controllers;
 
 import models.User;
-import models.database.Database;
 
 public class Session implements ISession {
 	private static ISession instance = new Session();

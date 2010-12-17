@@ -92,16 +92,14 @@ public class MailboxTest extends MockedUnitTest {
 		Answer answer = this.question.answer(this.susane, "answer?");
 		this.pete.observe(this.question, answer);
 		List<Notification> petesNotifications = this.pete
-				.getMyNewNotifications();
+				.getNewNotifications();
 		List<Notification> susanesNotifications = this.susane
-				.getMyNewNotifications();
+				.getNewNotifications();
 		assertEquals(1, petesNotifications.size());
 		assertEquals(petesNotifications.get(0).getAbout(), answer);
 		assertEquals(0, susanesNotifications.size());
-		petesNotifications = this.pete
-				.getMyRecentNotifications();
-		susanesNotifications = this.susane
-				.getMyRecentNotifications();
+		petesNotifications = this.pete.getRecentNotifications();
+		susanesNotifications = this.susane.getRecentNotifications();
 		assertEquals(1, petesNotifications.size());
 		assertEquals(petesNotifications.get(0).getAbout(), answer);
 		assertEquals(0, susanesNotifications.size());

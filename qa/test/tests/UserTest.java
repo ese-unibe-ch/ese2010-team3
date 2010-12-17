@@ -328,12 +328,12 @@ public class UserTest extends MockedUnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 
 		n.answer(user5, "and then some");
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
@@ -354,8 +354,8 @@ public class UserTest extends MockedUnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(3, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(3, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
@@ -371,7 +371,7 @@ public class UserTest extends MockedUnitTest {
 		q.setTagString("demo");
 		q.answer(user5, "Simple!");
 
-		assertEquals(6, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(6, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test
@@ -386,8 +386,8 @@ public class UserTest extends MockedUnitTest {
 		s.setTagString("demo");
 		s.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(q, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(q, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
@@ -402,9 +402,9 @@ public class UserTest extends MockedUnitTest {
 		r.setTagString("demo");
 		r.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
 		sysInfo.year(2001);
-		assertEquals(0, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(0, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test
@@ -426,9 +426,9 @@ public class UserTest extends MockedUnitTest {
 		n.answer(user5, "Therefore");
 		o.answer(user5, "No");
 		o.setBestAnswer(user5.getAnswers().get(1));
-		assertEquals(2, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(p, user5.getSuggestedQuestions(this.questionDB).get(0));
-		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(1));
+		assertEquals(2, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(p, this.questionDB.suggestQuestions(user5).get(0));
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(1));
 
 	}
 
@@ -457,10 +457,10 @@ public class UserTest extends MockedUnitTest {
 		user5.getAnswers().get(1).voteUp(user3);
 		user5.getAnswers().get(1).voteUp(user4);
 
-		assertEquals(3, user5.getSuggestedQuestions(this.questionDB).size());
-		assertEquals(q, user5.getSuggestedQuestions(this.questionDB).get(0));
-		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(1));
-		assertEquals(p, user5.getSuggestedQuestions(this.questionDB).get(2));
+		assertEquals(3, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(q, this.questionDB.suggestQuestions(user5).get(0));
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(1));
+		assertEquals(p, this.questionDB.suggestQuestions(user5).get(2));
 
 	}
 
@@ -483,7 +483,7 @@ public class UserTest extends MockedUnitTest {
 		o.setTagString("demo demo3 demo4");
 		p.setTagString("demo demo3 demo4 demo5");
 
-		assertEquals(0, user8.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(0, this.questionDB.suggestQuestions(user8).size());
 	}
 
 	@Test
@@ -495,7 +495,7 @@ public class UserTest extends MockedUnitTest {
 		q.setTagString("demo");
 		f.setTagString("demo");
 		q.answer(user2, "Because");
-		assertEquals(0, user2.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(0, this.questionDB.suggestQuestions(user2).size());
 
 	}
 
@@ -512,7 +512,7 @@ public class UserTest extends MockedUnitTest {
 		k.answer(james, "Because");
 		k.setBestAnswer(k.answer(john, "No idea"));
 		l.answer(kate, "Therefore");
-		assertEquals(0, kate.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(0, this.questionDB.suggestQuestions(kate).size());
 	}
 
 	@Test
@@ -526,14 +526,14 @@ public class UserTest extends MockedUnitTest {
 		q.setTagString("demo");
 
 		q.answer(user5, "Simple!");
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
 
 		for (int i = 0; i < 9; i++) {
 			p.answer(null, "anonymous genious!");
 		}
-		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
 		p.answer(null, "yet another anonymous genious!");
-		assertEquals(0, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(0, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test

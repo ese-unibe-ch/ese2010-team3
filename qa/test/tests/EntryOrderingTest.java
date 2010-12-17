@@ -24,7 +24,7 @@ public class EntryOrderingTest extends MockedUnitTest {
 	private IQuestionDatabase questionDB;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		this.questionDB = new HotQuestionDatabase(null);
 
 		jack = new User("jack");

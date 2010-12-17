@@ -1,33 +1,23 @@
 package tests;
 
+import models.Notification;
+import models.Question;
 import models.User;
-import models.database.Database;
 import models.database.IDatabase;
 import models.database.IUserDatabase;
 import models.database.HotDatabase.HotDatabase;
+import models.database.HotDatabase.HotUserDatabase;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import controllers.Database;
 
 public class DatabaseTest extends MockedUnitTest {
 
-	private IDatabase origDB;
-
-	@Before
-	public void setUp() {
-		this.origDB = Database.swapWith(new HotDatabase());
-	}
-
-	@After
-	public void tearDown() {
-		Database.swapWith(this.origDB);
-	}
-
 	@Test
 	public void shouldKeepAdmins() {
-		IUserDatabase userDB = Database.users();
-		userDB.clear();
+		IDatabase db = new HotDatabase();
+		IUserDatabase userDB = db.users();
 
 		User admin = userDB.register("admin", "admin", "admin@example.com");
 		admin.setModerator(true, null);
@@ -38,30 +28,64 @@ public class DatabaseTest extends MockedUnitTest {
 		assertTrue(userDB.all().contains(user));
 		assertTrue(userDB.all().contains(admin));
 
-		Database.clearKeepAdmins();
+		db.clear(true);
 		assertEquals(1, userDB.all().size());
 		assertEquals(1, userDB.allModerators().size());
 		assertFalse(userDB.all().contains(user));
 		assertTrue(userDB.all().contains(admin));
 
-		Database.clear();
+		db.clear(false);
 		assertEquals(0, userDB.all().size());
 		assertEquals(0, userDB.allModerators().size());
 		assertFalse(userDB.all().contains(user));
 		assertFalse(userDB.all().contains(admin));
 
-		Database.clearKeepAdmins();
+		db.clear(true);
 	}
 
 	@Test
 	public void shouldSwapAndBack() {
+		IDatabase origDB = Database.swapWith(new HotDatabase());
 		IDatabase newDB = new HotDatabase();
 		assertNotSame(newDB.users(), Database.users());
 		IDatabase current = Database.swapWith(newDB);
 		assertNotSame(current, newDB);
 		assertEquals(newDB.users(), Database.users());
+		assertEquals(newDB.questions(), Database.questions());
+		assertEquals(newDB.tags(), Database.tags());
 		IDatabase prevDB = Database.swapWith(current);
 		assertEquals(prevDB, newDB);
 		assertEquals(current.questions(), Database.questions());
+		Database.swapWith(origDB);
+	}
+
+	@Test
+	public void shouldClearDB() {
+		IDatabase db = new HotDatabase();
+		User user = db.users().register("user", "password", "user@example.com");
+		Question question = db.questions().add(user, "question");
+		question.setTagString("tag");
+		new Notification(db.users().getModeratorMailbox(), question);
+		assertEquals(1, db.users().all().size());
+		assertEquals(1, db.questions().all().size());
+		assertEquals(1, db.tags().all().size());
+		assertEquals(1, db.users().getModeratorMailbox().getAllNotifications()
+				.size());
+
+		db.clear(false);
+		assertEquals(0, db.users().all().size());
+		assertEquals(0, db.questions().all().size());
+		assertEquals(0, db.tags().all().size());
+		assertEquals(0, db.users().getModeratorMailbox().getAllNotifications()
+				.size());
+	}
+
+	@Test
+	public void shouldCleanupUser() {
+		IUserDatabase userDB = new HotUserDatabase();
+		User user = userDB.register("user", "password", "user@example.com");
+		assertEquals(1, userDB.all().size());
+		user.delete();
+		assertEquals(0, userDB.all().size());
 	}
 }

@@ -172,10 +172,9 @@ public class XMLParser extends DefaultHandler {
 		try {
 			question.title = e.getText("title");
 			question.body = e.getText("body");
-			question.id = new Integer(e.getArg("id"));
+			question.id = this.toIntValue(e.getArg("id"));
 			question.creation = new Date((new Long(e.getText("creationdate")))*1000);
-			question.ownerid = e.getText("ownerid").equals("") ? -1
-					: new Integer(e.getText("ownerid"));
+			question.ownerid = this.toIntValue(e.getText("ownerid"));
 			for (Element tagE : e.get("tags").get(0).get("tag")) {
 				question.tags += " " + tagE.getText();
 			}
@@ -195,20 +194,24 @@ public class XMLParser extends DefaultHandler {
 	protected void createAnswer(Element e) {
 		ProtoAnswer answer = new ProtoAnswer();
 		try {
-			answer.ownerid = e.getText("ownerid").equals("") ? -1
-					: new Integer(e.getText("ownerid"));
-			answer.questionid = new Integer(e.getText("questionid"));
+			answer.ownerid = this.toIntValue(e.getText("ownerid"));
+			answer.questionid = this.toIntValue(e.getText("questionid"));
 			answer.title = e.getText("title");
 			answer.body = e.getText("body");
 			answer.accepted = e.getText("accepted").equals("true");
-			answer.id = e.getArg("id") == null ? -1 : new Integer(e
-					.getArg("id"));
+			answer.id = this.toIntValue(e.getArg("id"));
 			answer.creation = new Date((new Long(e.getText("creationdate")))*1000);
 			this.protoanswers.add(answer);
 		} catch (Throwable t) {
-			throw new SemanticError("Answer #" + e.getText("ownerid")
+			throw new SemanticError("Answer #" + e.getArg("id")
 					+ " is invalid");
 		}
+	}
+
+	protected int toIntValue(String maybeInt) {
+		if (maybeInt == null || maybeInt.equals(""))
+			return -1;
+		return new Integer(maybeInt).intValue();
 	}
 
 	protected void makeConnections() {
@@ -226,11 +229,13 @@ public class XMLParser extends DefaultHandler {
 			this.idQuestionBase.put(protoquestion.id, question);
 			question.setTagString(protoquestion.tags);
 		}
+
 		for (ProtoAnswer ans : this.protoanswers) {
 			Question question = this.idQuestionBase.get(ans.questionid);
-			if (question == null)
-				throw new SemanticError("No valid question: "
-						+ ans.ownerid);
+			if (question == null) {
+				question = this.db.questions().add(null,
+						"Anonymous question for imported answer #" + ans.id);
+			}
 
 			User owner = this.idUserBase.get(ans.ownerid);
 
@@ -259,7 +264,6 @@ public class XMLParser extends DefaultHandler {
 		private String title;
 		private String body;
 		private boolean accepted;
-		@SuppressWarnings("unused")
 		private int id;
 	}
 }

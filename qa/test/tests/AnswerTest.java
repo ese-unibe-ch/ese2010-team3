@@ -106,10 +106,11 @@ public class AnswerTest extends MockedUnitTest {
 
 	@Test
 	public void shouldBeBestAnswer() {
+		assertEquals(0, this.questionDB.countBestRatedAnswers());
 		assertTrue(this.question.isBestAnswerSettable());
 		this.question.setBestAnswer(this.answer);
 		assertTrue(this.answer.isBestAnswer());
-		assertTrue(this.questionDB.countBestRatedAnswers() > 0);
+		assertEquals(1, this.questionDB.countBestRatedAnswers());
 	}
 
 	@Test
@@ -121,5 +122,11 @@ public class AnswerTest extends MockedUnitTest {
 	public void shouldNotClaimtoBelongtoQuestion() {
 		this.question.unregister(this.answer);
 		assertNull(this.answer.getQuestion());
+	}
+
+	@Test
+	public void shouldDefaultToNoBestAnswers() {
+		this.questionDB.clear();
+		assertEquals(0, this.questionDB.countBestRatedAnswers());
 	}
 }

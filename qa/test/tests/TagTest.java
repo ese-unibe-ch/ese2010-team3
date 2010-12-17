@@ -194,6 +194,43 @@ public class TagTest extends MockedUnitTest {
 		assertEquals(question1.getTags().get(0), tagDB.get("double"));
 	}
 
+	@Test
+	public void shouldSuggestTags() {
+		question1.setTagString("tag1 tag2 nag3");
+		List<String> tagNames = tagDB.suggestTagNames("ta");
+		assertEquals(2, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+		assertEquals("tag2", tagNames.get(1));
+
+		tagNames = tagDB.suggestTagNames("TA");
+		assertEquals(2, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+		assertEquals("tag2", tagNames.get(1));
+
+		tagNames = tagDB.suggestTagNames("Na");
+		assertEquals(1, tagNames.size());
+		assertEquals("nag3", tagNames.get(0));
+
+		tagNames = tagDB.suggestTagNames("tag1");
+		assertEquals(1, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+
+		tagNames = tagDB.suggestTagNames(null);
+		assertEquals(3, tagNames.size());
+		assertEquals("nag3", tagNames.get(0));
+		assertEquals("tag1", tagNames.get(1));
+		assertEquals("tag2", tagNames.get(2));
+	}
+
+	@Test
+	public void shouldAllowStandaloneTags() {
+		Tag tag = new Tag(tagName, null);
+		tag.register(question1);
+		assertEquals(1, tag.getQuestions().size());
+		tag.unregister(question1);
+		assertEquals(0, tag.getQuestions().size());
+	}
+
 	private int countTags(String name) {
 		int count = 0;
 		for (Tag tag : tagDB.all())

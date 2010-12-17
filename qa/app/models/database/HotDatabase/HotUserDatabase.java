@@ -43,10 +43,17 @@ public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 		return users.size();
 	}
 
-	public void clear() {
+	public void clear(boolean keepAdmins) {
+		Collection<User> mods = this.allModerators();
 		users.clear();
 		for (Notification n : moderatorMailbox.getAllNotifications()) {
 			moderatorMailbox.removeNotification(n.id());
+		}
+
+		if (keepAdmins) {
+			for (User mod : mods) {
+				this.add(mod);
+			}
 		}
 	}
 

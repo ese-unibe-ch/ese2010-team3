@@ -4,8 +4,10 @@ import models.Answer;
 import models.Comment;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IDatabase;
+import models.database.HotDatabase.HotDatabase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import play.test.FunctionalTest;
 import tests.mocks.SessionMock;
 import controllers.CAnswer;
 import controllers.CQuestion;
+import controllers.Database;
 import controllers.Session;
 
 @Ignore
@@ -21,13 +24,20 @@ public class UserInteractionTest extends FunctionalTest {
 
 	private User jack;
 	private SessionMock session;
+	private IDatabase origDB;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		jack = new User("Jack");
 		session = new SessionMock();
 		session.loginAs(jack);
 		Session.mockWith(session);
+		origDB = Database.swapWith(new HotDatabase());
+	}
+
+	@After
+	public void tearDown() {
+		Database.swapWith(origDB);
 	}
 
 	@Test

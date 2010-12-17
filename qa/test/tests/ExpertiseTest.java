@@ -44,12 +44,12 @@ public class ExpertiseTest extends MockedUnitTest {
 			answer.voteUp(users.get(i));
 
 		Tag tag = this.tagDB.get("sole-expert");
-		assertEquals(john.getExpertise(this.questionDB).size(), 1);
-		assertTrue(john.getExpertise(this.questionDB).contains(tag));
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(john).size(), 1);
+		assertTrue(this.questionDB.getExpertise(john).contains(tag));
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 		for (int i = 0; i < 20; i++)
-			assertFalse(users.get(i).getExpertise(this.questionDB)
+			assertFalse(this.questionDB.getExpertise(users.get(i))
 					.contains(tag));
 	}
 
@@ -68,15 +68,14 @@ public class ExpertiseTest extends MockedUnitTest {
 		question.setBestAnswer(answer);
 
 		Tag tag = this.tagDB.get("also-expert");
-		assertEquals(john.getExpertise(this.questionDB).size(), 1);
-		assertTrue(john.getExpertise(this.questionDB).contains(tag));
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(john).size(), 1);
+		assertTrue(this.questionDB.getExpertise(john).contains(tag));
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 		for (int i = 0; i < 20; i++)
 			assertEquals(
-					users.get(i).getExpertise(this.questionDB).contains(tag),
-					10 <= i
-					&& i < 12);
+					this.questionDB.getExpertise(users.get(i)).contains(tag),
+					10 <= i && i < 12);
 	}
 
 	@Test
@@ -95,19 +94,18 @@ public class ExpertiseTest extends MockedUnitTest {
 			answer.voteUp(users.get(i));
 
 		Tag tag = this.tagDB.get("no-expert");
-		assertEquals(john.getExpertise(this.questionDB).size(), 0);
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(john).size(), 0);
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 		for (int i = 0; i < 20; i++)
 			assertEquals(
-					users.get(i).getExpertise(this.questionDB).contains(tag),
-					10 <= i
-					&& i < 13);
+					this.questionDB.getExpertise(users.get(i)).contains(tag),
+					10 <= i && i < 13);
 
-		assertEquals(john.getExpertise(this.questionDB).size(), 0);
+		assertEquals(this.questionDB.getExpertise(john).size(), 0);
 		users.get(10).anonymize(true);
 		users.get(11).anonymize(true);
-		assertEquals(john.getExpertise(this.questionDB).size(), 1);
+		assertEquals(this.questionDB.getExpertise(john).size(), 1);
 	}
 
 	@Test
@@ -123,12 +121,12 @@ public class ExpertiseTest extends MockedUnitTest {
 		}
 
 		Tag tag = this.tagDB.get("no-answer");
-		assertEquals(john.getExpertise(this.questionDB).size(), 0);
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(john).size(), 0);
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 		for (int i = 0; i < 20; i++)
 			assertEquals(
-					users.get(i).getExpertise(this.questionDB).contains(tag),
+					this.questionDB.getExpertise(users.get(i)).contains(tag),
 					10 == i);
 	}
 
@@ -140,8 +138,8 @@ public class ExpertiseTest extends MockedUnitTest {
 		question.setBestAnswer(answer);
 
 		Tag tag = this.tagDB.get("own-answer");
-		assertEquals(james.getExpertise(this.questionDB).size(), 0);
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(james).size(), 0);
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 	}
 
@@ -150,7 +148,7 @@ public class ExpertiseTest extends MockedUnitTest {
 		Answer answer = question.answer(john, "Answer");
 		for (int i = 0; i < 10; i++)
 			answer.voteUp(users.get(i));
-		assertEquals(john.getExpertise(this.questionDB).size(), 0);
+		assertEquals(this.questionDB.getExpertise(john).size(), 0);
 	}
 
 	@Test
@@ -162,9 +160,9 @@ public class ExpertiseTest extends MockedUnitTest {
 			john.getAnswers().get(3 + i).voteUp(question.owner());
 
 		Tag tag = this.tagDB.get("sole-expert");
-		assertEquals(john.getExpertise(this.questionDB).size(), 1);
-		assertTrue(john.getExpertise(this.questionDB).contains(tag));
-		assertFalse(question.owner().getExpertise(this.questionDB)
+		assertEquals(this.questionDB.getExpertise(john).size(), 1);
+		assertTrue(this.questionDB.getExpertise(john).contains(tag));
+		assertFalse(this.questionDB.getExpertise(question.owner())
 				.contains(tag));
 	}
 }

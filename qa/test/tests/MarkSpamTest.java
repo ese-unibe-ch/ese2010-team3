@@ -66,4 +66,23 @@ public class MarkSpamTest extends MockedUnitTest {
 		this.alex.setModerator(false, null);
 		assertEquals(this.alex.getNotifications().size(), 0);
 	}
+
+	@Test
+	public void shouldNotReblockUser() {
+		this.pete.block("for testing");
+		assertFalse(this.pete.isSpammer());
+		this.question.markSpam(null);
+		this.question.confirmSpam();
+		assertTrue(this.pete.isSpammer());
+		assertEquals("for testing", this.pete.getStatusMessage());
+	}
+
+	@Test
+	public void shouldNotUnblockRedeemedSpammer() {
+		shouldNotReblockUser();
+		this.pete.setIsSpammer(false);
+		assertFalse(this.pete.isSpammer());
+		assertTrue(this.pete.isBlocked());
+		assertEquals("for testing", this.pete.getStatusMessage());
+	}
 }

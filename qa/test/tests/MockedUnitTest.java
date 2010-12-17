@@ -2,7 +2,6 @@ package tests;
 
 import models.SysInfo;
 import models.SystemInformation;
-import models.database.Database;
 import models.database.IDatabase;
 
 import org.junit.AfterClass;
@@ -10,6 +9,7 @@ import org.junit.BeforeClass;
 
 import play.test.UnitTest;
 import tests.mocks.SystemInformationMock;
+import controllers.Database;
 
 public abstract class MockedUnitTest extends UnitTest {
 

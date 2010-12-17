@@ -23,7 +23,7 @@ public class Tag implements Comparable<Tag> {
 	private final ICleanup<Tag> cleaner;
 
 	/** A regex a valid tag name has to match. */
-	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
+	private final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	/**
 	 * Instantiates a new Tag.
@@ -36,7 +36,7 @@ public class Tag implements Comparable<Tag> {
 	 *            this tag is no longer needed
 	 */
 	public Tag(String name, ICleanup<Tag> cleaner) {
-		if (name == null || !name.matches(tagRegex))
+		if (name == null || !name.matches(this.tagRegex))
 			throw new IllegalArgumentException();
 		this.name = name;
 		this.cleaner = cleaner;

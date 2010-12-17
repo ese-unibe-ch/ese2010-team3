@@ -12,6 +12,7 @@ import java.util.Set;
 import models.Answer;
 import models.Question;
 import models.SearchFilter;
+import models.SysInfo;
 import models.Tag;
 import models.User;
 import models.database.IQuestionDatabase;
@@ -144,6 +145,34 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 		return result;
 	}
 
+	public List<Question> suggestQuestions(User user) {
+		List<Question> suggestedQuestions = new ArrayList<Question>();
+		List<Question> sortedAnsweredQuestions = user
+				.getSortedAnsweredQuestions();
+
+		/*
+		 * Don't list questions that have many answers or already have a best
+		 * answer. The user should not be the owner of the suggested question.
+		 * Remove duplicates.
+		 */
+		for (Question q : sortedAnsweredQuestions) {
+			for (Question similarQ : this.findSimilar(q)) {
+				if (!suggestedQuestions.contains(similarQ)
+						&& !sortedAnsweredQuestions.contains(similarQ)
+						&& similarQ.owner() != user
+						&& similarQ.getAgeInDays(SysInfo.now()) <= 120
+						&& similarQ.countAnswers() < 10
+						&& !similarQ.hasBestAnswer()) {
+					suggestedQuestions.add(similarQ);
+				}
+			}
+		}
+		if (suggestedQuestions.size() > 6)
+			return suggestedQuestions.subList(0, 6);
+		return suggestedQuestions;
+
+	}
+
 	/**
 	 * Having given a best answer gives the equivalent of an additional
 	 * BEST_ANSWER_BONUS votes.
@@ -192,6 +221,43 @@ public class HotQuestionDatabase implements IQuestionDatabase,
 		}
 
 		return stats;
+	}
+
+	/**
+	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
+	 * user from being an expert.
+	 */
+	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
+	/**
+	 * What percentage of most proficient users are considered experts on a
+	 * topic.
+	 */
+	private final int EXPERTISE_PERCENTILE = 20;
+
+	public List<Tag> getExpertise(User user) {
+		Map<Tag, Map<User, Integer>> stats = this.collectExpertiseStatistics();
+
+		List<Tag> expertise = new ArrayList();
+		for (Tag tag : stats.keySet()) {
+			// ignore tags this user knows nothing about
+			if (!stats.get(tag).containsKey(user)) {
+				continue;
+			}
+			// ignore tags this user knows hardly anything about
+			if (stats.get(tag).get(user) < this.MINIMAL_EXPERTISE_THRESHOLD) {
+				continue;
+			}
+
+			Map<User, Integer> tagStats = stats.get(tag);
+			List<User> experts = Mapper.sortByValue(tagStats);
+			int threshold = (100 - this.EXPERTISE_PERCENTILE) * experts.size()
+					/ 100;
+			if (tagStats.get(user) >= tagStats.get(experts.get(threshold))) {
+				expertise.add(tag);
+			}
+		}
+
+		return expertise;
 	}
 
 	public void clear() {

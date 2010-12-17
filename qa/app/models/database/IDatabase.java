@@ -1,5 +1,12 @@
 package models.database;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 /**
  * Provides getters for all databases. There is a separate DB for
  * <ul>
@@ -17,4 +24,9 @@ public interface IDatabase {
 	IUserDatabase users();
 
 	ITagDatabase tags();
+
+	void importXML(File file) throws SAXException, IOException,
+			ParserConfigurationException;
+
+	void clear(boolean keepAdmins);
 }

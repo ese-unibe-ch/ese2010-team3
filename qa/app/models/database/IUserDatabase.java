@@ -67,9 +67,14 @@ public interface IUserDatabase {
 
 	/**
 	 * Deletes every user from the DB.
+	 * 
+	 * @param keepAdmins
+	 *            whether to not delete administrators (in case there's no other
+	 *            way to re-gain enough access to the system for creating new
+	 *            users)
 	 */
 
-	public void clear();
+	public void clear(boolean keepAdmins);
 
 	/**
 	 * Add a User directly.

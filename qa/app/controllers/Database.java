@@ -1,20 +1,21 @@
-package models.database;
+package controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.User;
+import models.database.IDatabase;
+import models.database.IQuestionDatabase;
+import models.database.ITagDatabase;
+import models.database.IUserDatabase;
 import models.database.HotDatabase.HotDatabase;
-import models.database.importers.Importer;
 
 import org.xml.sax.SAXException;
 
 /**
- * Database accessor. Can be swapped if necessary.
- * 
+ * Static database accessor, because Play!'s MVC doesn't seem allow us to inject
+ * the database as a dependency.
  */
 public class Database {
 	private static IDatabase instance = new HotDatabase();
@@ -65,18 +66,8 @@ public class Database {
 	 * Deletes all data. This ensures that the UserDB, the QuestionDB and the
 	 * TagDB are completely empty. Useful for tests.
 	 */
-	public static void clear() {
-		users().clear();
-		tags().clear();
-		questions().clear();
-	}
-
-	public static void clearKeepAdmins() {
-		Collection<User> mods = Database.users().allModerators();
-		Database.clear();
-		for (User mod : mods) {
-			Database.users().add(mod);
-		}
+	public static void clear(boolean keepAdmins) {
+		instance.clear(keepAdmins);
 	}
 
 	/**
@@ -87,6 +78,6 @@ public class Database {
 	 */
 	public static void importXML(File file) throws SAXException, IOException,
 			ParserConfigurationException {
-		new Importer(instance).importXML(file);
+		instance.importXML(file);
 	}
 }

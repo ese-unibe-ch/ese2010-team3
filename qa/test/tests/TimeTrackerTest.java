@@ -10,10 +10,10 @@ public class TimeTrackerTest extends MockedUnitTest {
 	private TimeTracker t;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		sysInfo.year(2010).month(9).day(1).hour(0).minute(0).second(0);
-		t = TimeTracker.getTimeTracker();
-		t.injectMockedStartTime(sysInfo.now());
+		t = new TimeTracker();
+		t.setStartTime(sysInfo.now());
 		sysInfo.year(2010).month(12).day(1).hour(0).minute(0).second(0);
 
 	}

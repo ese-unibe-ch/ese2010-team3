@@ -57,44 +57,34 @@ public class QuestionTest extends MockedUnitTest {
 
 	@Test
 	public void getOnlyImportantWords() {
-		assertEquals(Tools.extractImportantWords(""), "");
-		assertEquals(Tools.extractImportantWords("a b"), "");
-		assertEquals(Tools.extractImportantWords("a bc"), "");
-		assertEquals(Tools.extractImportantWords("ab"), "");
-		assertEquals(Tools.extractImportantWords("a "), "");
-		assertEquals(Tools.extractImportantWords("abcde"), "");
-		assertEquals(Tools.extractImportantWords("abcd abcd abcd abcd d"),
-				"abcd");
+		assertEquals(this.extractWordString(""), "");
+		assertEquals(this.extractWordString("a b"), "");
+		assertEquals(this.extractWordString("a bc"), "");
+		assertEquals(this.extractWordString("ab"), "");
+		assertEquals(this.extractWordString("a "), "");
+		assertEquals(this.extractWordString("abcde"), "");
+		assertEquals(this.extractWordString("abcd abcd abcd abcd d"), "abcd");
 		// "some" is a StopWord and should not be suggested
-		assertEquals(Tools.extractImportantWords("some some some some s"), "");
+		assertEquals(this.extractWordString("some some some some s"), "");
 		String txt = "asdf asdf asdf asdf qwer qwer qwer qwer yxcv yxcv yxcv";
-		assertEquals(Tools.extractImportantWords(txt), "asdf qwer yxcv");
+		assertEquals(this.extractWordString(txt), "asdf qwer yxcv");
 		txt += " hello hello hello hello";
-		assertEquals(Tools.extractImportantWords(txt), "asdf hello qwer yxcv");
+		assertEquals(this.extractWordString(txt), "asdf hello qwer yxcv");
 		txt += "mnbv text mnbv text mnbv text mnbv text asdf hello mnbv";
 		// remove "yxcv" because there are more important words
-		assertEquals(Tools.extractImportantWords(txt),
+		assertEquals(this.extractWordString(txt),
 				"asdf hello mnbv qwer text");
 	}
 
-	@Test
-	public void shouldBeOldQuestion() {
-		User user2 = new User("User2");
-		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
-
-		Question oldQuestion = new Question(user2, "Why?");
-		sysInfo.year(2001);
-		assertTrue(oldQuestion.isOldQuestion());
-	}
-
-	@Test
-	public void shouldNotBeOldQuestion() {
-		User user2 = new User("User2");
-		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
-
-		Question oldQuestion = new Question(user2, "Why?");
-		sysInfo.year(2000).month(9);
-		assertFalse(oldQuestion.isOldQuestion());
+	private String extractWordString(String words) {
+		String result = "";
+		for (String string : Tools.extractImportantWords(words)) {
+			result += " " + string;
+		}
+		if (result.length() > 0) {
+			result = result.substring(1);
+		}
+		return result;
 	}
 
 	@Test

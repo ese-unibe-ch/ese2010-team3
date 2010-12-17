@@ -1,7 +1,7 @@
 import models.User;
-import models.database.Database;
 import play.jobs.Every;
 import play.jobs.Job;
+import controllers.Database;
 
 @Every("2h")
 public class CleanUpJobs extends Job {

@@ -3,17 +3,16 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
 import models.Notification;
 import models.Question;
-import models.SysInfo;
 import models.Tag;
 import models.TimeTracker;
 import models.User;
-import models.database.Database;
 import models.database.IQuestionDatabase;
 import models.helpers.Tools;
 import notifiers.Mails;
@@ -26,6 +25,7 @@ import play.libs.Images;
 public class Application extends BaseController {
 
 	private static final int entriesPerPage = 15;
+	public static final TimeTracker timeTracker = new TimeTracker();
 
 	/**
 	 * Leads to the index page at a given page of {@link Question}'s.
@@ -207,8 +207,8 @@ public class Application extends BaseController {
 	 */
 	public static void showprofile(String userName) {
 		User showUser = Database.users().get(userName);
+		List<Tag> expertise = Database.questions().getExpertise(showUser);
 		boolean canEdit = userCanEditProfile(showUser);
-		List<Tag> expertise = showUser.getExpertise(Database.questions());
 		render(showUser, expertise, canEdit);
 	}
 
@@ -225,17 +225,9 @@ public class Application extends BaseController {
 	 *            occurring words that might also be useful as tags
 	 */
 	public static void tags(String term, String content) {
-		String tagString = "";
-		for (Tag tag : Database.tags().all()) {
-			if (term == null || tag.getName().startsWith(term.toLowerCase())) {
-				tagString += tag.getName() + " ";
-			}
-		}
-		tagString += Tools.extractImportantWords(content);
-		// make sure not to return an array with a single empty string ([""])
-		String[] tags = tagString.split("\\s+");
-		if (tagString.length() == 0) {
-			tags = new String[0];
+		List<String> tags = Database.tags().suggestTagNames(term);
+		if (content != null) {
+			tags.addAll(Tools.extractImportantWords(content));
 		}
 		renderJSON(tags);
 	}
@@ -281,7 +273,7 @@ public class Application extends BaseController {
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
 		if (user != null && !isPureTagSearch) {
-			user.setLastSearch(term, SysInfo.now());
+			user.setLastSearch(term, new Date());
 		}
 		render(results, term, index, maxIndex);
 	}
@@ -291,8 +283,8 @@ public class Application extends BaseController {
 		User user = Session.user();
 		if (user != null) {
 			List<Notification> spamNotification = new LinkedList();
-			List<Question> suggestedQuestions = user
-					.getSuggestedQuestions(Database.questions());
+			List<Question> suggestedQuestions = Database.questions()
+					.suggestQuestions(user);
 			List<Notification> notifications = user.getNotifications();
 			List<Question> watchingQuestions = Database.questions()
 					.getWatchList(user);
@@ -312,7 +304,7 @@ public class Application extends BaseController {
 	 * the {@link TimeTracker}.
 	 */
 	public static void showStatisticalOverview() {
-		TimeTracker t = TimeTracker.getTimeTracker();
+		TimeTracker t = Application.timeTracker;
 		IQuestionDatabase questionDB = Database.questions();
 		int numberOfUsers = Database.users().count();
 		int numberOfQuestions = questionDB.count();

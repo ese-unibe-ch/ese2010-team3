@@ -1,13 +1,11 @@
 package models;
 
-import static models.helpers.SetOperations.difference;
-import static models.helpers.SetOperations.intersection;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import models.helpers.IFilter;
+import models.helpers.SetOperations;
 import models.helpers.StopWords;
 
 /**
@@ -49,7 +47,8 @@ public class SearchFilter implements IFilter<Question, Double> {
 	 *            higher it's rated.
 	 */
 	public SearchFilter(Set<String> query, Set<Tag> tags) {
-		this.queryFulltext = query != null ? difference(query, StopWords.get())
+		this.queryFulltext = query != null ? SetOperations.difference(query,
+				StopWords.get())
 				: null;
 		this.queryTags = tags;
 	}
@@ -106,7 +105,8 @@ public class SearchFilter implements IFilter<Question, Double> {
 
 		// rate highest questions that share most of the tags and don't have
 		// hardly any additional tags
-		return Math.pow(intersection(tags, this.queryTags).size(), 2)
+		return Math.pow(
+				SetOperations.intersection(tags, this.queryTags).size(), 2)
 				/ this.queryTags.size() / tags.size();
 	}
 
@@ -133,7 +133,8 @@ public class SearchFilter implements IFilter<Question, Double> {
 		if (words.isEmpty())
 			return 0;
 		mustHave.removeAll(words);
-		return 1.0 * intersection(words, this.queryFulltext).size()
+		return 1.0
+				* SetOperations.intersection(words, this.queryFulltext).size()
 				/ words.size();
 	}
 
@@ -172,6 +173,6 @@ public class SearchFilter implements IFilter<Question, Double> {
 			words.add(word.toLowerCase());
 		}
 		words.remove(""); // remove splitting artifact
-		return difference(words, StopWords.get());
+		return SetOperations.difference(words, StopWords.get());
 	}
 }

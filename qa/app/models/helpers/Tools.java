@@ -99,7 +99,7 @@ public class Tools {
 	 *            with all the words that contain more than 3 characters
 	 * @return keywords with words that occur more than 3 times
 	 */
-	public static String extractImportantWords(String input) {
+	public static List<String> extractImportantWords(String input) {
 		HashMap<String, Integer> keywords = new HashMap();
 		for (String word : input.toLowerCase().split("\\s+")) {
 			if (word.length() <= 3) {
@@ -125,27 +125,7 @@ public class Tools {
 			sorted = sorted.subList(0, 5);
 		}
 		Collections.sort(sorted);
-		return fromStringList(sorted, " ");
-	}
-
-	/**
-	 * Joins all strings from a list with a given joiner.
-	 * 
-	 * @param list
-	 *            a list of strings
-	 * @param joiner
-	 *            a string to be inserted between to strings to join them
-	 * @return the resulting string
-	 */
-	public static String fromStringList(List<String> list, String joiner) {
-		String result = "";
-		for (String string : list) {
-			result += joiner + string;
-		}
-		if (result.length() > 0) {
-			result = result.substring(joiner.length());
-		}
-		return result;
+		return sorted;
 	}
 
 	/**

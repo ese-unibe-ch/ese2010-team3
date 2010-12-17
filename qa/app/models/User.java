@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import models.database.IQuestionDatabase;
 import models.helpers.ICleanup;
 import models.helpers.IFilter;
 import models.helpers.IObservable;
@@ -542,39 +540,6 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Get a list of all questions that the user might also know to answer.
-	 * 
-	 * @return List<Question>
-	 */
-	public List<Question> getSuggestedQuestions(IQuestionDatabase questionDB) {
-		List<Question> suggestedQuestions = new ArrayList<Question>();
-		List<Question> sortedAnsweredQuestions = this
-				.getSortedAnsweredQuestions();
-
-		/*
-		 * Don't list questions that have many answers or already have a best
-		 * answer. The user should not be the owner of the suggested question.
-		 * Remove duplicates.
-		 */
-		for (Question q : sortedAnsweredQuestions) {
-			for (Question similarQ : questionDB.findSimilar(q)) {
-				if (!suggestedQuestions.contains(similarQ)
-						&& !sortedAnsweredQuestions.contains(similarQ)
-						&& similarQ.owner() != this
-						&& !similarQ.isOldQuestion()
-						&& similarQ.countAnswers() < 10
-						&& !similarQ.hasBestAnswer()) {
-					suggestedQuestions.add(similarQ);
-				}
-			}
-		}
-		if (suggestedQuestions.size() > 6)
-			return suggestedQuestions.subList(0, 6);
-		return suggestedQuestions;
-
-	}
-
-	/**
 	 * Get a List of the last three <code>Answer</code>s of this
 	 * <code>User</code>.
 	 * 
@@ -739,57 +704,6 @@ public class User implements IObserver {
 	}
 
 	/**
-	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
-	 * user from being an expert.
-	 */
-	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
-	/**
-	 * What percentage of most proficient users are considered experts on a
-	 * topic.
-	 */
-	private final int EXPERTISE_PERCENTILE = 20;
-
-	/**
-	 * Determines all the topics this user is an expert in. Each tag is
-	 * considered a topic and a user is considered an expert if he's got a
-	 * minimum of two positive votes (or one accepted best answer) to one of the
-	 * questions with the tag and if his vote count is in the first quintile
-	 * (i.e. at most 20 % of all the answerers for a given topic can be
-	 * experts).
-	 * 
-	 * @param questionDB
-	 *            a database containing questions from which to calculate the
-	 *            expertise levels
-	 * @return the list of tags for which this user is an expert
-	 */
-	public List<Tag> getExpertise(IQuestionDatabase questionDB) {
-		Map<Tag, Map<User, Integer>> stats = questionDB
-				.collectExpertiseStatistics();
-
-		List<Tag> expertise = new ArrayList();
-		for (Tag tag : stats.keySet()) {
-			// ignore tags this user knows nothing about
-			if (!stats.get(tag).containsKey(this)) {
-				continue;
-			}
-			// ignore tags this user knows hardly anything about
-			if (stats.get(tag).get(this) < this.MINIMAL_EXPERTISE_THRESHOLD) {
-				continue;
-			}
-
-			Map<User, Integer> tagStats = stats.get(tag);
-			List<User> experts = Mapper.sortByValue(tagStats);
-			int threshold = (100 - this.EXPERTISE_PERCENTILE) * experts.size()
-					/ 100;
-			if (tagStats.get(this) >= tagStats.get(experts.get(threshold))) {
-				expertise.add(tag);
-			}
-		}
-
-		return expertise;
-	}
-
-	/**
 	 * Remembers the term a user last searched for and the time of the search so
 	 * that we can specifically permit the user to continue a specific search
 	 * (e.g. display the next batch of search results) while still preventing
@@ -880,15 +794,6 @@ public class User implements IObserver {
 		return allNew;
 	}
 
-	/**
-	 * Gets new Notifications, but only the ones personally for me.
-	 * 
-	 * @return List of notifications (newest first)
-	 */
-	public List<Notification> getMyNewNotifications() {
-		return this.mainMailbox.getNewNotifications();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -900,15 +805,6 @@ public class User implements IObserver {
 			allRecent.addAll(mailbox.getRecentNotifications());
 		}
 		return allRecent;
-	}
-
-	/**
-	 * Gets recent notifications, but only the ones personally for me.
-	 * 
-	 * @return List of notifications (newest first)
-	 */
-	public List<Notification> getMyRecentNotifications() {
-		return this.mainMailbox.getRecentNotifications();
 	}
 
 	public void setIsSpammer(boolean isSpammer) {

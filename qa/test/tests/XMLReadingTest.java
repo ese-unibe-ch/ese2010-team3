@@ -195,13 +195,15 @@ public class XMLReadingTest extends MockedUnitTest {
 
 		hasThrown = false;
 		try {
+			// we are somewhat lenient here and produce new questions for
+			// answers not matching an existing question
 			this.importer.importXML(xml.replace(
 					"<questionid>4119991</questionid>",
 					"<questionid>37</questionid>"));
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
-		assertTrue(hasThrown);
+		assertFalse(hasThrown);
 	}
 
 	@Test

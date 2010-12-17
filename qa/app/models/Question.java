@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -360,18 +361,18 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Determines whether the question is old (Older than 120 days).
+	 * Calculates the age of this question in days.
 	 * 
-	 * @return boolean
+	 * @param now
+	 *            a Date representing the current moment (usually SysInfo.now())
+	 * @return this question's age in days
 	 */
-	public boolean isOldQuestion() {
-		double dayDiff = (double) (SysInfo.now().getTime() - timestamp()
-				.getTime()) / (1000 * 60 * 60 * 24);
-		return dayDiff > 120;
+	public long getAgeInDays(Date now) {
+		return (now.getTime() - this.timestamp().getTime())
+				/ (1000 * 60 * 60 * 24);
 	}
 
 	public int countAnswers() {
 		return this.answers.size();
 	}
-
 }
