@@ -8,7 +8,7 @@ import play.mvc.Http;
 /**
  * Some basic methods that should be available to all controllers.
  */
-public class BaseController extends Controller {
+public abstract class BaseController extends Controller {
 
 	/**
 	 * Makes the connected user available to all views as 'user'.
