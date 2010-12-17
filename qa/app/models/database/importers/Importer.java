@@ -17,16 +17,22 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Static collection of methods to import data from external sources, the most
- * prominent being XML.
+ * A collection of methods to import data from external sources, the most
+ * prominent being XML. The importer is stateless and can thus be reused for
+ * efficiency reasons.
  * 
  * @author aaron
- * 
  */
 public class Importer {
 
 	private final IDatabase db;
 
+	/**
+	 * Instantiates a new importer for a given database.
+	 * 
+	 * @param db
+	 *            the database into which to store all the data read
+	 */
 	public Importer(IDatabase db) {
 		this.db = db;
 	}
@@ -43,9 +49,8 @@ public class Importer {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 */
-	public void importXML(String string)
-			throws SAXException,
-			IOException, ParserConfigurationException {
+	public void importXML(String string) throws SAXException, IOException,
+			ParserConfigurationException {
 		this.importXML(new InputSource(
 				new CharArrayReader(string.toCharArray())));
 	}
@@ -62,8 +67,8 @@ public class Importer {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 */
-	public void importXML(File file) throws SAXException,
-			IOException, ParserConfigurationException {
+	public void importXML(File file) throws SAXException, IOException,
+			ParserConfigurationException {
 		this.importXML(new InputSource(new InputStreamReader(
 				new FileInputStream(file), "utf-8")));
 	}
@@ -82,9 +87,7 @@ public class Importer {
 	 * @throws ParserConfigurationException
 	 *             the parser configuration exception {@link XMLParser}.
 	 */
-	public void importXML(InputSource stream)
-			throws SAXException,
-			IOException,
+	public void importXML(InputSource stream) throws SAXException, IOException,
 			ParserConfigurationException {
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 

@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 
 public class XMLReadingTest extends MockedUnitTest {
 
-	static final String xml = "<?xml version=\"1.0\"?>\n"
+	private final String xml = "<?xml version=\"1.0\"?>\n"
 			+
 			"<QA>"
 			+

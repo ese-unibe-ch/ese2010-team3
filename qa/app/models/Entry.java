@@ -1,12 +1,16 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import models.helpers.Tools;
 
 /**
- * An {@link Item} which has a content and can be voted up and down.
+ * An {@link Item} which has a content, can be commented and can be voted up and
+ * down.
  * 
  * @author Simon Marti
  * @author Mirco Kocher
@@ -15,6 +19,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
 	private String contentText, contentHtml;
+	private final HashMap<Integer, Comment> comments;
 	private final HashMap<User, Vote> votes;
 	private boolean possiblySpam;
 	private int cachedRating;
@@ -33,26 +38,31 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 			content = "";
 		}
 		this.content = content;
+		this.comments = new HashMap<Integer, Comment>();
 		this.votes = new HashMap<User, Vote>();
 		this.cachedRating = 0;
 		this.possiblySpam = false;
 	}
 
-	/**
-	 * Unregisters a deleted {@link Comment} to its {@link Entry}.
-	 * 
-	 * @param comment
-	 *            the <code> Comment </code> to be unregistered
-	 */
-	public abstract void unregister(Comment comment);
-
-	/**
-	 * Delete all {@link Vote}s if the <code>Entry</code> gets deleted.
-	 */
-	protected void unregisterVotes() {
+	@Override
+	public void unregister() {
+		for (Comment comment : new ArrayList<Comment>(this.comments.values())) {
+			comment.unregister();
+		}
 		for (Vote vote : new ArrayList<Vote>(this.votes.values())) {
 			vote.unregister();
 		}
+		super.unregister();
+	}
+
+	/**
+	 * Unregisters a deleted {@link Comment}.
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to unregister
+	 */
+	public void unregister(Comment comment) {
+		this.comments.remove(comment.id());
 	}
 
 	/**
@@ -82,6 +92,54 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (this.contentText == null)
 			this.contentText = Tools.htmlToText(this.content());
 		return this.contentText;
+	}
+
+	/**
+	 * Post a {@link Comment} to an <code>Entry</code>.
+	 * 
+	 * @param user
+	 *            the {@link User} posting the {@link Comment}
+	 * @param content
+	 *            the comment
+	 * @return an {@link Comment}
+	 */
+	public Comment comment(User user, String content) {
+		Comment comment = new Comment(user, this, content);
+		this.comments.put(comment.id(), comment);
+		return comment;
+	}
+
+	/**
+	 * Checks if a {@link Comment} belongs to an <code>Entry</code>.
+	 * 
+	 * @param comment
+	 *            the {@link Comment} to check
+	 * @return true if the {@link Comment} belongs to the <code>Entry</code>
+	 */
+	public boolean hasComment(Comment comment) {
+		return this.comments.containsValue(comment);
+	}
+
+	/**
+	 * Get all {@link Comment}s to an <code>Entry</code>.
+	 * 
+	 * @return {@link Collection} of {@link Comments}
+	 */
+	public List<Comment> comments() {
+		List<Comment> list = new ArrayList<Comment>(this.comments.values());
+		Collections.sort(list);
+		return Collections.unmodifiableList(list);
+	}
+
+	/**
+	 * Get a specific {@link Comment} to an <code>Entry</code>.
+	 * 
+	 * @param id
+	 *            of the <code>Comment</code>
+	 * @return {@link Comment} or null
+	 */
+	public Comment getComment(int id) {
+		return this.comments.get(id);
 	}
 
 	/**

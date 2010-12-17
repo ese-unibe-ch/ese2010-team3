@@ -1,7 +1,5 @@
 package tests;
 
-import java.util.Calendar;
-
 import models.Answer;
 import models.Question;
 import models.User;
@@ -92,8 +90,7 @@ public class VoteTest extends MockedUnitTest {
 
 	@Test
 	public void testBestAnswerSetting() {
-		Calendar now = Calendar.getInstance();
-		assertTrue(question.isBestAnswerSettable(now));
+		assertTrue(question.isBestAnswerSettable());
 		question.setBestAnswer(answer);
 		assertEquals(question.getBestAnswer(), answer);
 		question.setBestAnswer(secondAnswer);
@@ -102,16 +99,15 @@ public class VoteTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotAllowBestAnswerSetAfterOneHour() {
-		Calendar now = Calendar.getInstance();
-
-		Calendar inAnHour = (Calendar) now.clone();
-		inAnHour.add(Calendar.HOUR, 1);
-
+		this.sysInfo.hour(0).minute(0);
 		question.setBestAnswer(answer);
-		assertTrue(question.isBestAnswerSettable(now));
-		assertFalse(question.isBestAnswerSettable(inAnHour));
+		assertTrue(question.isBestAnswerSettable());
+		this.sysInfo.minute(15);
+		assertTrue(question.isBestAnswerSettable());
+		this.sysInfo.hour(1);
+		assertFalse(question.isBestAnswerSettable());
 
-		assertFalse(question.setBestAnswer(secondAnswer, inAnHour));
+		assertFalse(question.setBestAnswer(secondAnswer));
 		assertEquals(question.getBestAnswer(), answer);
 	}
 

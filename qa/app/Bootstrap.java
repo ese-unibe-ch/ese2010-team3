@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.GregorianCalendar;
 
 import models.Question;
@@ -71,7 +70,7 @@ public class Bootstrap extends Job {
 
 		// try to import some more questions, answers, etc.
 		try {
-			Database.importXML(new File("qa/conf/fixtures/QA.xml"));
+			Database.importXML(play.Play.getFile("conf/fixtures/QA.xml"));
 		} catch (Exception e) {
 			// handle all exceptions the same way (all failures aren't fatal)
 			e.printStackTrace();

@@ -8,10 +8,11 @@ import models.Tag;
 import models.User;
 
 /**
- * Interaction with the collection of <code>Questions</code> on the server.
+ * A question database is both a factory for creating new tags and a container
+ * tracking all the created questions, also providing basic statistical data
+ * about the tracked questions.
  * 
  * @author aaron
- * 
  */
 public interface IQuestionDatabase {
 	/**

@@ -5,6 +5,10 @@ import java.util.List;
 
 import models.Tag;
 
+/**
+ * A tag database is both a factory for creating new tags and a container
+ * tracking all the created tags.
+ */
 public interface ITagDatabase {
 
 	/**

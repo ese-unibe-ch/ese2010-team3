@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -15,21 +14,19 @@ import models.helpers.IObservable;
 import models.helpers.IObserver;
 
 /**
- * A {@link Entry} containing a question as <code>content</code>, {@link Answer}
- * s and {@link Comments}.
+ * A {@link Entry} containing a question as <code>content</code>, and
+ * {@link Answer}s (comments and votes are tracked by the superclass).
  * 
  * @author Simon Marti
  * @author Mirco Kocher
- * 
  */
 public class Question extends Entry implements IObservable {
 
-	private HashMap<Integer, Answer> answers;
-	private HashMap<Integer, Comment> comments;
+	private final HashMap<Integer, Answer> answers;
 	private boolean isLocked = false;
 
 	private Answer bestAnswer;
-	private Calendar settingOfBestAnswer;
+	private Date settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
 	private final ITagDatabase tagDB;
 	private final ICleanup<Question> cleaner;
@@ -55,7 +52,6 @@ public class Question extends Entry implements IObservable {
 			ICleanup<Question> cleaner) {
 		super(owner, content);
 		this.answers = new HashMap<Integer, Answer>();
-		this.comments = new HashMap<Integer, Comment>();
 		this.observers = new HashSet<IObserver>();
 		this.tagDB = tagDB;
 		this.cleaner = cleaner;
@@ -78,28 +74,18 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Unregisters all {@link Answer}s, {@link Comment}s, {@link Vote}s,
-	 * {@link Tag}s and itself.
+	 * Unregisters all {@link Answer}s, {@link Tag}s and itself.
 	 */
 	@Override
 	public void unregister() {
-		Collection<Answer> answers = this.answers.values();
-		Collection<Comment> comments = this.comments.values();
-		this.answers = new HashMap<Integer, Answer>();
-		this.comments = new HashMap<Integer, Comment>();
-		for (Answer answer : answers) {
+		for (Answer answer : new ArrayList<Answer>(this.answers.values())) {
 			answer.unregister();
 		}
-		for (Comment comment : comments) {
-			comment.unregister();
-		}
 		this.observers.clear();
+		setTagString("");
 		if (this.cleaner != null) {
 			this.cleaner.cleanUp(this);
 		}
-		unregisterVotes();
-		unregisterUser();
-		setTagString("");
 		super.unregister();
 	}
 
@@ -114,17 +100,6 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Unregisters a deleted {@link Comment}.
-	 * 
-	 * @param comment
-	 *            the {@link Comment} to unregister
-	 */
-	@Override
-	public void unregister(Comment comment) {
-		this.comments.remove(comment.id());
-	}
-
-	/**
 	 * Post a {@link Answer} to a <code>Question</code>.
 	 * 
 	 * @param user
@@ -136,22 +111,9 @@ public class Question extends Entry implements IObservable {
 	public Answer answer(User user, String content) {
 		Answer answer = new Answer(user, this, content);
 		this.answers.put(answer.id(), answer);
+		// make users aware of this new answer
+		this.notifyObservers(answer);
 		return answer;
-	}
-
-	/**
-	 * Post a {@link Comment} to a <code>Question</code>.
-	 * 
-	 * @param user
-	 *            the {@link User} posting the {@link Comment}
-	 * @param content
-	 *            the comment
-	 * @return an {@link Comment}
-	 */
-	public Comment comment(User user, String content) {
-		Comment comment = new Comment(user, this, content);
-		this.comments.put(comment.id(), comment);
-		return comment;
 	}
 
 	/**
@@ -166,34 +128,12 @@ public class Question extends Entry implements IObservable {
 	}
 
 	/**
-	 * Checks if a {@link Comment} belongs to a <code>Question</code>.
-	 * 
-	 * @param comment
-	 *            the {@link Comment} to check
-	 * @return true if the {@link Comment} belongs to the <code>Question</code>
-	 */
-	public boolean hasComment(Comment comment) {
-		return this.comments.containsValue(comment);
-	}
-
-	/**
 	 * Get all {@link Answer}s to a <code>Question</code>.
 	 * 
 	 * @return {@link Collection} of {@link Answers}
 	 */
 	public List<Answer> answers() {
 		List<Answer> list = new ArrayList<Answer>(this.answers.values());
-		Collections.sort(list);
-		return Collections.unmodifiableList(list);
-	}
-
-	/**
-	 * Get all {@link Comment}s to a <code>Question</code>.
-	 * 
-	 * @return {@link Collection} of {@link Comments}
-	 */
-	public List<Comment> comments() {
-		List<Comment> list = new ArrayList<Comment>(this.comments.values());
 		Collections.sort(list);
 		return Collections.unmodifiableList(list);
 	}
@@ -209,27 +149,10 @@ public class Question extends Entry implements IObservable {
 		return this.answers.get(id);
 	}
 
-	/**
-	 * Get a specific {@link Comment} to a <code>Question</code>.
-	 * 
-	 * @param id
-	 *            of the <code>Comment</code>
-	 * @return {@link Comment} or null
-	 */
-	public Comment getComment(int id) {
-		return this.comments.get(id);
-	}
-
-	public boolean isBestAnswerSettable(Calendar now) {
-		Calendar thirtyMinutesAgo = ((Calendar) now.clone());
-		thirtyMinutesAgo.add(Calendar.MINUTE, -30);
-		return this.settingOfBestAnswer == null
-				|| !thirtyMinutesAgo.getTime().after(
-						this.settingOfBestAnswer.getTime());
-	}
-
 	public boolean isBestAnswerSettable() {
-		return isBestAnswerSettable(Calendar.getInstance());
+		long thirtyMinutesAgo = SysInfo.now().getTime() - 30 * 60 * 1000;
+		return this.settingOfBestAnswer == null
+				|| thirtyMinutesAgo <= this.settingOfBestAnswer.getTime();
 	}
 
 	/**
@@ -241,17 +164,12 @@ public class Question extends Entry implements IObservable {
 	 * @return true if setting of best answer was allowed.
 	 */
 	public boolean setBestAnswer(Answer bestAnswer) {
-		Calendar now = Calendar.getInstance();
-		return setBestAnswer(bestAnswer, now);
-	}
-
-	public boolean setBestAnswer(Answer bestAnswer, Calendar now) {
-		if (isBestAnswerSettable(now)) {
-			this.bestAnswer = bestAnswer;
-			this.settingOfBestAnswer = now;
-			return true;
-		} else
+		if (!isBestAnswerSettable()) {
 			return false;
+		}
+		this.bestAnswer = bestAnswer;
+		this.settingOfBestAnswer = SysInfo.now();
+		return true;
 	}
 
 	public boolean hasBestAnswer() {

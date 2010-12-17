@@ -5,6 +5,11 @@ import java.util.Collection;
 import models.IMailbox;
 import models.User;
 
+/**
+ * A user database is both a factory for creating new users and a container
+ * tracking all the created users and their privileges (currently: moderator
+ * status).
+ */
 public interface IUserDatabase {
 
 	/**
@@ -24,9 +29,9 @@ public interface IUserDatabase {
 	 * @param username
 	 *            unique identifier
 	 * @param password
-	 * 
+	 *            the password
 	 * @param email
-	 * 
+	 *            the email
 	 * @return The user with this credentials
 	 */
 	public User register(String username, String password, String email);
@@ -37,6 +42,7 @@ public interface IUserDatabase {
 	 * hard to distinguish
 	 * 
 	 * @param username
+	 *            the username
 	 * @return True iff there is no <code>User</code> of that name
 	 */
 	public boolean isAvailable(String username);
@@ -45,6 +51,7 @@ public interface IUserDatabase {
 	 * Deletes the user from the database without clean up.
 	 * 
 	 * @param name
+	 *            the name
 	 */
 
 	public void remove(String name);
@@ -52,7 +59,7 @@ public interface IUserDatabase {
 	/**
 	 * A collection of all registered Users in the system.
 	 * 
-	 * @return
+	 * @return the collection
 	 */
 
 	public Collection<User> all();
@@ -80,17 +87,22 @@ public interface IUserDatabase {
 	 * Add a User directly.
 	 * 
 	 * @param user
+	 *            the user
 	 */
 
 	public void add(User user);
 
 	/**
 	 * Get moderating crowd.
+	 * 
+	 * @return the collection
 	 */
 	public Collection<User> allModerators();
 
 	/**
 	 * Returns the mailbox that every moderator can read.
+	 * 
+	 * @return the moderator mailbox
 	 */
 
 	public IMailbox getModeratorMailbox();
