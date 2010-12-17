@@ -74,19 +74,19 @@ $(document).ready(function() {
 		});
 	
 	// add an inline login form
-	$(".navigation .user a[href=/login]").click(function() {
+	$(".navigation  a[href=/login]").click(function() {
 		$('<form action="/login" method="POST" id="mini_login"> \
-			<div class=hiddenlogin"><table> \
-			<tr><td><a href="javascript:void($(\'#mini_login\').remove())" title="hide login">[x]</a></td></tr> \
-			<tr><td>Username:</td></tr> \
-			<tr><td><input size="15" type="text" name="username" placeholder="user name"></td></tr> \
-			<tr><td>Password:</td></tr> \
-			<tr><td><input size="15" type="password" name="password" placeholder="password"></td></tr> \
-			<tr><td><input type="submit" value="Log in"></td></tr> \
+			<div class="hiddenlogin"><table> \
+			<tr class="placeholder"><td><a href="javascript:void($(\'#mini_login\').remove())" title="hide login">[x]</a></td></tr> \
+			<tr class="placeholder"><td>Username:</td></tr> \
+			<tr class="placeholder"><td><input size="15" type="text" name="username" placeholder="user name"></td></tr> \
+			<tr class="placeholder"><td>Password:</td></tr> \
+			<tr class="placeholder"><td><input size="15" type="password" name="password" placeholder="password"></td></tr> \
+			<tr class="placeholder"><td><input type="submit" value="Log in"></td></tr> \
 			</table></div></form>')
 			.insertBefore(this.parentNode);
 		if ("placeholder" in document.createElement("input"))
-			$(".loginform").remove();
+			$("#mini_login .placeholder").remove();
 		$("#mini_login input[name=username]").focus();
 		return false;
 	});

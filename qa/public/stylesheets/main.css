@@ -52,7 +52,8 @@ hr {
 global
 ************************/
 div.global {
-	width: 980px;
+	min-width: 780;
+	max-width: 980px;
 	margin: 0 auto;
 }
 /*********************** 
@@ -78,7 +79,16 @@ div.navigation ul li{
 div.hiddenlogin {
 	width: 170px;
 }
-
+#mini_login {
+	float: right;
+	right: 5px; 	
+}	
+#mini_login input {
+	max-width: 100px;	 	
+}
+#mini_login + .user {
+	display: none;
+}
 /*********************** 
 main
 ************************/
