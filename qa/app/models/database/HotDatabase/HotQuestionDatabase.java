@@ -14,13 +14,27 @@ import models.Question;
 import models.SearchFilter;
 import models.Tag;
 import models.User;
-import models.database.Database;
 import models.database.IQuestionDatabase;
+import models.database.ITagDatabase;
+import models.helpers.ICleanup;
 import models.helpers.Mapper;
 
-public class HotQuestionDatabase implements IQuestionDatabase {
+public class HotQuestionDatabase implements IQuestionDatabase,
+		ICleanup<Question> {
 
 	private final HashMap<Integer, Question> questions = new HashMap<Integer, Question>();
+	private final ITagDatabase tagDB;
+
+	/**
+	 * Creates a new in-memory database for managing questions.
+	 * 
+	 * @param tagDB
+	 *            the database which is to store the tags associated with the
+	 *            questions stored in the newly created database
+	 */
+	public HotQuestionDatabase(ITagDatabase tagDB) {
+		this.tagDB = tagDB;
+	}
 
 	/**
 	 * Searches through all questions, answers and usernames for the given
@@ -42,12 +56,12 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			if (s.startsWith("tag:") && s.length() > 4) {
 				// search for tag only
 				terms.add(s);
-				tags.add(Database.tags().get(s.substring(4)));
+				tags.add(this.tagDB.get(s.substring(4)));
 			} else {
 				// search for this term anywhere, so ignore all non-alphanumeric
 				// characters
 				terms.addAll(Arrays.asList(s.split("\\W+")));
-				tags.add(Database.tags().get(s));
+				tags.add(this.tagDB.get(s));
 			}
 		}
 		return Mapper.sort(this.questions.values(),
@@ -76,7 +90,9 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	}
 
 	public Question add(User owner, String content) {
-		return new Question(owner, content);
+		Question question = new Question(owner, content, this.tagDB, this);
+		this.register(question);
+		return question;
 	}
 
 	public void remove(int id) {
@@ -144,7 +160,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics() {
 		Map<Tag, Map<User, Integer>> stats = new HashMap();
 		// only check each question (and answer) once
-		for (Question question : Database.questions().all()) {
+		for (Question question : this.all()) {
 			List<Tag> tags = question.getTags();
 			// skip untagged questions
 			if (tags.isEmpty())
@@ -190,5 +206,10 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			}
 		}
 		return watchList;
+	}
+
+	@Override
+	public void cleanUp(Question question) {
+		this.remove(question.id());
 	}
 }

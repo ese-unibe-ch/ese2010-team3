@@ -65,7 +65,7 @@ public class Application extends BaseController {
 			List<Question> similarQuestions = (List<Question>) Cache
 					.get("question." + id + ".similar");
 			if (similarQuestions == null) {
-				similarQuestions = question.getSimilarQuestions();
+				similarQuestions = Database.questions().findSimilar(question);
 				if (similarQuestions.size() > 5) {
 					similarQuestions = similarQuestions.subList(0, 5);
 				}
@@ -208,7 +208,8 @@ public class Application extends BaseController {
 	public static void showprofile(String userName) {
 		User showUser = Database.users().get(userName);
 		boolean canEdit = userCanEditProfile(showUser);
-		render(showUser, canEdit);
+		List<Tag> expertise = showUser.getExpertise(Database.questions());
+		render(showUser, expertise, canEdit);
 	}
 
 	/**
@@ -290,7 +291,8 @@ public class Application extends BaseController {
 		User user = Session.user();
 		if (user != null) {
 			List<Notification> spamNotification = new LinkedList();
-			List<Question> suggestedQuestions = user.getSuggestedQuestions();
+			List<Question> suggestedQuestions = user
+					.getSuggestedQuestions(Database.questions());
 			List<Notification> notifications = user.getNotifications();
 			List<Question> watchingQuestions = Database.questions()
 					.getWatchList(user);

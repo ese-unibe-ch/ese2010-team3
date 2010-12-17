@@ -6,12 +6,10 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.database.Database;
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -22,7 +20,7 @@ import play.test.FunctionalTest;
 
 public class XMLExample extends FunctionalTest {
 
-	private static IDatabase old;
+	private static IDatabase db;
 	private static String loaded;
 	private static String incomplete;
 	@SuppressWarnings("unused")
@@ -30,8 +28,6 @@ public class XMLExample extends FunctionalTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		old = Database.swapWith(new HotDatabase());
-
 		loaded = loadFile("conf/fixtures/QA3.xml");
 		incomplete = loadFile("conf/fixtures/incompleteData.xml");
 		inconsistent = loadFile("conf/fixtures/inconsistentData.xml");
@@ -49,50 +45,39 @@ public class XMLExample extends FunctionalTest {
 		return build.toString();
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		Database.swapWith(old);
-	}
-
 	@Before
 	public void setUp() throws Exception {
-		Database.clear();
-	}
-
-	@Test
-	public void loadFile() throws SAXException, IOException,
-			ParserConfigurationException {
-		Importer.importXML(loaded);
+		this.db = new HotDatabase();
 	}
 
 	@Test
 	public void hasCorrectUserCount() throws SAXException, IOException,
 			ParserConfigurationException {
-		loadFile();
-		assertEquals(52, Database.users().count());
+		new Importer(this.db).importXML(loaded);
+		assertEquals(52, this.db.users().count());
 	}
 
 	@Test
 	public void hasCorrectQuestionCount() throws SAXException, IOException,
 			ParserConfigurationException {
-		loadFile();
-		assertEquals(44, Database.questions().count());
+		new Importer(this.db).importXML(loaded);
+		assertEquals(44, this.db.questions().count());
 	}
 
 	@Test
 	public void hasCorrectAnswerCount() throws SAXException, IOException,
 			ParserConfigurationException {
-		loadFile();
-		assertEquals(51, Database.questions().countAllAnswers());
+		new Importer(this.db).importXML(loaded);
+		assertEquals(51, this.db.questions().countAllAnswers());
 	}
 
 	@Ignore("Answers are not read correctly. I guess")
 	@Test
 	public void withIncompleteData() throws SAXException, IOException,
 			ParserConfigurationException {
-		Importer.importXML(incomplete);
-		assertEquals(50, Database.users().count());
-		assertEquals(41, Database.questions().count());
-		assertEquals(51, Database.questions().countAllAnswers());
+		new Importer(this.db).importXML(incomplete);
+		assertEquals(50, this.db.users().count());
+		assertEquals(41, this.db.questions().count());
+		assertEquals(51, this.db.questions().countAllAnswers());
 	}
 }

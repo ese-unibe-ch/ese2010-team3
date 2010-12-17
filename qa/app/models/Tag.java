@@ -3,7 +3,7 @@ package models;
 import java.util.HashSet;
 import java.util.Set;
 
-import models.database.Database;
+import models.helpers.ICleanup;
 
 /**
  * A <code>Tag</code> can belong to several questions, allowing to associate
@@ -19,8 +19,10 @@ public class Tag implements Comparable<Tag> {
 	/** The questions associated with this tag. */
 	private final HashSet<Question> questions = new HashSet<Question>();
 
-	/** A regex a valid tag name has to match. */
+	/** A cleaner to call once this tag isn't referenced by any questions. */
+	private final ICleanup<Tag> cleaner;
 
+	/** A regex a valid tag name has to match. */
 	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
 	/**
@@ -29,11 +31,15 @@ public class Tag implements Comparable<Tag> {
 	 * @param name
 	 *            the name of this tag (should be all lowercase and not contain
 	 *            whitespace)
+	 * @param cleaner
+	 *            an optional clean-up object that wants to be notified when
+	 *            this tag is no longer needed
 	 */
-	public Tag(String name) {
+	public Tag(String name, ICleanup<Tag> cleaner) {
 		if (name == null || !name.matches(tagRegex))
 			throw new IllegalArgumentException();
 		this.name = name;
+		this.cleaner = cleaner;
 	}
 
 	/**
@@ -66,8 +72,8 @@ public class Tag implements Comparable<Tag> {
 		this.questions.remove(question);
 
 		// remove this tag from the database
-		if (this.questions.isEmpty()) {
-			Database.tags().remove(this);
+		if (this.questions.isEmpty() && this.cleaner != null) {
+			this.cleaner.cleanUp(this);
 		}
 	}
 

@@ -10,7 +10,6 @@ import models.Question;
 import models.User;
 import models.Vote;
 import models.database.Database;
-import models.database.importers.Importer;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.mvc.With;
@@ -231,7 +230,7 @@ public class CUser extends BaseController {
 		}
 
 		try {
-			Importer.importXML(xml);
+			Database.importXML(xml);
 			flash.success("secure.xmlloadflash");
 		} catch (Throwable e) {
 			flash.error("secure.xmlloaderror", e.getMessage());

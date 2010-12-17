@@ -6,9 +6,23 @@ import models.database.IDatabase;
 import models.database.IUserDatabase;
 import models.database.HotDatabase.HotDatabase;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DatabaseTest extends MockedUnitTest {
+
+	private IDatabase origDB;
+
+	@Before
+	public void setUp() {
+		this.origDB = Database.swapWith(new HotDatabase());
+	}
+
+	@After
+	public void tearDown() {
+		Database.swapWith(this.origDB);
+	}
 
 	@Test
 	public void shouldKeepAdmins() {
@@ -16,7 +30,7 @@ public class DatabaseTest extends MockedUnitTest {
 		userDB.clear();
 
 		User admin = userDB.register("admin", "admin", "admin@example.com");
-		admin.setModerator(true);
+		admin.setModerator(true, null);
 		User user = userDB.register("user", "user", "user@example.com");
 		assertEquals(2, userDB.all().size());
 		assertEquals(2, userDB.count());

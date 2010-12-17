@@ -11,15 +11,15 @@ import java.util.Map;
 import models.Answer;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IDatabase;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 public class XMLParser extends DefaultHandler {
 	private final Map<Integer, User> idUserBase;
 	private final Map<Integer, Question> idQuestionBase;
+	private final IDatabase db;
 
 	private final List<ProtoAnswer> protoanswers;
 	private final List<ProtoQuestion> protoquestions;
@@ -31,9 +31,10 @@ public class XMLParser extends DefaultHandler {
 	private final Action createAnswer;
 	private final Action makeConnections;
 
-	public XMLParser() {
+	public XMLParser(IDatabase db) {
 		this.idUserBase = new HashMap<Integer, User>();
 		this.idQuestionBase = new HashMap<Integer, Question>();
+		this.db = db;
 
 		this.protoanswers = new LinkedList();
 		this.protoquestions = new LinkedList();
@@ -145,7 +146,7 @@ public class XMLParser extends DefaultHandler {
 		String name = e.getText("displayname");
 		String password = e.getText("password");
 		String email = e.getText("email");
-		User user = Database.users().register(name, password,email);
+		User user = this.db.users().register(name, password, email);
 		Integer age = new Integer(e.getText("age"));
 		if (age != -1) {
 			Calendar pseudobirthday = GregorianCalendar.getInstance();
@@ -154,7 +155,8 @@ public class XMLParser extends DefaultHandler {
 		}
 		user.setBiography(e.getText("aboutme"));
 		user.setWebsite(e.getText("website"));
-		user.setModerator(e.getText("ismoderator").equals("true"));
+		user.setModerator(e.getText("ismoderator").equals("true"), this.db
+				.users().getModeratorMailbox());
 		int id = new Integer(e.getArg("id"));
 		this.idUserBase.put(id, user);
 	}
@@ -219,7 +221,7 @@ public class XMLParser extends DefaultHandler {
 
 			String content = protoquestion.body;
 			content = "<h3>" + protoquestion.title + "</h3>\n" + content;
-			Question question = Database.questions().add(owner, content);
+			Question question = this.db.questions().add(owner, content);
 			question.setTimestamp(protoquestion.creation);
 			this.idQuestionBase.put(protoquestion.id, question);
 			question.setTagString(protoquestion.tags);

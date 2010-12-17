@@ -6,7 +6,8 @@ import models.Answer;
 import models.Entry;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +21,20 @@ public class EntryOrderingTest extends MockedUnitTest {
 	private Answer goodAnswer;
 	private Answer bestAnswer;
 	private User jack;
+	private IQuestionDatabase questionDB;
 
 	@Before
 	public void setUp() throws Exception {
-		jack = new User("jack");
-		createEntries();
-		voting();
-	}
+		this.questionDB = new HotQuestionDatabase(null);
 
-	private void voting() {
+		jack = new User("jack");
+		badQuestion = this.questionDB.add(jack, "bad");
+		goodQuestion = this.questionDB.add(jack, "good");
+		badAnswer = badQuestion.answer(jack, "");
+		notQuiteAsBadAnswer = badQuestion.answer(jack, "");
+		goodAnswer = badQuestion.answer(jack, "");
+		bestAnswer = badQuestion.answer(jack, "");
+
 		voteDownNTimes(badQuestion, 5);
 		voteUpNTimes(goodQuestion, 2);
 		voteUpNTimes(goodAnswer, 10);
@@ -50,19 +56,12 @@ public class EntryOrderingTest extends MockedUnitTest {
 		}
 	}
 
-	private void createEntries() {
-		badQuestion = new Question(jack, "");
-		goodQuestion = new Question(jack, "");
-		badAnswer = badQuestion.answer(jack, "");
-		notQuiteAsBadAnswer = badQuestion.answer(jack, "");
-		goodAnswer = badQuestion.answer(jack, "");
-		bestAnswer = badQuestion.answer(jack, "");
-	}
-
+	@Test
 	public void shouldPreferMoreRecentQuestionEventhoughTheyMightBeWorse() {
-		List<Question> questions = Database.questions().all();
-		assertEquals(goodQuestion, questions.get(1));
-		assertEquals(badQuestion, questions.get(0));
+		// TODO: this doesn't do what the tests expects it to!
+		List<Question> questions = this.questionDB.all();
+		assertEquals(goodQuestion, questions.get(0));
+		assertEquals(badQuestion, questions.get(1));
 	}
 
 	@Test

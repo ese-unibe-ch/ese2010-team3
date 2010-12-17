@@ -236,7 +236,7 @@ public class CAnswer extends BaseController {
 		User user = Session.user();
 		if (user != null && answer != null) {
 			if (!user.isModerator()) {
-				answer.markSpam();
+				answer.markSpam(Database.users().getModeratorMailbox());
 			} else {
 				answer.confirmSpam();
 			}

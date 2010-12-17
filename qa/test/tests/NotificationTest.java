@@ -7,7 +7,8 @@ import models.Answer;
 import models.Notification;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 
@@ -197,10 +198,11 @@ public class NotificationTest extends MockedUnitTest {
 
 	@Test
 	public void shouldBeOnWatchList() {
-		Question question2 = new Question(this.andrew, "another question");
-		List<Question> watchList = Database.questions()
-				.getWatchList(this.norbert);
-		assertTrue(watchList.contains(this.question));
+		IQuestionDatabase questionDB = new HotQuestionDatabase(null);
+		Question question1 = questionDB.add(this.norbert, "one question");
+		Question question2 = questionDB.add(this.andrew, "another question");
+		List<Question> watchList = questionDB.getWatchList(this.norbert);
+		assertTrue(watchList.contains(question1));
 		assertFalse(watchList.contains(question2));
 	}
 

@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import models.database.Database;
+import models.database.ITagDatabase;
+import models.helpers.ICleanup;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
 
@@ -29,6 +30,8 @@ public class Question extends Entry implements IObservable {
 	private Answer bestAnswer;
 	private Calendar settingOfBestAnswer;
 	private final ArrayList<Tag> tags = new ArrayList<Tag>();
+	private final ITagDatabase tagDB;
+	private final ICleanup<Question> cleaner;
 
 	protected HashSet<IObserver> observers;
 
@@ -40,16 +43,37 @@ public class Question extends Entry implements IObservable {
 	 *            the {@link User} who posted the <code>Question</code>
 	 * @param content
 	 *            the question
+	 * @param tagDB
+	 *            an optional tag database in which to store tags associated
+	 *            with this question
+	 * @param cleaner
+	 *            an optional clean-up object that wants to be notified when
+	 *            this question is no longer needed
 	 */
-	public Question(User owner, String content) {
+	public Question(User owner, String content, ITagDatabase tagDB,
+			ICleanup<Question> cleaner) {
 		super(owner, content);
 		this.answers = new HashMap<Integer, Answer>();
 		this.comments = new HashMap<Integer, Comment>();
 		this.observers = new HashSet<IObserver>();
-		Database.questions().register(this);
+		this.tagDB = tagDB;
+		this.cleaner = cleaner;
 		// all users watch their own questions by default
 		if (owner != null)
 			owner.startObserving(this);
+	}
+
+	/**
+	 * Constructor for questions not registered in any kind of database (for
+	 * testing only).
+	 * 
+	 * @param owner
+	 *            the {@link User} who posted the <code>Question</code>
+	 * @param content
+	 *            the question
+	 */
+	public Question(User owner, String content) {
+		this(owner, content, null, null);
 	}
 
 	/**
@@ -69,7 +93,9 @@ public class Question extends Entry implements IObservable {
 			comment.unregister();
 		}
 		this.observers.clear();
-		Database.questions().remove(id());
+		if (this.cleaner != null) {
+			this.cleaner.cleanUp(this);
+		}
 		unregisterVotes();
 		unregisterUser();
 		setTagString("");
@@ -272,7 +298,7 @@ public class Question extends Entry implements IObservable {
 		}
 		this.tags.clear();
 
-		if (tags == null)
+		if (tags == null || tags.equals(""))
 			return;
 
 		String bits[] = tags.split("[\\s,]+");
@@ -283,7 +309,7 @@ public class Question extends Entry implements IObservable {
 				bit = bit.substring(0, 32);
 			}
 
-			Tag tag = Database.tags().get(bit);
+			Tag tag = this.tagDB.get(bit);
 			if (tag != null && !this.tags.contains(tag)) {
 				this.tags.add(tag);
 				tag.register(this);
@@ -331,17 +357,6 @@ public class Question extends Entry implements IObservable {
 		for (IObserver o : this.observers) {
 			o.observe(this, arg);
 		}
-	}
-
-	/**
-	 * Get all questions that containing at least one of the tags of the
-	 * original question.
-	 * 
-	 * @return List<Question> the List containing all questions that contain at
-	 *         least one of the first question.
-	 */
-	public List<Question> getSimilarQuestions() {
-		return Database.questions().findSimilar(this);
 	}
 
 	/**

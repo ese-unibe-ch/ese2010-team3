@@ -3,7 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import models.database.Database;
 import models.helpers.Tools;
 
 /**
@@ -255,15 +254,20 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
-	 * Declare this post to be probably spam. Sends a notice to the moderating
-	 * staff to check if this really is spam.
+	 * Declare this post to be probably spam. Optionally sends a notice to the
+	 * moderating staff to check if this really is spam.
+	 * 
+	 * @param moderatorMailbox
+	 *            an optional reference to a mailbox to dump the spam
+	 *            notification in
 	 */
-	public void markSpam() {
+	public void markSpam(IMailbox moderatorMailbox) {
 		if (this.owner().isSpammer()) {
 			this.confirmSpam();
 		} else if (!this.possiblySpam) {
-			new Notification(Database.users()
-					.getModeratorMailbox(), this);
+			if (moderatorMailbox != null) {
+				new Notification(moderatorMailbox, this);
+			}
 			this.possiblySpam = true;
 		}
 	}
@@ -273,7 +277,6 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * and blocks the user that posted it in the first place.
 	 */
 	public void confirmSpam() {
-		this.owner().block("Declared Spammer");
 		this.owner().setIsSpammer(true);
 		this.unregister();
 	}

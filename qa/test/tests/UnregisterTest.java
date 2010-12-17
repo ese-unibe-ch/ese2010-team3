@@ -90,16 +90,16 @@ public class UnregisterTest extends MockedUnitTest {
 
 	@Test
 	public void shouldDeleteAllCommentsOnQuestionDelete() {
-		assertTrue(questionComment.isRegistered());
+		assertNotNull(questionComment.getQuestion());
 		question.unregister();
-		assertFalse(questionComment.isRegistered());
+		assertNull(questionComment.getQuestion());
 	}
 
 	@Test
 	public void shouldDeleteAllCommentsOnAnswerDelete() {
-		assertTrue(answerComment.isRegistered());
+		assertNotNull(answerComment.getQuestion());
 		answer.unregister();
-		assertFalse(answerComment.isRegistered());
+		assertNull(answerComment.getQuestion());
 	}
 
 	@Test

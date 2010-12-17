@@ -4,10 +4,10 @@ import java.util.List;
 
 import models.Answer;
 import models.IMailbox;
+import models.Mailbox;
 import models.Notification;
 import models.Question;
 import models.User;
-import models.database.Database;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,19 +20,18 @@ public class MailboxTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		Database.clear();
 		this.pete = new User("Pete");
 		this.susane = new User("Susane");
-		this.mailbox = Database.users().getModeratorMailbox();
-		this.pete.setModerator(true);
-		this.susane.setModerator(true);
+		this.mailbox = new Mailbox("We're married");
+		this.pete.setModerator(true, this.mailbox);
+		this.susane.setModerator(true, this.mailbox);
 		this.question = new Question(this.susane, "ORLY?");
 		sysInfo.year(2000).month(4).day(2).hour(9).minute(0).second(0);
 	}
 
 	@Test
 	public void testReceive() {
-		assertEquals(this.mailbox.getName(), "Moderators");
+		assertEquals(this.mailbox.getName(), "We're married");
 		new Notification(this.mailbox, this.question);
 	}
 

@@ -4,7 +4,6 @@ import models.SysInfo;
 import models.SystemInformation;
 import models.database.Database;
 import models.database.IDatabase;
-import models.database.HotDatabase.HotDatabase;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -20,7 +19,8 @@ public abstract class MockedUnitTest extends UnitTest {
 
 	@BeforeClass
 	public static void classSetUp() {
-		origDB = Database.swapWith(new HotDatabase());
+		// make sure that no test tries to access the global database
+		origDB = Database.swapWith(null);
 		sysInfo = new SystemInformationMock();
 		savedSysInfo = SysInfo.mockWith(sysInfo);
 	}

@@ -11,7 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.helpers.ICleanup;
 import models.helpers.IFilter;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
@@ -55,15 +56,25 @@ public class User implements IObserver {
 	private long lastPost = 0;
 
 	private final Mailbox mainMailbox;
+	private IMailbox moderatorMailbox;
 	private boolean isSpammer;
+	private final ICleanup<User> cleaner;
 
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
 	 * @param name
 	 *            the name of the <code>User</code>
+	 * @param password
+	 *            the user's password
+	 * @param email
+	 *            the user's valid(!) email address
+	 * @param cleaner
+	 *            an optional clean-up object that wants to be notified when
+	 *            this user object is no longer needed
 	 */
-	public User(String name, String password, String email) {
+	public User(String name, String password, String email,
+			ICleanup<User> cleaner) {
 		this.name = name;
 		if (password != null) {
 			// null passwords may happen during testing, as hashing a password
@@ -75,6 +86,7 @@ public class User implements IObserver {
 		this.items = new HashSet<Item>();
 		this.mainMailbox = new Mailbox(name);
 		this.isSpammer = false;
+		this.cleaner = cleaner;
 	}
 
 	/**
@@ -85,7 +97,7 @@ public class User implements IObserver {
 	 *            the name of the <code>User</code>
 	 */
 	public User(String name) {
-		this(name, null, null);
+		this(name, null, null, null);
 	}
 
 	public boolean canEdit(Entry entry) {
@@ -138,7 +150,9 @@ public class User implements IObserver {
 		}
 		this.items.clear();
 		this.mainMailbox.delete();
-		Database.users().remove(this.name);
+		if (this.cleaner != null) {
+			this.cleaner.cleanUp(this);
+		}
 	}
 
 	/**
@@ -434,10 +448,14 @@ public class User implements IObserver {
 	 * Set the status of the user whether he is a moderator or not.
 	 * 
 	 * @param mod
-	 *            , true if the user will be a moderator
+	 *            whether the user is to become a moderator or not
+	 * @param mailbox
+	 *            an optional moderator mailbox, through which the user will be
+	 *            notified about spam reports, etc.
 	 */
-	public void setModerator(boolean mod) {
+	public void setModerator(boolean mod, IMailbox mailbox) {
 		this.isModerator = mod;
+		this.moderatorMailbox = mod ? mailbox : null;
 	}
 
 	/**
@@ -528,7 +546,7 @@ public class User implements IObserver {
 	 * 
 	 * @return List<Question>
 	 */
-	public List<Question> getSuggestedQuestions() {
+	public List<Question> getSuggestedQuestions(IQuestionDatabase questionDB) {
 		List<Question> suggestedQuestions = new ArrayList<Question>();
 		List<Question> sortedAnsweredQuestions = this
 				.getSortedAnsweredQuestions();
@@ -539,7 +557,7 @@ public class User implements IObserver {
 		 * Remove duplicates.
 		 */
 		for (Question q : sortedAnsweredQuestions) {
-			for (Question similarQ : q.getSimilarQuestions()) {
+			for (Question similarQ : questionDB.findSimilar(q)) {
 				if (!suggestedQuestions.contains(similarQ)
 						&& !sortedAnsweredQuestions.contains(similarQ)
 						&& similarQ.owner() != this
@@ -739,10 +757,13 @@ public class User implements IObserver {
 	 * (i.e. at most 20 % of all the answerers for a given topic can be
 	 * experts).
 	 * 
+	 * @param questionDB
+	 *            a database containing questions from which to calculate the
+	 *            expertise levels
 	 * @return the list of tags for which this user is an expert
 	 */
-	public List<Tag> getExpertise() {
-		Map<Tag, Map<User, Integer>> stats = Database.questions()
+	public List<Tag> getExpertise(IQuestionDatabase questionDB) {
+		Map<Tag, Map<User, Integer>> stats = questionDB
 				.collectExpertiseStatistics();
 
 		List<Tag> expertise = new ArrayList();
@@ -842,7 +863,7 @@ public class User implements IObserver {
 		List<IMailbox> mailboxes = new ArrayList();
 		mailboxes.add(this.mainMailbox);
 		if (this.isModerator())
-			mailboxes.add(Database.users().getModeratorMailbox());
+			mailboxes.add(this.moderatorMailbox);
 		return mailboxes;
 	}
 
@@ -890,7 +911,10 @@ public class User implements IObserver {
 		return this.mainMailbox.getRecentNotifications();
 	}
 
-	public void setIsSpammer(boolean b) {
-		this.isSpammer = b;
+	public void setIsSpammer(boolean isSpammer) {
+		if (isSpammer && !this.isBlocked) {
+			this.block("Declared Spammer");
+		}
+		this.isSpammer = isSpammer;
 	}
 }

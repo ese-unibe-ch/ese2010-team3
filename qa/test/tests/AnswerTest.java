@@ -5,7 +5,8 @@ import java.util.Date;
 import models.Answer;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ public class AnswerTest extends MockedUnitTest {
 	private Answer answer;
 	private Date questionDate;
 	private Date answerDate;
+	private IQuestionDatabase questionDB;
 
 	@Before
 	public void setUp() {
@@ -31,7 +33,8 @@ public class AnswerTest extends MockedUnitTest {
 		this.answerDate = sysInfo.now();
 		sysInfo.changeTo(this.answerDate);
 
-		this.question = new Question(new User("Jack"),
+		this.questionDB = new HotQuestionDatabase(null);
+		this.question = this.questionDB.add(new User("Jack"),
 				"Why did the chicken cross the road?");
 
 		this.answer = this.question.answer(this.james,
@@ -106,7 +109,7 @@ public class AnswerTest extends MockedUnitTest {
 		assertTrue(this.question.isBestAnswerSettable());
 		this.question.setBestAnswer(this.answer);
 		assertTrue(this.answer.isBestAnswer());
-		assertTrue(Database.questions().countBestRatedAnswers() > 0);
+		assertTrue(this.questionDB.countBestRatedAnswers() > 0);
 	}
 
 	@Test

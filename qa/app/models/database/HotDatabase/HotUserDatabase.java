@@ -10,8 +10,9 @@ import models.Mailbox;
 import models.Notification;
 import models.User;
 import models.database.IUserDatabase;
+import models.helpers.ICleanup;
 
-public class HotUserDatabase implements IUserDatabase {
+public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 	/** Tracks all users by their lowercase(!) usernames. */
 	private final HashMap<String, User> users = new HashMap();
 	private final IMailbox moderatorMailbox = new Mailbox("Moderators");
@@ -21,7 +22,7 @@ public class HotUserDatabase implements IUserDatabase {
 	}
 
 	public User register(String username, String password, String email) {
-		User user = new User(username, password, email);
+		User user = new User(username, password, email, this);
 		users.put(username.toLowerCase(), user);
 		return user;
 	}
@@ -65,5 +66,10 @@ public class HotUserDatabase implements IUserDatabase {
 
 	public IMailbox getModeratorMailbox() {
 		return this.moderatorMailbox;
+	}
+
+	@Override
+	public void cleanUp(User user) {
+		this.remove(user.getName());
 	}
 }

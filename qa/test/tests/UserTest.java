@@ -6,7 +6,11 @@ import models.Answer;
 import models.Question;
 import models.Tag;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.IUserDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
+import models.database.HotDatabase.HotTagDatabase;
+import models.database.HotDatabase.HotUserDatabase;
 import models.helpers.Tools;
 
 import org.junit.Before;
@@ -14,9 +18,11 @@ import org.junit.Test;
 
 public class UserTest extends MockedUnitTest {
 
+	private IQuestionDatabase questionDB;
+
 	@Before
 	public void setUp() {
-		Database.clear();
+		this.questionDB = new HotQuestionDatabase(new HotTagDatabase());
 	}
 
 	@Test
@@ -33,11 +39,12 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void checkUsernameAvailable() {
-		assertTrue(Database.users().isAvailable("JaneSmith"));
-		Database.users().register("JaneSmith", "janesmith", "jane@smith.com");
-		assertFalse(Database.users().isAvailable("JaneSmith"));
-		assertFalse(Database.users().isAvailable("janesmith"));
-		assertFalse(Database.users().isAvailable("jAnEsMiTh"));
+		IUserDatabase userDB = new HotUserDatabase();
+		assertTrue(userDB.isAvailable("JaneSmith"));
+		userDB.register("JaneSmith", "janesmith", "jane@smith.com");
+		assertFalse(userDB.isAvailable("JaneSmith"));
+		assertFalse(userDB.isAvailable("janesmith"));
+		assertFalse(userDB.isAvailable("jAnEsMiTh"));
 	}
 
 	@Test
@@ -58,7 +65,7 @@ public class UserTest extends MockedUnitTest {
 
 	@Test
 	public void checkPassw() {
-		User user = new User("Bill", "bill", "bill@example.net");
+		User user = new User("Bill", "bill", "bill@example.net", null);
 		assertTrue(user.checkPW("bill"));
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
 		user.setSHA1Password("bill2");
@@ -163,7 +170,7 @@ public class UserTest extends MockedUnitTest {
 		User user1 = new User("Jack");
 		User user2 = new User("John");
 		User user3 = new User("Geronimo");
-		user1.setModerator(true);
+		user1.setModerator(true, null);
 		Question q = new Question(user2, "Can you edit this post?");
 		/* moderator should be able to edit the question */
 		assertTrue(user1.canEdit(q));
@@ -233,7 +240,7 @@ public class UserTest extends MockedUnitTest {
 	public void testModerator() {
 		User user = new User("Jack");
 		assertFalse(user.isModerator());
-		user.setModerator(true);
+		user.setModerator(true, null);
 		assertTrue(user.isModerator());
 	}
 
@@ -277,11 +284,11 @@ public class UserTest extends MockedUnitTest {
 	@Test
 	public void shouldHaveOneHighRatedAnswer() {
 		User user = new User("Jack");
-		Question q = new Question(user, "Why?");
+		Question q = this.questionDB.add(user, "Why?");
 		q.answer(user, "Because");
 
 		assertEquals(0, user.highRatedAnswers().size());
-		assertTrue(Database.questions().countHighRatedAnswers() == 0);
+		assertTrue(this.questionDB.countHighRatedAnswers() == 0);
 
 		User A = new User("A");
 		User B = new User("B");
@@ -296,7 +303,7 @@ public class UserTest extends MockedUnitTest {
 		q.answers().get(0).voteUp(E);
 
 		assertEquals(1, user.highRatedAnswers().size());
-		assertTrue(Database.questions().countHighRatedAnswers() > 0);
+		assertTrue(this.questionDB.countHighRatedAnswers() > 0);
 
 		A.delete();
 		B.delete();
@@ -312,8 +319,8 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user4 = new User("User4");
 		User user5 = new User("User5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -321,12 +328,12 @@ public class UserTest extends MockedUnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
 
 		n.answer(user5, "and then some");
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
 	}
 
 	@Test
@@ -334,10 +341,10 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user4 = new User("User4");
 		User user5 = new User("User5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -347,8 +354,8 @@ public class UserTest extends MockedUnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(3, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(3, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(0));
 	}
 
 	@Test
@@ -356,31 +363,31 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user5 = new User("User5");
 		for (int i = 0; i < 10; i++) {
-			Question q = new Question(user3, "Hard question " + i);
+			Question q = this.questionDB.add(user3, "Hard question " + i);
 			q.setTagString("demo");
 		}
 
-		Question q = new Question(user3, "Simple question");
+		Question q = this.questionDB.add(user3, "Simple question");
 		q.setTagString("demo");
 		q.answer(user5, "Simple!");
 
-		assertEquals(6, user5.getSuggestedQuestions().size());
+		assertEquals(6, user5.getSuggestedQuestions(this.questionDB).size());
 	}
 
 	@Test
 	public void shouldNotSuggestSameQuestionTwice() {
 		User user5 = new User("User5");
-		Question q = new Question(null, "suggest me!");
+		Question q = this.questionDB.add(null, "suggest me!");
 		q.setTagString("demo");
-		Question r = new Question(null, "answer me!");
+		Question r = this.questionDB.add(null, "answer me!");
 		r.setTagString("demo");
 		r.answer(user5, "ok");
-		Question s = new Question(null, "answer me, too!");
+		Question s = this.questionDB.add(null, "answer me, too!");
 		s.setTagString("demo");
 		s.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(q, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(q, user5.getSuggestedQuestions(this.questionDB).get(0));
 	}
 
 	@Test
@@ -388,16 +395,16 @@ public class UserTest extends MockedUnitTest {
 		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
 		User user5 = new User("User5");
-		Question q = new Question(null, "suggest me!");
+		Question q = this.questionDB.add(null, "suggest me!");
 		q.setTagString("demo");
 
-		Question r = new Question(null, "answer me!");
+		Question r = this.questionDB.add(null, "answer me!");
 		r.setTagString("demo");
 		r.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
 		sysInfo.year(2001);
-		assertEquals(0, user5.getSuggestedQuestions().size());
+		assertEquals(0, user5.getSuggestedQuestions(this.questionDB).size());
 	}
 
 	@Test
@@ -405,10 +412,10 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user4 = new User("User4");
 		User user5 = new User("User5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -419,9 +426,9 @@ public class UserTest extends MockedUnitTest {
 		n.answer(user5, "Therefore");
 		o.answer(user5, "No");
 		o.setBestAnswer(user5.getAnswers().get(1));
-		assertEquals(2, user5.getSuggestedQuestions().size());
-		assertEquals(p, user5.getSuggestedQuestions().get(0));
-		assertEquals(m, user5.getSuggestedQuestions().get(1));
+		assertEquals(2, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(p, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(1));
 
 	}
 
@@ -430,12 +437,12 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user4 = new User("User4");
 		User user5 = new User("User5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
-		Question q = new Question(user3, "So?");
-		Question r = new Question(user4, "For ho long?");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
+		Question q = this.questionDB.add(user3, "So?");
+		Question r = this.questionDB.add(user4, "For ho long?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -450,10 +457,10 @@ public class UserTest extends MockedUnitTest {
 		user5.getAnswers().get(1).voteUp(user3);
 		user5.getAnswers().get(1).voteUp(user4);
 
-		assertEquals(3, user5.getSuggestedQuestions().size());
-		assertEquals(q, user5.getSuggestedQuestions().get(0));
-		assertEquals(m, user5.getSuggestedQuestions().get(1));
-		assertEquals(p, user5.getSuggestedQuestions().get(2));
+		assertEquals(3, user5.getSuggestedQuestions(this.questionDB).size());
+		assertEquals(q, user5.getSuggestedQuestions(this.questionDB).get(0));
+		assertEquals(m, user5.getSuggestedQuestions(this.questionDB).get(1));
+		assertEquals(p, user5.getSuggestedQuestions(this.questionDB).get(2));
 
 	}
 
@@ -462,10 +469,10 @@ public class UserTest extends MockedUnitTest {
 		User user6 = new User("User6");
 		User user7 = new User("User7");
 		User user8 = new User("User8");
-		Question m = new Question(user6, "Why?");
-		Question n = new Question(user7, "Where?");
-		Question o = new Question(user6, "Who?");
-		Question p = new Question(user7, "How old?");
+		Question m = this.questionDB.add(user6, "Why?");
+		Question n = this.questionDB.add(user7, "Where?");
+		Question o = this.questionDB.add(user6, "Who?");
+		Question p = this.questionDB.add(user7, "How old?");
 		m.answer(user6, "Because");
 		m.answer(user7, "No idea");
 		p.answer(user8, "Therefore");
@@ -476,19 +483,19 @@ public class UserTest extends MockedUnitTest {
 		o.setTagString("demo demo3 demo4");
 		p.setTagString("demo demo3 demo4 demo5");
 
-		assertEquals(0, user8.getSuggestedQuestions().size());
+		assertEquals(0, user8.getSuggestedQuestions(this.questionDB).size());
 	}
 
 	@Test
 	public void shouldNotSuggestOwnQuestions() {
 		User user = new User("Jack");
 		User user2 = new User("John");
-		Question q = new Question(user, "Why?");
-		Question f = new Question(user2, "Where?");
+		Question q = this.questionDB.add(user, "Why?");
+		Question f = this.questionDB.add(user2, "Where?");
 		q.setTagString("demo");
 		f.setTagString("demo");
 		q.answer(user2, "Because");
-		assertEquals(0, user2.getSuggestedQuestions().size());
+		assertEquals(0, user2.getSuggestedQuestions(this.questionDB).size());
 
 	}
 
@@ -497,15 +504,15 @@ public class UserTest extends MockedUnitTest {
 		User james = new User("James");
 		User john = new User("John");
 		User kate = new User("Kate");
-		Question k = new Question(james, "Why?");
-		Question l = new Question(john, "Where?");
+		Question k = this.questionDB.add(james, "Why?");
+		Question l = this.questionDB.add(john, "Where?");
 
 		k.setTagString("demo");
 		l.setTagString("demo");
 		k.answer(james, "Because");
 		k.setBestAnswer(k.answer(john, "No idea"));
 		l.answer(kate, "Therefore");
-		assertEquals(0, kate.getSuggestedQuestions().size());
+		assertEquals(0, kate.getSuggestedQuestions(this.questionDB).size());
 	}
 
 	@Test
@@ -513,20 +520,20 @@ public class UserTest extends MockedUnitTest {
 		User user3 = new User("User3");
 		User user5 = new User("User5");
 
-		Question p = new Question(user3, "Hard question");
+		Question p = this.questionDB.add(user3, "Hard question");
 		p.setTagString("demo");
-		Question q = new Question(user3, "Simple question");
+		Question q = this.questionDB.add(user3, "Simple question");
 		q.setTagString("demo");
 
 		q.answer(user5, "Simple!");
-		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
 
 		for (int i = 0; i < 9; i++) {
 			p.answer(null, "anonymous genious!");
 		}
-		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(1, user5.getSuggestedQuestions(this.questionDB).size());
 		p.answer(null, "yet another anonymous genious!");
-		assertEquals(0, user5.getSuggestedQuestions().size());
+		assertEquals(0, user5.getSuggestedQuestions(this.questionDB).size());
 	}
 
 	@Test
@@ -534,8 +541,7 @@ public class UserTest extends MockedUnitTest {
 		User james = new User("James");
 		Question question = new Question(james, "Why?");
 		Answer answer = question.answer(james, "No idea");
-		question.setTagString("TAG");
-		Tag tag = question.getTags().get(0);
+		Tag tag = new Tag("tag", null);
 		assertEquals(james.toString(), "U[James]");
 		assertEquals(question.toString(), "Question(Why?)");
 		assertEquals(answer.toString(), "Answer(No idea)");
@@ -622,6 +628,6 @@ public class UserTest extends MockedUnitTest {
 	@Test
 	public void shouldNotWatchAnything() {
 		User user = new User("Jack");
-		assertEquals(0, Database.questions().getWatchList(user).size());
+		assertEquals(0, this.questionDB.getWatchList(user).size());
 	}
 }

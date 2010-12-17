@@ -1,5 +1,7 @@
 package tests;
 
+import models.IMailbox;
+import models.Mailbox;
 import models.Question;
 import models.User;
 
@@ -13,11 +15,13 @@ public class MarkSpamTest extends MockedUnitTest {
 	private User pete;
 	private Question question;
 	private Question otherQuestion;
+	private IMailbox moderatorBox;
 
 	@Before
 	public void setUp() {
+		this.moderatorBox = new Mailbox("Moderators");
 		this.alex = new User("Alex");
-		this.alex.setModerator(true);
+		this.alex.setModerator(true, moderatorBox);
 		this.pete = new User("Pete");
 		this.question = new Question(this.pete, "SPAMSPAMSPAM!!!1eleven");
 		this.otherQuestion = new Question(this.pete, "MOAR SPAM!!!!");
@@ -31,14 +35,14 @@ public class MarkSpamTest extends MockedUnitTest {
 
 	@Test
 	public void shouldInformModerator() {
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
 		assertTrue(this.question.isPossiblySpam());
 		assertEquals(1, this.alex.getNotifications().size());
 	}
 
 	@Test
 	public void shouldDeleteSpam() {
-		this.question.markSpam();
+		this.question.markSpam(null);
 		this.question.confirmSpam();
 		assertTrue(this.question.isDeleted());
 		assertTrue(this.pete.isBlocked());
@@ -46,20 +50,20 @@ public class MarkSpamTest extends MockedUnitTest {
 
 	@Test
 	public void shouldEaseProcess() {
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
 		this.question.confirmSpam();
-		this.otherQuestion.markSpam();
+		this.otherQuestion.markSpam(this.moderatorBox);
 		assertEquals(this.alex.getNotifications().size(), 0);
 		assertTrue(this.otherQuestion.isDeleted());
 	}
 
 	@Test
 	public void shouldntBotherNonMods() {
-		this.question.markSpam();
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
+		this.question.markSpam(this.moderatorBox);
 		this.question.confirmSpam();
-		this.otherQuestion.markSpam();
-		this.alex.setModerator(false);
+		this.otherQuestion.markSpam(this.moderatorBox);
+		this.alex.setModerator(false, null);
 		assertEquals(this.alex.getNotifications().size(), 0);
 	}
 }

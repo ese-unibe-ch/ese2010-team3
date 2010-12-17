@@ -297,7 +297,7 @@ public class CQuestion extends BaseController {
 			if (user.isModerator()) {
 				question.confirmSpam();
 			} else {
-				question.markSpam();
+				question.markSpam(Database.users().getModeratorMailbox());
 			}
 			flash.success("spam.thx");
 		}

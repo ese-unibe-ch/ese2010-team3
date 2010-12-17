@@ -6,9 +6,10 @@ import java.util.Map;
 
 import models.Tag;
 import models.database.ITagDatabase;
+import models.helpers.ICleanup;
 
-public class HotTagDatabase implements ITagDatabase {
-	private Map<String, Tag> tags = new HashMap<String, Tag>();
+public class HotTagDatabase implements ITagDatabase, ICleanup<Tag> {
+	private final Map<String, Tag> tags = new HashMap<String, Tag>();
 
 	private static final String tagRegex = "^[^A-Z\\s]{1,32}$";
 
@@ -19,7 +20,7 @@ public class HotTagDatabase implements ITagDatabase {
 	public Tag get(String name) {
 		Tag tag = this.tags.get(name);
 		if (tag == null && name.matches(tagRegex)) {
-			tag = new Tag(name);
+			tag = new Tag(name, this);
 			this.tags.put(name, tag);
 		}
 		return tag;
@@ -31,5 +32,10 @@ public class HotTagDatabase implements ITagDatabase {
 
 	public void clear() {
 		this.tags.clear();
+	}
+
+	@Override
+	public void cleanUp(Tag tag) {
+		this.remove(tag);
 	}
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import models.Question;
 import models.Tag;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
 import models.database.ITagDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
+import models.database.HotDatabase.HotTagDatabase;
 import models.helpers.SetOperations;
 
 import org.junit.Before;
@@ -22,44 +24,33 @@ public class TagTest extends MockedUnitTest {
 
 	@Before
 	public void setUp() {
-		Database.clear();
-		tagDB = Database.tags();
+		tagDB = new HotTagDatabase();
 		douglas = new User("Douglas");
-		question1 = new Question(douglas, "Why did the chicken cross the road?");
-		question2 = new Question(douglas, "Is this question meaningless?");
+		question1 = new Question(douglas,
+				"Why did the chicken cross the road?", tagDB, null);
+		question2 = new Question(douglas, "Is this question meaningless?",
+				tagDB, null);
 		tagName = "tag";
 	}
 
 	@Test
 	public void shouldHaveName() {
-		Tag tag = new Tag(tagName);
+		Tag tag = new Tag(tagName, null);
 		assertNotNull(tag.getName());
 		assertEquals(tag.getName(), tagName);
-
 		assertNull(tagDB.get("space "));
-		boolean hasThrown = false;
-		try {
-			new Tag(null);
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
-		}
-		assertTrue(hasThrown);
 
-		hasThrown = false;
-		try {
-			new Tag("UpperCase");
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
+		String invalidNames[] = { null, "UpperCase",
+				"012345678901234567890123456789012" };
+		for (String name : invalidNames) {
+			boolean hasThrown = false;
+			try {
+				new Tag(name, null);
+			} catch (IllegalArgumentException ex) {
+				hasThrown = true;
+			}
+			assertTrue("Should throw for name " + name, hasThrown);
 		}
-		assertTrue(hasThrown);
-
-		hasThrown = false;
-		try {
-			new Tag("012345678901234567890123456789012");
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
-		}
-		assertTrue(hasThrown);
 	}
 
 	@Test
@@ -133,15 +124,16 @@ public class TagTest extends MockedUnitTest {
 
 	@Test
 	public void shouldNotListQuestionWithZeroTags() {
+		IQuestionDatabase questionDB = new HotQuestionDatabase(this.tagDB);
 		User A = new User("A");
 		User B = new User("B");
 		User C = new User("C");
 		User D = new User("D");
-		Question questionK = new Question(A, "K?");
-		Question questionL = new Question(B, "L?");
-		Question questionM = new Question(C, "M?");
-		Question questionN = new Question(D, "N?");
-		Question questionO = new Question(D, "O?");
+		Question questionK = questionDB.add(A, "K?");
+		Question questionL = questionDB.add(B, "L?");
+		Question questionM = questionDB.add(C, "M?");
+		Question questionN = questionDB.add(D, "N?");
+		Question questionO = questionDB.add(D, "O?");
 
 		questionK.setTagString(" J K Z");
 		questionL.setTagString(" ");
@@ -149,11 +141,11 @@ public class TagTest extends MockedUnitTest {
 		questionN.setTagString("");
 		questionO.setTagString("");
 
-		List<Question> similarK = questionK.getSimilarQuestions();
-		List<Question> similarL = questionL.getSimilarQuestions();
-		List<Question> similarM = questionM.getSimilarQuestions();
-		List<Question> similarN = questionN.getSimilarQuestions();
-		List<Question> similarO = questionO.getSimilarQuestions();
+		List<Question> similarK = questionDB.findSimilar(questionK);
+		List<Question> similarL = questionDB.findSimilar(questionL);
+		List<Question> similarM = questionDB.findSimilar(questionM);
+		List<Question> similarN = questionDB.findSimilar(questionN);
+		List<Question> similarO = questionDB.findSimilar(questionO);
 
 		assertTrue(similarK.isEmpty());
 		assertTrue(similarL.isEmpty());
@@ -164,16 +156,17 @@ public class TagTest extends MockedUnitTest {
 
 	@Test
 	public void shouldListCorrectOrderOfSimilarQuestions() {
+		IQuestionDatabase questionDB = new HotQuestionDatabase(this.tagDB);
 		User A = new User("A");
 		User B = new User("B");
 		User C = new User("C");
 		User D = new User("D");
-		Question questionA = new Question(A, "A?");
-		Question questionB = new Question(B, "B?");
-		Question questionC = new Question(C, "C?");
-		Question questionD = new Question(D, "D?");
-		Question questionE = new Question(D, "E?");
-		Question questionF = new Question(A, "F?");
+		Question questionA = questionDB.add(A, "A?");
+		Question questionB = questionDB.add(B, "B?");
+		Question questionC = questionDB.add(C, "C?");
+		Question questionD = questionDB.add(D, "D?");
+		Question questionE = questionDB.add(D, "E?");
+		Question questionF = questionDB.add(A, "F?");
 
 		questionA.setTagString("A B C D");
 		questionB.setTagString("A B C D");
@@ -187,8 +180,7 @@ public class TagTest extends MockedUnitTest {
 				questionE };
 		Question[] possibility2 = { questionF, questionB, questionC, questionD,
 				questionE };
-		List<Question> similar = Database.questions().findSimilar(
-				questionA);
+		List<Question> similar = questionDB.findSimilar(questionA);
 		assertEquals(similar.size(), 5);
 		assertTrue(SetOperations.arrayEquals(possibility1, similar.toArray())
 				|| SetOperations.arrayEquals(possibility2, similar.toArray()));

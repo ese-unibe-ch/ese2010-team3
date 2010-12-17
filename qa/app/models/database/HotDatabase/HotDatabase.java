@@ -6,16 +6,21 @@ import models.database.ITagDatabase;
 import models.database.IUserDatabase;
 
 /**
- * Provides a Database that is kept entirely in Memory. Server's down, data's
- * dead.
+ * Provides a Database that is kept entirely in Memory. Server down, data dead.
  * 
  * @author aaron
  * 
  */
 public class HotDatabase implements IDatabase {
-	private final HotQuestionDatabase questions = new HotQuestionDatabase();
-	private final HotUserDatabase users = new HotUserDatabase();
-	private final HotTagDatabase tags = new HotTagDatabase();
+	private final HotQuestionDatabase questions;
+	private final HotUserDatabase users;
+	private final HotTagDatabase tags;
+
+	public HotDatabase() {
+		this.users = new HotUserDatabase();
+		this.tags = new HotTagDatabase();
+		this.questions = new HotQuestionDatabase(this.tags);
+	}
 
 	public IQuestionDatabase questions() {
 		return questions;
