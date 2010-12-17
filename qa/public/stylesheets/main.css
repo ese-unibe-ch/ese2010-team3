@@ -19,7 +19,6 @@ h1 {
 h1:first-child {
 	margin-top: 0px;
 }
-
 h2 {
 	color: #ff8400;
 	margin: 0;
@@ -65,7 +64,6 @@ div.navigation {
 	color: #222222;
 	width:170px;
 	float:right;
-	
 }
 div.navigation ul{
 	list-style:none;
@@ -79,14 +77,10 @@ div.navigation ul li{
 div.hiddenlogin {
 	width: 170px;
 }
-#mini_login {
-	float: right;
-	right: 5px; 	
-}	
-#mini_login input {
-	max-width: 100px;	 	
+div.hiddenlogin input{
+	width: 150px;
 }
-#mini_login + .user {
+#mini_login + .userlogin {
 	display: none;
 }
 /*********************** 
@@ -132,14 +126,12 @@ div.content ul {
 	padding: 0;
 	margin: 0;
 }
-
 div.content li.bestAnswer {
 	background: #2b6026;
 }
 div.content li.own {
 	background: #320;
 }
-
 div.content li {
 	background: #333333;
 	list-style: none;
@@ -149,22 +141,18 @@ div.content li {
 }
 div.content pre {
 	overflow-x: auto;
-}
-		
+}	
 div.content li[onclick] {
 	cursor: pointer;
-}
-		
+}	
 div.content li[onclick]:hover {
 	background: #666;
 }
-
 div.content li.question p,
 div.content ul.answers p {
 	margin-top: 0.2em;
 	margin-bottom: 0.5em;
 }
-	
 div.content li p {
 	color: #aecbfb;
 }
@@ -172,7 +160,6 @@ div.content li p.relatedQ {
 	margin: 2px;
 	color: #ff8400;
 }
-	
 div.content span.vote {
 	bottom: 7px;
 	font-size: 2em;
@@ -197,7 +184,7 @@ div.content div.date {
 			
 div.content textarea {
 	height: 50px;
-	width: 710px;
+	max-width: 99%;
 	background: #ccc;
 	border: 1px #000000 solid;
 	color: #000000;

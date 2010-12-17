@@ -39,8 +39,8 @@
 					</div><!-- end search -->
 				#{/if}
 				#{else}
-						<li>&{'signinorup'}</li>
-						<li><a href="@{Secure.login}">&{'user.login'}</a>&{' or '}
+						<li class="userlogin">&{'signinorup'}</li>
+						<li class="userlogin"><a href="@{Secure.login}">&{'user.login'}</a> &{'or'} 
 						<a href="@{Application.register}">&{'user.signup'}</a></li>
 				#{/else}	
 				</ul>
