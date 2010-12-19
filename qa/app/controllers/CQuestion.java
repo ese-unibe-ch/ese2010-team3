@@ -3,7 +3,6 @@ package controllers;
 import models.Comment;
 import models.Question;
 import models.User;
-import models.database.Database;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
@@ -297,7 +296,7 @@ public class CQuestion extends BaseController {
 			if (user.isModerator()) {
 				question.confirmSpam();
 			} else {
-				question.markSpam();
+				question.markSpam(Database.users().getModeratorMailbox());
 			}
 			flash.success("spam.thx");
 		}

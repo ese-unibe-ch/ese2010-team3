@@ -11,16 +11,31 @@ import java.util.Set;
 
 import models.Answer;
 import models.Question;
+import models.SearchFilter;
+import models.SysInfo;
 import models.Tag;
 import models.User;
-import models.SearchEngine.SearchFilter;
-import models.database.Database;
 import models.database.IQuestionDatabase;
+import models.database.ITagDatabase;
+import models.helpers.ICleanup;
 import models.helpers.Mapper;
 
-public class HotQuestionDatabase implements IQuestionDatabase {
+public class HotQuestionDatabase implements IQuestionDatabase,
+		ICleanup<Question> {
 
 	private final HashMap<Integer, Question> questions = new HashMap<Integer, Question>();
+	private final ITagDatabase tagDB;
+
+	/**
+	 * Creates a new in-memory database for managing questions.
+	 * 
+	 * @param tagDB
+	 *            the database which is to store the tags associated with the
+	 *            questions stored in the newly created database
+	 */
+	public HotQuestionDatabase(ITagDatabase tagDB) {
+		this.tagDB = tagDB;
+	}
 
 	/**
 	 * Searches through all questions, answers and usernames for the given
@@ -42,12 +57,12 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			if (s.startsWith("tag:") && s.length() > 4) {
 				// search for tag only
 				terms.add(s);
-				tags.add(Database.tags().get(s.substring(4)));
+				tags.add(this.tagDB.get(s.substring(4)));
 			} else {
 				// search for this term anywhere, so ignore all non-alphanumeric
 				// characters
 				terms.addAll(Arrays.asList(s.split("\\W+")));
-				tags.add(Database.tags().get(s));
+				tags.add(this.tagDB.get(s));
 			}
 		}
 		return Mapper.sort(this.questions.values(),
@@ -76,7 +91,9 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	}
 
 	public Question add(User owner, String content) {
-		return new Question(owner, content);
+		Question question = new Question(owner, content, this.tagDB, this);
+		this.register(question);
+		return question;
 	}
 
 	public void remove(int id) {
@@ -128,6 +145,34 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		return result;
 	}
 
+	public List<Question> suggestQuestions(User user) {
+		List<Question> suggestedQuestions = new ArrayList<Question>();
+		List<Question> sortedAnsweredQuestions = user
+				.getSortedAnsweredQuestions();
+
+		/*
+		 * Don't list questions that have many answers or already have a best
+		 * answer. The user should not be the owner of the suggested question.
+		 * Remove duplicates.
+		 */
+		for (Question q : sortedAnsweredQuestions) {
+			for (Question similarQ : this.findSimilar(q)) {
+				if (!suggestedQuestions.contains(similarQ)
+						&& !sortedAnsweredQuestions.contains(similarQ)
+						&& similarQ.owner() != user
+						&& similarQ.getAgeInDays(SysInfo.now()) <= 120
+						&& similarQ.countAnswers() < 10
+						&& !similarQ.hasBestAnswer()) {
+					suggestedQuestions.add(similarQ);
+				}
+			}
+		}
+		if (suggestedQuestions.size() > 6)
+			return suggestedQuestions.subList(0, 6);
+		return suggestedQuestions;
+
+	}
+
 	/**
 	 * Having given a best answer gives the equivalent of an additional
 	 * BEST_ANSWER_BONUS votes.
@@ -144,7 +189,7 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 	public Map<Tag, Map<User, Integer>> collectExpertiseStatistics() {
 		Map<Tag, Map<User, Integer>> stats = new HashMap();
 		// only check each question (and answer) once
-		for (Question question : Database.questions().all()) {
+		for (Question question : this.all()) {
 			List<Tag> tags = question.getTags();
 			// skip untagged questions
 			if (tags.isEmpty())
@@ -178,6 +223,43 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 		return stats;
 	}
 
+	/**
+	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
+	 * user from being an expert.
+	 */
+	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
+	/**
+	 * What percentage of most proficient users are considered experts on a
+	 * topic.
+	 */
+	private final int EXPERTISE_PERCENTILE = 20;
+
+	public List<Tag> getExpertise(User user) {
+		Map<Tag, Map<User, Integer>> stats = this.collectExpertiseStatistics();
+
+		List<Tag> expertise = new ArrayList();
+		for (Tag tag : stats.keySet()) {
+			// ignore tags this user knows nothing about
+			if (!stats.get(tag).containsKey(user)) {
+				continue;
+			}
+			// ignore tags this user knows hardly anything about
+			if (stats.get(tag).get(user) < this.MINIMAL_EXPERTISE_THRESHOLD) {
+				continue;
+			}
+
+			Map<User, Integer> tagStats = stats.get(tag);
+			List<User> experts = Mapper.sortByValue(tagStats);
+			int threshold = (100 - this.EXPERTISE_PERCENTILE) * experts.size()
+					/ 100;
+			if (tagStats.get(user) >= tagStats.get(experts.get(threshold))) {
+				expertise.add(tag);
+			}
+		}
+
+		return expertise;
+	}
+
 	public void clear() {
 		this.questions.clear();
 	}
@@ -190,5 +272,10 @@ public class HotQuestionDatabase implements IQuestionDatabase {
 			}
 		}
 		return watchList;
+	}
+
+	@Override
+	public void cleanUp(Question question) {
+		this.remove(question.id());
 	}
 }

@@ -53,8 +53,8 @@
 			<tr>
 				<td class="left">&{'user.expertise'}:</td>
 				<td class="right">
-					#{tags tags:showUser.getExpertise() /}
-					#{if showUser.getExpertise().isEmpty()}
+					#{tags tags:expertise /}
+					#{if expertise?.isEmpty()}
 						&{'user.isnovice', showUser.getName().escape()}
 					#{/if}
 				</td>

@@ -5,16 +5,16 @@ import java.util.List;
 import models.Question;
 import models.Tag;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
 import models.database.ITagDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
+import models.database.HotDatabase.HotTagDatabase;
 import models.helpers.SetOperations;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class TagTest extends UnitTest {
+public class TagTest extends MockedUnitTest {
 
 	private ITagDatabase tagDB;
 	private Question question1;
@@ -24,44 +24,33 @@ public class TagTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		Database.clear();
-		tagDB = Database.tags();
-		douglas = new User("Douglas", "douglas");
-		question1 = new Question(douglas, "Why did the chicken cross the road?");
-		question2 = new Question(douglas, "Is this question meaningless?");
+		tagDB = new HotTagDatabase();
+		douglas = new User("Douglas");
+		question1 = new Question(douglas,
+				"Why did the chicken cross the road?", tagDB, null);
+		question2 = new Question(douglas, "Is this question meaningless?",
+				tagDB, null);
 		tagName = "tag";
 	}
 
 	@Test
 	public void shouldHaveName() {
-		Tag tag = new Tag(tagName);
+		Tag tag = new Tag(tagName, null);
 		assertNotNull(tag.getName());
 		assertEquals(tag.getName(), tagName);
-
 		assertNull(tagDB.get("space "));
-		boolean hasThrown = false;
-		try {
-			new Tag(null);
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
-		}
-		assertTrue(hasThrown);
 
-		hasThrown = false;
-		try {
-			new Tag("UpperCase");
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
+		String invalidNames[] = { null, "UpperCase",
+				"012345678901234567890123456789012" };
+		for (String name : invalidNames) {
+			boolean hasThrown = false;
+			try {
+				new Tag(name, null);
+			} catch (IllegalArgumentException ex) {
+				hasThrown = true;
+			}
+			assertTrue("Should throw for name " + name, hasThrown);
 		}
-		assertTrue(hasThrown);
-
-		hasThrown = false;
-		try {
-			new Tag("012345678901234567890123456789012");
-		} catch (IllegalArgumentException ex) {
-			hasThrown = true;
-		}
-		assertTrue(hasThrown);
 	}
 
 	@Test
@@ -135,15 +124,16 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldNotListQuestionWithZeroTags() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
-		Question questionK = new Question(A, "K?");
-		Question questionL = new Question(B, "L?");
-		Question questionM = new Question(C, "M?");
-		Question questionN = new Question(D, "N?");
-		Question questionO = new Question(D, "O?");
+		IQuestionDatabase questionDB = new HotQuestionDatabase(this.tagDB);
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
+		Question questionK = questionDB.add(A, "K?");
+		Question questionL = questionDB.add(B, "L?");
+		Question questionM = questionDB.add(C, "M?");
+		Question questionN = questionDB.add(D, "N?");
+		Question questionO = questionDB.add(D, "O?");
 
 		questionK.setTagString(" J K Z");
 		questionL.setTagString(" ");
@@ -151,11 +141,11 @@ public class TagTest extends UnitTest {
 		questionN.setTagString("");
 		questionO.setTagString("");
 
-		List<Question> similarK = questionK.getSimilarQuestions();
-		List<Question> similarL = questionL.getSimilarQuestions();
-		List<Question> similarM = questionM.getSimilarQuestions();
-		List<Question> similarN = questionN.getSimilarQuestions();
-		List<Question> similarO = questionO.getSimilarQuestions();
+		List<Question> similarK = questionDB.findSimilar(questionK);
+		List<Question> similarL = questionDB.findSimilar(questionL);
+		List<Question> similarM = questionDB.findSimilar(questionM);
+		List<Question> similarN = questionDB.findSimilar(questionN);
+		List<Question> similarO = questionDB.findSimilar(questionO);
 
 		assertTrue(similarK.isEmpty());
 		assertTrue(similarL.isEmpty());
@@ -166,16 +156,17 @@ public class TagTest extends UnitTest {
 
 	@Test
 	public void shouldListCorrectOrderOfSimilarQuestions() {
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
-		Question questionA = new Question(A, "A?");
-		Question questionB = new Question(B, "B?");
-		Question questionC = new Question(C, "C?");
-		Question questionD = new Question(D, "D?");
-		Question questionE = new Question(D, "E?");
-		Question questionF = new Question(A, "F?");
+		IQuestionDatabase questionDB = new HotQuestionDatabase(this.tagDB);
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
+		Question questionA = questionDB.add(A, "A?");
+		Question questionB = questionDB.add(B, "B?");
+		Question questionC = questionDB.add(C, "C?");
+		Question questionD = questionDB.add(D, "D?");
+		Question questionE = questionDB.add(D, "E?");
+		Question questionF = questionDB.add(A, "F?");
 
 		questionA.setTagString("A B C D");
 		questionB.setTagString("A B C D");
@@ -189,8 +180,7 @@ public class TagTest extends UnitTest {
 				questionE };
 		Question[] possibility2 = { questionF, questionB, questionC, questionD,
 				questionE };
-		List<Question> similar = Database.questions().findSimilar(
-				questionA);
+		List<Question> similar = questionDB.findSimilar(questionA);
 		assertEquals(similar.size(), 5);
 		assertTrue(SetOperations.arrayEquals(possibility1, similar.toArray())
 				|| SetOperations.arrayEquals(possibility2, similar.toArray()));
@@ -202,6 +192,43 @@ public class TagTest extends UnitTest {
 		assertEquals(countTags("double"), 1);
 		assertEquals(question1.getTags().size(), 1);
 		assertEquals(question1.getTags().get(0), tagDB.get("double"));
+	}
+
+	@Test
+	public void shouldSuggestTags() {
+		question1.setTagString("tag1 tag2 nag3");
+		List<String> tagNames = tagDB.suggestTagNames("ta");
+		assertEquals(2, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+		assertEquals("tag2", tagNames.get(1));
+
+		tagNames = tagDB.suggestTagNames("TA");
+		assertEquals(2, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+		assertEquals("tag2", tagNames.get(1));
+
+		tagNames = tagDB.suggestTagNames("Na");
+		assertEquals(1, tagNames.size());
+		assertEquals("nag3", tagNames.get(0));
+
+		tagNames = tagDB.suggestTagNames("tag1");
+		assertEquals(1, tagNames.size());
+		assertEquals("tag1", tagNames.get(0));
+
+		tagNames = tagDB.suggestTagNames(null);
+		assertEquals(3, tagNames.size());
+		assertEquals("nag3", tagNames.get(0));
+		assertEquals("tag1", tagNames.get(1));
+		assertEquals("tag2", tagNames.get(2));
+	}
+
+	@Test
+	public void shouldAllowStandaloneTags() {
+		Tag tag = new Tag(tagName, null);
+		tag.register(question1);
+		assertEquals(1, tag.getQuestions().size());
+		tag.unregister(question1);
+		assertEquals(0, tag.getQuestions().size());
 	}
 
 	private int countTags(String name) {

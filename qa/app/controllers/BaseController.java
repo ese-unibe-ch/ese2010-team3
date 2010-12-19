@@ -1,7 +1,6 @@
 package controllers;
 
 import models.User;
-import models.database.Database;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;

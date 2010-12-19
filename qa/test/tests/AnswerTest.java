@@ -4,43 +4,37 @@ import java.util.Date;
 
 import models.Answer;
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class AnswerTest extends UnitTest {
+public class AnswerTest extends MockedUnitTest {
 
 	private User james;
 	private Question question;
 	private Answer answer;
 	private Date questionDate;
 	private Date answerDate;
-	private SystemInformation savedSysInfo;
+	private IQuestionDatabase questionDB;
 
 	@Before
 	public void setUp() {
-		SystemInformationMock sys = new SystemInformationMock();
-		this.savedSysInfo = SysInfo.mockWith(sys);
-		this.james = new User("James", "jack");
+		this.james = new User("James");
 
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
-		this.questionDate = sys.now();
-		sys.changeTo(this.questionDate);
-		this.question = new Question(new User("Jack", "jack"),
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		this.questionDate = sysInfo.now();
+		sysInfo.changeTo(this.questionDate);
+		this.question = new Question(new User("Jack"),
 				"Why did the chicken cross the road?");
-		sys.minute(5);
-		this.answerDate = sys.now();
-		sys.changeTo(this.answerDate);
+		sysInfo.minute(5);
+		this.answerDate = sysInfo.now();
+		sysInfo.changeTo(this.answerDate);
 
-		this.question = new Question(new User("Jack", "jack"),
+		this.questionDB = new HotQuestionDatabase(null);
+		this.question = this.questionDB.add(new User("Jack"),
 				"Why did the chicken cross the road?");
 
 		this.answer = this.question.answer(this.james,
@@ -85,18 +79,13 @@ public class AnswerTest extends UnitTest {
 		assertEquals(this.answer, this.question.getAnswer(this.answer.id()));
 	}
 
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(this.savedSysInfo);
-	}
-
 	@Test
 	public void shouldBeHighRated() {
-		User a = new User("a", "a");
-		User b = new User("b", "b");
-		User c = new User("c", "c");
-		User d = new User("d", "d");
-		User e = new User("e", "e");
+		User a = new User("a");
+		User b = new User("b");
+		User c = new User("c");
+		User d = new User("d");
+		User e = new User("e");
 
 		this.answer.voteUp(a);
 		this.answer.voteUp(b);
@@ -117,10 +106,11 @@ public class AnswerTest extends UnitTest {
 
 	@Test
 	public void shouldBeBestAnswer() {
+		assertEquals(0, this.questionDB.countBestRatedAnswers());
 		assertTrue(this.question.isBestAnswerSettable());
 		this.question.setBestAnswer(this.answer);
 		assertTrue(this.answer.isBestAnswer());
-		assertTrue(Database.questions().countBestRatedAnswers() > 0);
+		assertEquals(1, this.questionDB.countBestRatedAnswers());
 	}
 
 	@Test
@@ -132,5 +122,11 @@ public class AnswerTest extends UnitTest {
 	public void shouldNotClaimtoBelongtoQuestion() {
 		this.question.unregister(this.answer);
 		assertNull(this.answer.getQuestion());
+	}
+
+	@Test
+	public void shouldDefaultToNoBestAnswers() {
+		this.questionDB.clear();
+		assertEquals(0, this.questionDB.countBestRatedAnswers());
 	}
 }

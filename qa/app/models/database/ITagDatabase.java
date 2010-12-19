@@ -1,6 +1,7 @@
 package models.database;
 
 import java.util.Collection;
+import java.util.List;
 
 import models.Tag;
 
@@ -26,6 +27,16 @@ public interface ITagDatabase {
 	 */
 
 	public Tag get(String name);
+
+	/**
+	 * Suggest tag names that start with a given term so that the tag name could
+	 * e.g. be auto-completed.
+	 * 
+	 * @param start
+	 *            the start of all the tag names
+	 * @return the string
+	 */
+	public List<String> suggestTagNames(String start);
 
 	/**
 	 * Removes a Tag from the grid. Call only if

@@ -4,7 +4,6 @@ import models.Answer;
 import models.Comment;
 import models.Question;
 import models.User;
-import models.database.Database;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.mvc.Router.ActionDefinition;
@@ -236,7 +235,7 @@ public class CAnswer extends BaseController {
 		User user = Session.user();
 		if (user != null && answer != null) {
 			if (!user.isModerator()) {
-				answer.markSpam();
+				answer.markSpam(Database.users().getModeratorMailbox());
 			} else {
 				answer.confirmSpam();
 			}

@@ -7,20 +7,22 @@ import java.util.Set;
 
 import models.IMailbox;
 import models.Mailbox;
+import models.Notification;
 import models.User;
 import models.database.IUserDatabase;
+import models.helpers.ICleanup;
 
-public class HotUserDatabase implements IUserDatabase {
+public class HotUserDatabase implements IUserDatabase, ICleanup<User> {
 	/** Tracks all users by their lowercase(!) usernames. */
-	private static HashMap<String, User> users = new HashMap();
-	private static IMailbox moderatorMailbox = new Mailbox("Moderators");
+	private final HashMap<String, User> users = new HashMap();
+	private final IMailbox moderatorMailbox = new Mailbox("Moderators");
 
 	public boolean isAvailable(String username) {
 		return get(username) == null;
 	}
 
 	public User register(String username, String password, String email) {
-		User user = new User(username, password, email);
+		User user = new User(username, password, email, this);
 		users.put(username.toLowerCase(), user);
 		return user;
 	}
@@ -41,8 +43,18 @@ public class HotUserDatabase implements IUserDatabase {
 		return users.size();
 	}
 
-	public void clear() {
+	public void clear(boolean keepAdmins) {
+		Collection<User> mods = this.allModerators();
 		users.clear();
+		for (Notification n : moderatorMailbox.getAllNotifications()) {
+			moderatorMailbox.removeNotification(n.id());
+		}
+
+		if (keepAdmins) {
+			for (User mod : mods) {
+				this.add(mod);
+			}
+		}
 	}
 
 	public void add(User user) {
@@ -61,5 +73,10 @@ public class HotUserDatabase implements IUserDatabase {
 
 	public IMailbox getModeratorMailbox() {
 		return this.moderatorMailbox;
+	}
+
+	@Override
+	public void cleanUp(User user) {
+		this.remove(user.getName());
 	}
 }

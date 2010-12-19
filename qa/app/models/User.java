@@ -9,9 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import models.database.Database;
+import models.helpers.ICleanup;
 import models.helpers.IFilter;
 import models.helpers.IObservable;
 import models.helpers.IObserver;
@@ -31,7 +30,7 @@ import models.helpers.Tools;
  * @author Mirco Kocher
  * 
  */
-public class User implements IObserver, IMailbox {
+public class User implements IObserver {
 
 	private final String name;
 	private String password;
@@ -54,28 +53,38 @@ public class User implements IObserver, IMailbox {
 	private String lastSearchTerm = "";
 	private long lastPost = 0;
 
-	// Check if and how these can be combined. The question is,
-	// if we need this distinction in the view.
 	private final Mailbox mainMailbox;
-	private final List<IMailbox> otherMailboxes;
-
+	private IMailbox moderatorMailbox;
 	private boolean isSpammer;
+	private final ICleanup<User> cleaner;
 
 	/**
 	 * Creates a <code>User</code> with a given name.
 	 * 
 	 * @param name
 	 *            the name of the <code>User</code>
+	 * @param password
+	 *            the user's password
+	 * @param email
+	 *            the user's valid(!) email address
+	 * @param cleaner
+	 *            an optional clean-up object that wants to be notified when
+	 *            this user object is no longer needed
 	 */
-	public User(String name, String password, String email) {
+	public User(String name, String password, String email,
+			ICleanup<User> cleaner) {
 		this.name = name;
-		this.password = Tools.encrypt(password);
+		if (password != null) {
+			// null passwords may happen during testing, as hashing a password
+			// can be quite slow in comparison
+			this.password = Tools.encrypt(password);
+		}
 		this.email = email;
 		this.confirmKey = Tools.randomStringGenerator(35);
 		this.items = new HashSet<Item>();
 		this.mainMailbox = new Mailbox(name);
-		this.otherMailboxes = new LinkedList();
 		this.isSpammer = false;
+		this.cleaner = cleaner;
 	}
 
 	/**
@@ -85,8 +94,8 @@ public class User implements IObserver, IMailbox {
 	 * @param name
 	 *            the name of the <code>User</code>
 	 */
-	public User(String name, String password) {
-		this(name, password, null);
+	public User(String name) {
+		this(name, null, null, null);
 	}
 
 	public boolean canEdit(Entry entry) {
@@ -114,7 +123,8 @@ public class User implements IObserver, IMailbox {
 
 	/**
 	 * Registers an {@link Item} which should be deleted in case the
-	 * <code>User</code> gets deleted.
+	 * <code>User</code> gets deleted and, if the item is an {@link Entry},
+	 * remembers the time of the user's last post for spamming prevention.
 	 * 
 	 * @param item
 	 *            the {@link Item} to register
@@ -122,6 +132,9 @@ public class User implements IObserver, IMailbox {
 	public void registerItem(Item item) {
 		this.items.add(item);
 		this.updateCheaterStatus();
+		if (item instanceof Entry) {
+			this.setLastPostTime(SysInfo.now());
+		}
 	}
 
 	/**
@@ -135,7 +148,9 @@ public class User implements IObserver, IMailbox {
 		}
 		this.items.clear();
 		this.mainMailbox.delete();
-		Database.users().remove(this.name);
+		if (this.cleaner != null) {
+			this.cleaner.cleanUp(this);
+		}
 	}
 
 	/**
@@ -168,10 +183,10 @@ public class User implements IObserver, IMailbox {
 	 *         <code>User</code> in this Hour.
 	 */
 	public int howManyItemsPerHour() {
-		Date now = SysInfo.now();
+		long now = SysInfo.now().getTime();
 		int i = 0;
 		for (Item item : this.items) {
-			if (now.getTime() - item.timestamp().getTime() <= 60 * 60 * 1000) {
+			if (now - item.timestamp().getTime() <= 60 * 60 * 1000) {
 				i++;
 			}
 		}
@@ -263,13 +278,12 @@ public class User implements IObserver, IMailbox {
 	 * we will remember here the time of the user's last post for future
 	 * spamming prevention.
 	 */
-	public void updateCheaterStatus() {
+	private void updateCheaterStatus() {
 		if (this.isSpammer()) {
 			this.block("User is a Spammer");
 		} else if (this.isMaybeCheater()) {
 			this.block("User voted up somebody");
 		}
-		this.setLastPostTime(SysInfo.now());
 	}
 
 	/**
@@ -432,19 +446,14 @@ public class User implements IObserver, IMailbox {
 	 * Set the status of the user whether he is a moderator or not.
 	 * 
 	 * @param mod
-	 *            , true if the user will be a moderator
+	 *            whether the user is to become a moderator or not
+	 * @param mailbox
+	 *            an optional moderator mailbox, through which the user will be
+	 *            notified about spam reports, etc.
 	 */
-	public void setModerator(Boolean mod) {
-		if (this.isModerator != mod) {
-			this.isModerator = mod;
-			if (mod) {
-				this.addMailbox(Database.users().getModeratorMailbox());
-			} else {
-				this
-						.removeMailbox(Database.users()
-								.getModeratorMailbox());
-			}
-		}
+	public void setModerator(boolean mod, IMailbox mailbox) {
+		this.isModerator = mod;
+		this.moderatorMailbox = mod ? mailbox : null;
 	}
 
 	/**
@@ -490,7 +499,7 @@ public class User implements IObserver, IMailbox {
 	public void observe(IObservable o, Object arg) {
 		if (o instanceof Question && arg instanceof Answer
 				&& ((Answer) arg).owner() != this) {
-			new Notification(this, (Answer) arg);
+			new Notification(this.mainMailbox, (Answer) arg);
 		}
 	}
 
@@ -528,39 +537,6 @@ public class User implements IObserver, IMailbox {
 		}
 
 		return sortedAnsweredQuestions;
-	}
-
-	/**
-	 * Get a list of all questions that the user might also know to answer.
-	 * 
-	 * @return List<Question>
-	 */
-	public List<Question> getSuggestedQuestions() {
-		List<Question> suggestedQuestions = new ArrayList<Question>();
-		List<Question> sortedAnsweredQuestions = this
-				.getSortedAnsweredQuestions();
-
-		/*
-		 * Don't list questions that have many answers or already have a best
-		 * answer. The user should not be the owner of the suggested question.
-		 * Remove duplicates.
-		 */
-		for (Question q : sortedAnsweredQuestions) {
-			for (Question similarQ : q.getSimilarQuestions()) {
-				if (!suggestedQuestions.contains(similarQ)
-						&& !sortedAnsweredQuestions.contains(similarQ)
-						&& similarQ.owner() != this
-						&& !similarQ.isOldQuestion()
-						&& similarQ.countAnswers() < 10
-						&& !similarQ.hasBestAnswer()) {
-					suggestedQuestions.add(similarQ);
-				}
-			}
-		}
-		if (suggestedQuestions.size() > 6)
-			return suggestedQuestions.subList(0, 6);
-		return suggestedQuestions;
-
 	}
 
 	/**
@@ -663,7 +639,11 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public List<Notification> getNotifications() {
-		return this.mainMailbox.getAllNotifications();
+		List<Notification> all = new LinkedList();
+		for (IMailbox mailbox : this.getAllMailboxes()) {
+			all.addAll(mailbox.getAllNotifications());
+		}
+		return all;
 	}
 
 	/**
@@ -690,7 +670,7 @@ public class User implements IObserver, IMailbox {
 	 * @return a notification with the given id
 	 */
 	public Notification getNotification(int id) {
-		for (Notification n : this.getAllNotifications())
+		for (Notification n : this.getNotifications())
 			if (n.id() == id)
 				return n;
 		return null;
@@ -721,54 +701,6 @@ public class User implements IObserver, IMailbox {
 	@Override
 	public String toString() {
 		return "U[" + this.name + "]";
-	}
-
-	/**
-	 * Having less than MINIMAL_EXPERTISE_THRESHOLD votes on a topic prevents a
-	 * user from being an expert.
-	 */
-	private final int MINIMAL_EXPERTISE_THRESHOLD = 2;
-	/**
-	 * What percentage of most proficient users are considered experts on a
-	 * topic.
-	 */
-	private final int EXPERTISE_PERCENTILE = 20;
-
-	/**
-	 * Determines all the topics this user is an expert in. Each tag is
-	 * considered a topic and a user is considered an expert if he's got a
-	 * minimum of two positive votes (or one accepted best answer) to one of the
-	 * questions with the tag and if his vote count is in the first quintile
-	 * (i.e. at most 20 % of all the answerers for a given topic can be
-	 * experts).
-	 * 
-	 * @return the list of tags for which this user is an expert
-	 */
-	public List<Tag> getExpertise() {
-		Map<Tag, Map<User, Integer>> stats = Database.questions()
-				.collectExpertiseStatistics();
-
-		List<Tag> expertise = new ArrayList();
-		for (Tag tag : stats.keySet()) {
-			// ignore tags this user knows nothing about
-			if (!stats.get(tag).containsKey(this)) {
-				continue;
-			}
-			// ignore tags this user knows hardly anything about
-			if (stats.get(tag).get(this) < this.MINIMAL_EXPERTISE_THRESHOLD) {
-				continue;
-			}
-
-			Map<User, Integer> tagStats = stats.get(tag);
-			List<User> experts = Mapper.sortByValue(tagStats);
-			int threshold = (100 - this.EXPERTISE_PERCENTILE) * experts.size()
-					/ 100;
-			if (tagStats.get(this) >= tagStats.get(experts.get(threshold))) {
-				expertise.add(tag);
-			}
-		}
-
-		return expertise;
 	}
 
 	/**
@@ -842,44 +774,11 @@ public class User implements IObserver, IMailbox {
 	}
 
 	public List<IMailbox> getAllMailboxes() {
-		List<IMailbox> mailboxes = new LinkedList();
-		mailboxes.addAll(this.otherMailboxes);
+		List<IMailbox> mailboxes = new ArrayList();
 		mailboxes.add(this.mainMailbox);
+		if (this.isModerator())
+			mailboxes.add(this.moderatorMailbox);
 		return mailboxes;
-	}
-
-	/**
-	 * Adds an additional Mailbox to the user, eg because they became mod and
-	 * thus gain access to the moderators mailbox.
-	 * 
-	 * @param mailbox
-	 *            mailbox to be added to the user so they see the updates.
-	 */
-
-	public void addMailbox(IMailbox mailbox) {
-		this.otherMailboxes.add(mailbox);
-	}
-
-	/**
-	 * Revoke access to the Mailbox.
-	 * 
-	 * @param mailbox
-	 */
-	public void removeMailbox(IMailbox mailbox) {
-		this.otherMailboxes.remove(mailbox);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see models.IMailbox#getAll()
-	 */
-	public List<Notification> getAllNotifications() {
-		List<Notification> all = new LinkedList();
-		for (IMailbox mailbox : this.getAllMailboxes()) {
-			all.addAll(mailbox.getAllNotifications());
-		}
-		return all;
 	}
 
 	/*
@@ -895,15 +794,6 @@ public class User implements IObserver, IMailbox {
 		return allNew;
 	}
 
-	/**
-	 * Gets new Notifications, but only the ones personally for me.
-	 * 
-	 * @return List of notifications (newest first)
-	 */
-	public List<Notification> getMyNewNotifications() {
-		return this.mainMailbox.getNewNotifications();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -917,24 +807,10 @@ public class User implements IObserver, IMailbox {
 		return allRecent;
 	}
 
-	/**
-	 * Gets recent notifications, but only the ones personally for me.
-	 * 
-	 * @return List of notifications (newest first)
-	 */
-	public List<Notification> getMyRecentNotifications() {
-		return this.mainMailbox.getRecentNotifications();
-	}
-
-	public void receive(Notification notification) {
-		this.mainMailbox.receive(notification);
-	}
-
-	public void removeNotification(int id) {
-		this.mainMailbox.removeNotification(id);
-	}
-
-	public void setIsSpammer(boolean b) {
-		this.isSpammer = b;
+	public void setIsSpammer(boolean isSpammer) {
+		if (isSpammer && !this.isBlocked) {
+			this.block("Declared Spammer");
+		}
+		this.isSpammer = isSpammer;
 	}
 }

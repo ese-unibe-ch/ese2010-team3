@@ -3,12 +3,11 @@ import java.util.GregorianCalendar;
 
 import models.Question;
 import models.SysInfo;
-import models.TimeTracker;
 import models.User;
-import models.database.Database;
-import models.database.importers.Importer;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
+import controllers.Application;
+import controllers.Database;
 
 @OnApplicationStart
 public class Bootstrap extends Job {
@@ -44,7 +43,7 @@ public class Bootstrap extends Job {
 		jack.setWebsite("http://www.example.org/#jackd");
 		jack.setProfession("Brewer");
 		jack.setBiography("Oh well, ...");
-		jack.setModerator(true);
+		jack.setModerator(true, Database.users().getModeratorMailbox());
 
 		// Questions
 
@@ -68,11 +67,11 @@ public class Bootstrap extends Job {
 		// TimeTracker
 		GregorianCalendar mock = new GregorianCalendar();
 		mock.set(2010, 10, 1, 0, 0);
-		TimeTracker.getTimeTracker().injectMockedStartTime(mock.getTime());
+		Application.timeTracker.setStartTime(mock.getTime());
 
 		// try to import some more questions, answers, etc.
 		try {
-			Importer.importXML(new File("qa/conf/fixtures/QA.xml"));
+			Database.importXML(new File("qa/conf/fixtures/QA.xml"));
 		} catch (Exception e) {
 			// handle all exceptions the same way (all failures aren't fatal)
 			e.printStackTrace();

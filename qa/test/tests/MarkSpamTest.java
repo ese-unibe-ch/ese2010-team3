@@ -1,5 +1,7 @@
 package tests;
 
+import models.IMailbox;
+import models.Mailbox;
 import models.Question;
 import models.User;
 
@@ -7,20 +9,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class MarkSpamTest extends UnitTest {
+public class MarkSpamTest extends MockedUnitTest {
 
 	private User alex;
 	private User pete;
 	private Question question;
 	private Question otherQuestion;
+	private IMailbox moderatorBox;
 
 	@Before
 	public void setUp() {
-		this.alex = new User("Alex", "123");
-		this.alex.setModerator(true);
-		this.pete = new User("Pete", "789");
+		this.moderatorBox = new Mailbox("Moderators");
+		this.alex = new User("Alex");
+		this.alex.setModerator(true, moderatorBox);
+		this.pete = new User("Pete");
 		this.question = new Question(this.pete, "SPAMSPAMSPAM!!!1eleven");
 		this.otherQuestion = new Question(this.pete, "MOAR SPAM!!!!");
 	}
@@ -33,14 +35,14 @@ public class MarkSpamTest extends UnitTest {
 
 	@Test
 	public void shouldInformModerator() {
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
 		assertTrue(this.question.isPossiblySpam());
-		assertEquals(1, this.alex.getAllNotifications().size());
+		assertEquals(1, this.alex.getNotifications().size());
 	}
 
 	@Test
 	public void shouldDeleteSpam() {
-		this.question.markSpam();
+		this.question.markSpam(null);
 		this.question.confirmSpam();
 		assertTrue(this.question.isDeleted());
 		assertTrue(this.pete.isBlocked());
@@ -48,20 +50,39 @@ public class MarkSpamTest extends UnitTest {
 
 	@Test
 	public void shouldEaseProcess() {
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
 		this.question.confirmSpam();
-		this.otherQuestion.markSpam();
-		assertEquals(this.alex.getAllNotifications().size(), 0);
+		this.otherQuestion.markSpam(this.moderatorBox);
+		assertEquals(this.alex.getNotifications().size(), 0);
 		assertTrue(this.otherQuestion.isDeleted());
 	}
 
 	@Test
 	public void shouldntBotherNonMods() {
-		this.question.markSpam();
-		this.question.markSpam();
+		this.question.markSpam(this.moderatorBox);
+		this.question.markSpam(this.moderatorBox);
 		this.question.confirmSpam();
-		this.otherQuestion.markSpam();
-		this.alex.setModerator(false);
-		assertEquals(this.alex.getAllNotifications().size(), 0);
+		this.otherQuestion.markSpam(this.moderatorBox);
+		this.alex.setModerator(false, null);
+		assertEquals(this.alex.getNotifications().size(), 0);
+	}
+
+	@Test
+	public void shouldNotReblockUser() {
+		this.pete.block("for testing");
+		assertFalse(this.pete.isSpammer());
+		this.question.markSpam(null);
+		this.question.confirmSpam();
+		assertTrue(this.pete.isSpammer());
+		assertEquals("for testing", this.pete.getStatusMessage());
+	}
+
+	@Test
+	public void shouldNotUnblockRedeemedSpammer() {
+		shouldNotReblockUser();
+		this.pete.setIsSpammer(false);
+		assertFalse(this.pete.isSpammer());
+		assertTrue(this.pete.isBlocked());
+		assertEquals("for testing", this.pete.getStatusMessage());
 	}
 }

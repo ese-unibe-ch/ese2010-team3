@@ -2,45 +2,31 @@ package tests;
 
 import java.util.List;
 
+import models.Answer;
+import models.IMailbox;
 import models.Mailbox;
 import models.Notification;
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class MailboxTest extends UnitTest {
+public class MailboxTest extends MockedUnitTest {
 	private User pete;
 	private User susane;
-	private Mailbox mailbox;
+	private IMailbox mailbox;
 	private Question question;
-	private SystemInformationMock sys;
-	private static SystemInformation old;
 
 	@Before
 	public void setUp() {
-		this.pete = new User("Pete", "");
-		this.susane = new User("Susane", "");
+		this.pete = new User("Pete");
+		this.susane = new User("Susane");
 		this.mailbox = new Mailbox("We're married");
-		this.pete.addMailbox(this.mailbox);
-		this.susane.addMailbox(this.mailbox);
+		this.pete.setModerator(true, this.mailbox);
+		this.susane.setModerator(true, this.mailbox);
 		this.question = new Question(this.susane, "ORLY?");
-		this.sys = new SystemInformationMock();
-		this.sys.year(2000).month(4).day(2).hour(9).minute(0).second(0);
-
-		this.old = SysInfo.mockWith(this.sys);
-	}
-
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(this.old);
+		sysInfo.year(2000).month(4).day(2).hour(9).minute(0).second(0);
 	}
 
 	@Test
@@ -52,9 +38,9 @@ public class MailboxTest extends UnitTest {
 	@Test
 	public void testGetAll() {
 		new Notification(this.mailbox, this.question);
-		List<Notification> petesNotifications = this.pete.getAllNotifications();
+		List<Notification> petesNotifications = this.pete.getNotifications();
 		List<Notification> susanesNotifications = this.susane
-				.getAllNotifications();
+				.getNotifications();
 		assertEquals(1, petesNotifications.size());
 		assertEquals(petesNotifications.get(0).getAbout(), this.question);
 		assertEquals(1, susanesNotifications.size());
@@ -73,7 +59,7 @@ public class MailboxTest extends UnitTest {
 		assertEquals(1, susanesNotifications.size());
 		assertEquals(susanesNotifications.get(0).getAbout(), this.question);
 
-		this.sys.minute(15);
+		sysInfo.minute(15);
 		petesNotifications = this.pete.getRecentNotifications();
 		susanesNotifications = this.susane.getRecentNotifications();
 		assertEquals(0, petesNotifications.size());
@@ -103,20 +89,19 @@ public class MailboxTest extends UnitTest {
 
 	@Test
 	public void testPersonalMailbox() {
-		new Notification(this.pete, this.question);
+		Answer answer = this.question.answer(this.susane, "answer?");
+		this.pete.observe(this.question, answer);
 		List<Notification> petesNotifications = this.pete
-				.getMyNewNotifications();
+				.getNewNotifications();
 		List<Notification> susanesNotifications = this.susane
-				.getMyNewNotifications();
+				.getNewNotifications();
 		assertEquals(1, petesNotifications.size());
-		assertEquals(petesNotifications.get(0).getAbout(), this.question);
+		assertEquals(petesNotifications.get(0).getAbout(), answer);
 		assertEquals(0, susanesNotifications.size());
-		petesNotifications = this.pete
-				.getMyRecentNotifications();
-		susanesNotifications = this.susane
-				.getMyRecentNotifications();
+		petesNotifications = this.pete.getRecentNotifications();
+		susanesNotifications = this.susane.getRecentNotifications();
 		assertEquals(1, petesNotifications.size());
-		assertEquals(petesNotifications.get(0).getAbout(), this.question);
+		assertEquals(petesNotifications.get(0).getAbout(), answer);
 		assertEquals(0, susanesNotifications.size());
 	}
 

@@ -9,9 +9,7 @@ import models.Vote;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class UnregisterTest extends UnitTest {
+public class UnregisterTest extends MockedUnitTest {
 
 	private User jack;
 	private User john;
@@ -28,12 +26,12 @@ public class UnregisterTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		jack = new User("Jack", "jack");
-		john = new User("John", "john");
-		bill = new User("Bill", "bill");
-		kate = new User("Kate", "kate");
-		sahra = new User("Sahra", "sahra");
-		michael = new User("Michael", "michael");
+		jack = new User("Jack");
+		john = new User("John");
+		bill = new User("Bill");
+		kate = new User("Kate");
+		sahra = new User("Sahra");
+		michael = new User("Michael");
 		question = new Question(jack, "Why did the chicken cross the road?");
 		answer = question.answer(john, "To get to the other side.");
 		questionVote = question.voteUp(kate);
@@ -92,16 +90,16 @@ public class UnregisterTest extends UnitTest {
 
 	@Test
 	public void shouldDeleteAllCommentsOnQuestionDelete() {
-		assertTrue(questionComment.isRegistered());
+		assertNotNull(questionComment.getQuestion());
 		question.unregister();
-		assertFalse(questionComment.isRegistered());
+		assertNull(questionComment.getQuestion());
 	}
 
 	@Test
 	public void shouldDeleteAllCommentsOnAnswerDelete() {
-		assertTrue(answerComment.isRegistered());
+		assertNotNull(answerComment.getQuestion());
 		answer.unregister();
-		assertFalse(answerComment.isRegistered());
+		assertNull(answerComment.getQuestion());
 	}
 
 	@Test

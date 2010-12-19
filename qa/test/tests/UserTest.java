@@ -4,61 +4,47 @@ import java.text.ParseException;
 
 import models.Answer;
 import models.Question;
-import models.SysInfo;
-import models.SystemInformation;
 import models.Tag;
 import models.User;
-import models.database.Database;
-import models.database.IDatabase;
-import models.database.HotDatabase.HotDatabase;
+import models.database.IQuestionDatabase;
+import models.database.IUserDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
+import models.database.HotDatabase.HotTagDatabase;
+import models.database.HotDatabase.HotUserDatabase;
 import models.helpers.Tools;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
+public class UserTest extends MockedUnitTest {
 
-public class UserTest extends UnitTest {
-
-	private static IDatabase origDB;
-	private SystemInformation savedSysInfo;
-	private SystemInformationMock sys;
+	private IQuestionDatabase questionDB;
 
 	@Before
 	public void setUp() {
-		origDB = Database.swapWith(new HotDatabase());
-		sys = new SystemInformationMock();
-		savedSysInfo = SysInfo.mockWith(sys);
-		Database.clear();
-	}
-
-	@After
-	public void tearDown() {
-		Database.swapWith(origDB);
-		SysInfo.mockWith(savedSysInfo);
+		this.questionDB = new HotQuestionDatabase(new HotTagDatabase());
 	}
 
 	@Test
 	public void shouldCreateUser() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertTrue(user != null);
 	}
 
 	@Test
 	public void shouldBeCalledJack() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(user.getName(), "Jack");
 	}
 
 	@Test
 	public void checkUsernameAvailable() {
-		assertTrue(Database.users().isAvailable("JaneSmith"));
-		Database.users().register("JaneSmith", "janesmith", "jane@smith.com");
-		assertFalse(Database.users().isAvailable("JaneSmith"));
-		assertFalse(Database.users().isAvailable("janesmith"));
-		assertFalse(Database.users().isAvailable("jAnEsMiTh"));
+		IUserDatabase userDB = new HotUserDatabase();
+		assertTrue(userDB.isAvailable("JaneSmith"));
+		userDB.register("JaneSmith", "janesmith", "jane@smith.com");
+		assertFalse(userDB.isAvailable("JaneSmith"));
+		assertFalse(userDB.isAvailable("janesmith"));
+		assertFalse(userDB.isAvailable("jAnEsMiTh"));
 	}
 
 	@Test
@@ -72,14 +58,14 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkMailAssertion() {
-		User user = new User("Bill", "bill");
+		User user = new User("Bill");
 		user.setEmail("bill@aol.com");
 		assertEquals(user.getEmail(), "bill@aol.com");
 	}
 
 	@Test
 	public void checkPassw() {
-		User user = new User("Bill", "bill");
+		User user = new User("Bill", "bill", "bill@example.net", null);
 		assertTrue(user.checkPW("bill"));
 		assertEquals(Tools.encrypt("bill"), user.getSHA1Password());
 		user.setSHA1Password("bill2");
@@ -88,9 +74,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldEditProfileCorrectly() throws ParseException {
-		sys.year(2010).month(12).day(3);
+		sysInfo.year(2010).month(12).day(3);
 
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(user.getAge(), 0);
 		assertNull(user.getBiographyHTML());
 
@@ -115,7 +101,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForSpammer() {
-		User user = new User("Spammer", "spammer");
+		User user = new User("Spammer");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		assertTrue(user.howManyItemsPerHour() == 0);
@@ -138,8 +124,8 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void checkForCheater() {
-		User user = new User("TheSupported", "supported");
-		User user2 = new User("Cheater", "cheater");
+		User user = new User("TheSupported");
+		User user2 = new User("Cheater");
 		assertFalse(user.isBlocked());
 		assertFalse(user2.isBlocked());
 		assertFalse(user2.isMaybeCheater());
@@ -148,13 +134,13 @@ public class UserTest extends UnitTest {
 		for (int i = 0; i < 5; i++) {
 			new Question(user, "This is my " + i + ". question").voteUp(user2);
 		}
-		sys.setTestMode(false);
+		sysInfo.setTestMode(false);
 		assertTrue(user2.isMaybeCheater());
 		assertTrue(user2.isCheating());
 		assertTrue(user2.isBlocked());
-		sys.setTestMode(true);
+		sysInfo.setTestMode(true);
 		assertFalse(user2.isCheating());
-		sys.setTestMode(false);
+		sysInfo.setTestMode(false);
 		assertTrue(user2.isCheating());
 		assertEquals(user2.getStatusMessage(), "User voted up somebody");
 		assertFalse(user.isMaybeCheater());
@@ -165,9 +151,9 @@ public class UserTest extends UnitTest {
 	
 	@Test
 	public void shouldAllowVotingOften() {
-		User voter = new User("Voter", "voter");
-		User user1 = new User("User1", "user1");
-		User user2 = new User("User2", "user2");
+		User voter = new User("Voter");
+		User user1 = new User("User1");
+		User user2 = new User("User2");
 
 		for (int i = 0; i < 5; i++) {
 			new Question(user1, "Q1-" + i).voteUp(voter);
@@ -181,10 +167,10 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldNotBeAbleToEditForeignPosts() {
-		User user1 = new User("Jack", "jack");
-		User user2 = new User("John", "john");
-		User user3 = new User("Geronimo", "geronimo");
-		user1.setModerator(true);
+		User user1 = new User("Jack");
+		User user2 = new User("John");
+		User user3 = new User("Geronimo");
+		user1.setModerator(true, null);
 		Question q = new Question(user2, "Can you edit this post?");
 		/* moderator should be able to edit the question */
 		assertTrue(user1.canEdit(q));
@@ -200,7 +186,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneQuestion() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		assertEquals(1, user.getQuestions().size());
 		q.unregister();
@@ -208,7 +194,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoQuestion() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.unregister();
 		assertEquals(0, user.getQuestions().size());
@@ -216,7 +202,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		assertEquals(1, user.getAnswers().size());
@@ -224,7 +210,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.answers().get(0).unregister();
@@ -233,7 +219,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneBestAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -242,7 +228,7 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveNoBestAnswer() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		Question q = new Question(user, "Why?");
 		q.answer(user, "Because");
 		q.setBestAnswer(q.answers().get(0));
@@ -252,15 +238,15 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testModerator() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertFalse(user.isModerator());
-		user.setModerator(true);
+		user.setModerator(true, null);
 		assertTrue(user.isModerator());
 	}
 
 	@Test
 	public void testBlock() {
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertFalse(user.isBlocked());
 		assertEquals(user.getStatusMessage(), "");
 		user.block("offending comments");
@@ -274,9 +260,9 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveRecentEntries() {
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
-		User user = new User("Jack", "jack");
+		User user = new User("Jack");
 		assertEquals(0, user.getRecentQuestions().size());
 		assertEquals(0, user.getRecentAnswers().size());
 		assertEquals(0, user.getRecentComments().size());
@@ -288,7 +274,7 @@ public class UserTest extends UnitTest {
 		assertEquals(1, user.getRecentComments().size());
 
 		for (int i = 0; i < 4; i++) {
-			sys.second(i);
+			sysInfo.second(i);
 			question.answer(user, "Answer " + i);
 		}
 		assertEquals(3, user.getRecentAnswers().size());
@@ -297,18 +283,18 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldHaveOneHighRatedAnswer() {
-		User user = new User("Jack", "jack");
-		Question q = new Question(user, "Why?");
+		User user = new User("Jack");
+		Question q = this.questionDB.add(user, "Why?");
 		q.answer(user, "Because");
 
 		assertEquals(0, user.highRatedAnswers().size());
-		assertTrue(Database.questions().countHighRatedAnswers() == 0);
+		assertTrue(this.questionDB.countHighRatedAnswers() == 0);
 
-		User A = new User("A", "a");
-		User B = new User("B", "b");
-		User C = new User("C", "c");
-		User D = new User("D", "d");
-		User E = new User("E", "e");
+		User A = new User("A");
+		User B = new User("B");
+		User C = new User("C");
+		User D = new User("D");
+		User E = new User("E");
 
 		q.answers().get(0).voteUp(A);
 		q.answers().get(0).voteUp(B);
@@ -317,7 +303,7 @@ public class UserTest extends UnitTest {
 		q.answers().get(0).voteUp(E);
 
 		assertEquals(1, user.highRatedAnswers().size());
-		assertTrue(Database.questions().countHighRatedAnswers() > 0);
+		assertTrue(this.questionDB.countHighRatedAnswers() > 0);
 
 		A.delete();
 		B.delete();
@@ -330,11 +316,11 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void shouldSuggestQuestion() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -342,23 +328,23 @@ public class UserTest extends UnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 
 		n.answer(user5, "and then some");
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
 	public void shouldSuggestThreeQuestions() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -368,68 +354,68 @@ public class UserTest extends UnitTest {
 		m.answer(user4, "No idea");
 		n.answer(user5, "Therefore");
 
-		assertEquals(3, user5.getSuggestedQuestions().size());
-		assertEquals(m, user5.getSuggestedQuestions().get(0));
+		assertEquals(3, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
 	public void shouldSuggestSixQuestionsMax() {
-		User user3 = new User("User3", "user3");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user5 = new User("User5");
 		for (int i = 0; i < 10; i++) {
-			Question q = new Question(user3, "Hard question " + i);
+			Question q = this.questionDB.add(user3, "Hard question " + i);
 			q.setTagString("demo");
 		}
 
-		Question q = new Question(user3, "Simple question");
+		Question q = this.questionDB.add(user3, "Simple question");
 		q.setTagString("demo");
 		q.answer(user5, "Simple!");
 
-		assertEquals(6, user5.getSuggestedQuestions().size());
+		assertEquals(6, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test
 	public void shouldNotSuggestSameQuestionTwice() {
-		User user5 = new User("User5", "user5");
-		Question q = new Question(null, "suggest me!");
+		User user5 = new User("User5");
+		Question q = this.questionDB.add(null, "suggest me!");
 		q.setTagString("demo");
-		Question r = new Question(null, "answer me!");
+		Question r = this.questionDB.add(null, "answer me!");
 		r.setTagString("demo");
 		r.answer(user5, "ok");
-		Question s = new Question(null, "answer me, too!");
+		Question s = this.questionDB.add(null, "answer me, too!");
 		s.setTagString("demo");
 		s.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		assertEquals(q, user5.getSuggestedQuestions().get(0));
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(q, this.questionDB.suggestQuestions(user5).get(0));
 	}
 
 	@Test
 	public void shouldNotSuggestOldQuestions() {
-		sys.year(2000).month(6).day(6).hour(12).minute(0).second(0);
+		sysInfo.year(2000).month(6).day(6).hour(12).minute(0).second(0);
 
-		User user5 = new User("User5", "user5");
-		Question q = new Question(null, "suggest me!");
+		User user5 = new User("User5");
+		Question q = this.questionDB.add(null, "suggest me!");
 		q.setTagString("demo");
 
-		Question r = new Question(null, "answer me!");
+		Question r = this.questionDB.add(null, "answer me!");
 		r.setTagString("demo");
 		r.answer(user5, "ok");
 
-		assertEquals(1, user5.getSuggestedQuestions().size());
-		sys.year(2001);
-		assertEquals(0, user5.getSuggestedQuestions().size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
+		sysInfo.year(2001);
+		assertEquals(0, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test
 	public void shouldSuggestQuestionsFromBestAnswersFirst() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -440,23 +426,23 @@ public class UserTest extends UnitTest {
 		n.answer(user5, "Therefore");
 		o.answer(user5, "No");
 		o.setBestAnswer(user5.getAnswers().get(1));
-		assertEquals(2, user5.getSuggestedQuestions().size());
-		assertEquals(p, user5.getSuggestedQuestions().get(0));
-		assertEquals(m, user5.getSuggestedQuestions().get(1));
+		assertEquals(2, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(p, this.questionDB.suggestQuestions(user5).get(0));
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(1));
 
 	}
 
 	@Test
 	public void shouldSuggestQuestionsSortedByRatingOfAnswers() {
-		User user3 = new User("User3", "user3");
-		User user4 = new User("User4", "user4");
-		User user5 = new User("User5", "user5");
-		Question m = new Question(user3, "Why?");
-		Question n = new Question(user4, "Where?");
-		Question o = new Question(user3, "Who?");
-		Question p = new Question(user4, "How old?");
-		Question q = new Question(user3, "So?");
-		Question r = new Question(user4, "For ho long?");
+		User user3 = new User("User3");
+		User user4 = new User("User4");
+		User user5 = new User("User5");
+		Question m = this.questionDB.add(user3, "Why?");
+		Question n = this.questionDB.add(user4, "Where?");
+		Question o = this.questionDB.add(user3, "Who?");
+		Question p = this.questionDB.add(user4, "How old?");
+		Question q = this.questionDB.add(user3, "So?");
+		Question r = this.questionDB.add(user4, "For ho long?");
 
 		m.setTagString("demo");
 		n.setTagString("demo demo2");
@@ -471,22 +457,22 @@ public class UserTest extends UnitTest {
 		user5.getAnswers().get(1).voteUp(user3);
 		user5.getAnswers().get(1).voteUp(user4);
 
-		assertEquals(3, user5.getSuggestedQuestions().size());
-		assertEquals(q, user5.getSuggestedQuestions().get(0));
-		assertEquals(m, user5.getSuggestedQuestions().get(1));
-		assertEquals(p, user5.getSuggestedQuestions().get(2));
+		assertEquals(3, this.questionDB.suggestQuestions(user5).size());
+		assertEquals(q, this.questionDB.suggestQuestions(user5).get(0));
+		assertEquals(m, this.questionDB.suggestQuestions(user5).get(1));
+		assertEquals(p, this.questionDB.suggestQuestions(user5).get(2));
 
 	}
 
 	@Test
 	public void shouldNotSuggestQuestionsFromBadAnswers() {
-		User user6 = new User("User6", "user6");
-		User user7 = new User("User7", "user7");
-		User user8 = new User("User8", "user8");
-		Question m = new Question(user6, "Why?");
-		Question n = new Question(user7, "Where?");
-		Question o = new Question(user6, "Who?");
-		Question p = new Question(user7, "How old?");
+		User user6 = new User("User6");
+		User user7 = new User("User7");
+		User user8 = new User("User8");
+		Question m = this.questionDB.add(user6, "Why?");
+		Question n = this.questionDB.add(user7, "Where?");
+		Question o = this.questionDB.add(user6, "Who?");
+		Question p = this.questionDB.add(user7, "How old?");
 		m.answer(user6, "Because");
 		m.answer(user7, "No idea");
 		p.answer(user8, "Therefore");
@@ -497,66 +483,65 @@ public class UserTest extends UnitTest {
 		o.setTagString("demo demo3 demo4");
 		p.setTagString("demo demo3 demo4 demo5");
 
-		assertEquals(0, user8.getSuggestedQuestions().size());
+		assertEquals(0, this.questionDB.suggestQuestions(user8).size());
 	}
 
 	@Test
 	public void shouldNotSuggestOwnQuestions() {
-		User user = new User("Jack", "jack");
-		User user2 = new User("John", "john");
-		Question q = new Question(user, "Why?");
-		Question f = new Question(user2, "Where?");
+		User user = new User("Jack");
+		User user2 = new User("John");
+		Question q = this.questionDB.add(user, "Why?");
+		Question f = this.questionDB.add(user2, "Where?");
 		q.setTagString("demo");
 		f.setTagString("demo");
 		q.answer(user2, "Because");
-		assertEquals(0, user2.getSuggestedQuestions().size());
+		assertEquals(0, this.questionDB.suggestQuestions(user2).size());
 
 	}
 
 	@Test
 	public void shouldNotSuggestQuestionsWithBestAnswer() {
-		User james = new User("James", "james");
-		User john = new User("John", "john");
-		User kate = new User("Kate", "kate");
-		Question k = new Question(james, "Why?");
-		Question l = new Question(john, "Where?");
+		User james = new User("James");
+		User john = new User("John");
+		User kate = new User("Kate");
+		Question k = this.questionDB.add(james, "Why?");
+		Question l = this.questionDB.add(john, "Where?");
 
 		k.setTagString("demo");
 		l.setTagString("demo");
 		k.answer(james, "Because");
 		k.setBestAnswer(k.answer(john, "No idea"));
 		l.answer(kate, "Therefore");
-		assertEquals(0, kate.getSuggestedQuestions().size());
+		assertEquals(0, this.questionDB.suggestQuestions(kate).size());
 	}
 
 	@Test
 	public void shouldNotSuggestQuestionsWithManyAnswers() {
-		User user3 = new User("User3", "user3");
-		User user5 = new User("User5", "user5");
+		User user3 = new User("User3");
+		User user5 = new User("User5");
 
-		Question p = new Question(user3, "Hard question");
+		Question p = this.questionDB.add(user3, "Hard question");
 		p.setTagString("demo");
-		Question q = new Question(user3, "Simple question");
+		Question q = this.questionDB.add(user3, "Simple question");
 		q.setTagString("demo");
 
 		q.answer(user5, "Simple!");
-		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
 
 		for (int i = 0; i < 9; i++) {
 			p.answer(null, "anonymous genious!");
 		}
-		assertEquals(1, user5.getSuggestedQuestions().size());
+		assertEquals(1, this.questionDB.suggestQuestions(user5).size());
 		p.answer(null, "yet another anonymous genious!");
-		assertEquals(0, user5.getSuggestedQuestions().size());
+		assertEquals(0, this.questionDB.suggestQuestions(user5).size());
 	}
 
 	@Test
 	public void shouldHaveDebugFriendly_toString() {
-		User james = new User("James", "james");
+		User james = new User("James");
 		Question question = new Question(james, "Why?");
 		Answer answer = question.answer(james, "No idea");
-		question.setTagString("TAG");
-		Tag tag = question.getTags().get(0);
+		Tag tag = new Tag("tag", null);
 		assertEquals(james.toString(), "U[James]");
 		assertEquals(question.toString(), "Question(Why?)");
 		assertEquals(answer.toString(), "Answer(No idea)");
@@ -565,16 +550,16 @@ public class UserTest extends UnitTest {
 
 	@Test
 	public void testPostAndSearchDelay() {
-		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
+		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James");
 		assertTrue(james.canPost());
 		assertTrue(james.canSearchFor("search 1"));
 
-		james.setLastPostTime(sys.now());
+		james.setLastPostTime(sysInfo.now());
 		assertFalse(james.canPost());
-		sys.second(29);
+		sysInfo.second(29);
 		assertFalse(james.canPost());
-		sys.second(30);
+		sysInfo.second(30);
 		assertTrue(james.canPost());
 
 		assertTrue(james.canPost());
@@ -583,66 +568,66 @@ public class UserTest extends UnitTest {
 		james.unblock();
 		assertTrue(james.canPost());
 
-		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		james.setLastSearch("search 1", sys.now());
+		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		james.setLastSearch("search 1", sysInfo.now());
 		assertFalse(james.canSearchFor("search 2"));
-		sys.second(14);
+		sysInfo.second(14);
 		assertFalse(james.canSearchFor("search 2"));
-		sys.second(15);
+		sysInfo.second(15);
 		assertTrue(james.canSearchFor("search 2"));
 	}
 
 	@Test
 	public void testTimeToSearchAndPost() {
-		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
+		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James");
 
-		james.setLastSearch("search 1", sys.now());
+		james.setLastSearch("search 1", sysInfo.now());
 		assertEquals(james.timeToSearch(), 15);
-		sys.second(14);
+		sysInfo.second(14);
 		assertEquals(james.timeToSearch(), 1);
 		assertFalse(james.canSearchFor("search 2"));
 		assertTrue(james.canSearchFor("search 1"));
-		sys.second(15);
+		sysInfo.second(15);
 		assertEquals(james.timeToSearch(), 0);
 		assertTrue(james.canSearchFor("search 2"));
 		assertTrue(james.canSearchFor("search 1"));
-		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		james.setLastPostTime(sys.now());
+		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		james.setLastPostTime(sysInfo.now());
 		assertEquals(james.timeToPost(), 30);
-		sys.second(29);
+		sysInfo.second(29);
 		assertEquals(james.timeToPost(), 1);
 		assertFalse(james.canPost());
-		sys.second(30);
+		sysInfo.second(30);
 		assertEquals(james.timeToPost(), 0);
 		assertTrue(james.canPost());
 	}
 
 	@Test
 	public void testTestMode() {
-		sys.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		User james = new User("James", "james");
-		sys.setTestMode(false);
-		assertFalse(sys.isInTestMode());
-		james.setLastPostTime(sys.now());
-		james.setLastSearch("search 1", sys.now());
+		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
+		User james = new User("James");
+		sysInfo.setTestMode(false);
+		assertFalse(sysInfo.isInTestMode());
+		james.setLastPostTime(sysInfo.now());
+		james.setLastSearch("search 1", sysInfo.now());
 		assertFalse(james.canSearchFor("search 2"));
 		assertFalse(james.canPost());
-		sys.setTestMode(false);
-		assertEquals(sys.isInTestMode(), false);
-		sys.setTestMode(true);
-		assertEquals(sys.isInTestMode(), true);
-		assertTrue(sys.isInTestMode());
-		sys.isInTestMode();
-		james.setLastPostTime(sys.now());
-		james.setLastSearch("search 3", sys.now());
+		sysInfo.setTestMode(false);
+		assertEquals(sysInfo.isInTestMode(), false);
+		sysInfo.setTestMode(true);
+		assertEquals(sysInfo.isInTestMode(), true);
+		assertTrue(sysInfo.isInTestMode());
+		sysInfo.isInTestMode();
+		james.setLastPostTime(sysInfo.now());
+		james.setLastSearch("search 3", sysInfo.now());
 		assertTrue(james.canSearchFor("search 4"));
 		assertTrue(james.canPost());
 	}
 
 	@Test
 	public void shouldNotWatchAnything() {
-		User user = new User("Jack", "jack");
-		assertEquals(0, Database.questions().getWatchList(user).size());
+		User user = new User("Jack");
+		assertEquals(0, this.questionDB.getWatchList(user).size());
 	}
 }

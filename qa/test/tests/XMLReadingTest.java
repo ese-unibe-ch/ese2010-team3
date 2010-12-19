@@ -5,21 +5,16 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Question;
-import models.database.Database;
 import models.database.IDatabase;
 import models.database.HotDatabase.HotDatabase;
 import models.database.importers.Importer;
 import models.database.importers.SemanticError;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import play.test.UnitTest;
-
-public class XMLReadingTest extends UnitTest {
+public class XMLReadingTest extends MockedUnitTest {
 
 	static final String xml = "<?xml version=\"1.0\"?>\n"
 			+
@@ -111,55 +106,43 @@ public class XMLReadingTest extends UnitTest {
 			"  </answers>" +
 			"" +
 			"</QA>";
-
-	private static HotDatabase mock = new HotDatabase();
-	private static IDatabase old;
-
-	@BeforeClass
-	public static void setUp() throws SAXException, IOException,
-			ParserConfigurationException {
-		old = Database.swapWith(mock);
-
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		Database.swapWith(old);
-	}
+	private IDatabase db;
+	private Importer importer;
 
 	@Before
 	public void clean() {
-		Database.clear();
+		this.db = new HotDatabase();
+		this.importer = new Importer(this.db);
 	}
 
 	@Test
 	public void shouldReadTom() throws SAXException, IOException,
 			ParserConfigurationException {
-		Importer.importXML(this.xml);
-		assertFalse(Database.users().isAvailable("sdaau"));
+		this.importer.importXML(this.xml);
+		assertFalse(this.db.users().isAvailable("sdaau"));
 	}
 
 	@Test
 	public void shouldReadQuestion() throws SAXException, IOException,
 			ParserConfigurationException {
-		assertEquals(0, Database.questions().count());
-		Importer.importXML(this.xml);
-		assertEquals(1, Database.questions().count());
+		assertEquals(0, this.db.questions().count());
+		this.importer.importXML(this.xml);
+		assertEquals(1, this.db.questions().count());
 	}
 
 	@Test
 	public void shouldReadAnswerToo() throws SAXException, IOException,
 			ParserConfigurationException {
-		assertEquals(0, Database.questions().countAllAnswers());
-		Importer.importXML(this.xml);
-		assertEquals(1, Database.questions().countAllAnswers());
+		assertEquals(0, this.db.questions().countAllAnswers());
+		this.importer.importXML(this.xml);
+		assertEquals(1, this.db.questions().countAllAnswers());
 	}
 
 	@Test
 	public void shouldNotContainCDATA() throws SAXException, IOException,
 			ParserConfigurationException {
-		Importer.importXML(this.xml);
-		Question question = Database.questions().all().get(0);
+		this.importer.importXML(this.xml);
+		Question question = this.db.questions().all().get(0);
 		assertFalse(question.content().startsWith("<![CDATA["));
 		assertFalse(question.answers().get(0).content().contains("<![CDATA["));
 	}
@@ -169,7 +152,7 @@ public class XMLReadingTest extends UnitTest {
 			ParserConfigurationException {
 		boolean hasThrown = false;
 		try {
-			Importer.importXML("<invalid />");
+			this.importer.importXML("<invalid />");
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
@@ -177,7 +160,8 @@ public class XMLReadingTest extends UnitTest {
 
 		hasThrown = false;
 		try {
-			Importer.importXML("<QA><answers><answer><ownerid>666</ownerid><questionid>999</questionid></answer></answers></QA>");
+			this.importer
+					.importXML("<QA><answers><answer><ownerid>666</ownerid><questionid>999</questionid></answer></answers></QA>");
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
@@ -185,7 +169,8 @@ public class XMLReadingTest extends UnitTest {
 
 		hasThrown = false;
 		try {
-			Importer.importXML("<QA><questions><question/></questions></QA>");
+			this.importer
+					.importXML("<QA><questions><question/></questions></QA>");
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
@@ -193,7 +178,7 @@ public class XMLReadingTest extends UnitTest {
 
 		hasThrown = false;
 		try {
-			Importer.importXML(xml.replace("title>", "ignored>"));
+			this.importer.importXML(xml.replace("title>", "ignored>"));
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
@@ -201,7 +186,7 @@ public class XMLReadingTest extends UnitTest {
 
 		hasThrown = false;
 		try {
-			Importer.importXML(xml.replace("<ownerid>277826</ownerid>",
+			this.importer.importXML(xml.replace("<ownerid>277826</ownerid>",
 					"<ownerid>13</ownerid>"));
 		} catch (SemanticError err) {
 			hasThrown = true;
@@ -210,26 +195,24 @@ public class XMLReadingTest extends UnitTest {
 
 		hasThrown = false;
 		try {
-			Importer.importXML(xml.replace("<questionid>4119991</questionid>",
+			// we are somewhat lenient here and produce new questions for
+			// answers not matching an existing question
+			this.importer.importXML(xml.replace(
+					"<questionid>4119991</questionid>",
 					"<questionid>37</questionid>"));
 		} catch (SemanticError err) {
 			hasThrown = true;
 		}
-		assertTrue(hasThrown);
+		assertFalse(hasThrown);
 	}
 
 	@Test
 	public void shouldTolerateSomeMissingValues() throws SAXException,
 			IOException, ParserConfigurationException {
-		Importer.importXML(xml.replace("<ownerid>277826</ownerid>",
+		this.importer.importXML(xml.replace("<ownerid>277826</ownerid>",
 				"<ownerid/>").replace("<answer id=\"4120453\">", "<answer>"));
-		Question question = Database.questions().all().get(0);
+		Question question = this.db.questions().all().get(0);
 		assertNull(question.owner());
 		assertNull(question.answers().get(0).owner());
-	}
-
-	@Test
-	public void shouldMakeCoberturaHappy() {
-		new Importer();
 	}
 }

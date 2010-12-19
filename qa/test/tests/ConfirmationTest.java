@@ -1,35 +1,20 @@
 package tests;
 
-import models.SysInfo;
-import models.SystemInformation;
 import models.User;
 import models.helpers.Tools;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-import tests.mocks.SystemInformationMock;
-
-public class ConfirmationTest extends UnitTest {
+public class ConfirmationTest extends MockedUnitTest {
 	
-	private SystemInformation sys;
-	private SystemInformation savedSysInfo;
 	private User norbert;
 	private User andrew;
 
 	@Before
 	public void setUp() {
-		sys = new SystemInformationMock();
-		savedSysInfo = SysInfo.mockWith(sys);
-		norbert = new User("Norbert", "norbert");
-		andrew = new User("Andrew", "andrew");
-	}
-	
-	@After
-	public void tearDown() {
-		SysInfo.mockWith(savedSysInfo);
+		norbert = new User("Norbert");
+		andrew = new User("Andrew");
 	}
 	
 	@Test

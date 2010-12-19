@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import models.Question;
-import models.SearchEngine.StopWords;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -102,7 +99,7 @@ public class Tools {
 	 *            with all the words that contain more than 3 characters
 	 * @return keywords with words that occur more than 3 times
 	 */
-	public static String extractImportantWords(String input) {
+	public static List<String> extractImportantWords(String input) {
 		HashMap<String, Integer> keywords = new HashMap();
 		for (String word : input.toLowerCase().split("\\s+")) {
 			if (word.length() <= 3) {
@@ -128,31 +125,11 @@ public class Tools {
 			sorted = sorted.subList(0, 5);
 		}
 		Collections.sort(sorted);
-		return fromStringList(sorted, " ");
+		return sorted;
 	}
 
 	/**
-	 * Joins all strings from a list with a given joiner.
-	 * 
-	 * @param list
-	 *            a list of strings
-	 * @param joiner
-	 *            a string to be inserted between to strings to join them
-	 * @return the resulting string
-	 */
-	public static String fromStringList(List<String> list, String joiner) {
-		String result = "";
-		for (String string : list) {
-			result += joiner + string;
-		}
-		if (result.length() > 0) {
-			result = result.substring(joiner.length());
-		}
-		return result;
-	}
-
-	/**
-	 * Sorts a list of Questions and segments them into parts according to a
+	 * Sorts a list of entries and segments them into parts according to a
 	 * certain number of entries per part.
 	 * 
 	 * @param entries
@@ -166,8 +143,7 @@ public class Tools {
 	 * @return a list of the entries on the given page number.
 	 * 
 	 */
-	public static List<Question> paginate(List<Question> entries,
-			int entriesPerPage, int index) {
+	public static List paginate(List entries, int entriesPerPage, int index) {
 		int limit = entries.size();
 		int upperBound = ((index + 1) * entriesPerPage);
 
@@ -176,12 +152,11 @@ public class Tools {
 		if (index * entriesPerPage <= limit)
 			return entries.subList(index * entriesPerPage, limit);
 
-		return new ArrayList<Question>();
+		return new ArrayList();
 	}
 
-	public static int determineMaximumIndex(List<Question> questions,
-			int entriesPerPage) {
-		return (questions.size() - 1) / entriesPerPage;
+	public static int determineMaximumIndex(List entries, int entriesPerPage) {
+		return (entries.size() - 1) / entriesPerPage;
 	}
 
 	/**

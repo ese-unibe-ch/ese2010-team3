@@ -6,14 +6,13 @@ import models.Answer;
 import models.Entry;
 import models.Question;
 import models.User;
-import models.database.Database;
+import models.database.IQuestionDatabase;
+import models.database.HotDatabase.HotQuestionDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import play.test.UnitTest;
-
-public class EntryOrderingTest extends UnitTest {
+public class EntryOrderingTest extends MockedUnitTest {
 
 	private Question badQuestion;
 	private Question goodQuestion;
@@ -22,15 +21,20 @@ public class EntryOrderingTest extends UnitTest {
 	private Answer goodAnswer;
 	private Answer bestAnswer;
 	private User jack;
+	private IQuestionDatabase questionDB;
 
 	@Before
-	public void setUp() throws Exception {
-		jack = new User("jack", "b");
-		createEntries();
-		voting();
-	}
+	public void setUp() {
+		this.questionDB = new HotQuestionDatabase(null);
 
-	private void voting() {
+		jack = new User("jack");
+		badQuestion = this.questionDB.add(jack, "bad");
+		goodQuestion = this.questionDB.add(jack, "good");
+		badAnswer = badQuestion.answer(jack, "");
+		notQuiteAsBadAnswer = badQuestion.answer(jack, "");
+		goodAnswer = badQuestion.answer(jack, "");
+		bestAnswer = badQuestion.answer(jack, "");
+
 		voteDownNTimes(badQuestion, 5);
 		voteUpNTimes(goodQuestion, 2);
 		voteUpNTimes(goodAnswer, 10);
@@ -41,30 +45,23 @@ public class EntryOrderingTest extends UnitTest {
 	}
 
 	private void voteUpNTimes(Entry entry, int n) {
-		for (Integer i = 0; i < n; i++) {
-			entry.voteUp(new User(i.toString(), i.toString()));
+		for (int i = 0; i < n; i++) {
+			entry.voteUp(new User("user" + i));
 		}
 	}
 
 	private void voteDownNTimes(Entry entry, int n) {
-		for (Integer i = 0; i < n; i++) {
-			entry.voteDown(new User(i.toString(), i.toString()));
+		for (int i = 0; i < n; i++) {
+			entry.voteDown(new User("user" + i));
 		}
 	}
 
-	private void createEntries() {
-		badQuestion = new Question(jack, "");
-		goodQuestion = new Question(jack, "");
-		badAnswer = badQuestion.answer(jack, "");
-		notQuiteAsBadAnswer = badQuestion.answer(jack, "");
-		goodAnswer = badQuestion.answer(jack, "");
-		bestAnswer = badQuestion.answer(jack, "");
-	}
-
+	@Test
 	public void shouldPreferMoreRecentQuestionEventhoughTheyMightBeWorse() {
-		List<Question> questions = Database.questions().all();
-		assertEquals(goodQuestion, questions.get(1));
-		assertEquals(badQuestion, questions.get(0));
+		// TODO: this doesn't do what the tests expects it to!
+		List<Question> questions = this.questionDB.all();
+		assertEquals(goodQuestion, questions.get(0));
+		assertEquals(badQuestion, questions.get(1));
 	}
 
 	@Test

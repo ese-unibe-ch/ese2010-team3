@@ -1,9 +1,8 @@
 package models;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import models.database.Database;
 import models.helpers.Tools;
 
 /**
@@ -15,9 +14,10 @@ import models.helpers.Tools;
 public abstract class Entry extends Item implements Comparable<Entry> {
 
 	private final String content;
-	private String contentText;
-	private HashMap<User, Vote> votes;
+	private String contentText, contentHtml;
+	private final HashMap<User, Vote> votes;
 	private boolean possiblySpam;
+	private int cachedRating;
 
 	/**
 	 * Create an <code>Entry</code>.
@@ -32,8 +32,9 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 		if (content == null) {
 			content = "";
 		}
-		this.content = Tools.markdownToHtml(content);
+		this.content = content;
 		this.votes = new HashMap<User, Vote>();
+		this.cachedRating = 0;
 		this.possiblySpam = false;
 	}
 
@@ -49,9 +50,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * Delete all {@link Vote}s if the <code>Entry</code> gets deleted.
 	 */
 	protected void unregisterVotes() {
-		Collection<Vote> votes = this.votes.values();
-		this.votes = new HashMap();
-		for (Vote vote : votes) {
+		for (Vote vote : new ArrayList<Vote>(this.votes.values())) {
 			vote.unregister();
 		}
 	}
@@ -64,6 +63,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public void unregister(Vote vote) {
 		this.votes.remove(vote.owner());
+		this.cachedRating -= vote.up() ? 1 : -1;
 	}
 
 	/**
@@ -73,12 +73,14 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return the content of the <code>Entry</code>
 	 */
 	public String content() {
-		return this.content;
+		if (this.contentHtml == null)
+			this.contentHtml = Tools.markdownToHtml(this.content);
+		return this.contentHtml;
 	}
 
 	public String getContentText() {
 		if (this.contentText == null)
-			this.contentText = Tools.htmlToText(this.content);
+			this.contentText = Tools.htmlToText(this.content());
 		return this.contentText;
 	}
 
@@ -106,7 +108,7 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * @return rating as an <code>Integer</code>
 	 */
 	public int rating() {
-		return this.upVotes() - this.downVotes();
+		return this.cachedRating;
 	}
 
 	/**
@@ -172,7 +174,8 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 */
 	public Vote voteCancel(User user) {
 		if (this.hasVote(user)) {
-			this.votes.get(user).unregister();
+			Vote oldVote = this.votes.get(user);
+			oldVote.unregister();
 		}
 		return this.votes.remove(user);
 	}
@@ -223,12 +226,11 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	private Vote vote(User user, boolean up) {
 		if (user == this.owner())
 			return null;
-		if (this.hasVote(user)) {
-			this.votes.get(user).unregister();
-		}
+		this.voteCancel(user);
 
 		Vote vote = new Vote(user, this, up);
 		this.votes.put(user, vote);
+		this.cachedRating += up ? 1 : -1;
 		return vote;
 	}
 
@@ -252,24 +254,20 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	}
 
 	/**
-	 * Get all <code>Votes</code>.
+	 * Declare this post to be probably spam. Optionally sends a notice to the
+	 * moderating staff to check if this really is spam.
 	 * 
-	 * @return votes
+	 * @param moderatorMailbox
+	 *            an optional reference to a mailbox to dump the spam
+	 *            notification in
 	 */
-	public Collection<Vote> getVotes() {
-		return this.votes.values();
-	}
-
-	/**
-	 * Declare this post to be probably spam. Sends a notice to the moderating
-	 * staff to check if this really is spam.
-	 */
-	public void markSpam() {
+	public void markSpam(IMailbox moderatorMailbox) {
 		if (this.owner().isSpammer()) {
 			this.confirmSpam();
 		} else if (!this.possiblySpam) {
-			new Notification(Database.users()
-					.getModeratorMailbox(), this);
+			if (moderatorMailbox != null) {
+				new Notification(moderatorMailbox, this);
+			}
 			this.possiblySpam = true;
 		}
 	}
@@ -279,7 +277,6 @@ public abstract class Entry extends Item implements Comparable<Entry> {
 	 * and blocks the user that posted it in the first place.
 	 */
 	public void confirmSpam() {
-		this.owner().block("Declared Spammer");
 		this.owner().setIsSpammer(true);
 		this.unregister();
 	}

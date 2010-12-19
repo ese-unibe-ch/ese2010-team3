@@ -15,21 +15,13 @@ import java.util.GregorianCalendar;
 public final class TimeTracker {
 
 	private final GregorianCalendar startTime = new GregorianCalendar();
-	private static TimeTracker t;
 
-	private TimeTracker() {
-		startTime.setTime(SysInfo.now());
+	public TimeTracker() {
+		startTime.setTime(new Date());
 	}
 
-	public static TimeTracker getTimeTracker() {
-		if (t == null) {
-			t = new TimeTracker();
-		}
-		return t;
-	}
-
-	public void injectMockedStartTime(Date mock) {
-		TimeTracker.getTimeTracker().startTime.setTime(mock);
+	public void setStartTime(Date startTime) {
+		this.startTime.setTime(startTime);
 	}
 
 	/**
