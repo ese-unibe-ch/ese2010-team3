@@ -66,8 +66,17 @@ public class Database {
 	 * Deletes all data. This ensures that the UserDB, the QuestionDB and the
 	 * TagDB are completely empty. Useful for tests.
 	 */
-	public static void clear(boolean keepAdmins) {
-		instance.clear(keepAdmins);
+	public static void clear() {
+		instance.clear(false);
+	}
+
+	/**
+	 * Deletes all data except for administrative users. This is useful to call
+	 * before importing a different data set from an XML file which might not
+	 * contain data for any administrative users.
+	 */
+	public static void clearKeepAdmins() {
+		instance.clear(true);
 	}
 
 	/**
