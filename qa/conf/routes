@@ -12,7 +12,7 @@ POST		/question/{questionId}						CAnswer.newAnswer
 
 GET     	/question/{id}/comments/					Application.commentQuestion
 
-GET		/question/{questionId}/confirmspam						Application.confirmMarkSpam
+GET		/question/{questionId}/confirmspam						Application.confirmMarkSpamQuestion
 GET		/answer/{questionId}/{answerId}/confirmspam				Application.confirmMarkSpamAnswer
 GET		/comment/{questionId}/{answerId}/{commentId}/confirmspam					Application.confirmMarkSpamAnswerComment
 GET		/comment/{questionId}/{commentId}/confirmspam					Application.confirmMarkSpamQuestionComment

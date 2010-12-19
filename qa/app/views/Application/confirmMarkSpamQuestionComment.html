@@ -1,14 +1,14 @@
 #{extends 'main.html' /}
 
-#{if _comment}
-	#{set title:'ajopi - mark spam: ' + _comment.summary().escape() /}
+#{if comment}
+	#{set title:'ajopi - mark spam: ' + comment.summary().escape() /}
 	<div class="deleteQuestion">
 		<p>&{'spam.reallyspam'}</p>
 	</div>
-	<ul><li class="comments"><p>${_comment.summary()}</ul>
+	<ul><li class="comments"><p>${comment.summary()}</ul>
 	<ul class="optionLinks">
-		<p><a href="@{CQuestion.markSpamComment(_question.id(),_comment.id())}">&{'spam.confirmspam'}</a></p>
-		<p><a href="@{Application.question(_question.id())}">&{'spam.notconfirm'}</a></p>
+		<p><a href="@{CQuestion.markSpamComment(question.id(),comment.id())}">&{'spam.confirmspam'}</a></p>
+		<p><a href="@{Application.question(question.id())}">&{'spam.notconfirm'}</a></p>
 	</ul>
 #{/if}
 #{else}

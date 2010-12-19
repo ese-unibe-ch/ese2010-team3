@@ -122,7 +122,7 @@ public class Application extends BaseController {
 	 * @param id
 	 *            the id of the {@link Question}
 	 */
-	public static void confirmMarkSpam(int id) {
+	public static void confirmMarkSpamQuestion(int id) {
 		Question question = Database.questions().get(id);
 		render(question);
 	}
@@ -153,10 +153,10 @@ public class Application extends BaseController {
 	 */
 	public static void confirmMarkSpamAnswerComment(int questionId,
 			int answerId, int commentId) {
-		Question _question = Database.questions().get(questionId);
-		Answer _answer = _question.getAnswer(answerId);
-		Comment _comment = _answer.getComment(commentId);
-		render(_question, _answer, _comment);
+		Question question = Database.questions().get(questionId);
+		Answer answer = question.getAnswer(answerId);
+		Comment comment = answer.getComment(commentId);
+		render(question, answer, comment);
 	}
 
 	/**
@@ -169,9 +169,9 @@ public class Application extends BaseController {
 	 */
 	public static void confirmMarkSpamQuestionComment(int questionId,
 			int commentId) {
-		Question _question = Database.questions().get(questionId);
-		Comment _comment = _question.getComment(commentId);
-		render(_question, _comment);
+		Question question = Database.questions().get(questionId);
+		Comment comment = question.getComment(commentId);
+		render(question, comment);
 	}
 
 	public static void deleteuser() {
@@ -344,7 +344,7 @@ public class Application extends BaseController {
 					.getWatchList(user);
 			if (user.isModerator()) {
 				spamNotification.addAll(Database.users()
-						.getModeratorMailbox().getNewNotifications());
+						.getModeratorMailbox().getAllNotifications());
 			}
 			render(notifications, watchingQuestions, suggestedQuestions,
 					spamNotification, content);
