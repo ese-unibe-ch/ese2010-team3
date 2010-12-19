@@ -94,10 +94,11 @@ public class CQuestion extends BaseController {
 	 *            the id of the {@link Question}.
 	 */
 	public static void addLikerQuestionComment(int commentId, int questionId) {
-		Comment comment = Database.questions().get(questionId)
-				.getComment(commentId);
-		comment.addLiker(Session.user());
-		flash.success("secure.likecommentflash");
+		Comment comment = getComment(questionId, -1, commentId);
+		if (comment != null) {
+			comment.addLiker(Session.user());
+			flash.success("secure.likecommentflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -110,10 +111,11 @@ public class CQuestion extends BaseController {
 	 *            the id of the {@link Question}.
 	 */
 	public static void removeLikerQuestionComment(int commentId, int questionId) {
-		Comment comment = Database.questions().get(questionId)
-				.getComment(commentId);
-		comment.removeLiker(Session.user());
-		flash.success("secure.dislikecommentflash");
+		Comment comment = getComment(questionId, -1, commentId);
+		if (comment != null) {
+			comment.removeLiker(Session.user());
+			flash.success("secure.dislikecommentflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -182,8 +184,10 @@ public class CQuestion extends BaseController {
 	 */
 	public static void deleteQuestion(int id) {
 		Question question = Database.questions().get(id);
-		flash.success("secure.questiondeletedflash");
-		question.delete();
+		if (question != null) {
+			flash.success("secure.questiondeletedflash");
+			question.delete();
+		}
 		Application.index(0);
 	}
 
@@ -197,10 +201,11 @@ public class CQuestion extends BaseController {
 	 *            the id of the {@link Comment}.
 	 */
 	public static void deleteCommentQuestion(int questionId, int commentId) {
-		Question question = Database.questions().get(questionId);
-		Comment comment = question.getComment(commentId);
-		comment.delete();
-		flash.success("secure.commentdeletedflash");
+		Comment comment = getComment(questionId, -1, commentId);
+		if (comment != null) {
+			comment.delete();
+			flash.success("secure.commentdeletedflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -212,9 +217,8 @@ public class CQuestion extends BaseController {
 	 */
 	public static void watchQuestion(int id) {
 		Question question = Database.questions().get(id);
-		User user = Session.user();
 		if (question != null) {
-			user.startObserving(question);
+			Session.user().startObserving(question);
 			flash.success("secure.startwatchquestionflash");
 		}
 		Application.question(id);
@@ -228,9 +232,8 @@ public class CQuestion extends BaseController {
 	 */
 	public static void unwatchQuestion(int id) {
 		Question question = Database.questions().get(id);
-		User user = Session.user();
 		if (question != null) {
-			user.stopObserving(question);
+			Session.user().stopObserving(question);
 			flash.success("secure.stopwatchquestionflash");
 		}
 		Application.question(id);
@@ -244,9 +247,8 @@ public class CQuestion extends BaseController {
 	 */
 	public static void unwatchQuestionFromList(int id) {
 		Question question = Database.questions().get(id);
-		User user = Session.user();
 		if (question != null) {
-			user.stopObserving(question);
+			Session.user().stopObserving(question);
 			flash.success("secure.stopwatchquestionflash", id, question
 					.summary());
 		}
@@ -290,17 +292,15 @@ public class CQuestion extends BaseController {
 	 * is a moderator.
 	 */
 	public static void markSpam(int id) {
-		Question question = Database.questions().get(id);
-		User user = Session.user();
-		if (user != null && question != null) {
-			if (user.isModerator()) {
-				question.confirmSpam();
-			} else {
-				question.markSpam(Database.users().getModeratorMailbox());
-			}
-			flash.success("spam.thx");
-		}
+		markSpam(Database.questions().get(id));
 		Application.index(0);
 	}
 
+	/**
+	 * Informs the moderators that this comment is spam.
+	 */
+	public static void markSpamComment(int questionId, int commentId) {
+		markSpam(getComment(questionId, -1, commentId));
+		Application.question(questionId);
+	}
 }

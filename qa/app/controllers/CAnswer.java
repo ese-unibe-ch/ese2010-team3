@@ -81,10 +81,11 @@ public class CAnswer extends BaseController {
 	 */
 	public static void addLikerAnswerComment(int commentId, int questionId,
 			int answerId) {
-		Comment comment = Database.questions().get(questionId).getAnswer(
-				answerId).getComment(commentId);
-		comment.addLiker(Session.user());
-		flash.success("secure.likecommentflash");
+		Comment comment = getComment(questionId, answerId, commentId);
+		if (comment != null) {
+			comment.addLiker(Session.user());
+			flash.success("secure.likecommentflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -100,10 +101,11 @@ public class CAnswer extends BaseController {
 	 */
 	public static void removeLikerAnswerComment(int commentId, int questionId,
 			int answerId) {
-		Comment comment = Database.questions().get(questionId).getAnswer(
-				answerId).getComment(commentId);
-		comment.removeLiker(Session.user());
-		flash.success("secure.dislikecommentflash");
+		Comment comment = getComment(questionId, answerId, commentId);
+		if (comment != null) {
+			comment.removeLiker(Session.user());
+			flash.success("secure.dislikecommentflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -117,8 +119,7 @@ public class CAnswer extends BaseController {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerUp(int question, int id) {
-		Question q = Database.questions().get(question);
-		Answer answer = q.getAnswer(id);
+		Answer answer = getAnswer(question, id);
 		if (answer != null) {
 			answer.voteUp(Session.user());
 			flash.success("secure.upvoteflash");
@@ -138,8 +139,7 @@ public class CAnswer extends BaseController {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerDown(int question, int id) {
-		Question q = Database.questions().get(question);
-		Answer answer = q.getAnswer(id);
+		Answer answer = getAnswer(question, id);
 		if (answer != null) {
 			answer.voteDown(Session.user());
 			flash.success("secure.downvoteflash");
@@ -159,8 +159,7 @@ public class CAnswer extends BaseController {
 	 *            the id of the {@link Answer}.
 	 */
 	public static void voteAnswerCancel(int question, int id) {
-		Question q = Database.questions().get(question);
-		Answer answer = q.getAnswer(id);
+		Answer answer = getAnswer(question, id);
 		if (answer != null) {
 			answer.voteCancel(Session.user());
 			flash.success("Your vote has been forgotten.");
@@ -180,10 +179,11 @@ public class CAnswer extends BaseController {
 	 *            the id of the {@link Answer}
 	 */
 	public static void deleteAnswer(int questionId, int answerId) {
-		Question question = Database.questions().get(questionId);
-		Answer answer = question.getAnswer(answerId);
-		answer.delete();
-		flash.success("secure.answerdeletedflash");
+		Answer answer = getAnswer(questionId, answerId);
+		if (answer != null) {
+			answer.delete();
+			flash.success("secure.answerdeletedflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -199,11 +199,11 @@ public class CAnswer extends BaseController {
 	 */
 	public static void deleteCommentAnswer(int questionId, int answerId,
 			int commentId) {
-		Question question = Database.questions().get(questionId);
-		Answer answer = question.getAnswer(answerId);
-		Comment comment = answer.getComment(commentId);
-		comment.delete();
-		flash.success("secure.commentdeletedflash");
+		Comment comment = getComment(questionId, answerId, commentId);
+		if (comment != null) {
+			comment.delete();
+			flash.success("secure.commentdeletedflash");
+		}
 		Application.question(questionId);
 	}
 
@@ -217,32 +217,27 @@ public class CAnswer extends BaseController {
 	 */
 	public static void selectBestAnswer(int questionId, int answerId) {
 		Question question = Database.questions().get(questionId);
-		Answer answer = question.getAnswer(answerId);
-		question.setBestAnswer(answer);
-		flash.success("secure.bestanswerflash");
+		if (question != null) {
+			question.setBestAnswer(question.getAnswer(answerId));
+			flash.success("secure.bestanswerflash");
+		}
 		Application.question(questionId);
 	}
 
 	/**
 	 * Informs the moderators that this post is spam.
 	 */
-	static void markSpam(int questionId, int answerId) {
-		Question question = Database.questions().get(questionId);
-		if (question == null) {
-			Application.index(0);
-		}
-		Answer answer = question.getAnswer(answerId);
-		User user = Session.user();
-		if (user != null && answer != null) {
-			if (!user.isModerator()) {
-				answer.markSpam(Database.users().getModeratorMailbox());
-			} else {
-				answer.confirmSpam();
-			}
-			flash.success("spam.thx");
-
-		}
+	public static void markSpam(int questionId, int answerId) {
+		markSpam(getAnswer(questionId, answerId));
 		Application.question(questionId);
 	}
 
+	/**
+	 * Informs the moderators that this comment is spam.
+	 */
+	public static void markSpamComment(int questionId, int answerId,
+			int commentId) {
+		markSpam(getComment(questionId, answerId, commentId));
+		Application.question(questionId);
+	}
 }
