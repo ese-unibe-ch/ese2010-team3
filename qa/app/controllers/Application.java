@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
+import models.Comment;
 import models.Notification;
 import models.Question;
 import models.SysInfo;
@@ -124,6 +125,53 @@ public class Application extends BaseController {
 	public static void confirmMarkSpam(int id) {
 		Question question = Database.questions().get(id);
 		render(question);
+	}
+
+	/**
+	 * Prompts the user to mark this {@link Answer} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param answerId
+	 *            the id of the {@link Answer}
+	 */
+	public static void confirmMarkSpamAnswer(int questionId, int answerId) {
+		Question question = Database.questions().get(questionId);
+		Answer answer = question.getAnswer(answerId);
+		render(question, answer);
+	}
+
+	/**
+	 * Prompts the user to mark {@link Comment} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param answerId
+	 *            the id of the {@link Answer} this {@link Comment} belongs to
+	 * @param commentId
+	 *            the id of the {@link Comment}
+	 */
+	public static void confirmMarkSpamAnswerComment(int questionId,
+			int answerId, int commentId) {
+		Question _question = Database.questions().get(questionId);
+		Answer _answer = _question.getAnswer(answerId);
+		Comment _comment = _answer.getComment(commentId);
+		render(_question, _answer, _comment);
+	}
+
+	/**
+	 * Prompts the user to mark {@link Comment} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param commentId
+	 *            the id of the {@link Comment}
+	 */
+	public static void confirmMarkSpamQuestionComment(int questionId,
+			int commentId) {
+		Question _question = Database.questions().get(questionId);
+		Comment _comment = _question.getComment(commentId);
+		render(_question, _comment);
 	}
 
 	public static void deleteuser() {

@@ -84,9 +84,6 @@ question.newanswer=New answer to one of your questions
 question.nonexistent=Question does not exist.
 question.lock=Lock
 question.unlock=Unlock
-question.confirmspam=Yes, this is spam.
-question.reallyspam=Is this question really spam?
-question.notconfirm=No, I changed my mind.
 #   Answer messages
 answers=Answers
 answer.add=Add answer
@@ -201,8 +198,11 @@ mod.mightbespam=Might be Spam
 mod.spamhint=Users can report something as spam and you as a moderator should feel free to block the Spammer.
 mod.mightbespammer=might be a spammer, as this post was reported:
 
-spam.mark=Report
+spam.mark=Spam
 spam.thx=Thanks for making our site Spam-free
+spam.confirmspam=Yes, I'm positive.
+spam.reallyspam=Is this really spam?
+spam.notconfirm=No, I changed my mind.
 
 # Mails
 mail.welcome.title=confirm your ajopi account

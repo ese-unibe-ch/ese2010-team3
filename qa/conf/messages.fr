@@ -84,9 +84,6 @@ question.newanswer=Nouvelle réponse à une de vôtre questions.
 question.nonexistent=Cette question n'existe pas.
 question.lock=Ferme
 question.unlock=Ouvre
-question.confirmspam=Oui, c'est du spam.
-question.reallyspam=Est-ce vraiment une question du spam?
-question.notconfirm=Non, j'ai changé d'avis.
 #   Answer messages
 answers=Réponse
 answer.add=Donner une réponse
@@ -203,6 +200,9 @@ mod.mightbespammer=peut-être un spammeur. Ce poste a été marqué:
 
 spam.mark=Rapport
 spam.thx=Merci pour rendre notre site sans spam
+spam.confirmspam=Oui, c'est du spam.
+spam.reallyspam=Est-ce vraiment du spam?
+spam.notconfirm=Non, j'ai changé d'avis.
 
 # Mails
 mail.welcome.title=confirmer votre compte ajopi

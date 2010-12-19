@@ -7,8 +7,8 @@ import models.database.Database;
 import play.cache.Cache;
 import play.data.validation.Required;
 import play.data.validation.Validation;
-import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
+import play.mvc.Router.ActionDefinition;
 
 /**
  * The controller for all routes that concern the {@link Question}'s.
@@ -304,4 +304,26 @@ public class CQuestion extends BaseController {
 		Application.index(0);
 	}
 
+	/**
+	 * Informs the moderators that this comment is spam.
+	 */
+	public static void markSpamComment(int questionId, int commentId) {
+		Question question = Database.questions().get(questionId);
+		if (question == null) {
+			Application.index(0);
+		}
+		User user = Session.user();
+		if (user != null) {
+			Comment comment = question.getComment(commentId);
+			if (comment != null) {
+				if (!user.isModerator()) {
+					comment.markSpam();
+				} else {
+					comment.confirmSpam();
+				}
+				flash.success("spam.thx");
+			}
+		}
+		Application.question(questionId);
+	}
 }

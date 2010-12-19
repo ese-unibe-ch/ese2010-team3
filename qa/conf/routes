@@ -12,7 +12,10 @@ POST		/question/{questionId}						CAnswer.newAnswer
 
 GET     	/question/{id}/comments/					Application.commentQuestion
 
-GET		/question/{id}/confirmspam					Application.confirmMarkSpam
+GET		/question/{questionId}/confirmspam						Application.confirmMarkSpam
+GET		/answer/{questionId}/{answerId}/confirmspam				Application.confirmMarkSpamAnswer
+GET		/comment/{questionId}/{answerId}/{commentId}/confirmspam					Application.confirmMarkSpamAnswerComment
+GET		/comment/{questionId}/{commentId}/confirmspam					Application.confirmMarkSpamQuestionComment
 
 GET		/question/{id}/up						CQuestion.voteQuestionUp
 GET		/question/{id}/down						CQuestion.voteQuestionDown
@@ -38,6 +41,8 @@ POST		/comment/{questionId}						CQuestion.newCommentQuestion
 POST		/comment/{questionId}/{answerId}				CAnswer.newCommentAnswer
 GET		/comment/{questionId}/{commentId}/delete			CQuestion.deleteCommentQuestion
 GET		/comment/{questionId}/{answerId}/{commentId}/delete		CAnswer.deleteCommentAnswer
+GET		/comment/{questionId}/{commentId}/markspam			CQuestion.markSpamComment
+GET		/comment/{questionId}/{answerId}/{commentId}/markspam			CAnswer.markSpamComment
 
 GET		/register							Application.register
 POST		/register							Application.signup

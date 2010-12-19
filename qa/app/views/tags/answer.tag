@@ -15,6 +15,7 @@
 			#{if _user.canEdit(_answer.getQuestion()) && !_answer.getQuestion().isLocked() && _answer.getQuestion().isBestAnswerSettable() && _answer.getQuestion().getBestAnswer() != _answer}
 				| <a href="@{CAnswer.selectBestAnswer(_answer.getQuestion().id(), _answer.id())}#answer-${_answer.id()}">Select as Best</a>
 			#{/if}
+			| <a href="@{Application.confirmMarkSpamAnswer(_answer.getQuestion().id(),_answer.id())}">&{'spam.mark'}</a>
 		</div>
 	#{/if}
 	#{if _user && _answer.owner() != _user && !_user.isBlocked()}
