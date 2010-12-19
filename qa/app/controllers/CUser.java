@@ -250,7 +250,7 @@ public class CUser extends BaseController {
 			flash.error("secure.cleardberror");
 			Application.index(0);
 		}
-		Database.clear(true /* keepAdmins */);
+		Database.clearKeepAdmins();
 		flash.success("secure.cleardbflash");
 		Application.admin();
 	}
