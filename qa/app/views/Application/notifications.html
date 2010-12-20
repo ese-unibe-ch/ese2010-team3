@@ -15,13 +15,13 @@
 		<ul>
 		#{list items:notifications, as:'notification'}
 			<li>
-			<div class="message">
-				#{if notification.isNew()}&{'new'}#{/if}
+			<div class="message summary">
+				#{if notification.isNew()}<div class="highlight">&{'new'}</div>#{/if}
 				#{showProfile notification.getAbout() /} &{'answer.answeredto'}
 				"${notification.getAbout().getQuestion().summary()}":
 				<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().content().raw()}</a></p>
 				#{date notification.getAbout() /}
-				<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
+				<div class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></div>
 			</div><!-- end message -->
 		#{/list}
 		#{else}
@@ -32,7 +32,7 @@
 		#{if user.getNewNotifications().size() > 0}
 			<li><a href="@{CUser.clearNewNotifications}">Mark all notifications as read</a>
 		#{/if}
-		<div class="message">
+		<li><div class="message">
 			<p class="hint">&{'watch.hint'}</p>
 		</div><!-- end message -->
 		</ul>
@@ -81,12 +81,12 @@
 			<ul>
 				#{list items:spamNotification, as:'notification'}
 					<li>
-					<div class="message">
-						#{if notification.isNew()}&{'new'}#{/if}
+					<div class="message summary">
+						#{if notification.isNew()}<div class="highlight">&{'new'}</div>#{/if}
 						#{showProfile notification.getAbout() /} &{'mod.mightbespammer'}
 						<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a></p>
 						#{date notification.getAbout() /}
-						<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
+						<div class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></div>
 					</div><!-- end message -->
 				#{/list}
 			</ul>
