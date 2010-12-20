@@ -19,9 +19,9 @@
 				#{if notification.isNew()}&{'new'}#{/if}
 				#{showProfile notification.getAbout() /} &{'answer.answeredto'}
 				"${notification.getAbout().getQuestion().summary()}":
-				<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().content().raw()}</a></p>
+				<p><a href="@{CUser.folldelete notificationowNotification(notification.id())}">${notification.getAbout().content().raw()}</a></p>
 				#{date notification.getAbout() /}
-				<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
+				<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">&{'notification.delete'}</a></p>
 			</div><!-- end message -->
 		#{/list}
 		#{else}
@@ -30,7 +30,7 @@
 			</div><!-- end message -->
 		#{/else}
 		#{if user.getNewNotifications().size() > 0}
-			<li><a href="@{CUser.clearNewNotifications}">Mark all notifications as read</a>
+			<li><a href="@{CUser.clearNewNotifications}">&{'notification.markasread'}</a>
 		#{/if}
 		<div class="message">
 			<p class="hint">&{'watch.hint'}</p>
@@ -86,7 +86,7 @@
 						#{showProfile notification.getAbout() /} &{'mod.mightbespammer'}
 						<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a></p>
 						#{date notification.getAbout() /}
-						<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">delete notification</a></p>
+						<p class="commands"><a href="@{CUser.deleteNotification(notification.id())}">&{'notification.delete'}</a></p>
 					</div><!-- end message -->
 				#{/list}
 			</ul>

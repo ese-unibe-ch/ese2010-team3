@@ -48,7 +48,7 @@ user.norecommention=We're not able to recommend any (more) questions for you to 
 user.editprofile=Edit profile
 user.deleteaccount=Delete Account
 user.block=Block user
-user.isblocked=This user is blocked
+user.isblocked=This user is blocked.
 user.blockedbymoderator=You have been blocked by a moderator.
 user.blockedforreason=Blocked because
 user.unblocknow=Unblock now
@@ -211,3 +211,9 @@ mail.welcome.hi=Hi
 mail.welcome.introduction=Please confirm your ajopi account by clicking this link:
 mail.welcome.introduction2=Once you confirm, you will have full access to ajopi and all future notifications will be sent to this email address.
 mail.welcome.team=Best regards your ajopi team
+
+# Errors
+error.notfound=Not found
+error.apperror=Application error
+error.oops=Oops, an error occurred
+error.loggedwithid=This exception has been logged with id

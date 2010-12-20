@@ -210,3 +210,9 @@ mail.welcome.hi=Hi
 mail.welcome.introduction=S'il vous plaît confirmer votre compte ajopi en cliquant sur ce lien:
 mail.welcome.introduction2=Dès que vous confirmez, vous aurez un accès complet à toutes les notifications ajopi et futurs seront envoyés à cette adresse e-mail.
 mail.welcome.team=Cordialement votre équipe ajopi
+
+# Errors
+error.notfound=Pas trouvé
+error.apperror=Erreur d'application
+error.oops=Oh, une erreur s'est produite
+error.loggedwithid=Cette exception a été enregistrée avec id

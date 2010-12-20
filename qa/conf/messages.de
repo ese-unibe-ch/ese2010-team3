@@ -211,3 +211,9 @@ mail.welcome.hi=Hallo
 mail.welcome.introduction= Bitte bestätige dein ajopi-Account indem du auf folgenden Link klickst:
 mail.welcome.introduction2=Wenn du dein Konto bestätigt hast, hast du vollen Zugirff auf ajopi. Benachrichtigungen werden in Zukunft an diese Adresse versandt.
 mail.welcome.team=freundliche Grüsse dein ajopi Team
+
+# Errors
+error.notfound=Nicht gefunden
+error.apperror=Programm Fehler
+error.oops=Huch, es ist ein Fehler aufgetreten.
+error.loggedwithid=Diese Ausnahme wurde mit folgender ID aufgezeichnet: 

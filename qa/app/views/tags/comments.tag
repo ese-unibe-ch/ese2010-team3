@@ -11,17 +11,17 @@
 		 		#{if _user && comment.owner() != _user && !_user.isBlocked() && !comment.getLikers().contains(_user)}
 					<img alt="&{'comment.ilike'}" src="/public/images/thumbUp.png" />
 					#{if _entry instanceof models.Answer}
-						<a href="@{CAnswer.addLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">I like</a>
+						<a href="@{CAnswer.addLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">&{'comment.ilike'}</a>
 					#{/if}#{else}
-						<a href="@{CQuestion.addLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">I like</a>
+						<a href="@{CQuestion.addLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">&{'comment.ilike'}</a>
 					#{/else }
 				#{/if}
 				#{if _user && comment.owner() != _user && !_user.isBlocked() && comment.getLikers().contains(_user)}
 					<img alt="&{'comment.idislike'}" src="/public/images/thumbDown.png" />
 					#{if _entry instanceof models.Answer}
-						<a href="@{CAnswer.removeLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">I don't like</a>
+						<a href="@{CAnswer.removeLikerAnswerComment(comment.id(), _entry.getQuestion().id(), _entry.id())}#comment-${comment.id()}">&{'comment.idislike'}</a>
 					#{/if}#{else}
-						<a href="@{CQuestion.removeLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">I don't like</a>
+						<a href="@{CQuestion.removeLikerQuestionComment(comment.id(), _entry.id())}#comment-${comment.id()}">&{'comment.idislike'}</a>
 					#{/else }
 				#{/if}
 				<!-- count of users who like this -->
@@ -35,9 +35,9 @@
 				<!-- EOT2 = end of team2 -->
 				#{if _user && _user.canEdit(comment)}
 					#{if _entry instanceof models.Answer}
-						<a href="@{CAnswer.deleteCommentAnswer(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">Delete</a>
+						<a href="@{CAnswer.deleteCommentAnswer(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">&{'delete'}</a>
 					#{/if}#{else}
-						<a href="@{CQuestion.deleteCommentQuestion(_entry.id(), comment.id())}">Delete</a>
+						<a href="@{CQuestion.deleteCommentQuestion(_entry.id(), comment.id())}">&{'delete'}</a>
 					#{/else}
 				#{/if}
 			</li>	

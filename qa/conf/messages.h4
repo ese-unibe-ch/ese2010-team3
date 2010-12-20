@@ -57,7 +57,7 @@ user.nonexistent=¥0µ'r3 |\\|07 £0993Ð 1|\\| 0r 7|-|3r3 1$ |\\|0 $µ(|-| µ$3
 user.expertise=3xp3r71$3
 user.isnovice=%s 1$ $71££ 4 |\\|0\\/1(3.
 user.confirm.success=¥0µ |-|4\\/3 $µ((3$$ƒµ££¥ (0|\\|ƒ1r|\\/|3Ð ¥0µr 4j0p1 4((0µ|\\|7!
-user.confirm.error=7|-|3 4j0p1 4((0µ|\|7 1$ |\|07 (0|\|ƒ1r|\\/|3Ð 0r Ð03$ |\\|07 (0|\\|$1$7$!
+user.confirm.error=7|-|3 4j0p1 4((0µ|\\|7 1$ |\\|07 (0|\\|ƒ1r|\\/|3Ð 0r Ð03$ |\\|07 (0|\\|$1$7$!
 user.cannotsearch=P£34$3 \\/\\/417 %d $3(0|\\|Ð$.
 user.cannotpost=P£34$3 \\/\\/417 %d $3(0|\\|Ð$ µ|\\|71£ ¥0µ |\\/|4¥ p0$7 4941|\\|.
 
@@ -84,9 +84,9 @@ question.newanswer=|\\|3\\/\\/ 4|\\|$\\/\\/3r 70 0|\\|3 0ƒ ¥0µr qµ3$710|\\|$
 question.nonexistent=Qµ3$710|\\| Ð03$ |\\|07 3x1$7.
 question.lock=£0(|{
 question.unlock=µ|\\|£0(|{
-question.confirmspam=¥3$, 7|-|1$ 1$ $p4|\/|.
-question.reallyspam=1$ 7|-|1$ qµ3$710|\| r34££¥ $p4|\/|?
-question.notconfirm=\|0, 1 (|-|4|\|93Ð |\/|¥ |\/|1|\|Ð.
+question.confirmspam=¥3$, 7|-|1$ 1$ $p4|\\/|.
+question.reallyspam=1$ 7|-|1$ qµ3$710|\\| r34££¥ $p4|\\/|?
+question.notconfirm=|\\|0, 1 (|-|4|\\|93Ð |\\/|¥ |\\/|1|\\|Ð.
 #   Answer messages
 answers=4|\\|$\\/\\/3r$
 answer.add=4ÐÐ 4|\\|$\\/\\/3r
@@ -186,7 +186,7 @@ secure.mail.error=|\\/|41£ (0µ£Ð |\\|07 b3 $3|\\|7!
 secure.mail.success=$µ((3$$! 90 70 ¥0µr |\\/|41£b0x 4|\\|Ð (0|\\|ƒ1r|\\/| ¥0µr 4((0µ|\\|7.
 
 since.seconds=%d $3(0|\\|Ð$ 460
-since.minutes=%d |\\/\1|\\|µt3[$] 460
+since.minutes=%d |\\/|1|\\|µt3[$] 460
 since.hours=%d |-|0µr[$] 460
 since.days=%d Ð4¥[$] 460
 since.months=%d |\\/|0|\\|7|-|[$] 460
@@ -195,23 +195,28 @@ since.years=%d ¥34r[$] 460
 search.placeholder="$34r(|-| Cu3$710|\\|"
 
 # Moderator
-mod.nospam=7|-|3r3'$ |\|0 $p4|\/|. £µ(|{¥ ¥0µ!
-mod.spamnotify=$p4|\/| |\|071(3$
-mod.mightbespam=|\/|19|-|7 b3 $p4|\/|
-mod.spamhint=µ$3r$ (4|\| r3p0r7 $0|\/|37|-|1|\|9 4$ $p4|\/| 4|\|Ð ¥0µ 4$ 4 |\/|0Ð3r470r $|-|0µ£Ð ƒ33£ ƒr33 70 b£0(|{ 7|-|3 $p4|\/||\/|3r.
-mod.mightbespammer=|\/|19|-|7 b3 4 $p4|\/||\/|3r, 4$ 7|-|1$ p0$7 \/\/4$ r3p0r73Ð:
+mod.nospam=7|-|3r3'$ |\\|0 $p4|\\/|. £µ(|{¥ ¥0µ!
+mod.spamnotify=$p4|\\/| |\\|071(3$
+mod.mightbespam=|\\/|19|-|7 b3 $p4|\\/|
+mod.spamhint=µ$3r$ (4|\\| r3p0r7 $0|\\/|37|-|1|\\|9 4$ $p4|\\/| 4|\\|Ð ¥0µ 4$ 4 |\\/|0Ð3r470r $|-|0µ£Ð ƒ33£ ƒr33 70 b£0(|{ 7|-|3 $p4|\\/||\\/|3r.
+mod.mightbespammer=|\\/|19|-|7 b3 4 $p4|\\/||\\/|3r, 4$ 7|-|1$ p0$7 \\/\\/4$ r3p0r73Ð:
 
 spam.mark=R3p0r7
-spam.thx=7|-|4|\||{$ ƒ0r |\/|4|{1|\|9 0µr $173 $p4|\/|-ƒr33
+spam.thx=7|-|4|\\||{$ ƒ0r |\\/|4|{1|\\|9 0µr $173 $p4|\\/|-ƒr33
 
 # Mails
 mail.welcome.title=(0|\\|ƒ1r|\\/| ¥0µr 4j0p1 4((0µ|\\|7
-mail.welcome.subject="\/\/3£(0|\/|3"
+mail.welcome.subject="\\/\\/3£(0|\\/|3"
 mail.welcome.hi=|-|1
 mail.welcome.introduction=P£34$3 (0|\\|ƒ1r|\\/| ¥0µr 4j0p1 4((0µ|\\|7 b¥ (£1(|{1|\\|9 7|-|1$ £1|\\||{:
 mail.welcome.introduction2=0|\\|(3 ¥0µ (0|\\|ƒ1r|\\/|, ¥0µ \\/\\/1££ |-|4\\/3 ƒµ££ 4((3$$ 70 4j0p1 4|\\|Ð 4££ ƒµ7µr3 |\\|071ƒ1(4710|\\|$ \\/\\/1££ b3 $3|\\|7 70 7|-|1$ 3|\\/|41£ 4ÐÐr3$$.
 mail.welcome.team=B3$7 r394rÐ$ ¥0µr 4j0p1 734|\\/|
 
+# Errors
+error.notfound=|\\|07 ƒ0µ|\\|Ð
+error.apperror=4pp£1(4710|\\| 3rr0r
+error.oops=00p$, 4|\\| 3rr0r 0((µrr3Ð
+error.loggedwithid=7|-|1$ 3x(3p710|\\| |-|4$ b33|\\| £0993Ð \\/\\/17|-| 1Ð
 
 # Leet Translator:
 # http://www.albinoblacksheep.com/text/leet

@@ -7,9 +7,9 @@
 			<h2>&{'user.delete'}</h2>
 			<p>
 			<ul class="optionLinks">
-				<li><a href="@{CUser.deleteUser(true)}">Yes, but keep all questions and answers.</a></li>
-				<li><a href="@{CUser.deleteUser(false)}">Yes, delete everything.</a></li>
-				<li><a href="@{Application.showprofile(showUser.getName())}">No, I've changed my mind.</a></li>
+				<li><a href="@{CUser.deleteUser(true)}">&{'user.confirmanonymize'}</a></li>
+				<li><a href="@{CUser.deleteUser(false)}">&{'user.confirmdelete'}</a></li>
+				<li><a href="@{Application.showprofile(showUser.getName())}">&{'user.abortdelete'}</a></li>
 			</p>
 		</li>
 	</ul>
