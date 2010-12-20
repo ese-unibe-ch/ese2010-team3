@@ -296,10 +296,11 @@ public class CQuestion extends BaseController {
 		if (user != null && question != null) {
 			if (user.isModerator()) {
 				question.confirmSpam();
+				flash.success("spam.thx.mod");
 			} else {
 				question.markSpam();
+				flash.success("spam.thx.user");
 			}
-			flash.success("spam.thx");
 		}
 		Application.index(0);
 	}
@@ -318,10 +319,12 @@ public class CQuestion extends BaseController {
 			if (comment != null) {
 				if (!user.isModerator()) {
 					comment.markSpam();
+					flash.success("spam.thx.user");
 				} else {
 					comment.confirmSpam();
+					flash.success("spam.thx.mod");
 				}
-				flash.success("spam.thx");
+
 			}
 		}
 		Application.question(questionId);

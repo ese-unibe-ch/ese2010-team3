@@ -237,10 +237,11 @@ public class CAnswer extends BaseController {
 		if (user != null && answer != null) {
 			if (!user.isModerator()) {
 				answer.markSpam();
+				flash.success("spam.thx.user");
 			} else {
 				answer.confirmSpam();
+				flash.success("spam.thx.mod");
 			}
-			flash.success("spam.thx");
 
 		}
 		Application.question(questionId);
@@ -262,10 +263,11 @@ public class CAnswer extends BaseController {
 			if (comment != null) {
 				if (!user.isModerator()) {
 					comment.markSpam();
+					flash.success("spam.thx.user");
 				} else {
 					comment.confirmSpam();
+					flash.success("spam.thx.mod");
 				}
-				flash.success("spam.thx");
 			}
 		}
 		Application.question(questionId);

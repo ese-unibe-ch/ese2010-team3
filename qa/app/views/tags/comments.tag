@@ -41,7 +41,7 @@
 					#{/else}
 				#{/if}
 				#{if _user && _user != comment.owner()}
-					#{if _entry instanceof models.Answer}
+					| #{if _entry instanceof models.Answer}
 						<a href="@{Application.confirmMarkSpamAnswerComment(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">&{'spam.mark'}</a>
 					#{/if}#{else}
 						<a href="@{Application.confirmMarkSpamQuestionComment(_entry.id(), comment.id())}">&{'spam.mark'}</a>

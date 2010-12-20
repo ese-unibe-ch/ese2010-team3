@@ -199,8 +199,10 @@ mod.spamhint=Benutzer können Beiträge als Spam kennzeichnen und du als Moderat
 mod.mightbespammer=Könnte ein Spamer sein. Folgender Beitrag wurde als Spam gekennzeichnet:
 
 spam.mark=Spam
-spam.thx=Danke, dass du ajopi Spam-frei hältst
-spam.confirmspam=Ja, dies ist Spam.
+spam.thx.mod=Post wurde gelöscht, der User geblockt. Danke, dass du unsere Seite Spam-frei hälst.
+spam.thx.user=Post wurde den Moderatoren gemeldet. Danke, dass du unsere Seite Spam-frei hälst.
+spam.confirmspam.user=Ja, dies ist Spam. Informiere die Obrigkeit!
+spam.confirmspam.mod=Ja, dies ist Spam. Lösche den Schund und blocke den Schuldigen.
 spam.reallyspam=Ist dies wirklich Spam?
 spam.notconfirm=Nein, doch kein Spam.
 

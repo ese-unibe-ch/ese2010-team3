@@ -199,8 +199,11 @@ mod.spamhint=µ$3r$ (4|\| r3p0r7 $0|\/|37|-|1|\|9 4$ $p4|\/| 4|\|Ð ¥0µ 4$ 4 |
 mod.mightbespammer=|\/|19|-|7 b3 4 $p4|\/||\/|3r, 4$ 7|-|1$ p0$7 \/\/4$ r3p0r73Ð:
 
 spam.mark=R3p0r7
-spam.thx=7|-|4|\||{$ ƒ0r |\/|4|{1|\|9 0µr $173 $p4|\/|-ƒr33
-spam.confirmspam=¥3$, 7|-|1$ 1$ $p4|\/|.
+spam.thx.mod=TODO* Post has been deleted, the user blocked. Thanks for making our site Spam-free.
+spam.thx.user=TODO* Post has been reported to the moderators. Thanks for making our site Spam-free.
+spam.thx=TODELETE* 7|-|4|\||{$ ƒ0r |\/|4|{1|\|9 0µr $173 $p4|\/|-ƒr33
+spam.confirmspam.user=TODO* Yes, I'm positive. Inform the authorities!
+spam.confirmspam.mod=TODO* Yes, I'm positive. Delete this post and block this sorry fool.
 spam.reallyspam=1$ 7|-|1$ qµ3$710|\| r34££¥ $p4|\/|?
 spam.notconfirm=\|0, 1 (|-|4|\|93Ð |\/|¥ |\/|1|\|Ð.
 
