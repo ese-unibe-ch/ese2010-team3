@@ -84,6 +84,9 @@ question.newanswer=Neue Antwort auf eine deiner Fragen
 question.nonexistent=Frage existiert nicht.
 question.lock=Sperren
 question.unlock=Entsperren
+question.confirmspam=Ja, das ist Spam.
+question.reallyspam=Ist diese Frage wirklich Spam?
+question.notconfirm=Nein, ich habe meine Meinung geändert.
 #   Answer messages
 answers=Antworten
 answer.add=Antwort hinzufügen

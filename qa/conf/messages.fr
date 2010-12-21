@@ -84,6 +84,9 @@ question.newanswer=Nouvelle réponse à une de vôtre questions.
 question.nonexistent=Cette question n'existe pas.
 question.lock=Ferme
 question.unlock=Ouvre
+question.confirmspam=Oui, c'est du spam.
+question.reallyspam=Est-ce vraiment du spam?
+question.notconfirm=Non, j'ai changé d'avis.
 #   Answer messages
 answers=Réponse
 answer.add=Donner une réponse
@@ -206,6 +209,7 @@ spam.notconfirm=Non, j'ai changé d'avis.
 
 # Mails
 mail.welcome.title=confirmer votre compte ajopi
+mail.welcome.subject="Bienvenue"
 mail.welcome.hi=Hi
 mail.welcome.introduction=S'il vous plaît confirmer votre compte ajopi en cliquant sur ce lien:
 mail.welcome.introduction2=Dès que vous confirmez, vous aurez un accès complet à toutes les notifications ajopi et futurs seront envoyés à cette adresse e-mail.
