@@ -37,19 +37,14 @@
 							<input type="submit" value="&{'search.button'}" />
 						</form>
 					</div><!-- end search -->
-					<hr/>
 					<div class="newNotification">
 						#{list items:user.getNewNotifications(), as:'notification'}
-						#{if notification.isNew()}
 						<li>
 						<div class="message summary">
 						#{showProfile notification.getAbout() /}:
-						<hr/> 
 						<a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a>
-						<div class="newNotificationDelete"><a href="@{CUser.deleteNotification(notification.id())}">[X]</a></div>
 						</div>
 						</li>
-						#{/if}
 						#{/list}
 					</div><!-- end newNotifications -->
 				#{/if}
