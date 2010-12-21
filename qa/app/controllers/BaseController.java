@@ -107,10 +107,11 @@ public abstract class BaseController extends Controller {
 		if (spam != null && user != null) {
 			if (!user.isModerator()) {
 				spam.markSpam(Database.users().getModeratorMailbox());
+				flash.success("spam.thx.user");
 			} else {
 				spam.confirmSpam();
+				flash.success("spam.thx.mod");
 			}
-			flash.success("spam.thx");
 		}
 	}
 }

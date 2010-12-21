@@ -201,9 +201,11 @@ mod.mightbespam=Might be Spam
 mod.spamhint=Users can report something as spam and you as a moderator should feel free to block the Spammer.
 mod.mightbespammer=might be a spammer, as this post was reported:
 
-spam.mark=Spam
-spam.thx=Thanks for making our site Spam-free
-spam.confirmspam=Yes, I'm positive.
+spam.mark=Report Spam
+spam.thx.mod=Post has been deleted, the user blocked. Thanks for helping to keep our site Spam-free.
+spam.thx.user=Post has been reported to the moderators. Thanks for helping to keep our site Spam-free.
+spam.confirmspam.user=Yes, I'm positive. Inform the authorities!
+spam.confirmspam.mod=Yes, I'm positive. Delete this post and block this sorry fool.
 spam.reallyspam=Is this really spam?
 spam.notconfirm=No, I changed my mind.
 
