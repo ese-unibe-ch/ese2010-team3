@@ -6,6 +6,7 @@
 				<p id="comment-${comment.id()}">#{showProfile comment /}:
 				${comment.content()}</p>
 				#{date comment /}
+				
 				<!-- by team2 -->
 				<p align="right">
 		 		#{if _user && comment.owner() != _user && !_user.isBlocked() && !comment.getLikers().contains(_user)}
@@ -33,6 +34,7 @@
 				#{/if}
 				</p>
 				<!-- EOT2 = end of team2 -->
+				
 				#{if _user && _user.canEdit(comment)}
 					#{if _entry instanceof models.Answer}
 						<a href="@{CAnswer.deleteCommentAnswer(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">&{'delete'}</a>
@@ -40,8 +42,9 @@
 						<a href="@{CQuestion.deleteCommentQuestion(_entry.id(), comment.id())}">&{'delete'}</a>
 					#{/else}
 				#{/if}
+				#{if _user && _user.canEdit(comment) && _user != comment.owner()}|#{/if}
 				#{if _user && _user != comment.owner()}
-					| #{if _entry instanceof models.Answer}
+					#{if _entry instanceof models.Answer}
 						<a href="@{Application.confirmMarkSpamAnswerComment(_entry.getQuestion().id(), _entry.id(), comment.id())}#answer-${_entry.id()}">&{'spam.mark'}</a>
 					#{/if}#{else}
 						<a href="@{Application.confirmMarkSpamQuestionComment(_entry.id(), comment.id())}">&{'spam.mark'}</a>

@@ -12,6 +12,7 @@ import models.User;
 import models.Vote;
 import play.cache.Cache;
 import play.data.validation.Required;
+import play.mvc.Router.ActionDefinition;
 import play.mvc.With;
 
 /**
@@ -134,13 +135,17 @@ public class CUser extends BaseController {
 			Entry about = notification.getAbout();
 
 			if (about instanceof Answer) {
-				Application.question(((Answer) about)
-						.getQuestion().id());
+				ActionDefinition action = reverse();
+				Answer answer = (Answer) about;
+				Application.question(answer.getQuestion().id());
+				redirect(action.addRef("answer-" + answer.id()).toString());
 			} else if (about instanceof Question) {
 				Application.question(((Question) about).id());
 			} else if (about instanceof Comment) {
-				Question question = ((Comment) about).getQuestion();
-				Application.question(question.id());
+				ActionDefinition action = reverse();
+				Comment comment = (Comment) about;
+				Application.question(comment.getQuestion().id());
+				redirect(action.addRef("comment-" + comment.id()).toString());
 			}
 		} else if (!redirectToCallingPage()) {
 			Application.notifications(0);
