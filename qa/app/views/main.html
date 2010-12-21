@@ -37,12 +37,14 @@
 							<input type="submit" value="&{'search.button'}" />
 						</form>
 					</div><!-- end search -->
+					<hr/>
+					<li>&{'user.notification'}:</li> 
 					<div class="newNotification">
 						#{list items:user.getNewNotifications(), as:'notification'}
-						<li>
+						<li onclick="goto('@{CUser.followNotification(notification.id())}')">
 						<div class="message">
 						#{showProfile notification.getAbout() /}:
-						<a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a>
+						${notification.getAbout().summary()}
 						</div>
 						</li>
 						#{/list}
