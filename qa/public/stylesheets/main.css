@@ -89,15 +89,9 @@ div.newNotification {
 	background: #333333;
 	color: #aecbfb;
 }
-div.newNotification li{
-	color: #aecbfb;
-}
 div.newNotification li[onclick] {
 	cursor: pointer;
 }
-div.newNotification li[onclick]:hover {
-    background:#666;
-  }
 /*********************** 
 main
 ************************/
