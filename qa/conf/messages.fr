@@ -192,15 +192,17 @@ since.years=il y a %d an(s)
 search.placeholder="Chercher question"
 
 # Moderator
-mod.nospam=Il n'ya pas de Spam, hereusement!
+mod.nospam=Il n'y a pas de Spam, hereusement!
 mod.spamnotify=Avis Spam
 mod.mightbespam=Peut être Spam
 mod.spamhint=Les utilisateurs peuvent marquer quelque chose comme Spam et vous en tant que modérateur doit se sentir libre pour bloquer le spammeur.
 mod.mightbespammer=peut-être un spammeur. Ce poste a été marqué:
 
-spam.mark=Rapport
-spam.thx=Merci pour rendre notre site sans spam
-spam.confirmspam=Oui, c'est du spam.
+spam.mark=Signaler comme spam
+spam.thx.mod=TODO* Post wurde gelöscht, der User geblockt. Danke, dass du unsere Seite Spam-frei hälst.
+spam.thx.user=TODO* Post wurde den Moderatoren gemeldet. Danke, dass du unsere Seite Spam-frei hälst.
+spam.confirmspam.user=TODO* Ja, dies ist Spam. Informiere die Obrigkeit!
+spam.confirmspam.mod=TODO* Ja, dies ist Spam. Lösche den Schund und blocke den Schuldigen.
 spam.reallyspam=Est-ce vraiment du spam?
 spam.notconfirm=Non, j'ai changé d'avis.
 
