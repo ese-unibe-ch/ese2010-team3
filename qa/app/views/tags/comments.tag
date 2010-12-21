@@ -2,8 +2,8 @@
 #{if _entry.comments().size() != 0}
 	<ul class="comments">
 		#{list items:_entry.comments(), as:'comment'}
-			<li class="comments">
-				<p id="comment-${comment.id()}">#{showProfile comment /}:
+			<li class="comments" id="comment-${comment.id()}">
+				<p>#{showProfile comment /}:
 				${comment.content()}</p>
 				#{date comment /}
 				

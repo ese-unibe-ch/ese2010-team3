@@ -1,6 +1,9 @@
 #{if false} Arguments: _answer, _user, _extended #{/if}
-<li class="answer #{if _answer.owner() == _user}own#{/if} #{if _answer.isBestAnswer()}bestAnswer#{/if}">
-	<h2 id="answer-${_answer.id()}">#{showProfile _answer /}:</h2>
+<li
+	class="answer #{if _answer.owner() == _user}own#{/if} #{if _answer.isBestAnswer()}bestAnswer#{/if}"
+	id="answer-${_answer.id()}"
+>
+	<h2>#{showProfile _answer /}:</h2>
 	<p>${_answer.content()}</p>
 	#{date _answer /}
 	

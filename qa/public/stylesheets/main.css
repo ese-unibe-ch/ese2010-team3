@@ -426,6 +426,10 @@ span.highlight {
 	color: #FF0;
 	background: none;
 }
+.answer:target, .comments:target {
+	border: 2px solid #FF0;
+}
+
 /*********************** 
 HTML5 form validation
 ************************/

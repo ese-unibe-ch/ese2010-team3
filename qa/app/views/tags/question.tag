@@ -1,8 +1,9 @@
 #{if false} Arguments: _question, _user, _extended, _custom #{/if}
 <li class="question #{if _user && _question.owner() == _user}own#{/if}"
 	#{if !_extended} onclick="goto('@{Application.question(_question.id())}')" #{/if}
-	>
-	<h2 id="question-${_question.id()}">#{showProfile _question /}:</h2>
+	id="question-${_question.id()}"
+>
+	<h2>#{showProfile _question /}:</h2>
 	#{if !_extended}<p>${_question.summary().escape()}</p>#{/if}
 	#{else}<p>${_question.content()}</p>#{/else}
 	#{date _question /}
