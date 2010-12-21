@@ -83,6 +83,14 @@ div.hiddenlogin input{
 #mini_login + .userlogin {
 	display: none;
 }
+div.newNotification {
+	font-size: 0.6em;
+}
+
+div.newNotificationDelete  {
+	position: relative;
+	left: 140px;
+}
 /*********************** 
 main
 ************************/
@@ -337,6 +345,7 @@ div.message > .commands {
 	top: 2px;
 	right: 6.5em;
 }
+
 /*********************** 
 confirm delete question
 ************************/

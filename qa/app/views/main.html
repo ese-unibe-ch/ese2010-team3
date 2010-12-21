@@ -37,6 +37,20 @@
 							<input type="submit" value="&{'search.button'}" />
 						</form>
 					</div><!-- end search -->
+					<div class="newNotification">
+						#{list items:user.getNewNotifications(), as:'notification'}
+						#{if notification.isNew()}
+						<li>
+						<div class="message summary">
+						#{showProfile notification.getAbout() /}:
+						<hr/> 
+						<a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a>
+						<div class="newNotificationDelete"><a href="@{CUser.deleteNotification(notification.id())}">[X]</a></div>
+						</div>
+						</li>
+						#{/if}
+						#{/list}
+					</div><!-- end newNotifications -->
 				#{/if}
 				#{else}
 						<li class="userlogin">&{'signinorup'}</li>
@@ -44,7 +58,7 @@
 						<a href="@{Application.register}">&{'user.signup'}</a></li>
 				#{/else}	
 				</ul>
-			</div><!-- end navigaion -->
+			</div><!-- end navigation -->
 			<div class="main">
 				<div class="header">
 					<a href="@{Application.index}"></a>
