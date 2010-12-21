@@ -84,12 +84,20 @@ div.hiddenlogin input{
 	display: none;
 }
 div.newNotification {
-	margin: 10px 0px ;
+	margin: 10px 0px 0px 0px;
 	font-size: 0.9em;
+	background: #333333;
+	color: #aecbfb;
+}
+div.newNotification li{
+	color: #aecbfb;
 }
 div.newNotification li[onclick] {
 	cursor: pointer;
-}	
+}
+div.newNotification li[onclick]:hover {
+    background:#666;
+  }
 /*********************** 
 main
 ************************/
