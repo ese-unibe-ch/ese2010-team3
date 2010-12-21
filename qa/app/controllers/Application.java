@@ -214,7 +214,6 @@ public class Application extends BaseController {
 		boolean isUsernameAvailable = Database.users().isAvailable(
 				username);
 		validation.equals(code, Cache.get("captcha." + randomID));
-		validation.equals(code, Cache.get(randomID));
 		if (validation.hasErrors()) {
 			flash.error("captcha.invalid");
 			params.flash();
@@ -230,6 +229,7 @@ public class Application extends BaseController {
 			} else {
 				user.delete();
 				flash.error("secure.mail.error");
+				params.flash();
 				register();
 			}
 		} else {
@@ -484,7 +484,7 @@ public class Application extends BaseController {
 	public static void captcha(String id) {
 		Images.Captcha captcha = Images.captcha();
 		String code = captcha.getText("#ff8400");
-		Cache.set(id, "captcha." + code, "3mn");
+		Cache.set("captcha." + id, code, "3mn");
 		renderBinary(captcha);
 	}
 
