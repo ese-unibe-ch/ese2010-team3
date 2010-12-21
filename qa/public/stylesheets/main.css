@@ -83,6 +83,15 @@ div.hiddenlogin input{
 #mini_login + .userlogin {
 	display: none;
 }
+div.newNotification {
+	margin: 10px 0px 0px 0px;
+	font-size: 0.9em;
+	background: #333333;
+	color: #aecbfb;
+}
+div.newNotification li[onclick] {
+	cursor: pointer;
+}
 /*********************** 
 main
 ************************/
@@ -342,6 +351,7 @@ div.summary > .commands {
 	top: 2px;
 	right: 6.5em;
 }
+
 /*********************** 
 confirm delete question
 ************************/
