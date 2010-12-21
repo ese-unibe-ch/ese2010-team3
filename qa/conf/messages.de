@@ -11,7 +11,7 @@ delete=Löschen
 signinorup=Bitte logge ein oder registriere dich (falls du die Seite zum ersten mal besuchst) damit du Fragen stellen und beantworten kannst oder falls du Einträge anderer Benutzer kommentieren oder bewerten willst.
 dateformat=TT.MM.JJJJ oder MM/TT/JJJJ
 administrator=Administrator
-new=*neu*
+new=neu
 search=Suche
 search.button=Suchen
 search.fail=Keine Frage gefunden mit
@@ -84,9 +84,6 @@ question.newanswer=Neue Antwort auf eine deiner Fragen
 question.nonexistent=Frage existiert nicht.
 question.lock=Sperren
 question.unlock=Entsperren
-question.confirmspam=Ja, dies ist Spam.
-question.reallyspam=Ist diese Frage wirklich Spam?
-question.notconfirm=Nein, doch kein Spam.
 #   Answer messages
 answers=Antworten
 answer.add=Antwort hinzufügen
@@ -201,15 +198,18 @@ mod.mightbespam=Könnte Spam sein
 mod.spamhint=Benutzer können Beiträge als Spam kennzeichnen und du als Moderator solltest diese Fälle untersuchen und bei Bedarf Spamer sperren.
 mod.mightbespammer=Könnte ein Spamer sein. Folgender Beitrag wurde als Spam gekennzeichnet:
 
-spam.mark=Report
-spam.thx=Thanks for making our site Spam-free
+spam.mark=Spam
+spam.thx=Danke, dass du ajopi Spam-frei hältst
+spam.confirmspam=Ja, dies ist Spam.
+spam.reallyspam=Ist dies wirklich Spam?
+spam.notconfirm=Nein, doch kein Spam.
 
 # Mails
 mail.welcome.title=Bestätigung des ajopi-Konto
 mail.welcome.subject="Willkommen"
 mail.welcome.hi=Hallo
 mail.welcome.introduction= Bitte bestätige dein ajopi-Account indem du auf folgenden Link klickst:
-mail.welcome.introduction2=Wenn du dein Konto bestätigt hast, hast du vollen Zugirff auf ajopi. Benachrichtigungen werden in Zukunft an diese Adresse versandt.
+mail.welcome.introduction2=Wenn du dein Konto bestätigt hast, hast du vollen Zugriff auf ajopi. Benachrichtigungen werden in Zukunft an diese Adresse versandt.
 mail.welcome.team=freundliche Grüsse dein ajopi Team
 
 # Errors

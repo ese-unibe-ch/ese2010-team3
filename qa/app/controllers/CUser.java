@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.ParseException;
 
 import models.Answer;
+import models.Comment;
 import models.Entry;
 import models.Notification;
 import models.Question;
@@ -37,10 +38,11 @@ public class CUser extends BaseController {
 	public static void deleteUser(boolean anonymize)
 			throws Throwable {
 		User user = Session.user();
-		if (anonymize)
+		if (anonymize) {
 			user.anonymize(true);
-		else
+		} else {
 			Cache.delete("index.questions");
+		}
 		user.delete();
 		flash.success("secure.userdeletedflash");
 		Secure.logout();
@@ -78,7 +80,7 @@ public class CUser extends BaseController {
 			String employer, String biography, String oldPassword,
 			String newPassword) throws ParseException {
 		User user = Database.users().get(name);
-		if (!Application.userCanEditProfile(user)) {
+		if (!userCanEditProfile(user)) {
 			flash.error("secure.editprofileerror");
 			Application.showprofile(user.getName());
 		}
@@ -129,13 +131,16 @@ public class CUser extends BaseController {
 		Notification notification = user.getNotification(id);
 		if (notification != null) {
 			notification.unsetNew();
-		}
-		if (notification != null) {
-			if (notification.getAbout() instanceof Answer) {
-				Application.question(((Answer) notification.getAbout())
+			Entry about = notification.getAbout();
+
+			if (about instanceof Answer) {
+				Application.question(((Answer) about)
 						.getQuestion().id());
-			} else if (notification.getAbout() instanceof Question) {
-				Application.question(((Question) notification.getAbout()).id());
+			} else if (about instanceof Question) {
+				Application.question(((Question) about).id());
+			} else if (about instanceof Comment) {
+				Question question = ((Comment) about).getQuestion();
+				Application.question(question.id());
 			}
 		} else if (!redirectToCallingPage()) {
 			Application.notifications(0);

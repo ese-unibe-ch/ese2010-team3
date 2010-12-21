@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import models.Answer;
+import models.Comment;
 import models.Notification;
 import models.Question;
 import models.Tag;
@@ -105,7 +106,7 @@ public class Application extends BaseController {
 	 */
 	public static void commentAnswer(int questionId, int answerId) {
 		Question question = Database.questions().get(questionId);
-		Answer answer = question.getAnswer(answerId);
+		Answer answer = getAnswer(questionId, answerId);
 		render(answer, question);
 	}
 
@@ -126,9 +127,56 @@ public class Application extends BaseController {
 	 * @param id
 	 *            the id of the {@link Question}
 	 */
-	public static void confirmMarkSpam(int id) {
+	public static void confirmMarkSpamQuestion(int id) {
 		Question question = Database.questions().get(id);
 		render(question);
+	}
+
+	/**
+	 * Prompts the user to mark this {@link Answer} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param answerId
+	 *            the id of the {@link Answer}
+	 */
+	public static void confirmMarkSpamAnswer(int questionId, int answerId) {
+		Question question = Database.questions().get(questionId);
+		Answer answer = getAnswer(questionId, answerId);
+		render(question, answer);
+	}
+
+	/**
+	 * Prompts the user to mark {@link Comment} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param answerId
+	 *            the id of the {@link Answer} this {@link Comment} belongs to
+	 * @param commentId
+	 *            the id of the {@link Comment}
+	 */
+	public static void confirmMarkSpamAnswerComment(int questionId,
+			int answerId, int commentId) {
+		Question question = Database.questions().get(questionId);
+		Answer answer = question.getAnswer(answerId);
+		Comment comment = answer.getComment(commentId);
+		render(question, answer, comment);
+	}
+
+	/**
+	 * Prompts the user to mark {@link Comment} as Spam.
+	 * 
+	 * @param questionId
+	 *            the id of the {@link Question} this {@link Answer} belongs to
+	 * @param commentId
+	 *            the id of the {@link Comment}
+	 */
+	public static void confirmMarkSpamQuestionComment(int questionId,
+			int commentId) {
+		Question question = Database.questions().get(questionId);
+		Comment comment = question.getComment(commentId);
+		render(question, comment);
 	}
 
 	/**
@@ -195,20 +243,6 @@ public class Application extends BaseController {
 			params.flash();
 			register();
 		}
-	}
-
-	/**
-	 * Checks whether a {@link User} can edit a profile.
-	 * 
-	 * @param showUser
-	 *            the {@link User} who is the owner of the profile.
-	 * @return
-	 */
-	public static boolean userCanEditProfile(User showUser) {
-		User user = Session.user();
-		if (user == null)
-			return false;
-		return user == showUser && !showUser.isBlocked() || user.isModerator();
 	}
 
 	/**
@@ -322,7 +356,7 @@ public class Application extends BaseController {
 					.getWatchList(user);
 			if (user.isModerator()) {
 				spamNotification.addAll(Database.users()
-						.getModeratorMailbox().getNewNotifications());
+						.getModeratorMailbox().getAllNotifications());
 			}
 			render(notifications, watchingQuestions, suggestedQuestions,
 					spamNotification, content);

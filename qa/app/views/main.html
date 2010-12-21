@@ -25,13 +25,13 @@
 					<li><a href="@{Application.showprofile(user.getName())}">&{'user.profile'}</a></li>
 					#{if user.isModerator()}<li><a href="@{Application.admin}">&{'administrator'}</a>#{/if}
 					<li><a href="@{Secure.logout}">&{'user.logout'}</a></li>
+					<hr/>
 					<div class="search"
 						#{if user.timeToSearch() > 0}
 							timeout="${user.timeToSearch()}"
 							timeoutMsg="&{'user.cannotsearch', 999}"
 						#{/if}
 						>
-						<hr/>
 						<form class="search" action="@{Application.search}" method="GET">
 							<input type="search" size="15" results="5" name="term" #{if term}value="${term}"#{/if} placeholder=&{'search.placeholder'} required />
 							<input type="submit" value="&{'search.button'}" />

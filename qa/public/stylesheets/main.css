@@ -329,11 +329,13 @@ div.message p.hint {
 	font-size: 0.8em;
 	color: #888;
 }
-div.message p.commands {
+div.message.summary {
+	padding-top: 1em;
+}
+div.message > .commands {
 	position: absolute;
-	top: 15px;
-	right: 5px;
-	font-size: 10pt;
+	top: 2px;
+	right: 6.5em;
 }
 /*********************** 
 confirm delete question
@@ -399,6 +401,15 @@ div.overlay {
 span.highlight {
 	background: #FF0;
 	color: #000;
+}
+.summary .highlight {
+	position: absolute;
+	left: 12px;
+	top: 5px;
+	font-size: 0.8em;
+	text-shadow: #FF0 0px 0px 10px;
+	color: #FF0;
+	background: none;
 }
 /*********************** 
 HTML5 form validation
