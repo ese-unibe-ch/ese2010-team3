@@ -40,7 +40,7 @@
 					<div class="newNotification">
 						#{list items:user.getNewNotifications(), as:'notification'}
 						<li>
-						<div class="message summary">
+						<div class="message">
 						#{showProfile notification.getAbout() /}:
 						<a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a>
 						</div>

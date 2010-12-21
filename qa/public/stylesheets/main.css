@@ -84,6 +84,7 @@ div.hiddenlogin input{
 	display: none;
 }
 div.newNotification {
+	margin: 20px 0px ;
 	font-size: 0.6em;
 }
 
