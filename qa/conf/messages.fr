@@ -104,6 +104,10 @@ comment.ilike=J'aime ça.
 comment.idislike=Je ne l'aime plus.
 comment.likecountone=utilisateur aime ça.
 comment.likecountmultiple=utilisateurs aiment ça
+#	Voting
+vote.up=ce poste est bon
+vote.down=ce poste est mauvais
+vote.cancel=annuler le vote
 
 # Notification messages
 notifications=Notifications

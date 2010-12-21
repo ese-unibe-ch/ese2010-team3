@@ -95,7 +95,7 @@ answer.answeredto=hat geantwortet auf
 answer.best=Beste Antwort
 answers.best=Beste Antworten
 answer.selectasbest=Als beste Antwort markieren
-answers.highrated=gut bewertete Antworten
+answers.highrated=Gut bewertete Antworten
 #   Comment messages
 comments=Kommentare
 comment.add=Kommentar schreiben
@@ -104,6 +104,10 @@ comment.ilike=Gefällt mir
 comment.idislike=Gefällt mir nicht
 comment.likecountone=Benutzer gefällt das
 comment.likecountmultiple=Benutzern gefällt das
+#	Voting
+vote.up=dafür stimmen
+vote.down=dagegen stimmen
+vote.cancel=Stimme zurücknehmen
 
 # Notification messages
 notifications=Benachrichtigungen

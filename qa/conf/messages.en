@@ -95,7 +95,7 @@ answer.answeredto=answered to
 answer.best=Best answer
 answers.best=Best answers
 answer.selectasbest=Select as best
-answers.highrated=high rated answers
+answers.highrated=High rated answers
 #   Comment messages
 comments=Comments
 comment.add=Add comment
@@ -104,6 +104,10 @@ comment.ilike=I like
 comment.idislike=I don't like
 comment.likecountone=user likes this
 comment.likecountmultiple=users like this
+#	Voting
+vote.up=vote up
+vote.down=vote down
+vote.cancel=remove your vote
 
 # Notification messages
 notifications=Notifications

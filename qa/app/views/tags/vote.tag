@@ -8,7 +8,7 @@
 			#{/if}#{else}
 				@{CQuestion.voteQuestionCancel(_entry.id())}#question-${_entry.id()}
 			#{/else}
-		" class="voted" title="remove your vote">-</a>
+		" class="voted" title="&{'vote.cancel'}">-</a>
 	#{/if}#{else}
 		<a href="
 			#{if _entry instanceof models.Answer}
@@ -16,7 +16,7 @@
 			#{/if}#{else}
 				@{CQuestion.voteQuestionDown(_entry.id())}#question-${_entry.id()}
 			#{/else}
-		" title="vote down">-</a>
+		" title="&{'vote.down'}">-</a>
 	#{/else}
 	
 	${_entry.rating()}
@@ -28,7 +28,7 @@
 			#{/if}#{else}
 				@{CQuestion.voteQuestionCancel(_entry.id())}#question-${_entry.id()}
 			#{/else}
-		" class="voted" title="remove your vote">-</a>
+		" class="voted" title="&{'vote.cancel'}">-</a>
 	#{/if}#{else}
 	<a href="
 		#{if _entry instanceof models.Answer}
@@ -36,7 +36,7 @@
 		#{/if}#{else}
 			@{CQuestion.voteQuestionUp(_entry.id())}#question-${_entry.id()}
 		#{/else}
-	" title="vote up">+</a>
+	" title="&{'vote.up'}">+</a>
 	#{/else}
 
 </span>
