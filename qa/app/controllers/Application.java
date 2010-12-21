@@ -293,8 +293,9 @@ public class Application extends BaseController {
 		List<Question> results = (List<Question>) Cache.get("search." + term);
 		User user = Session.user();
 		boolean isPureTagSearch = term.matches("^tag:\\S+$");
+		boolean isRepeatedSearch = results != null;
 
-		if (results != null) {
+		if (isRepeatedSearch) {
 			// we've already done this search lately, so we can
 			// let the user do it with hardly any additional cost
 		} else if (isPureTagSearch) {
@@ -318,8 +319,8 @@ public class Application extends BaseController {
 		}
 		int maxIndex = Tools.determineMaximumIndex(results, entriesPerPage);
 		results = Tools.paginate(results, entriesPerPage, index);
-		if (user != null && !isPureTagSearch) {
-			user.setLastSearch(term, new Date());
+		if (user != null && !isPureTagSearch && !isRepeatedSearch) {
+			user.setLastSearch(term);
 		}
 		render(results, term, index, maxIndex);
 	}

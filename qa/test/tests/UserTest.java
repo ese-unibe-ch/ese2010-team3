@@ -571,7 +571,7 @@ public class UserTest extends MockedUnitTest {
 		assertTrue(james.canPost());
 
 		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
-		james.setLastSearch("search 1", sysInfo.now());
+		james.setLastSearch("search 1");
 		assertFalse(james.canSearchFor("search 2"));
 		sysInfo.second(14);
 		assertFalse(james.canSearchFor("search 2"));
@@ -584,7 +584,7 @@ public class UserTest extends MockedUnitTest {
 		sysInfo.year(2010).month(1).day(1).hour(1).minute(1).second(0);
 		User james = new User("James");
 
-		james.setLastSearch("search 1", sysInfo.now());
+		james.setLastSearch("search 1");
 		assertEquals(james.timeToSearch(), 15);
 		sysInfo.second(14);
 		assertEquals(james.timeToSearch(), 1);
@@ -612,7 +612,7 @@ public class UserTest extends MockedUnitTest {
 		sysInfo.setTestMode(false);
 		assertFalse(sysInfo.isInTestMode());
 		james.setLastPostTime(sysInfo.now());
-		james.setLastSearch("search 1", sysInfo.now());
+		james.setLastSearch("search 1");
 		assertFalse(james.canSearchFor("search 2"));
 		assertFalse(james.canPost());
 		sysInfo.setTestMode(false);
@@ -622,7 +622,7 @@ public class UserTest extends MockedUnitTest {
 		assertTrue(sysInfo.isInTestMode());
 		sysInfo.isInTestMode();
 		james.setLastPostTime(sysInfo.now());
-		james.setLastSearch("search 3", sysInfo.now());
+		james.setLastSearch("search 3");
 		assertTrue(james.canSearchFor("search 4"));
 		assertTrue(james.canPost());
 	}

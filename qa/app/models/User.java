@@ -753,9 +753,9 @@ public class User implements IObserver, ICleanup<Item> {
 	 * @param time
 	 *            the date/time of the last search
 	 */
-	public void setLastSearch(String term, Date time) {
+	public void setLastSearch(String term) {
 		this.lastSearchTerm = term;
-		this.lastSearch = time.getTime();
+		this.lastSearch = SysInfo.now().getTime();
 	}
 
 	/**
