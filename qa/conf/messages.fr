@@ -185,14 +185,14 @@ secure.cleardbflash=Tabula rasa!
 secure.mail.error=Mail n'a pas pu être envoyé!
 secure.mail.success=Réussi! Accédez à votre boîte e-mail et confirmer votre compte.
 
-since.seconds=il y a %d seconde(s)
+since.seconds=il y a %d secondes
 since.minutes=il y a %d minute(s)
 since.hours=il y a %d heure(s)
 since.days=il y a %d jour(s)
 since.months=il y a %d mois
 since.years=il y a %d an(s)
 
-search.placeholder="Chercher question"
+search.placeholder=Chercher une question
 
 # Moderator
 mod.nospam=Il n'y a pas de Spam, hereusement!
