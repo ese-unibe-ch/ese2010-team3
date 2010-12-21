@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'ajopi - Profile' /}
 #{if showUser}
+	<a href="@{Application.showprofile(showUser.getName())}">&{'back'}</a>
 	<div class="editprofile">
 		#{form @CUser.saveProfile(showUser.getName())}
 			<table>

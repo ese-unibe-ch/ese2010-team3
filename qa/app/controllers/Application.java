@@ -357,6 +357,8 @@ public class Application extends BaseController {
 			if (user.isModerator()) {
 				spamNotification.addAll(Database.users()
 						.getModeratorMailbox().getAllNotifications());
+				// make sure not to display spam notifications twice
+				notifications.removeAll(spamNotification);
 			}
 			render(notifications, watchingQuestions, suggestedQuestions,
 					spamNotification, content);

@@ -8,7 +8,12 @@
 	#{comments entry:answer, user:user /}
 	#{if user}
 		<h1>&{'comment.add'}</h1>
-		<div class="message">
+		<div id="addcomment" class="message"
+			#{if user.timeToPost() > 0}
+				timeout="${user.timeToPost()}"
+				timeoutMsg="&{'user.cannotpost', 999}"
+			#{/if}
+		>
 			#{form @CAnswer.newCommentAnswer(question.id(), answer.id())}
 				#{field 'content'}
 					<textarea name="${field.name}" class="${field.errorClass}"></textarea>

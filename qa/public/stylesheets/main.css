@@ -165,7 +165,7 @@ div.content li p.relatedQ {
 	color: #ff8400;
 }
 div.content span.vote {
-	bottom: 7px;
+	bottom: 0px;
 	font-size: 2em;
 	position: absolute;
 	right: 7px;
@@ -333,10 +333,15 @@ div.message p.hint {
 	font-size: 0.8em;
 	color: #888;
 }
-div.message.summary {
+div.summary {
+	padding: 5px;	
 	padding-top: 1em;
+	color: #aecbfb;
 }
-div.message > .commands {
+div.summary p {
+	margin: 5px 0px;
+}
+div.summary > .commands {
 	position: absolute;
 	top: 2px;
 	right: 6.5em;

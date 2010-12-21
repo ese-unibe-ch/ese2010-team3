@@ -11,7 +11,7 @@
 	#{if _extended && _user}
 		<div class="commands">
 		#{if !_question.isLocked()}
-			#{if _user.canPost()}
+			#{if !_user.isBlocked()}
 				<a id="addQuestionComment" href ="@{Application.commentQuestion(_question.id())}">&{'comment.add'}</a> |
 			#{/if}
 			#{if _user.isObserving(_question)}

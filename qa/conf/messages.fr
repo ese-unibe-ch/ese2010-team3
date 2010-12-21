@@ -104,6 +104,10 @@ comment.ilike=J'aime ça.
 comment.idislike=Je ne l'aime plus.
 comment.likecountone=utilisateur aime ça.
 comment.likecountmultiple=utilisateurs aiment ça
+#	Voting
+vote.up=ce poste est bon
+vote.down=ce poste est mauvais
+vote.cancel=annuler le vote
 
 # Notification messages
 notifications=Notifications
@@ -167,7 +171,8 @@ secure.userdeletedflash=L'utilisateur a été supprimé.
 secure.userdeleteerror=Vous n'étes pas permis de supprimer un utilisateur.
 secure.bestanswerflash=Nous sommes heureux que vous avez trouvez un réponse raisonnable.
 secure.editprofileerror=Vous n'étes pas permis de modifier ce profil.
-secure.editprofileflash=Merci de ajouter des mots-clés.
+secure.editprofileflash=Merci de maintenir vos informations personelles.
+secure.updatetagsflash=Merci de ajouter des mots-clés.
 secure.startwatchquestionflash=Vous surveillez cette question.
 secure.stopwatchquestionflash=Vous ne surveillez plus cette question.
 secure.notificationsmarkedasreadflash=Tous les notifications sont marque comme lu.
@@ -185,14 +190,14 @@ secure.cleardbflash=Tabula rasa!
 secure.mail.error=Mail n'a pas pu être envoyé!
 secure.mail.success=Réussi! Accédez à votre boîte e-mail et confirmer votre compte.
 
-since.seconds=il y a %d seconde(s)
+since.seconds=il y a %d secondes
 since.minutes=il y a %d minute(s)
 since.hours=il y a %d heure(s)
 since.days=il y a %d jour(s)
 since.months=il y a %d mois
 since.years=il y a %d an(s)
 
-search.placeholder="Chercher question"
+search.placeholder=Chercher une question
 
 # Moderator
 mod.nospam=Il n'y a pas de Spam, hereusement!
