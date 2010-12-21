@@ -202,10 +202,10 @@ mod.spamhint=Les utilisateurs peuvent marquer quelque chose comme Spam et vous e
 mod.mightbespammer=peut-être un spammeur. Ce poste a été marqué:
 
 spam.mark=Signaler comme spam
-spam.thx.mod=TODO* Post wurde gelöscht, der User geblockt. Danke, dass du unsere Seite Spam-frei hälst.
-spam.thx.user=TODO* Post wurde den Moderatoren gemeldet. Danke, dass du unsere Seite Spam-frei hälst.
-spam.confirmspam.user=TODO* Ja, dies ist Spam. Informiere die Obrigkeit!
-spam.confirmspam.mod=TODO* Ja, dies ist Spam. Lösche den Schund und blocke den Schuldigen.
+spam.thx.mod=L'entrée a été supprimée, l'utilisateur a été bloqué. Merci que vous tenez sur notre spam.
+spam.thx.user=L'entrée a été signalée aux modérateurs. Merci que vous tenez sur notre spam.
+spam.confirmspam.user=Oui, cela est du spam. Aviser les autorités!
+spam.confirmspam.mod=Oui, cela est du spam. Supprimer ce message et de bloquer ce fou.
 spam.reallyspam=Est-ce vraiment du spam?
 spam.notconfirm=Non, j'ai changé d'avis.
 
