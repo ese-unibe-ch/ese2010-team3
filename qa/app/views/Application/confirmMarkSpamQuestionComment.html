@@ -7,7 +7,13 @@
 	</div>
 	<ul><li class="comments"><p>${comment.summary()}</ul>
 	<ul class="optionLinks">
-		<p><a href="@{CQuestion.markSpamComment(question.id(),comment.id())}">&{'spam.confirmspam'}</a></p>
+		<p><a href="@{CQuestion.markSpamComment(question.id(),comment.id())}">
+			#{if user.isModerator()}
+				&{'spam.confirmspam.mod'}
+			#{/if}
+			#{else}
+				&{'spam.confirmspam.user'}
+			#{/else}</a></p>
 		<p><a href="@{Application.question(question.id())}">&{'spam.notconfirm'}</a></p>
 	</ul>
 #{/if}

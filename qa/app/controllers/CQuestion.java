@@ -56,7 +56,7 @@ public class CQuestion extends BaseController {
 		Question question = Database.questions().get(id);
 		User user = Session.user();
 		if (question != null && user.canEdit(question)) {
-			flash.success("secure.editprofileflash");
+			flash.success("secure.updatetagsflash");
 			question.setTagString(tags);
 		}
 		Application.question(id);

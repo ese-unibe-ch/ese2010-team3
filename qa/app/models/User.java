@@ -660,7 +660,7 @@ public class User implements IObserver, ICleanup<Item> {
 	}
 
 	/**
-	 * Get an ArrayList of all highRated answers
+	 * Get a List of all highRated answers
 	 * 
 	 * @return List<Answer> All high rated answers
 	 */
@@ -672,6 +672,11 @@ public class User implements IObserver, ICleanup<Item> {
 		});
 	}
 
+	/**
+	 * Returns all notifications blonging to this user.
+	 * 
+	 * @return the full list of notifications (new and old, read and unread)
+	 */
 	public List<Notification> getNotifications() {
 		List<Notification> all = new LinkedList();
 		for (IMailbox mailbox : this.getAllMailboxes()) {
@@ -822,10 +827,8 @@ public class User implements IObserver, ICleanup<Item> {
 		return mailboxes;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see models.IMailbox#getNew()
+	/**
+	 * @return this user's unread notifications.
 	 */
 	public List<Notification> getNewNotifications() {
 		List<Notification> allNew = new LinkedList();
@@ -835,10 +838,9 @@ public class User implements IObserver, ICleanup<Item> {
 		return allNew;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see models.IMailbox#getRecent()
+	/**
+	 * @return this user's recent notifications (arrived within the last 5
+	 *         minutes).
 	 */
 	public List<Notification> getRecentNotifications() {
 		List<Notification> allRecent = new LinkedList();
@@ -848,6 +850,14 @@ public class User implements IObserver, ICleanup<Item> {
 		return allRecent;
 	}
 
+	/**
+	 * Sets this user's current spammer status. If the user is set to be a
+	 * spammer and hasn't been blocked yet, he/she will be blocked in the
+	 * process.
+	 * 
+	 * @param isSpammer
+	 *            whether this user is a spammer or not
+	 */
 	public void setIsSpammer(boolean isSpammer) {
 		if (isSpammer && !this.isBlocked) {
 			this.block("Declared Spammer");

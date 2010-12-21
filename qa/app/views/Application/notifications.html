@@ -14,8 +14,8 @@
 		<h1>&{'notification.inbox'}</h1>
 		<ul>
 		#{list items:notifications, as:'notification'}
-			<li>
-			<div class="message summary">
+			<li onclick="goto('@{CUser.followNotification(notification.id())}')">
+			<div class="summary">
 				#{if notification.isNew()}<div class="highlight">&{'new'}</div>#{/if}
 				#{showProfile notification.getAbout() /} &{'answer.answeredto'}
 				"${notification.getAbout().getQuestion().summary()}":
@@ -25,63 +25,63 @@
 			</div><!-- end message -->
 		#{/list}
 		#{else}
-			<div class="message">
+			<li><div class="message">
 				<p>&{'notification.none'}</p>
 			</div><!-- end message -->
 		#{/else}
 		#{if user.getNewNotifications().size() > 0}
 			<li><a href="@{CUser.clearNewNotifications}">&{'notification.markasread'}</a>
 		#{/if}
-		<li><div class="message">
+		</ul>
+		<div class="message">
 			<p class="hint">&{'watch.hint'}</p>
 		</div><!-- end message -->
-		</ul>
 	#{/if}
 	#{elseif content == 1}
 		<h1>&{'user.watchinglist'}</h1>
+		<ul>
 		#{if watchingQuestions.size() != 0}
-			<ul>
-				#{list items:watchingQuestions, as:'question'}
-					#{question question:question, user:user, extended:false, custom:'watchlist' /}
-				#{/list}
-			</ul>
+			#{list items:watchingQuestions, as:'question'}
+				#{question question:question, user:user, extended:false, custom:'watchlist' /}
+			#{/list}
 		#{/if}
 		#{else}
-			<div class="message">
+			<li><div class="message">
 				<p>&{'watch.none'}</p>
 			</div><!-- end message -->
 		#{/else}
+		</ul>
 		<div class="message">
 			<p class="hint">&{'watch.hint'}</p>
 		</div><!-- end message -->
 	#{/elseif}
 	#{elseif content == 2}
 		<h1>&{'question.recommended'}</h1>
+		<ul>
 		#{if suggestedQuestions.size() != 0}
 			<h2>&{'user.mightknowanswer'}:</h2>
-			<ul>
 				#{list items:suggestedQuestions, as:'question'}
 					#{question question:question, user:user, extended:false /}
 				#{/list}
-			</ul>
 		#{/if}
 		#{else} 
-			<div class="message">
+			<li><div class="message">
 				<p>&{'user.norecommention'}</p>
 			</div><!-- end message -->
 		#{/else}
+		</ul>
 		<div class="message">
 			<p class="hint">&{'question.recommendhint'}</p>
 		</div><!-- end message -->
 	#{/elseif}
 	#{elseif content == 3}
 		<h1>&{'mod.spamnotify'}</h1>
+		<ul>
 		#{if spamNotification.size() != 0}
 			<h2>&{'mod.mightbespam'}:</h2>
-			<ul>
 				#{list items:spamNotification, as:'notification'}
-					<li>
-					<div class="message summary">
+					<li onclick="goto('@{CUser.followNotification(notification.id())}')">
+					<div class="summary">
 						#{if notification.isNew()}<div class="highlight">&{'new'}</div>#{/if}
 						#{showProfile notification.getAbout() /} &{'mod.mightbespammer'}
 						<p><a href="@{CUser.followNotification(notification.id())}">${notification.getAbout().summary()}</a></p>
@@ -89,13 +89,13 @@
 						<div class="commands"><a href="@{CUser.deleteNotification(notification.id())}">&{'notification.delete'}</a></div>
 					</div><!-- end message -->
 				#{/list}
-			</ul>
 		#{/if}
 		#{else} 
-			<div class="message">
+			<li><div class="message">
 				<p>&{'mod.nospam'}</p>
 			</div><!-- end message -->
 		#{/else}
+		</ul>
 		<div class="message">
 			<p class="hint">&{'mod.spamhint'}</p>
 		</div><!-- end message -->
