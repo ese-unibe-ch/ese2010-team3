@@ -131,15 +131,17 @@ admin.abortdeletedb=Non, je ne veux pas.
 
 # Secure messages
 secure.title=
-secure.username=nom d'utilisateur
-secure.realname=vrai nom
+secure.username=Nom d'utilisateur
+secure.realname=Vrai nom
 secure.email=E-Mail
-secure.birthday=anniversaire
+secure.birthday=Anniversaire
 secure.age=âge
 secure.website=Site Web
 secure.profession=Profession
 secure.employer=Employeur
 secure.biography=Biographie
+secure.oldpassword=Mot de pass vieux
+secure.newpassword=Mot de pass nouveau
 secure.password=Mot de pass
 secure.remember=Souvnir de moi
 secure.signin=Inscirvez-vous
