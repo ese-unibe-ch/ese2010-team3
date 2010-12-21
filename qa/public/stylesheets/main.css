@@ -161,7 +161,7 @@ div.content li p.relatedQ {
 	color: #ff8400;
 }
 div.content span.vote {
-	bottom: 7px;
+	bottom: 0px;
 	font-size: 2em;
 	position: absolute;
 	right: 7px;
